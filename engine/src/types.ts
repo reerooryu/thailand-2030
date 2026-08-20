@@ -175,6 +175,16 @@ export interface Params {
   consGap: number;
   consHhDebt: number;          // -0.213 on 4q change in hh debt
 
+  // --- household credit. The ratio is a STOCK over a denominator, so it falls
+  // when nominal GDP outruns credit growth and rises when it does not. Both
+  // halves matter: growing out of household debt is the only mechanism Thailand
+  // has ever used, and it is why the impairment term is a policy variable
+  // rather than a constant.
+  hhCreditTrend: number;           // annual % credit growth at baseline
+  hhCreditRealRate: number;        // pp of credit growth per pp of real rate
+  transfersToHhCredit: number;     // transfers substituting for borrowing
+  formalisationToHhCredit: number; // informal debt moving into cheaper formal credit
+
   // --- supply side
   /** Production function: Y_pot = TFP · K^alpha · L^(1-alpha) */
   alpha: number;               // capital share, 0.45

@@ -164,6 +164,21 @@ export function step(input: StepInput): State {
   const primaryBalance =
     revenue - policy.capitalSpend - policy.govConsumption - policy.transfers;
   const nominalGrowthQ = (potentialGrowthYoy + cpiYoy) / 4;
+
+  // ---- household credit, as a share of GDP.
+  // Previously carried forward unchanged, which made the largest single
+  // constraint on Thai consumption a decorative constant: the impairment term
+  // was frozen, and `dHhDebt4` was structurally zero, so the consumption damper
+  // never fired. The ratio is a stock over a denominator — it falls whenever
+  // nominal GDP outruns credit growth. That is the only way Thailand has ever
+  // reduced it, and it is slow enough that a single term barely moves it.
+  const hhCreditGrowth =
+    p.hhCreditTrend
+    + p.hhCreditRealRate * realRate
+    + p.transfersToHhCredit * policy.transfers
+    + p.formalisationToHhCredit * (policy.formalisation ?? 0);
+  const hhDebt = Math.max(40, Math.min(120,
+    s.hhDebt * (1 + (hhCreditGrowth / 4 - nominalGrowthQ) / 100)));
   const debtGdp =
     s.debtGdp * (1 + ((p.effectiveInterestRate + riskPremium) / 4 - nominalGrowthQ) / 100)
     - primaryBalance / 4;
@@ -178,7 +193,7 @@ export function step(input: StepInput): State {
     policyRate: policy.policyRate,
     realRate,
     reer,
-    hhDebt: s.hhDebt,
+    hhDebt,
     debtGdp,
     capitalSpend: policy.capitalSpend,
     govConsumption: policy.govConsumption,
@@ -192,6 +207,25 @@ export function step(input: StepInput): State {
  * Returns 1.0 when debt is at or below the threshold, falling linearly to a
  * floor. At Thailand's current 87.5% of GDP this returns ~0.65.
  */
+/**
+ * Raw accumulated reform effort -> effective reform index.
+ *
+ * This used to be `Math.min(100, effort)`, and the clamp bound from the SECOND
+ * QUARTER of a normal term: even a light reform strategy accumulates ~290 and a
+ * committed one ~340, so every reform card after the first two or three added
+ * exactly nothing. Three completely different playthroughs finished on the same
+ * reform stock of 64.4, because they were all sitting on the same ceiling.
+ *
+ * A saturating curve keeps the top of the range where it was — 336 of raw
+ * effort still maps to 100, so a maximal reformer scores what they always did —
+ * while restoring the gradient underneath it. Half-hearted reform now earns
+ * roughly half the index rather than all of it, and pushing past the old cap
+ * still pays, at a declining rate, toward an asymptote of 120.
+ */
+export function reformEffort(raw: number): number {
+  return 120 * (1 - Math.exp(-Math.max(0, raw) / 187.5));
+}
+
 export function debtImpairment(hhDebt: number, p: Params): number {
   const excess = Math.max(0, hhDebt - p.debtImpairThreshold);
   return Math.max(p.debtImpairFloor, 1 - p.debtImpairSlope * excess);

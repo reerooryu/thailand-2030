@@ -4,7 +4,7 @@
  * harnesses use — one engine, two hosts.
  */
 import { DATA } from './gen/data.js';
-import { step, nextPeriod } from './engine.js';
+import { step, nextPeriod, reformEffort } from './engine.js';
 import { runElection } from './election.js';
 import { evaluate as evaluateAchievements } from './achievements.js';
 import { classify } from './ideology.js';
@@ -325,7 +325,7 @@ export class BrowserGame {
       govConsumption: BASELINE.govConsumption + this.stance.govConsumption * ramp,
       transfers: Math.min(stimCap, this.stance.transfers * ramp),
       taxRate: BASELINE.taxRate + this.stance.taxRate * ramp,
-      reformIndex: Math.min(100, this.stance.reformIndex) * (this.ps.effects.reformCapacity ?? 0.7),
+      reformIndex: reformEffort(this.stance.reformIndex) * (this.ps.effects.reformCapacity ?? 0.7),
       fdiSignal: (this.stance.fdiSignal ?? 0) * ramp,
       humanCapital: (this.stance.humanCapital ?? 0) * ramp,
       formalisation: (this.stance.formalisation ?? 0) * ramp,
