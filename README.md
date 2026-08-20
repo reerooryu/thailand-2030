@@ -92,7 +92,6 @@ available to you — including the ones you did not take.
 | `ui/` | Single-page front end. `app.js` is the whole client. |
 | `scripts/` | Data builders (Python) and analysis tools (TypeScript). |
 | `data/` | Raw source files, kept for provenance. |
-| `saved_runs/` | Terms worth keeping. |
 
 ### Documentation
 

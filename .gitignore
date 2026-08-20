@@ -30,6 +30,11 @@ TURNLOOP.txt
 ui/assets/*.mp3
 ui/assets/*.mp4
 
+# ---- personal play records
+# Terms worth keeping, but they are a scrapbook rather than part of the project,
+# and every one of them is a spoiler for a run somebody else has not played yet.
+saved_runs/
+
 # ---- local
 .DS_Store
 *.log
