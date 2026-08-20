@@ -26,6 +26,7 @@ export interface AchievementContext {
   riskPremium: number;
   gap: number;
   primaryBalance: number;
+  hhDebt: number;             // household credit, % of GDP
   flags: Set<string>;
   opinion: Record<string, number>;
   fell: boolean;
@@ -307,6 +308,19 @@ export const ACHIEVEMENTS: Achievement[] = [
     // deliberate: the first thing a new player should learn is which of the two
     // numbers on the prologue screen was ever real.
     test: c => atLeast(c.headline, 9092, 0) && c.headline < 15000,
+  },
+  {
+    id: 'room_to_cut',
+    name: 'Room to Cut',
+    requirement: 'Finish with household debt below 80% of GDP.',
+    flavour: 'Thai household debt is the reason a rate cut here does less than a rate cut anywhere else: ' +
+             'bank lending is the dominant channel of transmission, and at 87.5% of GDP the banks tighten ' +
+             'against bad loans instead of passing the cut on. Getting the ratio below eighty restores most ' +
+             'of that. The achievement is named for what it hands over rather than what it did — a central ' +
+             'bank with working ammunition, for a crisis that has not happened yet, under a government that ' +
+             'has not been elected. There is no constituency for this and no headline in it.',
+    rarity: 'uncommon',
+    test: c => atMost(c.hhDebt, 80, 1) && !c.fell,
   },
   {
     id: 'winter_is_coming',

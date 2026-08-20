@@ -551,6 +551,8 @@ function showEnd(walked) {
                 `${setChg >= 0 ? '+' : ''}${fmt(setChg)}% from 1,622`, setChg >= 0 ? 'good' : 'critical')}
           ${row('Capital stock', fmt(s.capital / start.capital * 100 - 100, 1) + '%', 'growth over the term')}
           ${row('Reform stock', fmt(s.reformStock, 1), 'accumulated structural effort')}
+          ${row('Household debt', fmt(s.hhDebt) + '%', 'of GDP, from 87.5%',
+                s.hhDebt <= 82 ? 'good' : s.hhDebt >= 90 ? 'warning' : '')}
         </table>
       </div>
       <div class="statcol">
@@ -601,34 +603,59 @@ function showEnd(walked) {
 
 /* ---- end-of-term assessment ---------------------------------------------
    Written as an outside analyst filing after the term ends, not as a score.
-   Six dimensions, each banded independently, each expected to praise what
+   Seven dimensions, each banded seven ways, each expected to praise what
    worked and say plainly what did not — a cabinet that fixed potential growth
    and wrecked the balance sheet gets both paragraphs, in its own words. The
    headline band splits on the IMF baseline of 9,092, the only number in this
    game with an outside author. */
 function verdictSections(g, s, realCagr, setChg, gov) {
+  const start = g.history[3];
   const pick = (bands, v) => (bands.find(b => v >= b.min) || bands[bands.length - 1]);
   const h = g.headline();
   const gap = h - 9092;
   const n = x => Math.round(x).toLocaleString();
+  const pb = fmt(Math.abs(s.primaryBalance), 2);
+  const rs = fmt(s.reformStock, 0);
 
-  const growth = gap >= 200 ? { tag: 'ahead of baseline', t:
-    `The cabinet finished at ${n(h)} dollars per head, ${n(gap)} clear of the IMF's own projection for the ` +
-    `period. That deserves to be said plainly, because the Fund's Thailand baseline has behaved more like a ` +
-    `ceiling than a forecast for a decade, and beating it took genuine output rather than a favourable deflator. ` +
-    `It is also, of course, six thousand dollars short of what was promised in February 2026 — a promise no ` +
-    `serious observer costed at the time, and which the government spent four years being asked about anyway.` }
-    : gap >= -80 ? { tag: 'at baseline', t:
-    `${n(h)} dollars per head against a baseline of 9,092: the cabinet delivered almost precisely what the IMF ` +
-    `expected Thailand to deliver under any government at all. Read narrowly, that is four years of activity ` +
-    `with nothing to show at the top line. Read fairly, the top line was never the point — a term is worth ` +
-    `having or not on the strength of what sits underneath it, and this one has a good deal underneath it.` }
-    : { tag: 'behind baseline', t:
-    `At ${n(h)} dollars per head the cabinet came in ${n(-gap)} below what the IMF projected for a Thailand with ` +
-    `no particular government at all, which is the harshest fact in this assessment and cannot be attributed to ` +
-    `the external environment. Debt service, crowding out, and a stimulus habit that bought a quarter of growth ` +
-    `at a time each take a share of the blame. The 15,000 target was never reachable; underperforming the ` +
-    `do-nothing counterfactual was entirely avoidable.` };
+  // ---- headline: the level, against the only number here with an outside author
+  const growth = pick([
+    { min: 700, tag: 'historic', t:
+      `${n(h)} dollars per head, ${n(gap)} clear of the IMF's own projection. This is the top of what sixteen ` +
+      `quarters can produce and there is no interpretation under which it is not a real result — the Fund's ` +
+      `Thailand baseline has behaved more like a ceiling than a forecast for a decade, and this cabinet went ` +
+      `through it by a distance no post-crisis government has managed. The one caution is arithmetic rather ` +
+      `than politics: a level this far above trend is partly a cycle, and cycles are borrowed from the term ` +
+      `that follows.` },
+    { min: 400, tag: 'well ahead', t:
+      `The cabinet finished at ${n(h)} dollars per head, ${n(gap)} clear of the IMF's projection for the ` +
+      `period. That is a substantial beat and it took genuine output rather than a favourable deflator. It is ` +
+      `also, of course, well short of the 15,000 promised in February 2026 — a promise no serious observer ` +
+      `costed at the time, and which the government spent four years being asked about anyway.` },
+    { min: 150, tag: 'ahead of baseline', t:
+      `${n(h)} dollars per head, ${n(gap)} above the IMF baseline. A clear beat, if not a dramatic one, and ` +
+      `worth stating plainly because beating the Fund's Thailand number has not been a routine event. The ` +
+      `distance from the 15,000 target is the distance between what a government can do in four years and what ` +
+      `it has to say to be given them.` },
+    { min: -80, tag: 'at baseline', t:
+      `${n(h)} dollars per head against a baseline of 9,092: the cabinet delivered almost precisely what the ` +
+      `IMF expected Thailand to deliver under any government at all. Read narrowly, that is four years of ` +
+      `activity with nothing to show at the top line. Read fairly, the top line was never the point — a term is ` +
+      `worth having or not on the strength of what sits underneath it.` },
+    { min: -300, tag: 'behind', t:
+      `At ${n(h)} dollars per head the cabinet came in ${n(-gap)} below the do-nothing projection. That is a ` +
+      `narrow miss on a forecast rather than a catastrophe, but it is a miss, and the external environment ` +
+      `will not carry the explanation: the same world prices were available to the counterfactual.` },
+    { min: -700, tag: 'badly behind', t:
+      `${n(h)} dollars per head is ${n(-gap)} below what the IMF projected for a Thailand with no particular ` +
+      `government at all. Debt service, crowding out and a stimulus habit that bought a quarter of growth at a ` +
+      `time each take a share of the blame. The 15,000 target was never reachable; underperforming the ` +
+      `do-nothing counterfactual was entirely avoidable.` },
+    { min: -99999, tag: 'a lost term', t:
+      `At ${n(h)} dollars per head this term ends ${n(-gap)} below the passive path — the country would ` +
+      `measurably have been better served by a caretaker administration that answered the post and did ` +
+      `nothing else. Whatever was attempted here consumed fiscal space, political capital and four years, and ` +
+      `returned less than the absence of it would have.` },
+  ], gap);
 
   // A term can clear the baseline on the level and still have run the economy
   // into the ground on the way — playtesting produced a run at 9,228 with a
@@ -639,88 +666,187 @@ function verdictSections(g, s, realCagr, setChg, gov) {
       `when the votes were counted, and an idle output gap is unemployment and foregone revenue whatever the ` +
       `per-head number says.`;
 
+  // ---- legacy: potential growth, which is the only score that outlives the term
   const legacy = pick([
+    { min: 3.2, tag: 'a different economy', t:
+      `Potential growth of ${fmt(s.potentialGrowthYoy, 2)}% against 2.1% inherited is not an improvement, it ` +
+      `is a different supply side. A reform stock of ${rs} compounds annually whoever is in office, and at ` +
+      `this level the arithmetic of Thai convergence changes: the middle-income trap is a statement about ` +
+      `trend growth, and this trend is no longer trapped. Nobody will be able to attribute the 2030s to this ` +
+      `cabinet, which is exactly why so few governments do it.` },
     { min: 3.0, tag: 'transformed', t:
       `Potential growth of ${fmt(s.potentialGrowthYoy, 2)}%, from 2.1% at the start, is the outstanding ` +
       `achievement of this administration and will be recognised as such long after the personalities are ` +
-      `forgotten. A reform stock of ${fmt(s.reformStock, 0)} is not a rhetorical number: it is deregulation, ` +
-      `digitisation and human capital that compound annually whoever is in office. That almost none of it ` +
-      `showed up in the cabinet's own figures is the strongest evidence that it was real.` },
-    { min: 2.6, tag: 'improved', t:
-      `Potential growth improved to ${fmt(s.potentialGrowthYoy, 2)}% from 2.1%, on a reform stock of ` +
-      `${fmt(s.reformStock, 0)}. This is the part of the record that holds up. Thailand's problem has never ` +
-      `been the cycle, it has been a supply side that stopped improving around 2013, and this cabinet moved ` +
-      `it. The successor will collect the credit, which is how structural reform has always worked and why ` +
-      `so little of it gets done.` },
-    { min: 2.2, tag: 'concrete only', t:
-      `Potential growth reached ${fmt(s.potentialGrowthYoy, 2)}%, but the composition is unflattering: a reform ` +
-      `stock of ${fmt(s.reformStock, 0)} says most of this was bought with capital spending rather than earned ` +
-      `through reform. Concrete raises the capital stock whether or not anything was fixed, and it stops raising ` +
-      `it the moment the disbursement ends. The bureaucracy the cabinet inherited is substantially the ` +
+      `forgotten. A reform stock of ${rs} is not a rhetorical number: it is deregulation, digitisation and ` +
+      `human capital that compound annually. That almost none of it showed up in the cabinet's own figures is ` +
+      `the strongest evidence that it was real.` },
+    { min: 2.75, tag: 'improved', t:
+      `Potential growth improved to ${fmt(s.potentialGrowthYoy, 2)}% from 2.1%, on a reform stock of ${rs}. ` +
+      `This is the part of the record that holds up. Thailand's problem has never been the cycle, it has been ` +
+      `a supply side that stopped improving around 2013, and this cabinet moved it. The successor will collect ` +
+      `the credit, which is how structural reform has always worked and why so little of it gets done.` },
+    { min: 2.5, tag: 'lifted', t:
+      `Potential growth reached ${fmt(s.potentialGrowthYoy, 2)}%, a real gain on the 2.1% inherited and a ` +
+      `modest one against what was available. The reform stock of ${rs} is the constraint: effort was made, ` +
+      `and it was made late or thinly enough that only part of it had converted by the time the term ended. ` +
+      `Reform compounds, and compounding needs the one thing an electoral cycle cannot supply.` },
+    { min: 2.25, tag: 'concrete only', t:
+      `Potential growth reached ${fmt(s.potentialGrowthYoy, 2)}%, but the composition is unflattering: a ` +
+      `reform stock of ${rs} says most of this was bought with capital spending rather than earned through ` +
+      `reform. Concrete raises the capital stock whether or not anything was fixed, and it stops raising it ` +
+      `the moment the disbursement ends. The bureaucracy the cabinet inherited is substantially the ` +
       `bureaucracy it leaves.` },
-    { min: -99, tag: 'unchanged', t:
-      `Potential growth of ${fmt(s.potentialGrowthYoy, 2)}% is the central failure of the term. The constraint ` +
-      `this government was elected to address is exactly where it was found, and the country will be no more ` +
-      `capable of growing in 2031 than it was in 2026 — only more indebted. Four years, a working majority, ` +
-      `and a reform stock of ${fmt(s.reformStock, 0)} to show for it.` },
+    { min: 2.05, tag: 'unchanged', t:
+      `Potential growth ends at ${fmt(s.potentialGrowthYoy, 2)}% against 2.1% at the start — the trend rate of ` +
+      `this economy is exactly where it was found, on a reform stock of ${rs}. Everything that happened in ` +
+      `these four years was cyclical. The structural questions that were open in February 2026 are open now, ` +
+      `with four fewer years to answer them before the demographics close the window.` },
+    { min: -99, tag: 'gone backwards', t:
+      `Potential growth finished at ${fmt(s.potentialGrowthYoy, 2)}%, below the 2.1% this government ` +
+      `inherited, on a reform stock of ${rs}. A term that lowers the trend rate of growth is a rare thing to ` +
+      `achieve and it takes active effort: capital misallocated, reform reversed or never begun, and a risk ` +
+      `premium doing the rest. The next cabinet starts from a worse position than this one did.` },
   ], s.potentialGrowthYoy);
 
+  // ---- fiscal. Distinguish a ceiling honoured from a ceiling moved and then
+  // honoured: raising the limit and finishing under it is a real choice, but it
+  // is not the same choice as never touching it.
   const over = s.debtGdp - g.debtCeiling;
-  // The ceiling is only "raised for itself" if the cabinet actually legislated
-  // it. A term that declined to raise it and breached anyway is a different and
-  // slightly worse story, and the text used to conflate the two.
   const ceilingMoved = g.debtCeiling > 70;
   const ceilingPhrase = ceilingMoved
     ? `a ceiling this cabinet had already raised for itself to ${g.debtCeiling}%`
     : `the statutory ${g.debtCeiling}% ceiling, which it never once asked parliament to move`;
-  const debt = over >= 4 ? { tag: 'breached', t:
-    `Gross debt of ${fmt(s.debtGdp)}% of GDP stands ${fmt(over)} points above ${ceilingPhrase}. ` +
-    `The market has drawn the obvious conclusion: ` +
-    `${fmt(s.riskPremium, 2)} points of risk premium on everything the state borrows, compounding, and the same ` +
-    `premium passed through to every firm that borrows alongside it. A primary deficit of ` +
-    `${fmt(Math.abs(s.primaryBalance), 2)}% of GDP at the end of an expansion is not stabilisation policy, it is ` +
-    `a habit. This is the single largest constraint the next government inherits, and it was manufactured here.` }
-    : over >= 0 ? { tag: 'at the limit', t:
-    `Debt closed at ${fmt(s.debtGdp)}% against the ${g.debtCeiling}% ceiling — every point of fiscal space the ` +
-    `cabinet had, including the space it legislated for itself, is now spent. Defensible if the money bought ` +
-    `durable capacity, indefensible if it bought quarters of growth, and the reform stock of ` +
-    `${fmt(s.reformStock, 0)} is where that argument will be settled. Either way, the next fiscal shock finds ` +
-    `Thailand with no room and no politically cheap way to make some.` }
-    : over >= -5 ? { tag: 'used well', t:
-    `Debt finished at ${fmt(s.debtGdp)}% inside a ${g.debtCeiling}% ceiling, with the risk premium held to ` +
-    `${fmt(s.riskPremium, 2)} points. This is close to the textbook use of fiscal space: spent rather than ` +
-    `hoarded, stopped before the market repriced it, and handed over with a margin. In a region where three ` +
-    `governments have blown through their own limits since 2020, restraint of this kind is worth more than it ` +
-    `looks on the page.` }
-    : { tag: 'conserved', t:
-    `Debt of ${fmt(s.debtGdp)}% leaves ${fmt(-over)} points of unused headroom beneath the ceiling. Fiscal ` +
-    `conservatism is a real virtue and this cabinet practised it. The uncomfortable question is what the ` +
-    `restraint purchased: an unused balance sheet is not a policy, and the capacity that was not built during ` +
-    `four years of cheap money will cost considerably more to build later.` };
+  const debt = pick([
+    { min: 8, tag: 'blown', t:
+      `Gross debt of ${fmt(s.debtGdp)}% stands ${fmt(over)} points above ${ceilingPhrase}. At this distance ` +
+      `the limit has stopped being a constraint and become a comment, and the market has priced it: ` +
+      `${fmt(s.riskPremium, 2)} points of premium on everything the state borrows, compounding into the stock ` +
+      `and passed through to every firm borrowing alongside it. A primary deficit of ${pb}% of GDP at the end ` +
+      `of an expansion is not stabilisation policy. The next fiscal shock arrives with no room at all.` },
+    { min: 4, tag: 'breached', t:
+      `Gross debt of ${fmt(s.debtGdp)}% of GDP stands ${fmt(over)} points above ${ceilingPhrase}. The market ` +
+      `has drawn the obvious conclusion: ${fmt(s.riskPremium, 2)} points of risk premium on everything the ` +
+      `state borrows, compounding, and the same premium passed to every firm that borrows alongside it. A ` +
+      `primary deficit of ${pb}% at the end of an expansion is not stabilisation policy, it is a habit. This ` +
+      `is the single largest constraint the next government inherits, and it was manufactured here.` },
+    { min: 0, tag: 'at the limit', t:
+      `Debt closed at ${fmt(s.debtGdp)}% against the ${g.debtCeiling}% ceiling — every point of fiscal space ` +
+      `the cabinet had, including the space it legislated for itself, is now spent. Defensible if the money ` +
+      `bought durable capacity, indefensible if it bought quarters of growth, and the reform stock of ${rs} is ` +
+      `where that argument will be settled. Either way, the next shock finds Thailand with no room and no ` +
+      `politically cheap way to make some.` },
+    { min: -3, tag: 'used to the edge', t:
+      `Debt of ${fmt(s.debtGdp)}% leaves ${fmt(-over)} points beneath the ${g.debtCeiling}% ceiling, with a ` +
+      `premium of ${fmt(s.riskPremium, 2)} points. Spending to within a rounding error of a self-imposed limit ` +
+      `and stopping is a harder discipline than it looks — the last point of headroom is always the one with ` +
+      `a use for it — and the margin left is thin enough that a single bad year would consume it.` },
+    { min: -6, tag: 'used well', t:
+      `Debt finished at ${fmt(s.debtGdp)}% inside a ${g.debtCeiling}% ceiling, with the risk premium held to ` +
+      `${fmt(s.riskPremium, 2)} points. This is close to the textbook use of fiscal space: spent rather than ` +
+      `hoarded, stopped before the market repriced it, and handed over with a margin. In a region where three ` +
+      `governments have blown through their own limits since 2020, restraint of this kind is worth more than ` +
+      `it looks on the page.` },
+    { min: -10, tag: 'cautious', t:
+      `Debt of ${fmt(s.debtGdp)}% leaves ${fmt(-over)} points of the ceiling unused and the premium at ` +
+      `${fmt(s.riskPremium, 2)}. A comfortable balance sheet, handed over intact, by a government that had ` +
+      `access to cheap money and a mandate and chose to use part of both. Whether the caution was prudence or ` +
+      `timidity depends entirely on what the unspent space was being saved for, and nobody said.` },
+    { min: -999, tag: 'conserved', t:
+      `Debt of ${fmt(s.debtGdp)}% leaves ${fmt(-over)} points of unused headroom beneath the ceiling. Fiscal ` +
+      `conservatism is a real virtue and this cabinet practised it. The uncomfortable question is what the ` +
+      `restraint purchased: an unused balance sheet is not a policy, and the capacity that was not built ` +
+      `during four years of cheap money will cost considerably more to build later.` },
+  ], over);
 
+  // ---- investment. The single variable that decides whether Thailand grows,
+  // and the one every administration since 1997 has failed to move. The
+  // capital-stock comparison rides along here: ordering a port and having a
+  // port are separated by a decade, and the ratio cannot see the difference.
+  const capGrowth = s.capital / start.capital * 100 - 100;
+  const pipeline = ` Public capital ran at ${fmt(s.capitalSpend, 2)}% of GDP against 6.10% inherited while the ` +
+    `capital stock itself grew ${fmt(capGrowth, 1)}% — the distance between a commitment and a thing that ` +
+    `exists. What was ordered in this parliament gets commissioned in the next one.`;
   const inv = pick([
+    { min: 23, tag: 'a boom', t:
+      `Private investment of ${fmt(s.invRate)}% of GDP is a level Thailand has not sustained since before the ` +
+      `crisis, from 18.0% at the start. Firms do not commit capital on sentiment; they commit it when the ` +
+      `permitting, the legal certainty and the demand outlook all clear at once, and all three did. This is ` +
+      `the number that decides whether any of the rest compounds.` + pipeline },
     { min: 21, tag: 'reversed', t:
       `Private investment of ${fmt(s.invRate)}% of GDP is the result nobody forecast. This ratio has been ` +
-      `falling since 1996 and no administration in the intervening quarter-century arrested it for a full term. ` +
-      `Whatever else is disputed about this government, it moved the single variable that determines whether ` +
-      `Thailand grows — and it did so while public capital was also rising, which rules out the usual ` +
-      `explanation that the state simply crowded the number upward.` },
+      `falling since 1996 and no administration in the intervening quarter-century arrested it for a full ` +
+      `term. Whatever else is disputed about this government, it moved the single variable that determines ` +
+      `whether Thailand grows — and it did so while public capital was also rising, which rules out the usual ` +
+      `explanation that the state simply crowded the number upward.` + pipeline },
     { min: 19.5, tag: 'recovering', t:
       `Private investment recovered to ${fmt(s.invRate)}% of GDP from 18.0%. Set against 31.2% in 1996 that ` +
       `remains a diminished economy, but it is the first sustained increase in a generation and it is what the ` +
       `improvement in potential growth is actually made of. Firms responded to something — most plausibly the ` +
-      `permitting and compliance reforms rather than the megaprojects.` },
-    { min: 18.2, tag: 'flat', t:
-      `Private investment ended at ${fmt(s.invRate)}% of GDP, essentially where it was found. This is the ` +
-      `ordinary outcome and the hardest problem in Thai economics: reforms were legislated, and the firms did ` +
-      `not move within the electoral cycle. The cabinet can fairly argue the response comes later. It cannot ` +
-      `argue it came now.` },
+      `permitting and compliance reforms rather than the megaprojects.` + pipeline },
+    { min: 18.6, tag: 'edging up', t:
+      `Private investment ended at ${fmt(s.invRate)}% of GDP, above the 18.0% inherited by a margin that is ` +
+      `real but not yet a trend. Something in the policy mix registered with firms; not enough of it registered ` +
+      `for long enough to change the investment decision of a company that has spent twenty years assuming ` +
+      `Thai demand does not grow.` + pipeline },
+    { min: 18.0, tag: 'flat', t:
+      `Private investment of ${fmt(s.invRate)}% of GDP is where it started. Thai firms have sat on cash for a ` +
+      `decade rather than commit it domestically, and four years of this administration did not change that ` +
+      `calculation. Every other number in this assessment is downstream of this one, which is why the ` +
+      `improvements elsewhere should be read with some caution.` + pipeline },
+    { min: 17.0, tag: 'slipping', t:
+      `Private investment fell to ${fmt(s.invRate)}% of GDP from 18.0%. A declining investment rate through an ` +
+      `expansion is the least ambiguous signal in this assessment: firms had the demand, had the credit, and ` +
+      `still concluded that the domestic return did not justify the commitment.` + pipeline },
     { min: -99, tag: 'displaced', t:
-      `Private investment fell to ${fmt(s.invRate)}% of GDP. Public capital rose to ${fmt(s.capitalSpend, 2)}% ` +
-      `over the same period, so the state now accounts for a larger share of Thai investment than at any time ` +
-      `since the crisis. That is substitution, not recovery, and it is the mechanism by which a borrowing ` +
-      `programme can raise measured demand while leaving the economy weaker than it found it.` },
+      `Private investment fell to ${fmt(s.invRate)}% of GDP. The state borrowed heavily into a market where ` +
+      `private firms were competing for the same funds, and the risk premium did the rest. Crowding out is ` +
+      `usually a theoretical objection to public borrowing; here it is the observed outcome, and it means the ` +
+      `public capital in the table above came partly at the expense of the private capital in this one.` + pipeline },
   ], s.invRate);
+
+  // ---- households. The largest constraint on Thai consumption. A stock over a
+  // denominator: it falls when nominal GDP outruns credit, which is the only
+  // mechanism this country has ever used, and four years barely moves it.
+  const hhStart = 87.5, hhDelta = s.hhDebt - hhStart;
+  const households = pick([
+    { min: 6, tag: 'deeper in', t:
+      `Household debt finished at ${fmt(s.hhDebt)}% of GDP, ${fmt(hhDelta)} points ABOVE where this government ` +
+      `found it. That is the worst number in the assessment and the one with the longest tail: at this level ` +
+      `roughly a third of monetary transmission is gone, so the next cabinet will cut rates into a banking ` +
+      `system that cannot pass the cut on. Households borrowed to keep consuming through a term in which ` +
+      `output grew — which is the definition of a recovery that did not reach anybody.` },
+    { min: 2.5, tag: 'rising', t:
+      `Household debt rose ${fmt(hhDelta)} points to ${fmt(s.hhDebt)}% of GDP. Credit outran nominal income ` +
+      `for four consecutive years, in an expansion, which is when the ratio is supposed to fall. Every point ` +
+      `added here is a point of monetary transmission the Bank of Thailand will not have in the next ` +
+      `downturn, and the bill is presented in a quarter nobody can schedule.` },
+    { min: 0.5, tag: 'unchanged', t:
+      `Household debt sits at ${fmt(s.hhDebt)}% of GDP against ${hhStart}% at the start. Untouched, which ` +
+      `after four years of growth is itself a finding: nominal GDP rose and credit rose with it, so the ratio ` +
+      `that bottlenecks every rate cut this country makes is exactly where it was. Nobody campaigns on this ` +
+      `and no bond desk prices it, which is precisely why it never moves.` },
+    { min: -2, tag: 'flat', t:
+      `Household debt eased marginally to ${fmt(s.hhDebt)}% of GDP. Directionally right and quantitatively ` +
+      `nothing — at this pace the ratio returns to something a central bank can work with somewhere in the ` +
+      `2040s. Transfers and formalisation both bear on it, and neither was pushed hard enough here to outrun ` +
+      `credit growth by a meaningful margin.` },
+    { min: -5, tag: 'easing', t:
+      `Household debt came down ${fmt(-hhDelta)} points to ${fmt(s.hhDebt)}% of GDP. Real deleveraging, and ` +
+      `almost certainly not the point of any single decision that produced it — income support reduces the ` +
+      `need to borrow, formalisation moves informal debt onto terms people can service, and growth does the ` +
+      `rest through the denominator.` },
+    { min: -9, tag: 'deleveraging', t:
+      `Household debt fell ${fmt(-hhDelta)} points to ${fmt(s.hhDebt)}% of GDP, a pace no Thai government has ` +
+      `sustained across a full term in the era for which there are comparable figures. The reward is not the ` +
+      `ratio, it is what the ratio unblocks: bank lending is the dominant channel of monetary transmission ` +
+      `here, and most of a rate cut now reaches the real economy instead of dying in loan-loss provisions.` },
+    { min: -999, tag: 'transformed', t:
+      `Household debt fell ${fmt(-hhDelta)} points to ${fmt(s.hhDebt)}% of GDP. This is the quiet structural ` +
+      `achievement of the term and it will never be described as one, because the beneficiary is a future ` +
+      `central bank governor facing a crisis that has not happened yet. A household sector at this level of ` +
+      `leverage can absorb a shock without a fiscal rescue, which is the difference between a recession and ` +
+      `a lost decade.` },
+  ], hhDelta);
 
   const politics = gov.fallen ? { tag: 'collapsed', t:
     `The coalition broke before the term ran out, and everything above is a partial record scored on what was ` +
@@ -728,38 +854,75 @@ function verdictSections(g, s, realCagr, setChg, gov) {
     `early and the partners who paid for them were never compensated. Governments in Thailand rarely fall on ` +
     `policy. They fall on arithmetic, and the arithmetic was visible for quarters.` }
     : pick([
+    { min: 70, tag: 'adored', t:
+      `${g.approval}% approval at the close, with ${gov.seats} seats behind it. Numbers like this are ` +
+      `ordinarily the property of governments that have just spent a great deal of money very quickly, and ` +
+      `they are ordinarily followed by the bill. If this one was earned by delivery rather than disbursement ` +
+      `it is the strongest political position any Thai cabinet has held since 2005 — and it was still, on the ` +
+      `evidence of the later quarters, underspent.` },
     { min: 62, tag: 'commanding', t:
-      `The cabinet leaves with ${g.approval}% approval and ${gov.seats} seats intact — a government more popular ` +
-      `at the end than at the beginning, which in Thai politics is genuinely rare. The caveat is the standard ` +
-      `one: approval is an asset only while it is being converted into legislation, and a government this ` +
-      `popular could have spent more of it than it did.` },
+      `The cabinet leaves with ${g.approval}% approval and ${gov.seats} seats intact — a government more ` +
+      `popular at the end than at the beginning, which in Thai politics is genuinely rare. The caveat is the ` +
+      `standard one: approval is an asset only while it is being converted into legislation, and a government ` +
+      `this popular could have spent more of it than it did.` },
+    { min: 52, tag: 'comfortable', t:
+      `${g.approval}% approval and ${gov.seats} seats. Comfortable rather than commanding: enough authority to ` +
+      `pass what was already agreed, not obviously enough to force through anything a partner objected to. ` +
+      `Most Thai governments would take this and most would also find, as this one did, that it does not ` +
+      `stretch to the difficult bill in year three.` },
     { min: 44, tag: 'held', t:
       `${g.approval}% approval and ${gov.seats} seats at the close. The coalition held, which given a 500-seat ` +
       `house assembled from six parties and a mid-term revenue package is not a trivial achievement. But it ` +
       `held without ever building the majority for anything more ambitious than what was passed in the first ` +
       `eighteen months, and the later quarters read accordingly.` },
-    { min: -99, tag: 'exhausted', t:
-      `Approval of ${g.approval}% left the government surviving on party discipline rather than public consent. ` +
-      `A cabinet in this position cannot begin anything — every remaining bill is priced by partners who can ` +
-      `read the same polling — which is why the final years of the record are so thin. The seats were there. ` +
-      `The authority was not.` },
+    { min: 36, tag: 'strained', t:
+      `Approval of ${g.approval}% against ${gov.seats} seats describes a government with the votes and not the ` +
+      `standing. Partners price a weakened prime minister accurately and immediately, so the cost of every ` +
+      `remaining bill rose, and the record thins out exactly where the polling does.` },
+    { min: 28, tag: 'exhausted', t:
+      `Approval of ${g.approval}% left the government surviving on party discipline rather than public ` +
+      `consent. A cabinet in this position cannot begin anything — every remaining bill is priced by partners ` +
+      `who can read the same polling — which is why the final years of the record are so thin. The seats were ` +
+      `there. The authority was not.` },
+    { min: -99, tag: 'a caretaker', t:
+      `At ${g.approval}% approval this administration finished as a caretaker in all but name, holding the ` +
+      `office because the alternative was a dissolution nobody in the coalition wanted to face. Whatever was ` +
+      `achieved was achieved early. The remainder was survival, and survival is not a programme.` },
   ], g.approval);
 
   const markets = pick([
+    { min: 60, tag: 'euphoric', t:
+      `The SET closed at ${n(g.set)}, up ${fmt(setChg)}%, against real growth of ${fmt(realCagr, 2)}% ` +
+      `annualised. Sentiment in this model is clamped, so an index here is not a bubble in the technical ` +
+      `sense — it is the market leaning on the fundamental as hard as it is permitted to. Foreign ` +
+      `institutional money came back. It is the fastest money in the building and it leaves the same way.` },
     { min: 35, tag: 'rewarded', t:
-      `The SET closed at ${n(g.set)}, ${fmt(setChg)}% above where the term began, the loudest and least reliable ` +
-      `verdict available. Equity markets are pricing the reform narrative and the FDI signal, both of which are ` +
-      `revisable; real GDP growth annualised at ${fmt(realCagr, 2)}% over the same period, and the gap between ` +
-      `those two numbers is where disappointment usually lives.` },
+      `The SET closed at ${n(g.set)}, ${fmt(setChg)}% above where the term began, the loudest and least ` +
+      `reliable verdict available. Equity markets are pricing the reform narrative and the FDI signal, both ` +
+      `of which are revisable; real GDP growth annualised at ${fmt(realCagr, 2)}% over the same period, and ` +
+      `the gap between those two numbers is where disappointment usually lives.` },
+    { min: 18, tag: 'warm', t:
+      `The SET finished at ${n(g.set)}, up ${fmt(setChg)}%, with real growth of ${fmt(realCagr, 2)}% behind ` +
+      `it. A respectable re-rating rather than a story — the market has concluded that the risk of a Thai ` +
+      `policy accident fell, which is a lower bar than concluding that Thai earnings will grow.` },
     { min: 5, tag: 'neutral', t:
-      `The SET finished at ${n(g.set)}, up ${fmt(setChg)}% and roughly tracking nominal GDP, against real growth ` +
-      `of ${fmt(realCagr, 2)}% annualised. Markets neither rewarded nor punished this administration. After a ` +
-      `full term of policy activity, indifference is itself a judgement — foreign institutional money has still ` +
-      `not been given a reason to come back.` },
-    { min: -999, tag: 'unconvinced', t:
+      `The SET finished at ${n(g.set)}, up ${fmt(setChg)}% and roughly tracking nominal GDP, against real ` +
+      `growth of ${fmt(realCagr, 2)}% annualised. Markets neither rewarded nor punished this administration. ` +
+      `After a full term of policy activity, indifference is itself a judgement — foreign institutional money ` +
+      `has still not been given a reason to come back.` },
+    { min: -5, tag: 'indifferent', t:
+      `The SET ended at ${n(g.set)}, ${fmt(setChg)}% on where this government started. Four years of ` +
+      `announcements and the index is where it was. Whatever the cabinet believes it changed, the people who ` +
+      `price Thai equities for a living did not find it material.` },
+    { min: -20, tag: 'unconvinced', t:
       `The SET at ${n(g.set)} is ${fmt(setChg)}% on where this government started, with real growth of ` +
       `${fmt(realCagr, 2)}% annualised behind it. Thai equities have spent a decade as the cheapest way to ` +
       `express doubt about Thai growth, and nothing in these four years changed that trade.` },
+    { min: -999, tag: 'repudiated', t:
+      `The SET at ${n(g.set)} is ${fmt(setChg)}% below its level at the start of the term. An equity market ` +
+      `does not fall this far through an administration on sentiment alone; it falls when the people holding ` +
+      `Thai assets conclude that the policy risk attaching to them has risen. That is a verdict on the ` +
+      `government rather than on the economy, and it is the one investors act on.` },
   ], setChg);
 
   return [
@@ -767,6 +930,7 @@ function verdictSections(g, s, realCagr, setChg, gov) {
     { h: 'Legacy', tag: legacy.tag, t: legacy.t },
     { h: 'Fiscal', tag: debt.tag, t: debt.t },
     { h: 'Investment', tag: inv.tag, t: inv.t },
+    { h: 'Households', tag: households.tag, t: households.t },
     { h: 'Politics', tag: politics.tag, t: politics.t },
     { h: 'Markets', tag: markets.tag, t: markets.t },
   ];
