@@ -400,7 +400,7 @@ export class BrowserGame {
       invRate: s.invRate, debtGdp: s.debtGdp, ceiling: this.debtCeiling,
       approval: this.approval, set: this.set, setChange: (this.set / 1621.62 - 1) * 100,
       reformStock: s.reformStock, riskPremium: s.riskPremium, gap: s.gap,
-      primaryBalance: s.primaryBalance,
+      primaryBalance: s.primaryBalance, hhDebt: s.hhDebt,
       flags: this.flags, opinion: this.opinion,
       fell: this.government().fallen,
       playerSeats: elec ? elec.playerSeats : 0,
