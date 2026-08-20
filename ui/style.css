@@ -74,6 +74,7 @@ b{font-weight:600}
 .target-track{position:relative;height:7px;background:var(--surface-2);border-radius:4px;margin-top:11px}
 .target-fill{height:100%;background:var(--series-1);border-radius:4px}
 .target-mark{position:absolute;top:-3px;width:2px;height:13px;background:var(--ink-2)}
+.target-mark.hi{background:var(--series-1);height:15px;top:-4px}
 
 /* politics */
 #politics{background:var(--surface-1);border:1px solid var(--line);border-radius:var(--radius);

@@ -80,7 +80,32 @@ function tile(label, value, unit, sub, series, color, extra = '') {
   </div>`;
 }
 
+/* ---------- year-on-year real growth -------------------------------------
+   Two separate bugs lived here. The tile's SPARKLINE plotted `h.gap` — the
+   output gap — under a label reading "Real GDP growth, year on year", so the
+   number and the picture beneath it were different series entirely. And the
+   value itself indexed `history.length - 5` behind a `Math.max(0, ...)` guard,
+   which silently shortened the window to three quarters on the opening turn
+   while still calling it year-on-year.
+
+   Both are fixed by computing one series properly and reading the headline
+   figure off its last point. Where fewer than four quarters of history exist —
+   only ever the first turn — the change is annualised, so the label stays true. */
+function yoyAt(i) {
+  const h = g.history[i];
+  const back = Math.max(0, i - 4);
+  const lag = i - back;
+  if (lag < 1) return null;
+  const ratio = h.rgdp / g.history[back].rgdp;
+  return (Math.pow(ratio, 4 / lag) - 1) * 100;
+}
+function yoyGrowth() { return yoyAt(g.history.length - 1) ?? 0; }
+function yoySeries() {
+  return g.history.map((_, i) => yoyAt(i)).filter(v => v != null).slice(-10);
+}
+
 /* ---------- main render ---------- */
+
 function render() {
   const s = g.state;
   const hist = g.history.slice(-10);
@@ -100,18 +125,19 @@ function render() {
   const gdpExtra = `<div class="target-track" role="img" aria-label="${Math.round(headline)} of a 15,000 target">
       <div class="target-fill" style="width:${pctToTarget}%"></div>
       <div class="target-mark" style="left:${(baseline / target) * 100}%" title="IMF baseline 9,092"></div>
+      <div class="target-mark hi" style="left:${(10000 / target) * 100}%" title="10,000 — the practical ceiling of one term"></div>
     </div>
-    <div class="t-foot"><span class="muted">baseline 9,092</span><span class="muted">target 15,000</span></div>`;
+    <div class="t-foot"><span class="muted">baseline 9,092</span><span class="muted">10k</span><span class="muted">promised 15,000</span></div>`;
 
   g.gdpTrack = g.gdpTrack || [];
   if (g.gdpTrack.length <= g.quarter) g.gdpTrack.push(headline);
   else g.gdpTrack[g.quarter] = headline;
 
   $('#kpis').innerHTML = [
-    tile('GDP per capita', Math.round(headline).toLocaleString(), ' USD', '2030 projection at current stance',
+    tile('GDP per capita', Math.round(headline).toLocaleString(), ' USD', 'level now · the target is for 2030',
          g.gdpTrack.slice(-10), 'var(--series-1)', gdpExtra),
-    tile('Real GDP growth', fmt(((s.rgdp / g.history[Math.max(0, g.history.length - 5)].rgdp) - 1) * 100), '%',
-         'year on year', hist.map(h => h.gap), 'var(--series-3)'),
+    tile('Real GDP growth', fmt(yoyGrowth()), '%',
+         'year on year', yoySeries(), 'var(--series-3)'),
     tile('Headline inflation', fmt(s.cpiYoy), '%', `core ${fmt(s.cpiCoreYoy)}%`,
          hist.map(h => h.cpiYoy), 'var(--series-2)'),
     tile('SET Index', Math.round(g.set).toLocaleString(), '', 'the fastest number on this page',
@@ -138,7 +164,8 @@ function render() {
            hist.map(h => h.invRate), 'var(--series-3)')}
     ${tile('Potential growth', fmt(s.potentialGrowthYoy, 2), '%', 'the Legacy score',
            hist.map(h => h.potentialGrowthYoy), 'var(--series-1)')}
-    ${tile('Policy rate', fmt(s.policyRate, 2), '%', 'floor 0.50% · 50bp of room', null)}`;
+    ${tile('Household debt', fmt(s.hhDebt), '% of GDP', '87.5% in 2026 · the drag on every rate cut',
+           hist.map(h => h.hhDebt), 'var(--series-2)')}`;
 
   /* politics */
   const seats = g.coalitionSeats();

@@ -71,6 +71,24 @@ export const ACHIEVEMENTS: Achievement[] = [
                atLeast(c.invRate, 20, 1) && atLeast(c.set, 2500, 0),
   },
   {
+    id: 'five_figures',
+    name: 'Into Five Figures',
+    requirement: 'Finish the term above USD 10,000 of GDP per capita.',
+    flavour: 'Ten thousand dollars a head. Roughly a tenth above the IMF baseline, and the practical ' +
+             'ceiling of what sixteen quarters can produce — the search over every ordering of every card ' +
+             'tops out barely past this line, and only from two of the four coalitions. Getting here means ' +
+             'running the economy hot, moving the debt ceiling and spending to the edge of it, so read the ' +
+             'output gap before celebrating: the level is real, and some of the growth underneath it is ' +
+             'borrowed from a term that has not happened yet.',
+    rarity: 'legendary',
+    // Verified reachable, and only just: the optimiser's best lines are 10,034
+    // (Pheu Thai) and 10,027 (Democrat), against 9,701 for the conservative
+    // coalition, which cannot do it at all. It is a frontier rather than a
+    // target, and it is deliberately in tension with Sufficiency Economy —
+    // there is no route to five figures that leaves the ceiling where it was.
+    test: c => atLeast(c.headline, 10000, 0),
+  },
+  {
     id: 'sufficiency_economy',
     name: 'Sufficiency Economy',
     requirement: 'Complete the term without raising the debt ceiling — and finish inside it.',
@@ -289,6 +307,21 @@ export const ACHIEVEMENTS: Achievement[] = [
     // deliberate: the first thing a new player should learn is which of the two
     // numbers on the prologue screen was ever real.
     test: c => atLeast(c.headline, 9092, 0) && c.headline < 15000,
+  },
+  {
+    id: 'winter_is_coming',
+    name: 'Winter Is Coming',
+    requirement: 'Complete the term without touching the ageing agenda at all.',
+    flavour: 'Thailand became an aged society in 2024 and is super-aged by 2033 — 18.4 million people over ' +
+             'sixty, outnumbering every child in the country. That date does not move, does not negotiate ' +
+             'and does not care which coalition is sitting. It is the one deadline on this desk that was ' +
+             'set before you arrived and will still be there after you leave, and this cabinet spent four ' +
+             'years not looking at it. Nobody was ever going to make you. There is no protest, no bond ' +
+             'spread and no by-election for a demographic transition.',
+    rarity: 'common',
+    // Only the first card is tested: the other two require it, so a term that
+    // never opened the chain never had the option of finishing it.
+    test: c => !has(c, 'senior_plus_1') && !c.fell,
   },
   {
     id: 'bond_vigilantes',
