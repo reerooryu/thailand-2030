@@ -8,7 +8,14 @@
   <button id="mus-toggle" aria-label="Play or pause the campaign song">▶</button>
   <div class="mus-meta"><div class="mus-title">อนุทินเป็นนายกฯ</div><div class="mus-sub">Bhumjaithai, 2023</div></div>
 </div>
+<!-- Soundtrack, in order of preference. The local file wins when it exists; the
+     bundler strips this element from any build made without it (the mp3 is a
+     third-party recording and is not in the repository). The YouTube mount then
+     takes over, and if the embed cannot load either, the transport hides itself
+     and the game is simply silent. -->
 <audio id="anthem" src="assets/anthem.mp3" loop preload="auto"></audio>
+<div id="yt-host" aria-hidden="true"><div id="yt-frame"></div></div>
+<script>window.ANTHEM_YT = 'H8iqtpm1w_Q';</script>
 <div id="prologue"></div>
 <div id="game" hidden>
   <div class="topbar">

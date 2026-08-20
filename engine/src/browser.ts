@@ -204,7 +204,7 @@ export class BrowserGame {
     this.censusProposals();
 
     // A partner's bill left to die on the desk. They notice, and they say so.
-    for (const c of lapsedProposals(cat, this.quarter, this.flags, this.ps.coalition)) {
+    for (const c of lapsedProposals(cat, this.quarter, this.flags, this.ps.coalition, this.playedCards)) {
       for (const [party, delta] of Object.entries(c.proposal!.onIgnore)) {
         if (this.opinion[party] == null) continue;
         this.opinion[party] = Math.max(0, Math.min(100, Math.round(this.opinion[party] + delta)));

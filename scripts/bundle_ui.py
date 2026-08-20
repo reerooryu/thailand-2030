@@ -17,7 +17,8 @@ html = html.replace('<script src="engine.js"></script>\n<script type="module" sr
 # Inline the campaign song as a data URI so the single file really is single.
 # The mp3 is a third-party recording and is deliberately NOT in the repository
 # (see .gitignore), so a clean checkout has to build without it: drop the audio
-# element and let the player IIFE find nothing. The music control hides itself.
+# element, and the player falls through to streaming the rights holder's own
+# upload instead. If that will not load either, the transport hides itself.
 import base64
 song = os.path.join(U, 'assets', 'anthem.mp3')
 if os.path.exists(song):
@@ -25,7 +26,7 @@ if os.path.exists(song):
     html = html.replace('src="assets/anthem.mp3"', 'src="data:audio/mpeg;base64,%s"' % mp3)
 else:
     html = re.sub(r'<audio id="anthem".*?</audio>', '', html, flags=re.S)
-    print('note: ui/assets/anthem.mp3 absent — built without the music player')
+    print('note: ui/assets/anthem.mp3 absent — the build will stream the song instead')
 
 # --- guard: the engine bundle's global name must match what the app destructures.
 # esbuild's --global-name is passed on the command line, so nothing connects it

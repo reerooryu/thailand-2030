@@ -100,6 +100,24 @@ number that actually matters.
 | Central Cooperative Debt Consolidation | Leave the cooperatives to the registrar | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | not in this coalition's deck |
 | The People's Bank | Charter the bank with capped rates | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | not in this coalition's deck |
 | The People's Bank | Expand the existing state banks' mandate instead | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | not in this coalition's deck |
+| Senior Plus 1 — Employment Incentive | Double the ceiling to 30,000 baht and lift the headcount cap | +8 | +0.03 | -0.1 | +0.08 | +0.5 | +3.2 |  |
+| Senior Plus 1 — Employment Incentive | Raise the ceiling only, keep the 10% headcount cap | +4 | +0.01 | -0.0 | +0.04 | +0.2 | +1.6 |  |
+| Senior Plus 2 — Income Tax Relief | Grant the full 50% deduction under 1.5 million baht | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | not in this coalition's deck |
+| Senior Plus 2 — Income Tax Relief | A limited 25% deduction, reviewed after two years | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | not in this coalition's deck |
+| Senior Plus 3 — One Village, One Volunteer Nurse | Fund the nationwide programme and the training pipeline | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | not in this coalition's deck |
+| Senior Plus 3 — One Village, One Volunteer Nurse | Limit it to the twenty oldest provinces | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | not in this coalition's deck |
+| Migrant Labour Regularisation | One-stop regularisation, brokers cut out, social security enrolment mandatory | +12 | +0.07 | -0.5 | +0.26 | -1.3 | +9.7 |  |
+| Migrant Labour Regularisation | Widen the MOU channel and leave the rest alone | +4 | +0.03 | -0.4 | +0.12 | +0.1 | +3.9 |  |
+| Migrant Labour Regularisation | Enforcement first — raids, fines, deportations | -1 | -0.01 | +0.4 | -0.07 | +0.6 | 0.0 |  |
+| Ministry Restructure — Tourism, Culture and Sport | Split sport out and merge tourism with culture | +10 | +0.04 | +0.0 | +0.15 | +0.2 | +5.5 |  |
+| Ministry Restructure — Tourism, Culture and Sport | Create the sports ministry, leave tourism where it is | +3 | +0.02 | +0.0 | +0.05 | +0.4 | +2.4 |  |
+| Ministry Restructure — Tourism, Culture and Sport | Leave the machinery alone | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | **no measurable effect** |
+| Provincial Tourism Allocations | One hundred million to every province, no conditions | +1 | +0.00 | +0.2 | -0.01 | +1.5 | +0.5 |  |
+| Provincial Tourism Allocations | Allocate against submitted proposals, audited afterwards | +6 | +0.02 | +0.1 | +0.07 | +0.6 | +3.2 |  |
+| Provincial Tourism Allocations | Keep the fund centralised | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | **no measurable effect** |
+| Tourism Workforce Reskilling | Fund the full programme with a credit-bank qualification behind it | +16 | +0.01 | +0.2 | -0.04 | +1.4 | +1.7 |  |
+| Tourism Workforce Reskilling | Hospitality standards only, no digital component | +4 | +0.01 | +0.0 | +0.00 | +1.6 | +0.9 |  |
+| Tourism Workforce Reskilling | The sector trains its own | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | **no measurable effect** |
 
 ## News
 
@@ -169,11 +187,11 @@ number that actually matters.
 | 5 | Super Licence and Omnibus Law — Super licence only, defer the omnibus | +0.11 | -0.2 |
 | 6 | Negative Income Tax — Implement, funded from general revenue | +0.10 | +1.2 |
 | 7 | OECD Accession — Proceed at technical pace | +0.10 | -0.1 |
-| 8 | Revenue Mobilisation Package — Full package — excise, deduction caps, collection | +0.07 | -2.3 |
-| 9 | TH-AI Passport — Redirect toward domestic AI capacity | +0.06 | -0.1 |
-| 10 | Zero Corruption Act — Pass the Act as drafted, mandatory execution and all | +0.06 | -0.3 |
-| 11 | Semiconductor and Advanced Electronics — Fund the full package — packaging, design centres, 86,000 engineers | +0.06 | +0.1 |
-| 12 | Small Modular Reactors — Order both units and build the regulator | +0.05 | +0.6 |
+| 8 | Migrant Labour Regularisation — One-stop regularisation, brokers cut out, social security enrolment mandatory | +0.07 | -0.5 |
+| 9 | Revenue Mobilisation Package — Full package — excise, deduction caps, collection | +0.07 | -2.3 |
+| 10 | TH-AI Passport — Redirect toward domestic AI capacity | +0.06 | -0.1 |
+| 11 | Zero Corruption Act — Pass the Act as drafted, mandatory execution and all | +0.06 | -0.3 |
+| 12 | Semiconductor and Advanced Electronics — Fund the full package — packaging, design centres, 86,000 engineers | +0.06 | +0.1 |
 
 ## Ranking — cost in debt per point of legacy
 
@@ -181,13 +199,13 @@ number that actually matters.
 |---|--:|--:|--:|
 | VAT Reform — Phased: 8.5% in 2028, 10% in 2030 | +0.05 | -2.6 | -54.9 |
 | Revenue Mobilisation Package — Full package — excise, deduction caps, collection | +0.07 | -2.3 | -33.3 |
+| Migrant Labour Regularisation — Widen the MOU channel and leave the rest alone | +0.03 | -0.4 | -12.3 |
 | Justice System Reform — Separate investigation from arrest, prosecutors direct the file | +0.05 | -0.3 | -7.5 |
 | Zero Corruption Act — Take the enforcement, drop the death penalty | +0.05 | -0.4 | -6.9 |
+| Migrant Labour Regularisation — One-stop regularisation, brokers cut out, social security enrolment mandatory | +0.07 | -0.5 | -6.4 |
 | Zero Corruption Act — Pass the Act as drafted, mandatory execution and all | +0.06 | -0.3 | -5.5 |
+| Senior Plus 1 — Employment Incentive — Double the ceiling to 30,000 baht and lift the headcount cap | +0.03 | -0.1 | -2.4 |
 | Super Licence and Omnibus Law — Full omnibus consolidation | +0.24 | -0.3 | -1.4 |
 | OECD Accession — Accelerate the roadmap | +0.30 | -0.4 | -1.4 |
 | OECD Accession — Proceed at technical pace | +0.10 | -0.1 | -1.4 |
 | Super Licence and Omnibus Law — Super licence only, defer the omnibus | +0.11 | -0.2 | -1.4 |
-| Civil Service Reform — Freeze hiring, let attrition do it | +0.05 | -0.1 | -1.3 |
-| TH-AI Passport — Redirect toward domestic AI capacity | +0.06 | -0.1 | -1.0 |
-| TH-AI Passport — Run the programme as designed | +0.04 | -0.0 | -0.8 |

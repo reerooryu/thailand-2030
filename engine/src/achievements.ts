@@ -176,13 +176,13 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'to_the_moon',
     name: 'To the Moon',
-    requirement: 'Finish with the SET above 2,600.',
+    requirement: 'Finish with the SET above 2,700.',
     flavour: 'Sentiment is clamped at 45% above the nominal-GDP fundamental, so an index this high is not ' +
              'exuberance — it is a fundamental of roughly 1,800 with the market leaning on it as hard as it ' +
              'is allowed to. Foreign institutional money came back. Whether it stays is a question for a ' +
              'government that has not been elected yet.',
     rarity: 'rare',
-    test: c => atLeast(c.set, 2600, 0),
+    test: c => atLeast(c.set, 2700, 0),
   },
   {
     id: 'the_quiet_part',
