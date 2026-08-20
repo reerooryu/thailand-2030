@@ -14,8 +14,9 @@ a graph on top.
 ./build.sh          # then open ui/thailand-2030.html
 ```
 
-That HTML file is the entire game: no server, no install, no network. It runs
-from a local file, an internal share or GitHub Pages equally well — and
+That HTML file is the entire game: no server, no install, and no network for
+anything that affects play. It runs from a local file, an internal share or
+GitHub Pages equally well — and
 `.github/workflows/pages.yml` builds and publishes it on every push to `main`,
 so the live site is never a stale copy of a build somebody forgot to run.
 
@@ -27,7 +28,7 @@ Each quarter opens with the news. Some of it is a courtesy; some of it is
 **blocking**, and the turn will not end until you have answered it — the Strait
 of Hormuz closing, the Constitutional Court ruling on ballot reform, the
 southern provinces rising against the Land Bridge, a coalition partner
-threatening to walk. Then you spend up to three actions from a deck of 28
+threatening to walk. Then you spend up to three actions from a deck of 35
 policy cards, each with two to four options: the full programme, the pilot, the
 phase-in, or nothing.
 
@@ -88,7 +89,7 @@ available to you — including the ones you did not take.
 | `engine/src/achievements.ts` | Seventeen end-of-term predicates. Nothing feeds back. |
 | `engine/src/ideology.ts` | Reads a revealed economic position off the budget. |
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoils the game. |
-| `config/policies.json` | 28 cards, 78 options. |
+| `config/policies.json` | 35 cards, 99 options. |
 | `config/events.json` | 24 news events, 52 options. |
 | `config/coalitions.json` | The four coalitions and what each does to your capacity. |
 | `ui/` | Single-page front end. `app.js` is the whole client. |
@@ -167,10 +168,19 @@ understands; that rule is the reason the model stays legible.
 
 ### A note on the soundtrack
 
-The build looks for `ui/assets/anthem.mp3` and inlines it if present. The file
-is not in the repository — it is a third-party recording — so a clean checkout
-builds without the music player, and the game is otherwise identical. Drop any
-mp3 at that path to restore it.
+The recording is not ours to redistribute, so the player tries three sources in
+order and degrades quietly:
+
+1. **`ui/assets/anthem.mp3`**, inlined at build time if the file is present.
+   It is excluded by `.gitignore`, so a clean checkout does not have it.
+2. **The YouTube embed**, streamed from the rights holder's own upload. This is
+   what a build from a clean checkout uses, and the only part of the game that
+   touches the network. It needs `http(s)` — an embed cannot load from a
+   `file://` page — so a local no-mp3 build is silent by design.
+3. **Nothing.** If the embed is blocked, offline or disabled for the video, the
+   transport removes itself rather than leaving a button that does nothing.
+
+Nothing about the simulation changes in any of the three cases.
 
 ---
 

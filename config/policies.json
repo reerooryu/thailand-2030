@@ -174,7 +174,7 @@
     {
       "id": "super_licence",
       "name": "Super Licence and Omnibus Law",
-      "ministry": "pmo",
+      "ministry": "pm office",
       "type": "structural_reform",
       "briefing": "Replace sequential ministry-by-ministry approvals with a single unified licence, and consolidate up to 7,000 overlapping business rules. Target: super licence live within 180 days, full omnibus consolidation within a year. Almost no fiscal cost. It removes the slowest approving agency from the critical path, which is exactly why the slowest approving agencies resist it.",
       "options": [
@@ -374,7 +374,7 @@
     {
       "id": "oecd_accession",
       "name": "OECD Accession",
-      "ministry": "pmo",
+      "ministry": "pm office",
       "type": "structural_reform",
       "briefing": "Thailand submitted its Initial Memorandum in December 2025 and is in technical review. Accession requires alignment across competition policy, state enterprise governance, anti-corruption, investment openness and corporate governance. It is the single most demanding reform programme available, it costs almost nothing fiscally, and none of it delivers inside one parliamentary term.",
       "options": [
@@ -854,7 +854,7 @@
     {
       "id": "civil_service_reform",
       "name": "Civil Service Reform",
-      "ministry": "pmo",
+      "ministry": "pm office",
       "type": "structural_reform",
       "briefing": "1.8 million core civil servants, 3.0 million including teachers, medical staff, police and military. Personnel and pensions consume roughly 1.4 trillion baht — close to a third of total budget expenditure, and the Parliamentary Budget Office wants it capped at 35% by 2032. The plan on the desk cuts the core workforce by about a third, to 1.35 million, through voluntary early retirement aimed at officials around 40 — some 414,000 people, 30% of the workforce, young enough to retrain. No compulsion, financial incentives plus reskilling, targeted for fiscal 2027. The severance is paid now; the savings arrive over a decade. The public wage bill is downward-rigid, and this is the only card that moves it.",
       "options": [
@@ -2086,6 +2086,485 @@
             "People's": 0.1
           },
           "flavour": "GSB and BAAC already do this, badly, and at least their losses are already on the books."
+        }
+      ]
+    },
+    {
+      "id": "senior_plus_1",
+      "name": "Senior Plus 1 — Employment Incentive",
+      "ministry": "finance",
+      "type": "labour",
+      "scriptedQuarter": 3,
+      "briefing": "Thailand became an aged society in 2024 and will be super-aged by 2033, when 18.4 million people are over 60 and the elderly outnumber children. The country grew grey before it grew rich, which is the whole problem: the labour force is shrinking under an economy that never reached high income. A corporate deduction already exists — 200% of wages paid to Thai employees over 60 — but it is capped at salaries of 15,000 baht a month and at 10% of a firm's headcount, which confines it to the lowest-paid work an older worker can do. Senior Plus 1 doubles the salary ceiling to 30,000 and asks whether the headcount cap should survive.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Double the ceiling to 30,000 baht and lift the headcount cap",
+          "requiresLegislation": true,
+          "effects": {
+            "taxRate": -0.05,
+            "formalisation": 0.09,
+            "humanCapital": 0.06,
+            "reformIndex": 6,
+            "approvalBoost": 4
+          },
+          "lag": {
+            "capacityQuarters": 6
+          },
+          "sets": [
+            "senior_plus_1"
+          ],
+          "fit": {
+            "Others": 0.4,
+            "Kla Tham": 0.3,
+            "Democrat": 0.3,
+            "Pheu Thai": 0.2,
+            "People's": 0.1
+          },
+          "flavour": "Revenue forgone now against a participation rate that compounds for a decade. The headcount cap is the binding constraint, not the salary ceiling — a firm that wants to staff a shift with people over 60 currently cannot.",
+          "maximal": true
+        },
+        {
+          "id": "ceiling_only",
+          "label": "Raise the ceiling only, keep the 10% headcount cap",
+          "requiresLegislation": true,
+          "effects": {
+            "taxRate": -0.03,
+            "formalisation": 0.04,
+            "humanCapital": 0.03,
+            "reformIndex": 3,
+            "approvalBoost": 2
+          },
+          "sets": [
+            "senior_plus_1"
+          ],
+          "fit": {
+            "Others": 0.3,
+            "Kla Tham": 0.2,
+            "Democrat": 0.2,
+            "Pheu Thai": 0.1,
+            "People's": 0.0
+          },
+          "flavour": "Better-paid work for the older workers firms already employ, and no more of them."
+        }
+      ]
+    },
+    {
+      "id": "senior_plus_2",
+      "name": "Senior Plus 2 — Income Tax Relief",
+      "ministry": "finance",
+      "type": "labour",
+      "scriptedQuarter": 5,
+      "requires": [
+        "senior_plus_1"
+      ],
+      "briefing": "The employer side is done; the worker side is untouched. A Thai over 60 who keeps working pays income tax at the same schedule as everyone else, on top of losing means-tested support, so the effective marginal rate on staying in work is punitive at exactly the income where the decision is finely balanced. Senior Plus 2 grants a deduction of up to 50% for earners over 60 with assessable income under 1.5 million baht a year — which is to say, for almost all of them.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Grant the full 50% deduction under 1.5 million baht",
+          "requiresLegislation": true,
+          "effects": {
+            "taxRate": -0.11,
+            "formalisation": 0.1,
+            "savingsRate": 0.04,
+            "humanCapital": 0.04,
+            "reformIndex": 5,
+            "approvalBoost": 7
+          },
+          "sets": [
+            "senior_plus_2"
+          ],
+          "fit": {
+            "Others": 0.4,
+            "Kla Tham": 0.4,
+            "Pheu Thai": 0.3,
+            "Democrat": 0.2,
+            "People's": 0.0
+          },
+          "flavour": "The most expensive of the three and the one that actually changes a household's arithmetic. Note the second effect: income that was never declared because declaring it cost more than hiding it starts appearing on returns.",
+          "maximal": true
+        },
+        {
+          "id": "half",
+          "label": "A limited 25% deduction, reviewed after two years",
+          "requiresLegislation": true,
+          "effects": {
+            "taxRate": -0.05,
+            "formalisation": 0.05,
+            "savingsRate": 0.02,
+            "reformIndex": 3,
+            "approvalBoost": 3
+          },
+          "sets": [
+            "senior_plus_2"
+          ],
+          "fit": {
+            "Others": 0.3,
+            "Kla Tham": 0.2,
+            "Pheu Thai": 0.2,
+            "Democrat": 0.3,
+            "People's": 0.0
+          },
+          "flavour": "Half the cost and rather less than half the behavioural response — the review date is itself a reason not to reorganise your working life around it."
+        }
+      ]
+    },
+    {
+      "id": "senior_plus_3",
+      "name": "Senior Plus 3 — One Village, One Volunteer Nurse",
+      "ministry": "public health",
+      "type": "social",
+      "scriptedQuarter": 7,
+      "requires": [
+        "senior_plus_2"
+      ],
+      "briefing": "Tax relief does nothing for the third of the elderly population who cannot work. Thailand's answer to rural health has always been the village health volunteer — roughly a million of them, the network that carried the country through COVID — but they are volunteers with a stipend and a fortnight of training, and ageing-in-place needs a clinician. One Village, One Volunteer Nurse puts a qualified nurse behind the volunteer network in each of some 75,000 villages, working proactively rather than waiting at a district hospital for an emergency that a home visit would have prevented.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Fund the nationwide programme and the training pipeline",
+          "requiresLegislation": true,
+          "effects": {
+            "govConsumption": 0.13,
+            "humanCapital": 0.2,
+            "formalisation": 0.05,
+            "reformIndex": 7,
+            "approvalBoost": 10
+          },
+          "lag": {
+            "capacityQuarters": 10
+          },
+          "sets": [
+            "senior_plus_3",
+            "village_nurse"
+          ],
+          "fit": {
+            "Pheu Thai": 0.5,
+            "People's": 0.4,
+            "Others": 0.5,
+            "Democrat": 0.3,
+            "Kla Tham": 0.4
+          },
+          "flavour": "The binding constraint is nurses, not money, and nurses take four years — most of this programme is delivered by the government after yours. Proactive community care is the single cheapest thing a super-aged country can do, and the saving lands as an avoided hospital admission nobody will ever attribute to you.",
+          "maximal": true
+        },
+        {
+          "id": "pilot",
+          "label": "Limit it to the twenty oldest provinces",
+          "requiresLegislation": true,
+          "effects": {
+            "govConsumption": 0.05,
+            "humanCapital": 0.08,
+            "reformIndex": 4,
+            "approvalBoost": 4
+          },
+          "lag": {
+            "capacityQuarters": 8
+          },
+          "fit": {
+            "Pheu Thai": 0.3,
+            "People's": 0.3,
+            "Others": 0.2,
+            "Democrat": 0.4,
+            "Kla Tham": 0.1
+          },
+          "flavour": "Targets the need accurately and guarantees that the other fifty-seven provinces read about it in the newspaper."
+        }
+      ]
+    },
+    {
+      "id": "migrant_labour",
+      "name": "Migrant Labour Regularisation",
+      "ministry": "labour",
+      "type": "labour",
+      "briefing": "3.65 million migrant workers are registered in Thailand, mostly from Myanmar, Cambodia and Laos, and only about 1.4 million of them are inside the social security system. The government-to-government MOU channel has barely moved in a year — 635,000 to 655,000 — while the e-WorkPermit rollout of October 2025 failed badly enough to put over a million Myanmar workers at risk of falling out of legal status. The brokers price the gap: an agency renewal runs to tens of thousands of baht against under 4,000 done directly. When 300,000 Cambodians left over the border closures, the longan harvest alone lost an estimated 2.6 billion baht. This is the labour force the ageing projections quietly assume will keep showing up.",
+      "options": [
+        {
+          "id": "full",
+          "label": "One-stop regularisation, brokers cut out, social security enrolment mandatory",
+          "requiresLegislation": true,
+          "effects": {
+            "formalisation": 0.27,
+            "taxRate": 0.05,
+            "humanCapital": 0.04,
+            "govConsumption": 0.1,
+            "reformIndex": 15,
+            "approvalBoost": -14,
+            "institutionalSupport": -11
+          },
+          "lag": {
+            "capacityQuarters": 6
+          },
+          "sets": [
+            "migrants_regularised"
+          ],
+          "fit": {
+            "People's": 0.6,
+            "Democrat": 0.3,
+            "Pheu Thai": 0.0,
+            "Others": -0.6,
+            "Kla Tham": -0.9
+          },
+          "flavour": "The largest single move available on the formalisation channel and the most expensive thing on this desk politically. Building the one-stop system costs real money before a single contribution arrives, the enrolment revenue takes years to catch up with it, and the constituency you are taking the margin from is not a cartel of strangers — it is embedded in the ministries that would have to administer the replacement. Expect the whip count to be ugly and expect to lose approval you cannot buy back.",
+          "maximal": true
+        },
+        {
+          "id": "mou_only",
+          "label": "Widen the MOU channel and leave the rest alone",
+          "requiresLegislation": true,
+          "effects": {
+            "formalisation": 0.11,
+            "taxRate": 0.03,
+            "reformIndex": 6,
+            "institutionalSupport": -1
+          },
+          "lag": {
+            "capacityQuarters": 6
+          },
+          "fit": {
+            "People's": 0.2,
+            "Democrat": 0.3,
+            "Pheu Thai": 0.2,
+            "Kla Tham": -0.1,
+            "Others": 0.0
+          },
+          "flavour": "Doubles a channel that carries a fifth of the workforce. The brokers keep the other four fifths, which is where their margin was always coming from."
+        },
+        {
+          "id": "enforcement",
+          "label": "Enforcement first — raids, fines, deportations",
+          "requiresLegislation": true,
+          "effects": {
+            "formalisation": -0.13,
+            "fdiSignal": -0.05,
+            "govConsumption": 0.03,
+            "approvalBoost": 7
+          },
+          "sets": [
+            "migrant_crackdown"
+          ],
+          "fit": {
+            "Kla Tham": 0.6,
+            "Others": 0.4,
+            "Pheu Thai": -0.1,
+            "Democrat": -0.3,
+            "People's": -0.6
+          },
+          "flavour": "Popular, straightforward, and it drives the workforce further underground rather than out of the country — the farms and the building sites still need them next season. Ask the longan growers what a labour shortage costs."
+        }
+      ]
+    },
+    {
+      "id": "tourism_ministry",
+      "name": "Ministry Restructure — Tourism, Culture and Sport",
+      "ministry": "pm office",
+      "type": "structural_reform",
+      "scriptedQuarter": 1,
+      "briefing": "The Office of the Public Sector Development Commission has a framework in front of cabinet: cleave sport out of the Ministry of Tourism and Sports into a ministry of its own, and merge what remains into a Ministry of Culture and Tourism. The argument is soft power — that Thailand sells culture and has been administering it in a department attached to football. The counter-argument is that machinery-of-government changes consume eighteen months of senior attention and deliver an org chart. Tourism was 2.7 trillion baht in 2025 across foreign and domestic, on arrivals that fell 7.2% while everyone waited for the Chinese market to come back.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Split sport out and merge tourism with culture",
+          "requiresLegislation": true,
+          "effects": {
+            "govConsumption": 0.03,
+            "fdiSignal": 0.05,
+            "reformIndex": 9,
+            "executionBonus": 0.02,
+            "institutionalSupport": -5,
+            "approvalBoost": 2
+          },
+          "sets": [
+            "culture_tourism_ministry"
+          ],
+          "fit": {
+            "Others": 0.2,
+            "Kla Tham": 0.2,
+            "Pheu Thai": 0.3,
+            "Democrat": 0.1,
+            "People's": -0.1
+          },
+          "flavour": "Two new permanent secretaries, one genuine strategic alignment, and a year and a half of everybody arguing about which department keeps which budget line. The soft-power case is real. So is the disruption.",
+          "maximal": true
+        },
+        {
+          "id": "sports_only",
+          "label": "Create the sports ministry, leave tourism where it is",
+          "requiresLegislation": true,
+          "effects": {
+            "govConsumption": 0.02,
+            "reformIndex": 4,
+            "institutionalSupport": -2,
+            "approvalBoost": 3
+          },
+          "fit": {
+            "Others": 0.3,
+            "Kla Tham": 0.3,
+            "Pheu Thai": 0.1,
+            "Democrat": 0.1,
+            "People's": -0.1
+          },
+          "flavour": "The half of the reform with a constituency behind it. Sport gets its own budget; tourism keeps the letterhead it has always had."
+        },
+        {
+          "id": "none",
+          "label": "Leave the machinery alone",
+          "effects": {},
+          "fit": {
+            "Others": 0.3,
+            "People's": 0.2,
+            "Democrat": 0.2,
+            "Pheu Thai": -0.2
+          },
+          "flavour": "There is a serious argument that reorganising ministries is what governments do when they cannot think of a policy."
+        }
+      ]
+    },
+    {
+      "id": "tourism_provincial",
+      "name": "Provincial Tourism Allocations",
+      "ministry": "tourism",
+      "type": "fiscal",
+      "scriptedQuarter": 5,
+      "briefing": "The Tourism Promotion Fund holds 10 billion baht. The proposal is to hand 100 million of it to each of the 77 provinces — 7.7 billion in total — earmarked for local festivals, cultural events and regional activity, on the reasoning that foreign arrivals concentrate in five provinces while the fund is national. Domestic tourism was 1.16 trillion baht last year and grew while the foreign side fell 4.7%, so the demand is genuinely there. Whether an equal split finds it is a different question: Mae Hong Son and Chon Buri receive the same envelope.",
+      "options": [
+        {
+          "id": "equal",
+          "label": "One hundred million to every province, no conditions",
+          "requiresLegislation": true,
+          "effects": {
+            "govConsumption": 0.06,
+            "approvalBoost": 8,
+            "institutionalSupport": 6,
+            "reformIndex": 1
+          },
+          "sets": [
+            "provincial_tourism_fund"
+          ],
+          "fit": {
+            "Others": 0.6,
+            "Kla Tham": 0.5,
+            "Pheu Thai": 0.4,
+            "Democrat": 0.0,
+            "People's": -0.3
+          },
+          "flavour": "Seventy-seven governors with a budget line and a ribbon. Politically this is close to free money and economically it is close to a transfer — the provinces that can absorb it productively are not the ones the formula was designed to help.",
+          "maximal": true
+        },
+        {
+          "id": "competitive",
+          "label": "Allocate against submitted proposals, audited afterwards",
+          "requiresLegislation": true,
+          "effects": {
+            "govConsumption": 0.05,
+            "approvalBoost": 3,
+            "institutionalSupport": -2,
+            "reformIndex": 7,
+            "executionBonus": 0.02,
+            "fdiSignal": 0.02
+          },
+          "sets": [
+            "provincial_tourism_fund"
+          ],
+          "fit": {
+            "People's": 0.5,
+            "Democrat": 0.5,
+            "Pheu Thai": 0.1,
+            "Kla Tham": -0.2,
+            "Others": -0.3
+          },
+          "flavour": "Better spending and considerably worse politics. Every province that loses a round will explain that the criteria were written in Bangkok, and they will not be entirely wrong."
+        },
+        {
+          "id": "none",
+          "label": "Keep the fund centralised",
+          "effects": {},
+          "fit": {
+            "Others": -0.2,
+            "Kla Tham": -0.3,
+            "Democrat": 0.2,
+            "People's": 0.1
+          },
+          "flavour": "The fund continues to be spent on campaigns in the five provinces that were always going to be full."
+        }
+      ]
+    },
+    {
+      "id": "tourism_reskilling",
+      "name": "Tourism Workforce Reskilling",
+      "ministry": "labour",
+      "type": "human_capital",
+      "scriptedQuarter": 11,
+      "briefing": "The stated ambition is up to 10 million tourism-related jobs, supported by free state-backed upskilling in digital tourism, hospitality standards and AI. It sits inside the five-ministry human-capital strategy the government has already announced, which is coordinated across Labour, Education, Higher Education, Social Development and Agriculture and which conspicuously has not been costed. Tourism is the country's largest employer of people without a degree, its productivity per worker is among the lowest in the economy, and the sector is about to be reorganised by exactly the technologies the curriculum is meant to teach.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Fund the full programme with a credit-bank qualification behind it",
+          "requiresLegislation": true,
+          "effects": {
+            "govConsumption": 0.17,
+            "humanCapital": 0.3,
+            "formalisation": 0.06,
+            "reformIndex": 8,
+            "approvalBoost": 2,
+            "institutionalSupport": -4
+          },
+          "lag": {
+            "capacityQuarters": 12
+          },
+          "sets": [
+            "tourism_reskilling_funded"
+          ],
+          "dependsOn": {
+            "flag": "digital_government_mandated",
+            "withoutFactor": 0.55,
+            "note": "delivered through five ministries that cannot see each other's records"
+          },
+          "fit": {
+            "Pheu Thai": 0.4,
+            "People's": 0.4,
+            "Democrat": 0.2,
+            "Others": 0.0,
+            "Kla Tham": -0.1
+          },
+          "flavour": "Ten million jobs is a number from a press release; the programme underneath it is five ministries, an uncosted strategy and a credit bank that does not exist yet. Human capital is the slowest channel in the model and this is the last quarter it can be started in, so essentially none of the return lands before the election — you are spending real money in your final year on an outcome your successor collects. Without digital government underneath it, most of it dissipates between the five ministries running it.",
+          "maximal": true
+        },
+        {
+          "id": "hospitality_only",
+          "label": "Hospitality standards only, no digital component",
+          "requiresLegislation": true,
+          "effects": {
+            "govConsumption": 0.04,
+            "humanCapital": 0.12,
+            "formalisation": 0.03,
+            "reformIndex": 4,
+            "approvalBoost": 3
+          },
+          "lag": {
+            "capacityQuarters": 8
+          },
+          "fit": {
+            "Others": 0.3,
+            "Kla Tham": 0.3,
+            "Pheu Thai": 0.2,
+            "Democrat": 0.2,
+            "People's": 0.1
+          },
+          "flavour": "The training the industry asks for, which is the training it has always asked for, and which leaves the workforce exactly as exposed to automation as it was."
+        },
+        {
+          "id": "none",
+          "label": "The sector trains its own",
+          "effects": {},
+          "fit": {
+            "Others": 0.2,
+            "People's": -0.3,
+            "Pheu Thai": -0.2,
+            "Democrat": -0.1
+          },
+          "flavour": "It does, informally, on the job, to no standard anybody can put on a CV."
         }
       ]
     }

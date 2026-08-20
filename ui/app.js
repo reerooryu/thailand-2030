@@ -364,8 +364,7 @@ function renderDeck() {
                          : `<span class="chip fail">fails by ${v ? -v.margin : '?'}</span>`) + cross;
       const dep = o.dependsOn && !g.flags.has(o.dependsOn.flag)
         ? `<div class="o-dep">⚠ ×${o.dependsOn.withoutFactor} — ${o.dependsOn.note || o.dependsOn.flag}</div>` : '';
-      const maxi = o.maximal ? '<span class="chip maxi">maximal</span>' : '';
-      b.innerHTML = `<div class="o-label">${o.label} ${maxi}${badge}</div>` +
+      b.innerHTML = `<div class="o-label">${o.label} ${badge}</div>` +
         (o.flavour ? `<div class="o-flavour">${o.flavour}</div>` : '') + dep +
         renderEffects(o.effects) + renderWhip(v);
       b.onclick = () => {
@@ -873,35 +872,94 @@ function endTile(l, v, s, status) {
 renderPrologue();
 
 /* ---- campaign song -------------------------------------------------------
-   Autoplay is blocked until the page has been interacted with, so we try
-   immediately and fall back to starting on the first click. Once the player
-   pauses it deliberately, we never start it again behind their back. */
+   Three sources, tried in order, because the recording is not ours to ship:
+
+     1. the local mp3, inlined at build time if it is present on disk
+     2. the YouTube embed, streamed from the rights holder's own upload
+     3. nothing at all — the transport hides and the game is silent
+
+   Everything below the source layer is shared: one transport, one paint(), one
+   rule about consent. Autoplay is blocked until the page has been interacted
+   with, so each backend tries immediately and falls back to starting on the
+   first click; once the player has paused it deliberately, we never start it
+   again behind their back. */
 (function music() {
-  const el = document.getElementById('anthem');
   const btn = document.getElementById('mus-toggle');
   const box = document.getElementById('player');
-  // A build made without the audio asset (the mp3 is not in the repository)
-  // should not show a transport for a track that does not exist.
-  if (!el || !btn) { if (box) box.style.display = 'none'; return; }
-  let userPaused = false;
-  el.volume = 0.45;
+  if (!btn || !box) return;
+  const hide = () => { box.style.display = 'none'; };
+
+  let userPaused = false, playing = false;
   const paint = () => {
-    btn.textContent = el.paused ? '▶' : '❙❙';
-    box.classList.toggle('paused', el.paused);
+    btn.textContent = playing ? '❙❙' : '▶';
+    box.classList.toggle('paused', !playing);
   };
-  const start = () => {
-    if (userPaused) return;
-    el.play().then(paint).catch(() => {});
-  };
-  btn.onclick = () => {
-    if (el.paused) { userPaused = false; el.play().then(paint).catch(paint); }
-    else { userPaused = true; el.pause(); paint(); }
-  };
-  el.onplay = paint; el.onpause = paint;
-  start();
-  document.addEventListener('click', function once() {
-    document.removeEventListener('click', once);
-    if (el.paused) start();
+  /** Start on the first user gesture anywhere, once. Both backends need this
+   *  and neither should install its own listener. */
+  const onFirstClick = fn => document.addEventListener('click', function once() {
+    document.removeEventListener('click', once, true);
+    fn();
   }, true);
-  paint();
+
+  const local = el => {
+    el.volume = 0.45;
+    const sync = () => { playing = !el.paused; paint(); };
+    const start = () => { if (!userPaused) el.play().then(sync).catch(() => {}); };
+    btn.onclick = () => {
+      if (el.paused) { userPaused = false; el.play().then(sync).catch(sync); }
+      else { userPaused = true; el.pause(); sync(); }
+    };
+    el.onplay = sync; el.onpause = sync;
+    start(); onFirstClick(() => { if (el.paused) start(); }); sync();
+  };
+
+  const youtube = id => {
+    const frame = document.getElementById('yt-frame');
+    if (!frame || !window.location.protocol.startsWith('http')) return hide();
+    let player = null, ready = false;
+    // If the API never arrives — offline, blocked, or the embed is disabled for
+    // this video — there is nothing to control, so remove the transport rather
+    // than leaving a button that does nothing.
+    const giveUp = setTimeout(() => { if (!ready) hide(); }, 8000);
+
+    const boot = () => {
+      player = new window.YT.Player('yt-frame', {
+        videoId: id, host: 'https://www.youtube-nocookie.com',
+        // `playlist` set to the same id is what makes loop work on a single video.
+        playerVars: { autoplay: 1, loop: 1, playlist: id, controls: 0, disablekb: 1,
+                      modestbranding: 1, playsinline: 1, rel: 0 },
+        events: {
+          onReady: e => {
+            ready = true; clearTimeout(giveUp);
+            e.target.setVolume(45);
+            if (!userPaused) e.target.playVideo();
+            onFirstClick(() => { if (!userPaused && !playing) e.target.playVideo(); });
+            paint();
+          },
+          onStateChange: e => { playing = e.data === window.YT.PlayerState.PLAYING; paint(); },
+          onError: () => { clearTimeout(giveUp); hide(); },
+        },
+      });
+    };
+
+    btn.onclick = () => {
+      if (!player || !ready) return;
+      if (playing) { userPaused = true; player.pauseVideo(); }
+      else { userPaused = false; player.playVideo(); }
+    };
+
+    if (window.YT && window.YT.Player) return boot();
+    const prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => { if (prev) prev(); boot(); };
+    const s = document.createElement('script');
+    s.src = 'https://www.youtube.com/iframe_api';
+    s.onerror = () => { clearTimeout(giveUp); hide(); };
+    document.head.appendChild(s);
+    paint();
+  };
+
+  const el = document.getElementById('anthem');
+  if (el) local(el);
+  else if (window.ANTHEM_YT) youtube(window.ANTHEM_YT);
+  else hide();
 })();

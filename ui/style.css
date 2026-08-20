@@ -115,7 +115,6 @@ b{font-weight:600}
 .chip.exec{background:var(--surface-1);color:var(--ink-3)}
 .chip.pass{background:rgba(12,163,12,.16);color:var(--good)}
 .chip.fail{background:rgba(208,59,59,.18);color:var(--critical)}
-.chip.maxi{background:rgba(255,100,11,.16);color:#FF640B;margin-right:4px}
 
 #news{position:sticky;top:14px}
 .newsitem{background:var(--surface-1);border:1px solid var(--critical);border-radius:var(--radius);
@@ -312,3 +311,9 @@ details.whip td{padding:2px 0;vertical-align:baseline}
 .ideo-tag{font-size:12.5px;opacity:.75;font-style:italic}
 .ideo-body{margin:9px 0 8px;font-size:13px;line-height:1.55}
 .ideo-trad{font-size:11.5px;opacity:.55}
+
+/* The YouTube fallback needs a real, laid-out iframe — display:none or
+   visibility:hidden stops playback in several browsers — so it is parked
+   off-screen at 1px rather than hidden. Audio only; nobody sees the video. */
+#yt-host{position:fixed;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;
+  opacity:0;pointer-events:none}

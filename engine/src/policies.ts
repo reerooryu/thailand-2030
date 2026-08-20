@@ -164,10 +164,17 @@ export function aggregate(enacted: Enacted[]) {
 /** Proposals whose window closes on this quarter and which were never enacted.
  *  `enacted` is the flag each proposal sets when it passes. */
 export function lapsedProposals(cat: PolicyCatalogue, quarter: number, flags: Set<string>,
-                                coalition?: string[]) {
+                                coalition?: string[], played?: Set<string>) {
   return cat.policies.filter(c =>
     c.proposal && (!coalition || coalition.includes(c.proposal.bloc)) &&
     c.scriptedQuarter != null &&
     quarter === c.scriptedQuarter + c.proposal.expiresAfter &&
+    // Answered on the floor — including a REFUSAL. Declining a partner's bill
+    // already costs you through the option's `fit`; letting it expire costs you
+    // through `onIgnore`. They are different political acts and must not both
+    // fire for the same bill, which is what happened when the only test was
+    // "did a flag get set" — every decline option sets nothing, so voting a bill
+    // down looked identical to never tabling it.
+    !played?.has(c.id) &&
     !c.options.some(o => (o.sets ?? []).some(f => flags.has(f))));
 }
