@@ -210,7 +210,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     flavour: 'Enforcement with teeth, investigation separated from arrest, and twenty-two million rai ' +
              'converted from possession into property. The three reforms that attack the informal economy ' +
              'at its root, passed by a government that needed the establishment to keep functioning.',
-    rarity: 'legendary',
+    rarity: 'rare',
     test: c => has(c, 'zero_corruption_act') && has(c, 'justice_reform_done') && has(c, 'land_titled'),
   },
   {
@@ -272,6 +272,23 @@ export const ACHIEVEMENTS: Achievement[] = [
     // A cabinet that raised the limit to 85 and then borrowed to 84 has not
     // stayed disciplined — it has moved the goalposts, and the spread knows.
     test: c => c.approval >= 80 && atLeast(c.riskPremium, 1.0),
+  },
+  {
+    id: 'short_of_the_number',
+    name: 'Nine Thousand and Change',
+    requirement: "Finish ahead of the IMF's 9,092 baseline — and short of the 15,000 you promised.",
+    flavour: 'Both halves of this are the point. You beat the only number in the game with an outside ' +
+             'author, which is a real result and one most Thai governments of the last decade did not ' +
+             'manage. And you were never going to reach the other one, because 15,000 was not a forecast, ' +
+             'it was a campaign. Nobody costed it. Nobody was ever going to be asked to. The gap between ' +
+             'the two is the distance between what a government can do in four years and what it has to ' +
+             'say to be given them.',
+    rarity: 'common',
+    // The promise cannot be met — the ceiling on this model is somewhere under
+    // 10,000 — so the earned condition is really the baseline. That is
+    // deliberate: the first thing a new player should learn is which of the two
+    // numbers on the prologue screen was ever real.
+    test: c => atLeast(c.headline, 9092, 0) && c.headline < 15000,
   },
   {
     id: 'bond_vigilantes',
