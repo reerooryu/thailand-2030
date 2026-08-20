@@ -11,7 +11,7 @@ python3 scripts/build_ui_data.py
 
 # 2. Bundle the engine into an IIFE the page can load without a module server.
 npx --prefix engine esbuild engine/src/browser.ts \
-    --bundle --format=iife --global-name=THAI --outfile=ui/engine.js
+    --bundle --format=iife --global-name=ENGINE --outfile=ui/engine.js
 
 # 3. Inline engine + app + css (+ audio, if present) into one distributable file.
 python3 scripts/bundle_ui.py
