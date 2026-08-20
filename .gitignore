@@ -24,11 +24,21 @@ SIMULATION.txt
 TURNLOOP.txt
 
 # ---- third-party media
-# The 2023 Bhumjaithai campaign song. It is somebody else's recording and it is
-# not ours to redistribute, so it stays out of the repository; the build detects
-# its absence and omits the music player. Drop your own file here to restore it.
-ui/assets/*.mp3
-ui/assets/*.mp4
+# The 2023 Bhumjaithai campaign song — both the source file dropped in the
+# project root and the copy the build inlines from ui/assets/. It is somebody
+# else's recording and not ours to redistribute, so it stays out of the
+# repository entirely; the build detects its absence and omits the music player.
+#
+# Matched globally rather than by path, deliberately. A pattern anchored to
+# ui/assets/ silently misses the original sitting next to it, which is exactly
+# the kind of near-miss that puts a copyrighted file in a public repo.
+*.mp3
+*.mp4
+*.m4a
+*.wav
+*.mov
+*.webm
+*.ogg
 
 # ---- personal play records
 # Terms worth keeping, but they are a scrapbook rather than part of the project,
