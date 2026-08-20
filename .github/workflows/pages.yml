@@ -13,14 +13,13 @@ name: Deploy to Pages
 on:
   push:
     branches: [main]
-  workflow_dispatch:        # lets you redeploy from the Actions tab by hand
+  workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Never let two deploys race. A push mid-deploy queues rather than clobbers.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -33,7 +32,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22' # Upgraded from 20 to address deprecation warning
 
       - uses: actions/setup-python@v5
         with:
@@ -46,8 +45,6 @@ jobs:
         run: ./build.sh
 
       - name: Assemble the site
-        # Pages serves index.html from the site root; the game is one file, so
-        # that is the entire deployment.
         run: |
           mkdir -p _site
           cp ui/thailand-2030.html _site/index.html
@@ -59,6 +56,9 @@ jobs:
 
   deploy:
     needs: build
+    permissions:
+      pages: write
+      id-token: write
     runs-on: ubuntu-latest
     environment:
       name: github-pages
