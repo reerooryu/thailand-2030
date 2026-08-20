@@ -1,0 +1,214 @@
+{
+ "_meta": {
+  "scenario": "February 2026, post-election coalition formation",
+  "house": 500,
+  "vacant": 1,
+  "majority": 251,
+  "player": "Bhumjaithai",
+  "note": "The 17 minor parties are merged into 'Others' (35 seats). Their opinion doubles as general institutional support - the establishment, the bureaucracy, the provincial networks. It moves slowly and it gates the things a government needs quiet consent for.",
+  "opinion_scale": "0-100. Every party starts where the February 2026 result leaves it.",
+  "crossbench": "Opposition parties do not vote as perfect blocs. A party whose relations are above Frigid (opinion > 20) will lose a small number of members to the government side. The fraction rises with opinion and falls with cohesion, and is roughly halved where the bill crosses an ideological red line. It is small by design — a handful of seats — but it is what makes a four-vote defeat winnable by a player who has kept the opposition on speaking terms.",
+  "seatColourNote": "Real party colours, supplied by the designer. Validated against the dark chamber surface in seating order (People's, Kla Tham, Democrat, Others, Pheu Thai, Bhumjaithai): CVD separation passes at 8.2 deltaE, normal-vision separation at 21.2, contrast at 3:1 or better for all six. Two deliberate deviations from the reference palette: several hues sit above the 0.48-0.67 lightness band (real brand colours are brighter than a tuned ramp, and contrast still passes), and Others at #C3C3C3 has zero chroma so it reads grey - which is correct for a merged bloc of seventeen minor parties. Identity is never colour-alone: every party is named in the legend and on hover."
+ },
+ "bands": [
+  {
+   "min": 0,
+   "max": 10,
+   "label": "Hostile",
+   "note": "will oppose anything, may move no-confidence"
+  },
+  {
+   "min": 11,
+   "max": 20,
+   "label": "Frigid",
+   "note": "no cooperation available"
+  },
+  {
+   "min": 21,
+   "max": 30,
+   "label": "Cold",
+   "note": "opposes by default"
+  },
+  {
+   "min": 31,
+   "max": 40,
+   "label": "Cool",
+   "note": "opposes unless bought"
+  },
+  {
+   "min": 41,
+   "max": 60,
+   "label": "Neutral",
+   "note": "votes on the merits"
+  },
+  {
+   "min": 61,
+   "max": 70,
+   "label": "Warm",
+   "note": "supports most things"
+  },
+  {
+   "min": 71,
+   "max": 80,
+   "label": "Friendly",
+   "note": "reliable, tolerates cost"
+  },
+  {
+   "min": 81,
+   "max": 100,
+   "label": "Very friendly",
+   "note": "will spend its own capital for you"
+  }
+ ],
+ "parties": {
+  "Bhumjaithai": {
+   "seats": 191,
+   "opinion": 100,
+   "player": true,
+   "cohesion": 0.9,
+   "description": "Your party. Provincial machine politics built on the Northeast and rural constituencies, pragmatic rather than ideological, and the largest bloc in the House by a distance — sixty seats short of being able to ignore everyone else.",
+   "short": "Your party · provincial, pragmatic"
+  },
+  "People's": {
+   "seats": 120,
+   "opinion": 14,
+   "cohesion": 0.9,
+   "description": "The largest opposition party and the one with the clearest programme: institutional reform, decentralisation, competition policy, an end to the arrangements that produced this parliament. Urban, young, and the only bloc large enough to give you a reforming majority — which is why it will never give you one.",
+   "short": "Opposition · urban reformist"
+  },
+  "Pheu Thai": {
+   "seats": 74,
+   "opinion": 42,
+   "cohesion": 0.78,
+   "description": "The North and Northeast, and three decades of populist fiscal expansion. Wants transfers, megaprojects and visible spending, and is comfortable financing all three. A generous partner and an expensive one.",
+   "short": "Populist fiscal expansion"
+  },
+  "Kla Tham": {
+   "seats": 58,
+   "opinion": 47,
+   "cohesion": 0.68,
+   "description": "Provincial conservative networks. Agricultural support, no institutional reform, and a deep suspicion of anything that reduces the discretion of the people who currently hold it. Fifty-eight seats that make almost every arithmetic work — or not.",
+   "short": "Provincial conservative"
+  },
+  "Democrat": {
+   "seats": 21,
+   "opinion": 44,
+   "cohesion": 0.62,
+   "description": "The South and the urban middle class. The most fiscally conservative party of any size: supports the VAT rise, supports the Super Licence, audits everything, and has spent two decades losing seats for it.",
+   "short": "Fiscally conservative, Southern"
+  },
+  "Others": {
+   "seats": 35,
+   "opinion": 56,
+   "institutional": true,
+   "note": "Merged minor parties. Doubles as institutional/establishment support.",
+   "cohesion": 0.34,
+   "description": "Seventeen minor parties merged into one bloc — provincial one- and two-seat operations, single-issue vehicles, and the remnants of older coalitions. Individually purchasable, collectively decisive, and their mood doubles as the establishment's: the bureaucracy, the provincial governors, the people who actually implement what you pass.",
+   "short": "17 minor parties · the establishment"
+  }
+ },
+ "options": [
+  {
+   "id": "conservative",
+   "name": "Bhumjaithai + Kla Tham + Others",
+   "seats": 284,
+   "available": true,
+   "flavour": "The comfortable one. Provincial networks, conservative instincts, nobody asking difficult questions about the budget.",
+   "opinion_delta": {
+    "People's": -6,
+    "Democrat": -8,
+    "Kla Tham": 14,
+    "Others": 6,
+    "Pheu Thai": -2
+   },
+   "effects": {
+    "agricultureSupport": 1,
+    "reformCapacity": 0.55,
+    "educationPush": 0,
+    "megaprojectCap": 8.0,
+    "stimulusCap": 1.0,
+    "executionBonus": 0.0
+   },
+   "describe": "Small boost to agriculture, drag on everything else. Reform is close to impossible - this coalition exists to keep things as they are."
+  },
+  {
+   "id": "pheuthai",
+   "name": "Bhumjaithai + Pheu Thai + Others",
+   "seats": 300,
+   "available": true,
+   "flavour": "The big-tent option. Money to spend and partners who want to spend it.",
+   "opinion_delta": {
+    "People's": -8,
+    "Kla Tham": -12,
+    "Democrat": -3,
+    "Pheu Thai": 16,
+    "Others": 3
+   },
+   "effects": {
+    "agricultureSupport": 0,
+    "reformCapacity": 0.75,
+    "educationPush": 1.0,
+    "megaprojectCap": 10.5,
+    "stimulusCap": 2.5,
+    "executionBonus": 0.0
+   },
+   "describe": "Moderate boosts to education, megaprojects and stimulus. The widest fiscal latitude, and the fastest route into the debt ceiling."
+  },
+  {
+   "id": "democrat",
+   "name": "Bhumjaithai + Pheu Thai + Democrat",
+   "seats": 286,
+   "available": true,
+   "flavour": "The awkward one. Two parties who dislike each other, held together by you, with the Democrats auditing everything.",
+   "opinion_delta": {
+    "Kla Tham": -14,
+    "Democrat": 15,
+    "Pheu Thai": 10,
+    "People's": -2,
+    "Others": -4
+   },
+   "effects": {
+    "agricultureSupport": 0,
+    "reformCapacity": 0.7,
+    "educationPush": 0.6,
+    "megaprojectCap": 9.0,
+    "stimulusCap": 1.8,
+    "executionBonus": 0.14
+   },
+   "describe": "Minor boosts to education, megaprojects and stimulus, plus a real anti-corruption dividend - budget execution rises from 0.50 to 0.64, which raises every baht of capital spending you disburse. The Democrats complicate everything else."
+  },
+  {
+   "id": "peoples",
+   "name": "Bhumjaithai + People's Party",
+   "seats": 311,
+   "available": false,
+   "flavour": "Why would they ally with us again?",
+   "opinion_delta": {},
+   "effects": {},
+   "describe": "Unavailable. The arithmetic works and nothing else does."
+  }
+ ],
+ "crossbench": {
+  "opinionFloor": 20,
+  "opinionSaturation": 72,
+  "baseRate": 0.08,
+  "abstainMultiplier": 1.5,
+  "redLineMultiplier": 0.5,
+  "softOpposeMultiplier": 0.75,
+  "note": "rate = baseRate x opinionFactor x fitFactor x (1.3 - cohesion) x stanceMult, capped at 6% of a party's seats. Tuned so a cold opposition leaves a bill a couple of votes short and a warm one carries it by a hair.",
+  "cap": 0.06
+ },
+ "seatColours": {
+  "Bhumjaithai": "#2D5FCC",
+  "Pheu Thai": "#E30613",
+  "People's": "#FF640B",
+  "Kla Tham": "#50C871",
+  "Democrat": "#00A1F1",
+  "Others": "#C3C3C3",
+  "Vacant": "#3a3a38"
+ },
+ "seatColoursTrue": {
+  "Bhumjaithai": "#082680",
+  "note": "Bhumjaithai's true navy. Rendered at 1.33:1 against the #1a1a19 chamber surface — effectively invisible — so the seat fill is lifted to #2D5FCC, the darkest navy that clears 3:1. The true hex is kept here for a light-surface variant."
+ }
+}

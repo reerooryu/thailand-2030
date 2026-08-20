@@ -1,0 +1,1725 @@
+{
+ "source": "Bank of Thailand, MPC decision table (table-mpc-2026-3)",
+ "instrument": "1-day bilateral repurchase rate (policy rate)",
+ "units": "percent per annum",
+ "span": [
+  "2000-05-23",
+  "2026-06-24"
+ ],
+ "n_meetings": 190,
+ "n_changes": 65,
+ "meetings": [
+  {
+   "date": "2000-05-23",
+   "body": "MPB",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": null
+  },
+  {
+   "date": "2000-07-18",
+   "body": "MPB",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": null
+  },
+  {
+   "date": "2000-09-05",
+   "body": "MPB",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": null
+  },
+  {
+   "date": "2000-10-17",
+   "body": "MPB",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": null
+  },
+  {
+   "date": "2000-12-06",
+   "body": "MPB",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": null
+  },
+  {
+   "date": "2001-01-18",
+   "body": "MPB",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": null
+  },
+  {
+   "date": "2001-03-01",
+   "body": "MPB",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": null
+  },
+  {
+   "date": "2001-04-19",
+   "body": "MPB",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": null
+  },
+  {
+   "date": "2001-05-24",
+   "body": "MPB",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": null
+  },
+  {
+   "date": "2001-06-08",
+   "body": "By Governor",
+   "decision": "Raise 100 bps",
+   "policy_rate": 2.5,
+   "votes": null
+  },
+  {
+   "date": "2001-07-12",
+   "body": "MPC1/",
+   "decision": "Hold",
+   "policy_rate": 2.5,
+   "votes": null
+  },
+  {
+   "date": "2001-08-29",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.5,
+   "votes": null
+  },
+  {
+   "date": "2001-10-17",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.5,
+   "votes": null
+  },
+  {
+   "date": "2001-11-27",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.5,
+   "votes": null
+  },
+  {
+   "date": "2001-12-25",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 2.25,
+   "votes": null
+  },
+  {
+   "date": "2002-01-21",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 2.0,
+   "votes": null
+  },
+  {
+   "date": "2002-03-04",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.0,
+   "votes": null
+  },
+  {
+   "date": "2002-04-22",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.0,
+   "votes": null
+  },
+  {
+   "date": "2002-06-03",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.0,
+   "votes": null
+  },
+  {
+   "date": "2002-07-22",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.0,
+   "votes": null
+  },
+  {
+   "date": "2002-09-10",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.0,
+   "votes": null
+  },
+  {
+   "date": "2002-10-21",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.0,
+   "votes": null
+  },
+  {
+   "date": "2002-11-19",
+   "body": "MPC Special Meeting",
+   "decision": "Cut 25 bps",
+   "policy_rate": 1.75,
+   "votes": null
+  },
+  {
+   "date": "2002-12-12",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.75,
+   "votes": null
+  },
+  {
+   "date": "2003-01-20",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.75,
+   "votes": null
+  },
+  {
+   "date": "2003-03-03",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.75,
+   "votes": null
+  },
+  {
+   "date": "2003-04-21",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.75,
+   "votes": null
+  },
+  {
+   "date": "2003-06-02",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.75,
+   "votes": null
+  },
+  {
+   "date": "2003-06-27",
+   "body": "MPC Special Meeting",
+   "decision": "Cut 50 bps",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2003-07-21",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2003-09-11",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2003-10-28",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2003-12-12",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2004-01-21",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2004-03-17",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2004-04-21",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2004-06-09",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2004-07-21",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2004-08-25",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 1.5,
+   "votes": null
+  },
+  {
+   "date": "2004-10-20",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 1.75,
+   "votes": null
+  },
+  {
+   "date": "2004-12-15",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 2.0,
+   "votes": null
+  },
+  {
+   "date": "2005-01-19",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.0,
+   "votes": null
+  },
+  {
+   "date": "2005-03-02",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 2.25,
+   "votes": null
+  },
+  {
+   "date": "2005-04-20",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.25,
+   "votes": null
+  },
+  {
+   "date": "2005-06-09",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 2.5,
+   "votes": null
+  },
+  {
+   "date": "2005-07-20",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 2.75,
+   "votes": null
+  },
+  {
+   "date": "2005-09-07",
+   "body": "MPC",
+   "decision": "Raise 50 bps.",
+   "policy_rate": 3.25,
+   "votes": null
+  },
+  {
+   "date": "2005-10-19",
+   "body": "MPC",
+   "decision": "Raise 50 bps.",
+   "policy_rate": 3.75,
+   "votes": null
+  },
+  {
+   "date": "2005-12-14",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 4.0,
+   "votes": null
+  },
+  {
+   "date": "2006-01-18",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 4.25,
+   "votes": null
+  },
+  {
+   "date": "2006-03-08",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 4.5,
+   "votes": null
+  },
+  {
+   "date": "2006-04-10",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 4.75,
+   "votes": null
+  },
+  {
+   "date": "2006-06-07",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 5.0,
+   "votes": null
+  },
+  {
+   "date": "2006-07-19",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 5.0,
+   "votes": null
+  },
+  {
+   "date": "2006-09-06",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 5.0,
+   "votes": null
+  },
+  {
+   "date": "2006-10-18",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 5.0,
+   "votes": null
+  },
+  {
+   "date": "2006-12-13",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 5.0,
+   "votes": null
+  },
+  {
+   "date": "2007-01-17",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 4.75,
+   "votes": null
+  },
+  {
+   "date": "2007-02-28",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 4.5,
+   "votes": null
+  },
+  {
+   "date": "2007-04-11",
+   "body": "MPC",
+   "decision": "Cut 50 bps",
+   "policy_rate": 4.0,
+   "votes": null
+  },
+  {
+   "date": "2007-05-23",
+   "body": "MPC",
+   "decision": "Cut 50 bps",
+   "policy_rate": 3.5,
+   "votes": null
+  },
+  {
+   "date": "2007-07-18",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 3.25,
+   "votes": null
+  },
+  {
+   "date": "2007-08-29",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 3.25,
+   "votes": null
+  },
+  {
+   "date": "2007-10-10",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 3.25,
+   "votes": null
+  },
+  {
+   "date": "2007-12-04",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 3.25,
+   "votes": null
+  },
+  {
+   "date": "2008-01-16",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 3.25,
+   "votes": null
+  },
+  {
+   "date": "2008-02-27",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 3.25,
+   "votes": null
+  },
+  {
+   "date": "2008-04-09",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 3.25,
+   "votes": null
+  },
+  {
+   "date": "2008-05-21",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 3.25,
+   "votes": null
+  },
+  {
+   "date": "2008-07-16",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 3.5,
+   "votes": null
+  },
+  {
+   "date": "2008-08-27",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 3.75,
+   "votes": null
+  },
+  {
+   "date": "2008-10-08",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 3.75,
+   "votes": null
+  },
+  {
+   "date": "2008-12-03",
+   "body": "MPC",
+   "decision": "Cut 100 bps",
+   "policy_rate": 2.75,
+   "votes": null
+  },
+  {
+   "date": "2009-01-14",
+   "body": "MPC",
+   "decision": "Cut 75 bps",
+   "policy_rate": 2.0,
+   "votes": null
+  },
+  {
+   "date": "2009-02-25",
+   "body": "MPC",
+   "decision": "Cut 50 bps",
+   "policy_rate": 1.5,
+   "votes": null
+  },
+  {
+   "date": "2009-04-08",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2009-05-20",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2009-07-15",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2009-08-26",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2009-10-21",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2009-12-02",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2010-01-13",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2010-03-10",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2010-04-21",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2010-06-02",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": null
+  },
+  {
+   "date": "2010-07-14",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 1.5,
+   "votes": null
+  },
+  {
+   "date": "2010-08-25",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 1.75,
+   "votes": null
+  },
+  {
+   "date": "2010-10-20",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.75,
+   "votes": null
+  },
+  {
+   "date": "2010-12-01",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 2.0,
+   "votes": null
+  },
+  {
+   "date": "2011-01-12",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 2.25,
+   "votes": {
+    "raise_25": 7
+   }
+  },
+  {
+   "date": "2011-03-09",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 2.5,
+   "votes": {
+    "raise_25": 7
+   }
+  },
+  {
+   "date": "2011-04-20",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 2.75,
+   "votes": {
+    "hold": 1,
+    "raise_25": 6
+   }
+  },
+  {
+   "date": "2011-06-01",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 3.0,
+   "votes": {
+    "raise_25": 7
+   }
+  },
+  {
+   "date": "2011-07-13",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 3.25,
+   "votes": {
+    "raise_25": 7
+   }
+  },
+  {
+   "date": "2011-08-24",
+   "body": "MPC",
+   "decision": "Raise 25 bps.",
+   "policy_rate": 3.5,
+   "votes": {
+    "hold": 2,
+    "raise_25": 5
+   }
+  },
+  {
+   "date": "2011-10-19",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 3.5,
+   "votes": {
+    "hold": 6,
+    "cut_25": 1
+   }
+  },
+  {
+   "date": "2011-11-30",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 3.25,
+   "votes": {
+    "hold": 2,
+    "cut_25": 5
+   }
+  },
+  {
+   "date": "2012-01-25",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 3.0,
+   "votes": {
+    "cut_25": 7
+   }
+  },
+  {
+   "date": "2012-03-21",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 3.0,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2012-05-02",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 3.0,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2012-06-13",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 3.0,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2012-07-25",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 3.0,
+   "votes": {
+    "hold": 5,
+    "cut_25": 2
+   }
+  },
+  {
+   "date": "2012-09-05",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 3.0,
+   "votes": {
+    "hold": 3,
+    "cut_25": 2,
+    "absent": 2
+   }
+  },
+  {
+   "date": "2012-10-17",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 2.75,
+   "votes": {
+    "hold": 2,
+    "cut_25": 5
+   }
+  },
+  {
+   "date": "2012-11-28",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.75,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2013-01-09",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.75,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2013-02-20",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.75,
+   "votes": {
+    "hold": 6,
+    "cut_25": 1
+   }
+  },
+  {
+   "date": "2013-04-03",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.75,
+   "votes": {
+    "hold": 5,
+    "cut_25": 1,
+    "absent": 1
+   }
+  },
+  {
+   "date": "2013-08-21",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.5,
+   "votes": {
+    "hold": 6,
+    "cut_25": 1
+   }
+  },
+  {
+   "date": "2013-10-16",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.5,
+   "votes": {
+    "hold": 6,
+    "absent": 1
+   }
+  },
+  {
+   "date": "2013-11-27",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 2.25,
+   "votes": {
+    "hold": 1,
+    "cut_25": 6
+   }
+  },
+  {
+   "date": "2014-01-22",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.25,
+   "votes": {
+    "hold": 4,
+    "cut_25": 3
+   }
+  },
+  {
+   "date": "2014-03-12",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 2.0,
+   "votes": {
+    "hold": 3,
+    "cut_25": 4
+   }
+  },
+  {
+   "date": "2014-04-23",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.0,
+   "votes": {
+    "hold": 6,
+    "cut_25": 1
+   }
+  },
+  {
+   "date": "2014-06-18",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.0,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2014-08-06",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.0,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2014-09-17",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.0,
+   "votes": {
+    "hold": 5,
+    "absent": 2
+   }
+  },
+  {
+   "date": "2014-11-05",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.0,
+   "votes": {
+    "hold": 6,
+    "cut_25": 1
+   }
+  },
+  {
+   "date": "2014-12-17",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.0,
+   "votes": {
+    "hold": 5,
+    "cut_25": 2
+   }
+  },
+  {
+   "date": "2015-01-28",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.0,
+   "votes": {
+    "hold": 5,
+    "cut_25": 2
+   }
+  },
+  {
+   "date": "2015-03-11",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 1.75,
+   "votes": {
+    "hold": 3,
+    "cut_25": 4
+   }
+  },
+  {
+   "date": "2015-04-29",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 2,
+    "cut_25": 5
+   }
+  },
+  {
+   "date": "2015-06-10",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2015-08-05",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2015-09-16",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2015-11-04",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2015-12-16",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2016-02-03",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2016-03-23",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2016-05-11",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2016-06-22",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 6,
+    "absent": 1
+   }
+  },
+  {
+   "date": "2016-08-03",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2016-09-14",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2016-11-09",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2016-12-21",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2018-09-19",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 5,
+    "raise_25": 2
+   }
+  },
+  {
+   "date": "2018-11-14",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 4,
+    "raise_25": 3
+   }
+  },
+  {
+   "date": "2018-12-19",
+   "body": "MPC",
+   "decision": "Raise 25 bps",
+   "policy_rate": 1.75,
+   "votes": {
+    "hold": 2,
+    "raise_25": 5
+   }
+  },
+  {
+   "date": "2019-02-06",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.75,
+   "votes": {
+    "hold": 4,
+    "raise_25": 2,
+    "absent": 1
+   }
+  },
+  {
+   "date": "2019-03-20",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.75,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2019-05-08",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.75,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2019-06-26",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.75,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2019-08-07",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 2,
+    "cut_25": 5
+   }
+  },
+  {
+   "date": "2019-09-25",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2019-11-06",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 1.25,
+   "votes": {
+    "hold": 2,
+    "cut_25": 5
+   }
+  },
+  {
+   "date": "2019-12-18",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.25,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2020-02-05",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 1.0,
+   "votes": {
+    "cut_25": 7
+   }
+  },
+  {
+   "date": "2020-03-20",
+   "body": "MPC Special Meeting",
+   "decision": "Cut 25 bps",
+   "policy_rate": 0.75,
+   "votes": {
+    "cut_25": 7
+   }
+  },
+  {
+   "date": "2020-03-25",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.75,
+   "votes": {
+    "hold": 4,
+    "cut_25": 2
+   }
+  },
+  {
+   "date": "2020-05-20",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 3,
+    "cut_25": 4
+   }
+  },
+  {
+   "date": "2020-06-24",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2020-08-05",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2020-09-23",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2020-11-18",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2020-12-23",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 6,
+    "absent": 1
+   }
+  },
+  {
+   "date": "2021-02-03",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2021-03-24",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2021-05-05",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2021-06-23",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2021-08-04",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 4,
+    "cut_25": 2,
+    "absent": 1
+   }
+  },
+  {
+   "date": "2021-09-29",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2021-11-10",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2021-12-22",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2022-02-09",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2022-03-30",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2022-06-08",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 0.5,
+   "votes": {
+    "hold": 4,
+    "raise_25": 3
+   }
+  },
+  {
+   "date": "2022-08-10",
+   "body": "MPC",
+   "decision": "Raise 25 bps",
+   "policy_rate": 0.75,
+   "votes": {
+    "raise_25": 6,
+    "raise_50": 1
+   }
+  },
+  {
+   "date": "2022-09-28",
+   "body": "MPC",
+   "decision": "Raise 25 bps",
+   "policy_rate": 1.0,
+   "votes": {
+    "raise_25": 7
+   }
+  },
+  {
+   "date": "2022-11-30",
+   "body": "MPC",
+   "decision": "Raise 25 bps",
+   "policy_rate": 1.25,
+   "votes": {
+    "raise_25": 7
+   }
+  },
+  {
+   "date": "2023-01-25",
+   "body": "MPC",
+   "decision": "Raise 25 bps",
+   "policy_rate": 1.5,
+   "votes": {
+    "raise_25": 7
+   }
+  },
+  {
+   "date": "2023-03-29",
+   "body": "MPC",
+   "decision": "Raise 25 bps",
+   "policy_rate": 1.75,
+   "votes": {
+    "raise_25": 7
+   }
+  },
+  {
+   "date": "2023-05-31",
+   "body": "MPC",
+   "decision": "Raise 25 bps",
+   "policy_rate": 2.0,
+   "votes": null
+  },
+  {
+   "date": "2023-08-02",
+   "body": "MPC",
+   "decision": "Raise 25 bps",
+   "policy_rate": 2.25,
+   "votes": {
+    "raise_25": 7
+   }
+  },
+  {
+   "date": "2023-09-27",
+   "body": "MPC",
+   "decision": "Raise 25 bps",
+   "policy_rate": 2.5,
+   "votes": {
+    "raise_25": 7
+   }
+  },
+  {
+   "date": "2023-11-29",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.5,
+   "votes": {
+    "hold": 6,
+    "absent": 1
+   }
+  },
+  {
+   "date": "2024-02-07",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.5,
+   "votes": {
+    "hold": 5,
+    "cut_25": 2
+   }
+  },
+  {
+   "date": "2024-04-10",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.5,
+   "votes": {
+    "hold": 5,
+    "cut_25": 2
+   }
+  },
+  {
+   "date": "2024-06-12",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.5,
+   "votes": {
+    "hold": 6,
+    "cut_25": 1
+   }
+  },
+  {
+   "date": "2024-08-21",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.5,
+   "votes": {
+    "hold": 6,
+    "cut_25": 1
+   }
+  },
+  {
+   "date": "2024-10-16",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 2.25,
+   "votes": {
+    "hold": 2,
+    "cut_25": 5
+   }
+  },
+  {
+   "date": "2024-12-18",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 2.25,
+   "votes": {
+    "hold": 7
+   }
+  },
+  {
+   "date": "2025-02-26",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 2.0,
+   "votes": {
+    "hold": 1,
+    "cut_25": 6
+   }
+  },
+  {
+   "date": "2025-04-30",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 1.75,
+   "votes": {
+    "hold": 2,
+    "cut_25": 5
+   }
+  },
+  {
+   "date": "2025-06-25",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.75,
+   "votes": {
+    "hold": 6,
+    "cut_25": 1
+   }
+  },
+  {
+   "date": "2025-08-13",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 1.5,
+   "votes": null
+  },
+  {
+   "date": "2025-10-08",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.5,
+   "votes": {
+    "hold": 5,
+    "cut_25": 2
+   }
+  },
+  {
+   "date": "2025-12-17",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 1.25,
+   "votes": {
+    "cut_25": 7
+   }
+  },
+  {
+   "date": "2026-02-25",
+   "body": "MPC",
+   "decision": "Cut 25 bps",
+   "policy_rate": 1.0,
+   "votes": {
+    "hold": 2
+   }
+  },
+  {
+   "date": "2026-04-29",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.0,
+   "votes": null
+  },
+  {
+   "date": "2026-06-24",
+   "body": "MPC",
+   "decision": "Hold",
+   "policy_rate": 1.0,
+   "votes": {
+    "hold": 7
+   }
+  }
+ ],
+ "quarter_end": {
+  "2000Q2": 1.5,
+  "2000Q3": 1.5,
+  "2000Q4": 1.5,
+  "2001Q1": 1.5,
+  "2001Q2": 2.5,
+  "2001Q3": 2.5,
+  "2001Q4": 2.25,
+  "2002Q1": 2.0,
+  "2002Q2": 2.0,
+  "2002Q3": 2.0,
+  "2002Q4": 1.75,
+  "2003Q1": 1.75,
+  "2003Q2": 1.25,
+  "2003Q3": 1.25,
+  "2003Q4": 1.25,
+  "2004Q1": 1.25,
+  "2004Q2": 1.25,
+  "2004Q3": 1.5,
+  "2004Q4": 2.0,
+  "2005Q1": 2.25,
+  "2005Q2": 2.5,
+  "2005Q3": 3.25,
+  "2005Q4": 4.0,
+  "2006Q1": 4.5,
+  "2006Q2": 5.0,
+  "2006Q3": 5.0,
+  "2006Q4": 5.0,
+  "2007Q1": 4.5,
+  "2007Q2": 3.5,
+  "2007Q3": 3.25,
+  "2007Q4": 3.25,
+  "2008Q1": 3.25,
+  "2008Q2": 3.25,
+  "2008Q3": 3.75,
+  "2008Q4": 2.75,
+  "2009Q1": 1.5,
+  "2009Q2": 1.25,
+  "2009Q3": 1.25,
+  "2009Q4": 1.25,
+  "2010Q1": 1.25,
+  "2010Q2": 1.25,
+  "2010Q3": 1.75,
+  "2010Q4": 2.0,
+  "2011Q1": 2.5,
+  "2011Q2": 3.0,
+  "2011Q3": 3.5,
+  "2011Q4": 3.25,
+  "2012Q1": 3.0,
+  "2012Q2": 3.0,
+  "2012Q3": 3.0,
+  "2012Q4": 2.75,
+  "2013Q1": 2.75,
+  "2013Q2": 2.75,
+  "2013Q3": 2.5,
+  "2013Q4": 2.25,
+  "2014Q1": 2.0,
+  "2014Q2": 2.0,
+  "2014Q3": 2.0,
+  "2014Q4": 2.0,
+  "2015Q1": 1.75,
+  "2015Q2": 1.5,
+  "2015Q3": 1.5,
+  "2015Q4": 1.5,
+  "2016Q1": 1.5,
+  "2016Q2": 1.5,
+  "2016Q3": 1.5,
+  "2016Q4": 1.5,
+  "2017Q1": 1.5,
+  "2017Q2": 1.5,
+  "2017Q3": 1.5,
+  "2017Q4": 1.5,
+  "2018Q1": 1.5,
+  "2018Q2": 1.5,
+  "2018Q3": 1.5,
+  "2018Q4": 1.75,
+  "2019Q1": 1.75,
+  "2019Q2": 1.75,
+  "2019Q3": 1.5,
+  "2019Q4": 1.25,
+  "2020Q1": 0.75,
+  "2020Q2": 0.5,
+  "2020Q3": 0.5,
+  "2020Q4": 0.5,
+  "2021Q1": 0.5,
+  "2021Q2": 0.5,
+  "2021Q3": 0.5,
+  "2021Q4": 0.5,
+  "2022Q1": 0.5,
+  "2022Q2": 0.5,
+  "2022Q3": 1.0,
+  "2022Q4": 1.25,
+  "2023Q1": 1.75,
+  "2023Q2": 2.0,
+  "2023Q3": 2.5,
+  "2023Q4": 2.5,
+  "2024Q1": 2.5,
+  "2024Q2": 2.5,
+  "2024Q3": 2.5,
+  "2024Q4": 2.25,
+  "2025Q1": 2.0,
+  "2025Q2": 1.75,
+  "2025Q3": 1.5,
+  "2025Q4": 1.25,
+  "2026Q1": 1.0,
+  "2026Q2": 1.0
+ },
+ "source_notes": [
+  "ครั้งที่ 4/2556",
+  "ครั้งที่ 5/2556",
+  "ครั้งที่ 1/2560",
+  "ครั้งที่ 2/2560",
+  "ครั้งที่ 3/2560",
+  "ครั้งที่ 4/2560",
+  "ครั้งที่ 5/2560",
+  "ครั้งที่ 6/2560",
+  "ครั้งที่ 7/2560",
+  "ครั้งที่ 8/2560",
+  "ครั้งที่ 1/2561",
+  "ครั้งที่ 2/2561",
+  "ครั้งที่ 3/2561",
+  "ครั้งที่ 4/2561",
+  "ครั้งที่ 5/2561",
+  "หมายเหตุ:",
+  "1/ คณะกรรมการนโยบายการเงิน (กนง.) เปลี่ยนชื่อภาษาอังกฤษจาก Monetary Policy Board (MPB) เป็น Monetary Policy Committee (MPC) ตั้งแต่ 12 ก.ค. 2544",
+  "2/ อัตราดอกเบี้ยซื้อคืนพันธบัตรระยะ 14 วันเริ่มใช้เป็นอัตราดอกเบี้ยนโยบายในช่วงวันที่ 23 พ.ค. 2543 ถึง 16 ม.ค. 2550 หลังจากนั้นได้เปลี่ยนอัตราดอกเบี้ยนโยบายเป็นอัตราดอกเบี้ยซื้อคืนพันธบัตรระยะ 1 วัน",
+  "3/ เริ่มเผยแพร่จำนวนเสียงในการลงมติ (balance of votes) ของการประชุม กนง. ตั้งแต่ 12 ม.ค. 2554",
+  "4/ ในการประชุม กนง. วันที่ 25 มี.ค. 2563 กรรมการ 1 ท่านร่วมประชุมผ่าน video conference แต่ไม่ได้ร่วมลงมติ",
+  "5/ ในการประชุม กนง. วันที่ 13 ส.ค. 2568 องค์ประชุม กนง. มีจำนวน 6 ท่าน เนื่องจากตำแหน่งกรรมการที่ว่างลง 1 ท่านอยู่ระหว่างรอคำสั่งแต่งตั้งมีผลอย่างเป็นทางการ",
+  "6/ ในการประชุม กนง. วันที่ 31 พ.ค. 2566, 25 ก.พ. 2569 และ 29 เม.ย. 2569 องค์ประชุม กนง. มีจำนวน 6 ท่าน เนื่องจากตำแหน่งกรรมการที่ว่างลง 1 ท่านอยู่ระหว่างกระบวนการสรรหา",
+  "Remarks:",
+  "1/ There has been a change in the English name from Monetary Policy Board (MPB) to Monetary Policy Committee (MPC) since 12 July 2001.",
+  "2/ The 14-day repurchase rate was used as a policy rate from 23 May 2000 to 16 January 2007. After that, the policy rate has been switched to the 1-day repurchase rate.",
+  "3/ The balance of votes of the MPC meetings has been published since 12 January 2011.",
+  "4/ At the MPC meeting on 25 March 2020, one MPC member attended the meeting through video conference but did not vote.",
+  "5/ At the MPC meeting on 13 August 2025, the MPC comprised six members as one committee position was vacant and awaiting the effective date of appointment.",
+  "6/ At the MPC meeting on 31 May 2023, 25 February 2026 and 29 April 2026, the MPC comprised six members as the vacant position was under the selection process."
+ ]
+}

@@ -1,0 +1,2093 @@
+{
+  "_meta": {
+    "schema": "DESIGN.md section 10.2-10.3. Every option writes into channels the engine already understands.",
+    "gdp_2025_bn_baht": 18976,
+    "note": "Costs are % of GDP per year unless stated. reformIndex is 0-100 and feeds the reform stock. Political fit is -1..+1 per party and drives the House vote (POLITICS.md).",
+    "sources": "See RESEARCH note in POLICIES.md. Figures are from reporting current to August 2026 and should be re-checked before publication.",
+    "flags": "Options may declare `requires` (flags that must be set for the card to appear), `sets` and `clears`. This is what makes cancellation prune a branch and open another - DESIGN.md section 10.3. Flags set at scenario start represent the February 2026 inheritance.",
+    "initial_flags": [
+      "land_bridge_live",
+      "eastern_hsr_live",
+      "hsr_ne_phase1_live"
+    ],
+    "dependsOn": "An option may declare dependsOn: {flag, withoutFactor, note}. If the flag is not set, the option's effects are scaled by withoutFactor. This is how one reform becomes the precondition for another actually working, rather than merely being described that way in the briefing.",
+    "requiresFlags": "An option may declare requiresFlags: [...] — a HARD prerequisite. The option is shown locked until every flag is set. Distinct from dependsOn, which is a soft discount. Together these form the tech tree: Digital Government -> Civil Service Reform; Super Licence -> OECD accession; VAT Reform -> Negative Income Tax.",
+    "actionsPerQuarter": 3
+  },
+  "policies": [
+    {
+      "id": "land_bridge",
+      "name": "Land Bridge (Chumphon–Ranong)",
+      "ministry": "transport",
+      "type": "megaproject",
+      "briefing": "The Southern Economic Corridor land bridge. Over one trillion baht, Phase 1 targeted to open 2030 with full completion around 2035. Proponents project a transformational logistics shortcut past the Malacca Strait. Critics note the transfer would take roughly 54 hours against 48 through Malacca, cost around US$252 more per container, and that 73.9% of Thai trade already uses regional routes with little incentive to switch.",
+      "options": [
+        {
+          "id": "proceed",
+          "label": "Push ahead with Phase 1",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.55,
+            "reformIndex": 0,
+            "importContent": "high"
+          },
+          "lag": {
+            "capacityQuarters": 20,
+            "note": "Nothing lands before 2031. Outside the window."
+          },
+          "fit": {
+            "Pheu Thai": 0.5,
+            "Kla Tham": 0.4,
+            "Others": 0.6,
+            "Democrat": -0.3,
+            "People's": -0.7
+          },
+          "flavour": "The southern provinces get a decade of construction. You get the bill and none of the ribbon.",
+          "sets": [
+            "land_bridge_committed"
+          ],
+          "triggers": [
+            {
+              "event": "land_bridge_opposition",
+              "inQuarters": 1
+            }
+          ],
+          "dependsOn": {
+            "flag": "revenue_secured",
+            "withoutFactor": 0.8,
+            "note": "Without a revenue measure this is pure borrowing against a ceiling already within five points."
+          },
+          "maximal": true
+        },
+        {
+          "id": "postpone",
+          "label": "Delay pending review",
+          "effects": {
+            "institutionalSupport": 4,
+            "approvalBoost": 1
+          },
+          "returnsInQuarters": 2,
+          "fit": {
+            "Others": -0.2,
+            "Kla Tham": -0.2
+          },
+          "flavour": "Preserves the option and the money, and reads as prudence rather than retreat. The file comes back in two quarters and you will have to answer then."
+        },
+        {
+          "id": "scrap",
+          "label": "Cancel outright",
+          "requiresLegislation": true,
+          "effects": {
+            "fdiSignal": -0.3,
+            "reformIndex": 0
+          },
+          "fit": {
+            "People's": 0.6,
+            "Democrat": 0.4,
+            "Others": -0.6,
+            "Kla Tham": -0.5,
+            "Pheu Thai": -0.4
+          },
+          "flavour": "Honest arithmetic, expensive politics. The southern corridor does not disappear - a rail-only link becomes the obvious consolation prize.",
+          "clears": [
+            "land_bridge_committed"
+          ],
+          "sets": [
+            "land_bridge_scrapped"
+          ]
+        }
+      ],
+      "requires": [
+        "land_bridge_live"
+      ]
+    },
+    {
+      "id": "negative_income_tax",
+      "name": "Negative Income Tax",
+      "ministry": "finance",
+      "type": "welfare_reform",
+      "briefing": "Replace the patchwork of subsidies with a single income-tested transfer, targeted for 2027. Threshold around 60,000 baht a year. Only 10 million of 67 million Thais currently file, so the scheme requires mass enrolment into the tax net — which is the point, and the problem. The Finance Ministry has paired it with a VAT rise above 7% to fund it.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Implement, funded from general revenue",
+          "requiresLegislation": true,
+          "effects": {
+            "transfers": 0.9,
+            "taxRate": 0.3,
+            "reformIndex": 25,
+            "formalisation": 0.4
+          },
+          "lag": {
+            "tfpQuarters": 16
+          },
+          "fit": {
+            "Pheu Thai": 0.4,
+            "People's": 0.5,
+            "Democrat": 0.3,
+            "Kla Tham": -0.5,
+            "Others": -0.3
+          },
+          "flavour": "Broadens the tax base by making 20 million people file for the first time. They will notice. Funding it properly means the VAT card.",
+          "requiresFlags": [
+            "revenue_secured"
+          ],
+          "lockedNote": "Requires a revenue measure — VAT Reform or the Revenue Mobilisation Package. A transfer to twenty million new filers cannot be funded from a base flat at 21% of GDP.",
+          "maximal": true
+        },
+        {
+          "id": "transfers_only",
+          "label": "Transfers without the VAT rise",
+          "requiresLegislation": true,
+          "effects": {
+            "transfers": 0.9,
+            "reformIndex": 10,
+            "formalisation": 0.3
+          },
+          "fit": {
+            "Pheu Thai": 0.7,
+            "People's": 0.3,
+            "Kla Tham": 0.1,
+            "Democrat": -0.5,
+            "Others": -0.2
+          },
+          "flavour": "All of the cost, none of the funding. Popular, and the debt ceiling is already at 70%.",
+          "dependsOn": {
+            "flag": "revenue_secured",
+            "withoutFactor": 1.0,
+            "note": "Unfunded by design — the debt does the funding."
+          }
+        },
+        {
+          "id": "defer",
+          "label": "Defer to the next government",
+          "effects": {},
+          "returnsInQuarters": 8,
+          "fit": {
+            "Democrat": 0.2,
+            "Kla Tham": 0.3
+          },
+          "flavour": "Everyone agrees it should happen. Nobody agrees it should happen now."
+        }
+      ]
+    },
+    {
+      "id": "super_licence",
+      "name": "Super Licence and Omnibus Law",
+      "ministry": "pmo",
+      "type": "structural_reform",
+      "briefing": "Replace sequential ministry-by-ministry approvals with a single unified licence, and consolidate up to 7,000 overlapping business rules. Target: super licence live within 180 days, full omnibus consolidation within a year. Almost no fiscal cost. It removes the slowest approving agency from the critical path, which is exactly why the slowest approving agencies resist it.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Full omnibus consolidation",
+          "requiresLegislation": true,
+          "effects": {
+            "reformIndex": 45,
+            "executionBonus": 0.06,
+            "fdiSignal": 0.4
+          },
+          "lag": {
+            "investmentQuarters": 6,
+            "tfpQuarters": 12
+          },
+          "fit": {
+            "People's": 0.7,
+            "Democrat": 0.6,
+            "Pheu Thai": 0.1,
+            "Kla Tham": -0.5,
+            "Others": -0.7
+          },
+          "flavour": "The cheapest real reform available. Costs almost nothing and almost nobody in your coalition wants it.",
+          "dependsOn": {
+            "flag": "digital_government_mandated",
+            "withoutFactor": 0.55,
+            "note": "A unified licence is meaningless if ministries cannot see each other's records. Without whole-of-government digital migration the omnibus delivers barely half its effect."
+          },
+          "sets": [
+            "super_licence_done"
+          ],
+          "maximal": true
+        },
+        {
+          "id": "licence_only",
+          "label": "Super licence only, defer the omnibus",
+          "requiresLegislation": true,
+          "effects": {
+            "reformIndex": 22,
+            "fdiSignal": 0.2
+          },
+          "lag": {
+            "investmentQuarters": 6
+          },
+          "fit": {
+            "People's": 0.4,
+            "Democrat": 0.4,
+            "Pheu Thai": 0.1,
+            "Kla Tham": -0.2,
+            "Others": -0.3
+          },
+          "flavour": "Half the reform, a third of the enemies.",
+          "dependsOn": {
+            "flag": "digital_government_mandated",
+            "withoutFactor": 0.6,
+            "note": "Same dependency, smaller programme."
+          },
+          "sets": [
+            "super_licence_done"
+          ]
+        },
+        {
+          "id": "none",
+          "label": "Take no action",
+          "effects": {},
+          "fit": {},
+          "flavour": "Seven thousand overlapping rules, left exactly where they are. The ministries that wrote them will be relieved."
+        }
+      ]
+    },
+    {
+      "id": "thai_chuay_thai",
+      "name": "Thai Chuay Thai Plus",
+      "ministry": "finance",
+      "type": "stimulus",
+      "briefing": "Co-payment stimulus: 1,000 baht a month for four months to roughly 30 million Thais aged 18 and over, spendable only within the month. Around 120 billion baht, 0.63% of GDP. The multiplier on direct transfers is 0.30 — the weakest instrument in the fiscal toolkit — and at 87.5% household debt a meaningful share goes to repayment rather than spending.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Run the full scheme",
+          "effects": {
+            "transfers": 0.63,
+            "approvalBoost": 8
+          },
+          "lag": {
+            "immediate": true
+          },
+          "fit": {
+            "Pheu Thai": 0.8,
+            "Kla Tham": 0.5,
+            "Others": 0.4,
+            "People's": -0.2,
+            "Democrat": -0.6
+          },
+          "flavour": "Everyone gets a thousand baht and remembers who gave it to them. It buys four months of goodwill and nothing else.",
+          "maximal": true
+        },
+        {
+          "id": "targeted",
+          "label": "Means-test to the bottom 40%",
+          "effects": {
+            "transfers": 0.28,
+            "approvalBoost": 3,
+            "reformIndex": 8
+          },
+          "fit": {
+            "People's": 0.4,
+            "Democrat": 0.3,
+            "Pheu Thai": -0.2,
+            "Kla Tham": -0.3,
+            "Others": 0.0
+          },
+          "flavour": "Twice the multiplier per baht, a fraction of the gratitude."
+        },
+        {
+          "id": "redirect",
+          "label": "Redirect the funds to public investment",
+          "effects": {
+            "capitalSpend": 0.63,
+            "approvalBoost": -6
+          },
+          "lag": {
+            "capacityQuarters": 12
+          },
+          "fit": {
+            "Democrat": 0.5,
+            "People's": 0.3,
+            "Others": 0.2,
+            "Pheu Thai": -0.6,
+            "Kla Tham": -0.4
+          },
+          "flavour": "The government did this once before, moving 157 billion baht out of the Digital Wallet. Multiplier 0.30 becomes 0.675. Nobody thanks you."
+        }
+      ]
+    },
+    {
+      "id": "tisa",
+      "name": "Thailand Individual Savings Account (TISA)",
+      "ministry": "finance",
+      "type": "capital_market",
+      "briefing": "Tax-advantaged savings accounts for Thai equities, approved December 2025. Deduction up to 800,000 baht; those earning under 1.5 million baht may deduct up to 1.3 times their contribution. Targets roughly 11.4 million income earners. Deepens the domestic capital market and supports the SET — but the deduction is regressive, since only the 10 million who file benefit at all.",
+      "options": [
+        {
+          "id": "launch",
+          "label": "Launch as approved",
+          "requiresLegislation": true,
+          "effects": {
+            "taxRate": -0.15,
+            "setSupport": 0.5,
+            "savingsRate": 0.3
+          },
+          "lag": {
+            "investmentQuarters": 8
+          },
+          "fit": {
+            "Democrat": 0.6,
+            "Others": 0.5,
+            "Pheu Thai": 0.2,
+            "Kla Tham": 0.1,
+            "People's": -0.4
+          },
+          "flavour": "Deepens the capital market. The benefit lands almost entirely on people who already file taxes.",
+          "maximal": true
+        },
+        {
+          "id": "equalised",
+          "label": "Equalise deduction rights across income bands",
+          "requiresLegislation": true,
+          "effects": {
+            "taxRate": -0.2,
+            "setSupport": 0.4,
+            "savingsRate": 0.35,
+            "reformIndex": 6
+          },
+          "fit": {
+            "People's": 0.3,
+            "Democrat": 0.3,
+            "Pheu Thai": 0.3,
+            "Kla Tham": 0.0,
+            "Others": 0.2
+          },
+          "flavour": "Fairer, more expensive, and the brokerages stop returning your calls."
+        },
+        {
+          "id": "none",
+          "label": "Shelve it",
+          "effects": {},
+          "fit": {
+            "People's": 0.2,
+            "Others": -0.3
+          },
+          "flavour": "The capital market stays shallow and the 11.4 million people who file keep their money in deposits."
+        }
+      ]
+    },
+    {
+      "id": "oecd_accession",
+      "name": "OECD Accession",
+      "ministry": "pmo",
+      "type": "structural_reform",
+      "briefing": "Thailand submitted its Initial Memorandum in December 2025 and is in technical review. Accession requires alignment across competition policy, state enterprise governance, anti-corruption, investment openness and corporate governance. It is the single most demanding reform programme available, it costs almost nothing fiscally, and none of it delivers inside one parliamentary term.",
+      "options": [
+        {
+          "id": "accelerate",
+          "label": "Accelerate the roadmap",
+          "requiresLegislation": true,
+          "effects": {
+            "reformIndex": 55,
+            "fdiSignal": 0.7,
+            "institutionalSupport": -6
+          },
+          "lag": {
+            "investmentQuarters": 8,
+            "tfpQuarters": 20
+          },
+          "fit": {
+            "People's": 0.8,
+            "Democrat": 0.7,
+            "Pheu Thai": 0.0,
+            "Kla Tham": -0.7,
+            "Others": -0.8
+          },
+          "flavour": "Every chapter is a fight with a ministry that likes things as they are. The payoff arrives in the 2030s.",
+          "requiresFlags": [
+            "super_licence_done"
+          ],
+          "lockedNote": "Requires the Super Licence. OECD investment-openness chapters cannot be answered while approvals still run ministry by ministry.",
+          "maximal": true
+        },
+        {
+          "id": "steady",
+          "label": "Proceed at technical pace",
+          "effects": {
+            "reformIndex": 18,
+            "fdiSignal": 0.2
+          },
+          "lag": {
+            "tfpQuarters": 20
+          },
+          "fit": {
+            "People's": 0.3,
+            "Democrat": 0.4,
+            "Others": -0.2,
+            "Kla Tham": -0.2
+          },
+          "flavour": "Progress reports, working groups, no confrontations."
+        },
+        {
+          "id": "stall",
+          "label": "Let it drift",
+          "effects": {
+            "fdiSignal": -0.2
+          },
+          "fit": {
+            "Kla Tham": 0.5,
+            "Others": 0.6,
+            "People's": -0.6,
+            "Democrat": -0.5
+          },
+          "flavour": "The working groups continue. The chapters do not. Everyone understands what has happened without anyone saying it."
+        }
+      ]
+    },
+    {
+      "id": "th_ai_passport",
+      "name": "TH-AI Passport",
+      "ministry": "digital",
+      "type": "human_capital",
+      "briefing": "1.6 billion baht from the Digital Economy fund giving five million Thais aged 15+ a year of access to twelve premium AI models, with mandatory upskilling. Fiscally trivial at 0.008% of GDP. Critics argue it subsidises foreign platforms, encourages passive consumption over critical skill, and deepens dependence on international providers, with questions raised over contractor selection.",
+      "options": [
+        {
+          "id": "proceed",
+          "label": "Run the programme as designed",
+          "effects": {
+            "capitalSpend": 0.008,
+            "reformIndex": 6,
+            "humanCapital": 0.15,
+            "approvalBoost": 3
+          },
+          "lag": {
+            "tfpQuarters": 24
+          },
+          "fit": {
+            "Pheu Thai": 0.4,
+            "Others": 0.4,
+            "Kla Tham": 0.2,
+            "People's": -0.3,
+            "Democrat": -0.2
+          },
+          "flavour": "Costs almost nothing, polls well, and the productivity effect arrives after everyone in this room has retired.",
+          "sets": [
+            "ai_talent_imported"
+          ]
+        },
+        {
+          "id": "domestic",
+          "label": "Redirect toward domestic AI capacity",
+          "effects": {
+            "capitalSpend": 0.008,
+            "reformIndex": 10,
+            "humanCapital": 0.1,
+            "fdiSignal": 0.1
+          },
+          "lag": {
+            "tfpQuarters": 28
+          },
+          "fit": {
+            "People's": 0.4,
+            "Democrat": 0.2,
+            "Others": 0.1,
+            "Pheu Thai": 0.0,
+            "Kla Tham": 0.0
+          },
+          "flavour": "Builds something Thai instead of renting something American. Slower, and the procurement questions do not go away.",
+          "sets": [
+            "domestic_ai_capacity"
+          ],
+          "maximal": true
+        },
+        {
+          "id": "cancel",
+          "label": "Cancel over procurement concerns",
+          "effects": {
+            "approvalBoost": -2,
+            "institutionalSupport": -3
+          },
+          "fit": {
+            "People's": 0.5,
+            "Democrat": 0.5,
+            "Others": -0.4,
+            "Pheu Thai": -0.4
+          },
+          "flavour": "The procurement questions were fair. The five million people who were promised the tools will not read the audit."
+        }
+      ]
+    },
+    {
+      "id": "chumphon_ranong_rail",
+      "name": "Chumphon–Ranong Rail Link",
+      "ministry": "transport",
+      "type": "megaproject",
+      "requires": [
+        "land_bridge_scrapped"
+      ],
+      "briefing": "With the Land Bridge cancelled, the southern corridor reverts to what the corridor was always going to justify on its own: a conventional rail link between the Gulf and the Andaman coasts. A fraction of the cost, a fraction of the ambition, and unlike the deep-sea ports it does not depend on persuading global shippers to abandon Malacca. It also gives the southern provinces something to point at after you took away the trillion-baht project.",
+      "options": [
+        {
+          "id": "build",
+          "label": "Build the rail link",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.16,
+            "reformIndex": 0
+          },
+          "lag": {
+            "capacityQuarters": 14
+          },
+          "fit": {
+            "Others": 0.5,
+            "Kla Tham": 0.4,
+            "Pheu Thai": 0.3,
+            "Democrat": 0.2,
+            "People's": 0.0
+          },
+          "flavour": "Roughly a third of Land Bridge Phase 1, and it might actually carry something.",
+          "maximal": true
+        },
+        {
+          "id": "study",
+          "label": "Commission a feasibility study",
+          "effects": {},
+          "returnsInQuarters": 6,
+          "fit": {
+            "Democrat": 0.2,
+            "Others": -0.1
+          },
+          "flavour": "The traditional Thai response to a corridor that will not pencil out."
+        },
+        {
+          "id": "none",
+          "label": "Leave the corridor alone",
+          "effects": {
+            "approvalBoost": -3
+          },
+          "fit": {
+            "People's": 0.3,
+            "Others": -0.5,
+            "Kla Tham": -0.4
+          },
+          "flavour": "Two cancellations in the same region. The South will remember."
+        }
+      ]
+    },
+    {
+      "id": "hsr_northeast_china",
+      "name": "Northeast HSR — Bangkok–Nong Khai (Phase 2)",
+      "ministry": "transport",
+      "type": "megaproject",
+      "briefing": "Phase 2 of the Thai–Chinese high-speed railway: Nakhon Ratchasima to Nong Khai, 357 km, around US$10.1 billion, targeted operational 2030 and connecting into the China–Laos line. Phase 1 has already slipped a year. It is the largest single capital commitment available, it is geopolitically loaded, and the completion date sits precisely at the end of your term - which means the ribbon, if there is one, belongs to whoever wins in 2030.",
+      "options": [
+        {
+          "id": "accelerate",
+          "label": "Fund Phase 2 and accelerate",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.62,
+            "fdiSignal": 0.2
+          },
+          "lag": {
+            "capacityQuarters": 16
+          },
+          "fit": {
+            "Pheu Thai": 0.5,
+            "Others": 0.5,
+            "Kla Tham": 0.3,
+            "Democrat": -0.2,
+            "People's": -0.3
+          },
+          "sets": [
+            "hsr_ne_phase2_committed",
+            "hsr_northeast_accelerated"
+          ],
+          "flavour": "Isan gets a railway to China. The budget gets a hole until 2033.",
+          "dependsOn": {
+            "flag": "revenue_secured",
+            "withoutFactor": 0.8,
+            "note": "Without a revenue measure this is pure borrowing against a ceiling already within five points."
+          },
+          "maximal": true
+        },
+        {
+          "id": "phase1_only",
+          "label": "Finish Phase 1, defer Phase 2",
+          "effects": {
+            "capitalSpend": 0.24
+          },
+          "lag": {
+            "capacityQuarters": 10
+          },
+          "fit": {
+            "Democrat": 0.3,
+            "People's": 0.2,
+            "Pheu Thai": -0.2,
+            "Others": -0.2
+          },
+          "flavour": "Deliver something before promising more. Unfashionable."
+        },
+        {
+          "id": "renegotiate",
+          "label": "Renegotiate financing terms with Beijing",
+          "effects": {
+            "capitalSpend": 0.45,
+            "institutionalSupport": -4
+          },
+          "lag": {
+            "capacityQuarters": 18
+          },
+          "fit": {
+            "People's": 0.4,
+            "Democrat": 0.4,
+            "Kla Tham": -0.2,
+            "Others": -0.4,
+            "Pheu Thai": -0.3
+          },
+          "flavour": "Better terms, slower delivery, and a conversation nobody in the ministry wants to have."
+        }
+      ]
+    },
+    {
+      "id": "eastern_hsr",
+      "name": "Eastern HSR — Three-Airport Link",
+      "ministry": "transport",
+      "type": "megaproject",
+      "requires": [
+        "eastern_hsr_live"
+      ],
+      "briefing": "Don Mueang–Suvarnabhumi–U-Tapao, the spine of the Eastern Economic Corridor. Eight years late, over 21.8 billion baht already sunk - 9.8bn of it public, on land expropriation and utility relocation - and the concession faces a review that can end it outright. Sites were never handed over cleanly, a drainage channel at Makkasan is still unresolved, U-Tapao passenger forecasts have been cut, and the concessionaire cannot close financing against that uncertainty. Termination means negotiating compensation for money already spent on both sides.",
+      "options": [
+        {
+          "id": "amend",
+          "label": "Amend the concession and proceed",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.28,
+            "fdiSignal": -0.1
+          },
+          "lag": {
+            "capacityQuarters": 18
+          },
+          "fit": {
+            "Pheu Thai": 0.3,
+            "Others": 0.4,
+            "Kla Tham": 0.2,
+            "Democrat": -0.4,
+            "People's": -0.5
+          },
+          "flavour": "Eight years of delay rewarded with better terms. The Democrats will read the file aloud.",
+          "sets": [
+            "eastern_hsr_proceeding"
+          ],
+          "maximal": true
+        },
+        {
+          "id": "terminate",
+          "label": "Terminate the concession",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.1,
+            "fdiSignal": -0.45,
+            "approvalBoost": 2
+          },
+          "clears": [
+            "eastern_hsr_proceeding"
+          ],
+          "sets": [
+            "eastern_hsr_terminated"
+          ],
+          "fit": {
+            "People's": 0.6,
+            "Democrat": 0.5,
+            "Kla Tham": 0.0,
+            "Pheu Thai": -0.3,
+            "Others": -0.5
+          },
+          "flavour": "Compensation talks, a decade of nothing to show for 21.8 billion baht, and every foreign concessionaire in Thailand rereading their termination clauses."
+        },
+        {
+          "id": "defer",
+          "label": "Defer the review again",
+          "effects": {
+            "fdiSignal": -0.1
+          },
+          "returnsInQuarters": 4,
+          "fit": {
+            "Others": 0.2,
+            "Democrat": -0.3,
+            "People's": -0.3
+          },
+          "flavour": "The ninth year."
+        }
+      ]
+    },
+    {
+      "id": "eastern_standard_rail",
+      "name": "EEC Conventional Rail (post-termination)",
+      "ministry": "transport",
+      "type": "megaproject",
+      "requires": [
+        "eastern_hsr_terminated"
+      ],
+      "briefing": "With the high-speed concession dead, the corridor still needs a spine. Conventional double-track electrified rail to U-Tapao delivers most of the freight and commuter case at a fraction of the cost, on a timetable that fits inside a parliamentary term. It is the sensible answer, and it is an admission that eight years and 21.8 billion baht bought a lesson.",
+      "options": [
+        {
+          "id": "build",
+          "label": "Build conventional double-track to U-Tapao",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.14,
+            "reformIndex": 4,
+            "fdiSignal": 0.15
+          },
+          "lag": {
+            "capacityQuarters": 10
+          },
+          "fit": {
+            "Democrat": 0.5,
+            "People's": 0.4,
+            "Pheu Thai": 0.2,
+            "Others": 0.2,
+            "Kla Tham": 0.1
+          },
+          "flavour": "Lands inside your term. Nobody makes a documentary about double-track.",
+          "maximal": true
+        },
+        {
+          "id": "retender",
+          "label": "Re-tender the high-speed line",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.2,
+            "fdiSignal": -0.1
+          },
+          "lag": {
+            "capacityQuarters": 20
+          },
+          "fit": {
+            "Others": 0.4,
+            "Pheu Thai": 0.3,
+            "Democrat": -0.4,
+            "People's": -0.4
+          },
+          "flavour": "Same project, new consortium, same drainage channel at Makkasan."
+        },
+        {
+          "id": "none",
+          "label": "No replacement",
+          "effects": {
+            "approvalBoost": -4,
+            "fdiSignal": -0.1
+          },
+          "fit": {},
+          "flavour": "Twenty-one billion baht, eight years, and an empty corridor. The EEC keeps the name."
+        }
+      ]
+    },
+    {
+      "id": "vat_reform",
+      "name": "VAT Reform",
+      "ministry": "finance",
+      "type": "revenue",
+      "briefing": "VAT has sat at 7% for over three decades, renewed by royal decree year after year, against a statutory 10%. The Finance Ministry's published path is 8.5% in 2028 and 10% in 2030, alongside a 1 baht per litre fuel excise rise from 2027, targeting revenue of 15.1% of GDP and a deficit under 3% by FY2029. Each percentage point is worth roughly 0.55% of GDP. The tax multiplier is -1.125 - the largest in the toolkit - so every baht raised costs more output than a baht of spending gains, and it lands immediately while the spending it funds does not. If the House will not wear it, the Revenue Mobilisation Package raises about two-thirds as much without putting anyone on the street.",
+      "options": [
+        {
+          "id": "hold",
+          "label": "Keep VAT at 7%",
+          "effects": {},
+          "fit": {
+            "Pheu Thai": 0.4,
+            "Kla Tham": 0.5,
+            "Others": 0.3,
+            "People's": 0.0,
+            "Democrat": -0.4
+          },
+          "flavour": "The thirty-fourth consecutive year of the temporary reduction."
+        },
+        {
+          "id": "phased",
+          "label": "Phased: 8.5% in 2028, 10% in 2030",
+          "requiresLegislation": true,
+          "effects": {
+            "taxRate": 0.83,
+            "reformIndex": 12,
+            "approvalBoost": -5
+          },
+          "lag": {
+            "revenuePhased": true
+          },
+          "fit": {
+            "Democrat": 0.6,
+            "People's": 0.2,
+            "Pheu Thai": -0.3,
+            "Others": 0.1,
+            "Kla Tham": -0.5
+          },
+          "flavour": "The published plan. Half the revenue arrives after the next election, which is rather the point.",
+          "sets": [
+            "revenue_secured",
+            "vat_raised"
+          ]
+        },
+        {
+          "id": "immediate",
+          "label": "Go straight to 10%",
+          "requiresLegislation": true,
+          "effects": {
+            "taxRate": 1.65,
+            "reformIndex": 20,
+            "approvalBoost": -14
+          },
+          "fit": {
+            "Democrat": 0.4,
+            "People's": 0.1,
+            "Pheu Thai": -0.6,
+            "Kla Tham": -0.7,
+            "Others": -0.3
+          },
+          "flavour": "Closes the fiscal gap in one move, funds everything else on this desk, and hands the opposition a slogan that writes itself. -1.65pp of output on impact.",
+          "sets": [
+            "revenue_secured",
+            "vat_raised"
+          ],
+          "maximal": true
+        }
+      ]
+    },
+    {
+      "id": "civil_service_reform",
+      "name": "Civil Service Reform",
+      "ministry": "pmo",
+      "type": "structural_reform",
+      "briefing": "1.8 million core civil servants, 3.0 million including teachers, medical staff, police and military. Personnel and pensions consume roughly 1.4 trillion baht — close to a third of total budget expenditure, and the Parliamentary Budget Office wants it capped at 35% by 2032. The plan on the desk cuts the core workforce by about a third, to 1.35 million, through voluntary early retirement aimed at officials around 40 — some 414,000 people, 30% of the workforce, young enough to retrain. No compulsion, financial incentives plus reskilling, targeted for fiscal 2027. The severance is paid now; the savings arrive over a decade. The public wage bill is downward-rigid, and this is the only card that moves it.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Full early-retirement programme",
+          "requiresLegislation": true,
+          "effects": {
+            "govConsumption": 0.45,
+            "reformIndex": 30,
+            "executionBonus": 0.04,
+            "institutionalSupport": -12,
+            "approvalBoost": -4
+          },
+          "lag": {
+            "savingsFromQuarter": 12,
+            "note": "severance now, wage bill relief from 2029"
+          },
+          "sets": [
+            "civil_service_shrinking"
+          ],
+          "triggers": [
+            {
+              "event": "civil_service_backlash",
+              "inQuarters": 2
+            }
+          ],
+          "fit": {
+            "Democrat": 0.6,
+            "People's": 0.5,
+            "Pheu Thai": -0.2,
+            "Kla Tham": -0.6,
+            "Others": -0.9
+          },
+          "flavour": "You are asking the bureaucracy to vote for its own reduction. Every ministry will find a reason its own establishment is the exception, and Others — the institutional bloc — will not forgive it. They are also the people who implement everything else you pass.",
+          "requiresFlags": [
+            "digital_government_mandated"
+          ],
+          "lockedNote": "Requires Digital Government. The state cannot shed a third of its staff until something automates what they did.",
+          "maximal": true
+        },
+        {
+          "id": "attrition",
+          "label": "Freeze hiring, let attrition do it",
+          "effects": {
+            "reformIndex": 10,
+            "institutionalSupport": -3
+          },
+          "lag": {
+            "savingsFromQuarter": 16
+          },
+          "fit": {
+            "Democrat": 0.4,
+            "People's": 0.2,
+            "Others": -0.3,
+            "Kla Tham": -0.2
+          },
+          "flavour": "Slower, cheaper, survivable. Roughly a decade to achieve what the full scheme does in four.",
+          "dependsOn": {
+            "flag": "digital_government_mandated",
+            "withoutFactor": 0.65,
+            "note": "Same dependency."
+          }
+        },
+        {
+          "id": "none",
+          "label": "Leave the establishment alone",
+          "effects": {
+            "institutionalSupport": 5
+          },
+          "fit": {
+            "Others": 0.7,
+            "Kla Tham": 0.5,
+            "Pheu Thai": 0.1,
+            "Democrat": -0.5,
+            "People's": -0.4
+          },
+          "flavour": "A third of the budget, untouched, growing."
+        }
+      ]
+    },
+    {
+      "id": "digital_government",
+      "name": "Digital Government",
+      "ministry": "digital",
+      "type": "structural_reform",
+      "briefing": "The Digital Government Development Agency is consolidating ministries onto shared cloud infrastructure — e-Sarabun document handling with digital signatures and ThaiID authentication, e-Meeting, centralised data through the Government Data Cloud. Agencies are being onboarded one at a time and digital readiness varies enormously across the state. It is unglamorous, it is cheap, and it is the precondition for both civil service reduction and the Super Licence actually working: a unified permit is meaningless if the ministries cannot see each other's records.",
+      "options": [
+        {
+          "id": "accelerate",
+          "label": "Mandate whole-of-government migration",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.09,
+            "reformIndex": 24,
+            "executionBonus": 0.09,
+            "institutionalSupport": -5
+          },
+          "lag": {
+            "investmentQuarters": 8,
+            "tfpQuarters": 14
+          },
+          "sets": [
+            "digital_government_mandated"
+          ],
+          "fit": {
+            "People's": 0.7,
+            "Democrat": 0.5,
+            "Pheu Thai": 0.2,
+            "Kla Tham": -0.2,
+            "Others": -0.4
+          },
+          "flavour": "Raises budget execution more than any other card — the money you already allocate starts actually arriving. Every ministry will explain why it is a special case.",
+          "maximal": true
+        },
+        {
+          "id": "voluntary",
+          "label": "Continue voluntary agency onboarding",
+          "effects": {
+            "capitalSpend": 0.04,
+            "reformIndex": 8,
+            "executionBonus": 0.03
+          },
+          "lag": {
+            "tfpQuarters": 16
+          },
+          "fit": {
+            "People's": 0.3,
+            "Democrat": 0.3,
+            "Others": 0.1,
+            "Kla Tham": 0.0,
+            "Pheu Thai": 0.1
+          },
+          "flavour": "The agencies that were going to modernise anyway will modernise. The rest will not."
+        },
+        {
+          "id": "none",
+          "label": "No additional push",
+          "effects": {},
+          "fit": {
+            "Others": 0.3
+          },
+          "flavour": "Every ministry keeps its own database, its own signature, and its own reason why sharing is impossible."
+        }
+      ]
+    },
+    {
+      "id": "revenue_mobilisation",
+      "name": "Revenue Mobilisation Package",
+      "ministry": "finance",
+      "type": "revenue",
+      "briefing": "The unglamorous half of the Finance Ministry's plan, and the half nobody campaigns against: a 1 baht per litre fuel excise from 2027, tighter excise on alcohol, tobacco and vehicles, a cap on personal income tax deductions, and — the largest single item — closing the gap between tax assessed and tax collected. Only 10 million of 67 million Thais file at all. None of it raises as much as three points on VAT, and none of it puts anyone on the street. It is what a government does when it cannot get VAT through the House, which is most governments, most of the time.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Full package — excise, deduction caps, collection",
+          "requiresLegislation": true,
+          "effects": {
+            "taxRate": 0.52,
+            "reformIndex": 15,
+            "formalisation": 0.3,
+            "approvalBoost": -6
+          },
+          "dependsOn": {
+            "flag": "digital_government_mandated",
+            "withoutFactor": 0.6,
+            "note": "Most of the yield is better collection, not higher rates — and the Revenue Department cannot collect what it cannot see. Without whole-of-government digital migration this delivers well under two-thirds."
+          },
+          "sets": [
+            "revenue_secured",
+            "revenue_package_done"
+          ],
+          "lag": {
+            "revenueQuarters": 4
+          },
+          "fit": {
+            "Democrat": 0.5,
+            "People's": 0.3,
+            "Pheu Thai": -0.2,
+            "Kla Tham": -0.25,
+            "Others": -0.2
+          },
+          "flavour": "Two-thirds of the revenue of a phased VAT rise, a fraction of the fight. The people who notice are the ones who were not paying.",
+          "maximal": true
+        },
+        {
+          "id": "excise_only",
+          "label": "Fuel and sin excise only",
+          "requiresLegislation": true,
+          "effects": {
+            "taxRate": 0.24,
+            "approvalBoost": -4
+          },
+          "sets": [
+            "revenue_secured"
+          ],
+          "fit": {
+            "Democrat": 0.4,
+            "People's": 0.1,
+            "Pheu Thai": -0.1,
+            "Kla Tham": -0.15,
+            "Others": -0.1
+          },
+          "flavour": "The path of least resistance. Enough to unlock the transfer programme, not enough to fund it comfortably."
+        },
+        {
+          "id": "none",
+          "label": "No revenue measure",
+          "effects": {},
+          "fit": {
+            "Pheu Thai": 0.3,
+            "Kla Tham": 0.4,
+            "Others": 0.2,
+            "Democrat": -0.5
+          },
+          "flavour": "Revenue stays at 21% of GDP, where it has been for a decade."
+        }
+      ]
+    },
+    {
+      "id": "electric_bus",
+      "name": "Electric Bus Network",
+      "ministry": "transport",
+      "type": "infrastructure",
+      "briefing": "The BMTA carries 150 billion baht of accumulated debt and loses 8 billion a year. It also runs a fleet old enough that replacing it is not optional. 1,520 electric buses are due by March 2027, with Cabinet approving a further 800 on lease for 8.14 billion baht and 700 more replacing NGV stock at 7.1 billion. Leasing rather than buying keeps it off the capital budget; electric running costs are where the loss actually narrows. Fares are held so commuting stays under a fifth of the minimum wage, which is the entire political point and the entire fiscal problem.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Full fleet electrification and route overhaul",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.12,
+            "govConsumption": 0.06,
+            "reformIndex": 9,
+            "humanCapital": 0.05,
+            "approvalBoost": 6
+          },
+          "lag": {
+            "capacityQuarters": 8
+          },
+          "dependsOn": {
+            "flag": "digital_government_mandated",
+            "withoutFactor": 0.75,
+            "note": "Route rationalisation and integrated ticketing need the data the BMTA does not currently hold."
+          },
+          "sets": [
+            "bmta_reformed"
+          ],
+          "fit": {
+            "People's": 0.6,
+            "Pheu Thai": 0.4,
+            "Democrat": 0.2,
+            "Others": 0.1,
+            "Kla Tham": -0.1
+          },
+          "flavour": "Visible within two years, which almost nothing else here is. Bangkok notices buses in a way it does not notice the Super Licence.",
+          "maximal": true
+        },
+        {
+          "id": "lease_only",
+          "label": "Lease the buses, leave the routes alone",
+          "effects": {
+            "govConsumption": 0.05,
+            "reformIndex": 3,
+            "approvalBoost": 3
+          },
+          "fit": {
+            "Pheu Thai": 0.3,
+            "Others": 0.3,
+            "People's": 0.1,
+            "Democrat": 0.0,
+            "Kla Tham": 0.0
+          },
+          "flavour": "New buses on the same bad routes. The photographs are identical and the losses continue."
+        },
+        {
+          "id": "fare_free",
+          "label": "Electrify and make it fare-free",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.12,
+            "govConsumption": 0.28,
+            "transfers": 0.1,
+            "reformIndex": 6,
+            "approvalBoost": 13
+          },
+          "lag": {
+            "capacityQuarters": 8
+          },
+          "fit": {
+            "Pheu Thai": 0.7,
+            "People's": 0.4,
+            "Kla Tham": 0.3,
+            "Others": 0.0,
+            "Democrat": -0.6
+          },
+          "flavour": "The most approval per baht on this desk. It also permanently converts an 8 billion baht annual loss into a line item nobody can ever remove."
+        }
+      ]
+    },
+    {
+      "id": "smr_programme",
+      "name": "Small Modular Reactors",
+      "ministry": "energy",
+      "type": "infrastructure",
+      "requires": [
+        "nesdp14_full"
+      ],
+      "briefing": "The Power Development Plan carries 600 MWe of small modular reactor capacity — two 300 MWe units, one in the Northeast and one in the South, commercial operation 2037. The Office of Atoms for Peace has existed since 1961 and has never licensed a power reactor; the legal framework for one is a chapter heading, not a code. Capital cost runs USD 5,000–10,000 per kW against an LCOE of USD 90–160/MWh, versus USD 79–86 for the gas you would otherwise burn. It is not cheap power. It is firm, low-carbon power on a grid that is 60% gas and importing most of it, and the cost curve only bends if somebody orders early. Every unit reaches first power well after you leave office.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Order both units and build the regulator",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.22,
+            "reformIndex": 7,
+            "fdiSignal": 0.12,
+            "humanCapital": 0.25,
+            "executionBonus": 0.02
+          },
+          "lag": {
+            "capacityQuarters": 16
+          },
+          "dependsOn": {
+            "flag": "pax_silica",
+            "withoutFactor": 0.7,
+            "note": "Vendor selection, fuel supply and the safeguards agreement all run through partners you have not aligned with."
+          },
+          "sets": [
+            "smr_ordered",
+            "nuclear_regulator",
+            "smr_both_units"
+          ],
+          "fit": {
+            "Others": 0.5,
+            "Democrat": 0.3,
+            "Kla Tham": 0.2,
+            "Pheu Thai": 0.0,
+            "People's": -0.5
+          },
+          "flavour": "You are paying a premium over gas for firm power that arrives in 2037, and standing up a nuclear regulator from a standing start. Both are correct. Neither is on a ballot paper you will ever contest.",
+          "maximal": true
+        },
+        {
+          "id": "one_unit",
+          "label": "Order one unit, site it in the Northeast",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.12,
+            "reformIndex": 4,
+            "fdiSignal": 0.06,
+            "humanCapital": 0.15
+          },
+          "lag": {
+            "capacityQuarters": 16
+          },
+          "sets": [
+            "smr_ordered",
+            "nuclear_regulator"
+          ],
+          "fit": {
+            "Others": 0.4,
+            "Democrat": 0.3,
+            "Kla Tham": 0.2,
+            "Pheu Thai": 0.1,
+            "People's": -0.3
+          },
+          "flavour": "One unit is a demonstration, not a programme — it buys the regulator, the fuel agreement and the trained inspectors without betting the grid on a technology nobody has yet built at scale."
+        },
+        {
+          "id": "study_only",
+          "label": "Fund the feasibility and siting study only",
+          "effects": {
+            "govConsumption": 0.02,
+            "reformIndex": 1,
+            "humanCapital": 0.05,
+            "institutionalSupport": 2
+          },
+          "sets": [
+            "smr_study"
+          ],
+          "fit": {
+            "People's": 0.3,
+            "Others": 0.3,
+            "Democrat": 0.2,
+            "Pheu Thai": 0.2,
+            "Kla Tham": 0.1
+          },
+          "flavour": "Three years of consultants and a public hearing in every candidate province. Defensible, cheap, and it hands the decision to the next government exactly as your predecessors handed it to you."
+        },
+        {
+          "id": "cancel",
+          "label": "Strike the reactors from the plan",
+          "unavailable": true,
+          "effects": {},
+          "fit": {},
+          "flavour": "Uranium fever has done and got me down / Uranium fever it's spreadin' all around"
+        }
+      ]
+    },
+    {
+      "id": "semiconductor_initiative",
+      "name": "Semiconductor and Advanced Electronics",
+      "ministry": "industry",
+      "type": "structural",
+      "scriptedQuarter": 11,
+      "requires": [
+        "semiconductor_board_seen"
+      ],
+      "briefing": "Three years of roadmap have produced the one honest finding: Thailand cannot buy its way into wafer fabrication, and should stop pretending the question is money. What is reachable is the layer directly above where it sits now — advanced packaging, test, power and analogue devices, compliance-grade design services — and the engineering workforce to staff it. BOI's draft roadmap talks about 2.5 trillion baht of investment across the decade. None of that lands inside your term. What lands inside your term is whether the training pipeline, the design centres and the utility guarantees exist for somebody else to build on.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Fund the full package — packaging, design centres, 86,000 engineers",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.1,
+            "govConsumption": 0.05,
+            "humanCapital": 0.55,
+            "reformIndex": 8,
+            "fdiSignal": 0.2,
+            "formalisation": 0.1
+          },
+          "lag": {
+            "capacityQuarters": 16
+          },
+          "dependsOn": {
+            "flag": "semiconductor_board_committed",
+            "withoutFactor": 0.8,
+            "note": "Without three years of a funded board there is no secretariat, no curriculum and no pipeline to accelerate — the programme starts from a standing start."
+          },
+          "sets": [
+            "semiconductor_programme"
+          ],
+          "fit": {
+            "Democrat": 0.5,
+            "Others": 0.4,
+            "People's": 0.3,
+            "Pheu Thai": 0.2,
+            "Kla Tham": -0.1
+          },
+          "flavour": "The most defensible use of public money on this desk and the one with the least to show for it by December 2030. Almost every number it moves is a number your successor gets to report.",
+          "maximal": true
+        },
+        {
+          "id": "champion",
+          "label": "Build a national champion around the sovereign programme",
+          "requiresLegislation": true,
+          "requiresFlags": [
+            "sovereign_ai"
+          ],
+          "lockedNote": "Requires a sovereign AI course — there is no national champion to build around without one.",
+          "effects": {
+            "capitalSpend": 0.16,
+            "govConsumption": 0.04,
+            "humanCapital": 0.3,
+            "reformIndex": 4,
+            "fdiSignal": -0.05,
+            "approvalBoost": 5
+          },
+          "lag": {
+            "capacityQuarters": 16
+          },
+          "sets": [
+            "semiconductor_programme",
+            "semiconductor_champion"
+          ],
+          "fit": {
+            "Kla Tham": 0.5,
+            "Pheu Thai": 0.3,
+            "Others": 0.1,
+            "Democrat": -0.2,
+            "People's": -0.3
+          },
+          "flavour": "State-directed, domestically owned, and answerable to you. It is also Alphatec's business plan with a larger budget, and everyone in the room is old enough to remember how that ended.",
+          "dependsOn": {
+            "flag": "domestic_ai_capacity",
+            "withoutFactor": 0.75,
+            "note": "A champion with no domestic AI capacity to serve is a fabrication subsidy looking for a customer — the TH-AI redirect is what gives it demand."
+          }
+        },
+        {
+          "id": "none",
+          "label": "Leave the sector to the BOI incentives already in place",
+          "effects": {
+            "fdiSignal": 0.02
+          },
+          "sets": [
+            "semiconductor_status_quo"
+          ],
+          "fit": {
+            "Kla Tham": 0.2,
+            "Pheu Thai": 0.1,
+            "Others": 0.0,
+            "Democrat": -0.1,
+            "People's": -0.1
+          },
+          "flavour": "More of the same. Assembly and test, priced against Vietnam, for as long as the wage gap holds."
+        }
+      ]
+    },
+    {
+      "id": "zero_corruption",
+      "name": "Zero Corruption Act",
+      "ministry": "justice",
+      "type": "institutional",
+      "scriptedQuarter": 5,
+      "proposal": {
+        "party": "Economic Party",
+        "bloc": "Others",
+        "colour": "#FEBD00",
+        "note": "A coalition proposal. The Economic Party holds three seats inside Others and one item of leverage: the FINAL EXIT programme it ran on.",
+        "expiresAfter": 4,
+        "onPass": {
+          "Others": 9,
+          "Kla Tham": 2
+        },
+        "onIgnore": {
+          "Others": -7
+        }
+      },
+      "briefing": "The Economic Party's ZERO CORRUPTION plank, and it is not a metaphor: capital punishment for public corruption, with execution mandated within one year of a Supreme Court verdict. Thai law already permits the death penalty for serious graft — the 2018 organic act extended it to foreign officials — and it has never once been carried out for it. What is new here is the mandate, which removes the discretion that has always been the point. Three seats of a right-libertarian party inside your coalition are asking, and they ran on this.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Pass the Act as drafted, mandatory execution and all",
+          "requiresLegislation": true,
+          "effects": {
+            "reformIndex": 16,
+            "fdiSignal": 0.1,
+            "formalisation": 0.15,
+            "approvalBoost": 11,
+            "institutionalSupport": -9,
+            "executionBonus": 0.02
+          },
+          "sets": [
+            "zero_corruption_act"
+          ],
+          "fit": {
+            "Others": 0.5,
+            "Kla Tham": 0.3,
+            "Democrat": -0.2,
+            "Pheu Thai": -0.3,
+            "People's": -0.6
+          },
+          "flavour": "Enormously popular and constitutionally radioactive. Mandatory execution removes judicial discretion, which is what the drafters intend and what the Constitutional Court exists to object to; the OECD accession file will need a chapter explaining it. Corruption in Thailand has never been under-penalised. It has been under-prosecuted.",
+          "maximal": true
+        },
+        {
+          "id": "teeth_no_rope",
+          "label": "Take the enforcement, drop the death penalty",
+          "requiresLegislation": true,
+          "effects": {
+            "reformIndex": 13,
+            "fdiSignal": 0.14,
+            "formalisation": 0.18,
+            "approvalBoost": 5,
+            "executionBonus": 0.03,
+            "institutionalSupport": -4
+          },
+          "sets": [
+            "zero_corruption_act",
+            "anticorruption_enforcement"
+          ],
+          "fit": {
+            "Others": 0.3,
+            "Democrat": 0.4,
+            "People's": 0.3,
+            "Pheu Thai": 0.1,
+            "Kla Tham": 0.0
+          },
+          "flavour": "Asset declarations with real audit, whistleblower protection, and a prosecution service that can act without a police referral. Everything that actually reduces graft, and none of the headline the Economic Party wanted."
+        },
+        {
+          "id": "shelve",
+          "label": "Thank them and shelve it",
+          "effects": {
+            "institutionalSupport": 1
+          },
+          "sets": [
+            "zero_corruption_shelved"
+          ],
+          "fit": {
+            "Others": -0.4,
+            "Kla Tham": -0.2,
+            "People's": 0.1,
+            "Pheu Thai": 0.2,
+            "Democrat": 0.0
+          },
+          "flavour": "The safe answer, and they will remember it at every subsequent division. Three seats is not many until the margin is three."
+        }
+      ]
+    },
+    {
+      "id": "justice_reform",
+      "name": "Justice System Reform",
+      "ministry": "justice",
+      "type": "institutional",
+      "scriptedQuarter": 8,
+      "proposal": {
+        "party": "Economic Party",
+        "bloc": "Others",
+        "colour": "#FEBD00",
+        "note": "A coalition proposal. The Economic Party holds three seats inside Others and one item of leverage: the FINAL EXIT programme it ran on.",
+        "expiresAfter": 4,
+        "onPass": {
+          "Others": 8,
+          "Democrat": 3
+        },
+        "onIgnore": {
+          "Others": -6,
+          "Democrat": -2
+        }
+      },
+      "briefing": "The second half of FINAL EXIT: uncouple arrest from investigation. Under the present arrangement the same police organisation that investigates a case also decides who is detained, which is the structural feature that lets protection networks convert enforcement into revenue. Separating the two — investigators who cannot arrest, prosecutors who direct the file — is the single most-recommended reform in every Thai policing review since 2007, and the single most consistently blocked.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Separate investigation from arrest, prosecutors direct the file",
+          "requiresLegislation": true,
+          "effects": {
+            "reformIndex": 18,
+            "formalisation": 0.25,
+            "fdiSignal": 0.12,
+            "executionBonus": 0.03,
+            "institutionalSupport": -11,
+            "approvalBoost": 6
+          },
+          "dependsOn": {
+            "flag": "anticorruption_enforcement",
+            "withoutFactor": 0.75,
+            "note": "Without the enforcement machinery from the Zero Corruption Act there is no prosecution service capable of directing anything."
+          },
+          "sets": [
+            "justice_reform_done"
+          ],
+          "fit": {
+            "Others": 0.4,
+            "People's": 0.6,
+            "Democrat": 0.4,
+            "Pheu Thai": 0.0,
+            "Kla Tham": -0.5
+          },
+          "flavour": "This is the reform that dissolves grey capital, and it is the reform the police have defeated for twenty years. Passing it costs you the one institution every Thai government needs quiet cooperation from, and buys an economy where the informal sector has a reason to formalise.",
+          "maximal": true
+        },
+        {
+          "id": "pilot",
+          "label": "Pilot it in three provinces and review",
+          "requiresLegislation": true,
+          "effects": {
+            "reformIndex": 6,
+            "formalisation": 0.08,
+            "executionBonus": 0.01,
+            "institutionalSupport": -3
+          },
+          "sets": [
+            "justice_reform_pilot"
+          ],
+          "fit": {
+            "Others": 0.2,
+            "People's": 0.3,
+            "Democrat": 0.2,
+            "Pheu Thai": 0.1,
+            "Kla Tham": -0.2
+          },
+          "flavour": "A pilot is how this reform has been killed three times: it runs, it works, the review is scheduled after the next election, and nobody hears of it again."
+        },
+        {
+          "id": "decline",
+          "label": "Not this parliament",
+          "effects": {
+            "institutionalSupport": 2
+          },
+          "fit": {
+            "Others": -0.3,
+            "Kla Tham": 0.4,
+            "People's": -0.3,
+            "Democrat": -0.2,
+            "Pheu Thai": 0.1
+          },
+          "flavour": "The Royal Thai Police are content, and so is everyone who has ever paid them."
+        }
+      ]
+    },
+    {
+      "id": "agri_upgrade",
+      "name": "High-Value Agriculture",
+      "ministry": "agriculture",
+      "type": "structural",
+      "scriptedQuarter": 9,
+      "proposal": {
+        "party": "Pheu Thai",
+        "bloc": "Pheu Thai",
+        "colour": "#E30613",
+        "note": "A coalition proposal. Pheu Thai's constituency is agricultural, and it has not had a farm policy of its own since rice pledging.",
+        "expiresAfter": 4,
+        "onPass": {
+          "Pheu Thai": 10
+        },
+        "onIgnore": {
+          "Pheu Thai": -8
+        }
+      },
+      "briefing": "Roughly a third of Thai employment is still agricultural and it produces under a tenth of output, which is the arithmetic behind every income statistic in the country. The proposal is to move the sector up the value chain rather than subsidise it down: precision farming, synthetic biology and biorefining under the BCG framework already declared a national agenda, contract standards that let smallholders access it, and net-zero targets to open the European market. It is the anti-rice-pledging — the same constituency, the opposite instrument.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Fund the full transition — precision farming, biorefining, standards",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.09,
+            "govConsumption": 0.04,
+            "reformIndex": 11,
+            "humanCapital": 0.3,
+            "formalisation": 0.2,
+            "fdiSignal": 0.08,
+            "approvalBoost": 7
+          },
+          "lag": {
+            "capacityQuarters": 12
+          },
+          "dependsOn": {
+            "flag": "digital_government_mandated",
+            "withoutFactor": 0.8,
+            "note": "Traceability and contract standards run on registries the ministry does not currently hold."
+          },
+          "sets": [
+            "agri_upgraded"
+          ],
+          "fit": {
+            "Pheu Thai": 0.7,
+            "Others": 0.3,
+            "Kla Tham": 0.3,
+            "People's": 0.2,
+            "Democrat": 0.1
+          },
+          "flavour": "The most defensible thing any Thai government has proposed for agriculture in twenty years, and the slowest: a smallholder converting to high-value production needs three seasons and credit, and you are offering one of the two.",
+          "maximal": true
+        },
+        {
+          "id": "input_support",
+          "label": "Input subsidies and a price floor instead",
+          "requiresLegislation": true,
+          "effects": {
+            "transfers": 0.35,
+            "govConsumption": 0.05,
+            "reformIndex": 1,
+            "approvalBoost": 12
+          },
+          "sets": [
+            "agri_subsidised"
+          ],
+          "fit": {
+            "Pheu Thai": 0.5,
+            "Kla Tham": 0.5,
+            "Others": 0.1,
+            "Democrat": -0.3,
+            "People's": -0.3
+          },
+          "flavour": "Twelve points of approval and the entire lesson of 2011 to 2014 discarded to get them. The farm vote is real and this is what it costs to buy rather than earn."
+        },
+        {
+          "id": "none",
+          "label": "Leave the sector to the existing schemes",
+          "effects": {},
+          "fit": {
+            "Pheu Thai": -0.5,
+            "Kla Tham": -0.3,
+            "Others": 0.0,
+            "Democrat": 0.2,
+            "People's": 0.1
+          },
+          "flavour": "Thirty per cent of the workforce, eight per cent of output, and no plan. It has been the position of every government since 2014."
+        }
+      ]
+    },
+    {
+      "id": "mental_health",
+      "name": "Mental Health in the Universal Scheme",
+      "ministry": "public health",
+      "type": "social",
+      "scriptedQuarter": 11,
+      "proposal": {
+        "party": "Pheu Thai",
+        "bloc": "Pheu Thai",
+        "colour": "#E30613",
+        "note": "A coalition proposal. Universal coverage is Pheu Thai's founding achievement and it would like a second chapter.",
+        "expiresAfter": 3,
+        "onPass": {
+          "Pheu Thai": 7
+        },
+        "onIgnore": {
+          "Pheu Thai": -6
+        }
+      },
+      "briefing": "Thailand has 1.3 psychiatrists per 100,000 people against a global average of 13. Roughly 13.4 million Thais report a mental health condition; 89% received no care in the past year and 8.2% got formal treatment. The Department of Mental Health runs on 1.8% of the public health budget. The universal coverage scheme is the delivery mechanism Thailand already has and the only one that reaches the provinces — the proposal is to write mental health into it properly, with a training pipeline attached, because the workforce is the binding constraint and it takes six years to build.",
+      "options": [
+        {
+          "id": "fund",
+          "label": "Write it into the scheme and fund the training pipeline",
+          "requiresLegislation": true,
+          "effects": {
+            "govConsumption": 0.09,
+            "humanCapital": 0.22,
+            "reformIndex": 5,
+            "approvalBoost": 8,
+            "formalisation": 0.04
+          },
+          "lag": {
+            "capacityQuarters": 12
+          },
+          "sets": [
+            "mental_health_covered"
+          ],
+          "fit": {
+            "Pheu Thai": 0.6,
+            "People's": 0.6,
+            "Democrat": 0.4,
+            "Others": 0.2,
+            "Kla Tham": 0.0
+          },
+          "flavour": "Cheap by the standards of this desk and slow by the standards of any electorate — the psychiatrists you fund today qualify after you have left office. The lost output from untreated illness in the working-age population is larger than the programme, which is the argument nobody makes because it sounds callous.",
+          "maximal": true
+        },
+        {
+          "id": "decline",
+          "label": "Not in this budget",
+          "effects": {},
+          "fit": {
+            "Pheu Thai": -0.4,
+            "People's": -0.4,
+            "Democrat": -0.2,
+            "Others": 0.1,
+            "Kla Tham": 0.1
+          },
+          "flavour": "The Department of Mental Health keeps its 1.8%. Nobody protests, because the constituency for this is by definition not organised."
+        }
+      ]
+    },
+    {
+      "id": "vulnerable_allowances",
+      "name": "Vulnerable Demographic Allowances",
+      "ministry": "social development",
+      "type": "social",
+      "scriptedQuarter": 6,
+      "proposal": {
+        "party": "Palang Pracharath",
+        "bloc": "Others",
+        "colour": "#006738",
+        "note": "A coalition proposal. Palang Pracharath sits inside Others, is short of a cause, and has always been strongest with the elderly vote.",
+        "expiresAfter": 3,
+        "onPass": {
+          "Others": 6,
+          "Kla Tham": 3
+        },
+        "onIgnore": {
+          "Others": -5
+        }
+      },
+      "briefing": "The old-age allowance is still tiered by age — 600 baht a month at 60, rising to 1,000 only at 90 — and the child support grant reaches a fraction of those eligible. Thailand passed 'aged society' status years ago and will be 'super-aged' inside a decade, which makes this the one spending line that grows whether or not anyone legislates. The proposal is a flat 1,000 baht for everyone over 60 and a widened maternal grant. It is popular, it is defensible, and it is permanent.",
+      "options": [
+        {
+          "id": "raise",
+          "label": "Flat 1,000 baht at 60, and widen the maternal grant",
+          "requiresLegislation": true,
+          "effects": {
+            "transfers": 0.38,
+            "govConsumption": 0.03,
+            "approvalBoost": 11,
+            "humanCapital": 0.06,
+            "formalisation": 0.05
+          },
+          "sets": [
+            "allowances_raised"
+          ],
+          "fit": {
+            "Others": 0.5,
+            "Kla Tham": 0.5,
+            "Pheu Thai": 0.4,
+            "People's": 0.2,
+            "Democrat": -0.1
+          },
+          "flavour": "The most reliable eleven points of approval available anywhere on this desk. It is also a permanent claim on the budget in a country whose dependency ratio is deteriorating faster than almost any middle-income peer — you are not buying four years of goodwill, you are buying it for your successors as well.",
+          "maximal": true
+        },
+        {
+          "id": "decline",
+          "label": "Keep the existing tiers",
+          "effects": {
+            "institutionalSupport": 1
+          },
+          "fit": {
+            "Others": -0.3,
+            "Kla Tham": -0.4,
+            "Pheu Thai": -0.3,
+            "People's": -0.1,
+            "Democrat": 0.3
+          },
+          "flavour": "Fiscally correct and politically friendless. The 600-baht rate has not moved in real terms in over a decade, and every year it does not move is a transfer from the old to the bond market."
+        }
+      ]
+    },
+    {
+      "id": "free_education_15",
+      "name": "Fully Funded 15-Year Education",
+      "ministry": "education",
+      "type": "social",
+      "scriptedQuarter": 3,
+      "proposal": {
+        "party": "Democrat",
+        "bloc": "Democrat",
+        "colour": "#00A1F1",
+        "note": "A coalition proposal. The Democrats are the smallest party at the table and the only one with an institutional memory of governing.",
+        "expiresAfter": 3,
+        "onPass": {
+          "Democrat": 9,
+          "People's": 3
+        },
+        "onIgnore": {
+          "Democrat": -7
+        }
+      },
+      "briefing": "Fifteen years of free schooling has been policy since 2009 and it is the Democrats' own — the party wrote it in government and would now like it to be true. The state pays a per-head subsidy and families pay for transport, materials, registration and credential fees, which is why households under 2,802 baht a month still drop children out at the grade 6-7 and 9-10 transitions. The per-head formula also quietly punishes small rural schools, which receive less precisely because they are small. The proposal is to fund the whole cost to the household and reweight the subsidy toward remote schools.",
+      "options": [
+        {
+          "id": "fund",
+          "label": "Fund it properly — materials, transport, fees, and a remote-school weighting",
+          "requiresLegislation": true,
+          "effects": {
+            "govConsumption": 0.22,
+            "humanCapital": 0.45,
+            "reformIndex": 6,
+            "approvalBoost": 9,
+            "formalisation": 0.05
+          },
+          "lag": {
+            "capacityQuarters": 16
+          },
+          "sets": [
+            "education_fully_funded"
+          ],
+          "fit": {
+            "Democrat": 0.8,
+            "People's": 0.6,
+            "Pheu Thai": 0.4,
+            "Others": 0.2,
+            "Kla Tham": 0.1
+          },
+          "flavour": "The highest human-capital return on this desk and the slowest: a child kept in school through the grade 9 transition this year enters the labour force in 2038. Every finance minister since 2009 has agreed with the policy and funded the subsidy rather than the cost.",
+          "maximal": true
+        },
+        {
+          "id": "decline",
+          "label": "Keep the existing per-head subsidy",
+          "effects": {},
+          "fit": {
+            "Democrat": -0.5,
+            "People's": -0.3,
+            "Pheu Thai": -0.2,
+            "Others": 0.1,
+            "Kla Tham": 0.0
+          },
+          "flavour": "It has been called free for seventeen years. One more will not be noticed by anyone who is not paying for it."
+        }
+      ]
+    },
+    {
+      "id": "internet_subsidy",
+      "name": "The 100-Baht Internet Package",
+      "ministry": "digital economy",
+      "type": "social",
+      "scriptedQuarter": 11,
+      "proposal": {
+        "party": "Democrat",
+        "bloc": "Democrat",
+        "colour": "#00A1F1",
+        "note": "A coalition proposal. The Democrats are the smallest party at the table and the only one with an institutional memory of governing.",
+        "expiresAfter": 3,
+        "onPass": {
+          "Democrat": 7,
+          "People's": 2
+        },
+        "onIgnore": {
+          "Democrat": -5
+        }
+      },
+      "briefing": "Thailand's mobile market consolidated to two operators of consequence, and prices have behaved exactly as an economist would predict. The Democrat proposal is a mandated 100-baht broadband package for low-income households, delivered through the universal service obligation rather than a subsidy cheque. It is a price control by another name, and the sector will say so loudly. It also puts a connection in the households that every digital government service you have built assumes already has one.",
+      "options": [
+        {
+          "id": "mandate",
+          "label": "Mandate the package through the universal service obligation",
+          "requiresLegislation": true,
+          "effects": {
+            "govConsumption": 0.05,
+            "humanCapital": 0.12,
+            "formalisation": 0.1,
+            "reformIndex": 3,
+            "approvalBoost": 6,
+            "fdiSignal": -0.04
+          },
+          "dependsOn": {
+            "flag": "digital_government_mandated",
+            "withoutFactor": 0.7,
+            "note": "Connectivity is only worth what there is to connect to — without the service migration this is a cheaper bill, not a capability."
+          },
+          "sets": [
+            "broadband_universal"
+          ],
+          "fit": {
+            "Democrat": 0.6,
+            "People's": 0.5,
+            "Pheu Thai": 0.3,
+            "Others": 0.0,
+            "Kla Tham": 0.1
+          },
+          "flavour": "Popular, cheap, and a genuine complement to everything you digitised. It is also the state setting a retail price in a licensed market, which the operators will litigate and the next investment round will remember.",
+          "maximal": true
+        },
+        {
+          "id": "decline",
+          "label": "Leave it to the regulator",
+          "effects": {
+            "fdiSignal": 0.02
+          },
+          "fit": {
+            "Democrat": -0.4,
+            "People's": -0.3,
+            "Others": 0.1,
+            "Kla Tham": 0.0,
+            "Pheu Thai": -0.1
+          },
+          "flavour": "The NBTC has been leaving it to the market since the merger. The market has noticed."
+        }
+      ]
+    },
+    {
+      "id": "land_deeds",
+      "name": "Converting Sor Por Kor Land Deeds",
+      "ministry": "agriculture",
+      "type": "structural",
+      "scriptedQuarter": 2,
+      "proposal": {
+        "party": "Kla Tham",
+        "bloc": "Kla Tham",
+        "colour": "#50C871",
+        "note": "A coalition proposal. Kla Tham's price for its fifty-eight seats is the rural credit agenda it was built on.",
+        "expiresAfter": 3,
+        "onPass": {
+          "Kla Tham": 10,
+          "Pheu Thai": 3
+        },
+        "onIgnore": {
+          "Kla Tham": -8
+        }
+      },
+      "briefing": "1.62 million farmers hold 22.07 million rai on Sor Por Kor 4-01 documents — land they may farm and may not borrow against. The legislation to convert those documents into title has been drafted since Thamanat drove it from the agriculture ministry: five years' cultivation required, transfers restricted to other eligible farmers, and the resulting deed usable as bank collateral. That last clause is the entire policy. It is also the entire risk: Thailand has run land reform programmes before, and the land has a way of ending up with people who were never eligible for it.",
+      "options": [
+        {
+          "id": "convert",
+          "label": "Convert the documents to full title deeds",
+          "requiresLegislation": true,
+          "effects": {
+            "reformIndex": 9,
+            "formalisation": 0.3,
+            "savingsRate": 0.12,
+            "fdiSignal": 0.04,
+            "approvalBoost": 8
+          },
+          "lag": {
+            "capacityQuarters": 8
+          },
+          "sets": [
+            "land_titled"
+          ],
+          "fit": {
+            "Kla Tham": 0.8,
+            "Pheu Thai": 0.5,
+            "Others": 0.3,
+            "Democrat": 0.1,
+            "People's": -0.2
+          },
+          "flavour": "Twenty-two million rai of dead capital converted into collateral, which is the single largest formalisation available to any Thai government. The transfer restrictions are the only thing standing between that and a land grab, and transfer restrictions have historically lasted about as long as the government that wrote them.",
+          "maximal": true
+        },
+        {
+          "id": "decline",
+          "label": "Leave the documents as they are",
+          "effects": {},
+          "fit": {
+            "Kla Tham": -0.6,
+            "Pheu Thai": -0.3,
+            "Others": -0.1,
+            "People's": 0.3,
+            "Democrat": 0.1
+          },
+          "flavour": "The safest answer, and it leaves 1.62 million households farming land they cannot borrow against in a country where credit is the binding constraint on every farm upgrade."
+        }
+      ]
+    },
+    {
+      "id": "coop_debt",
+      "name": "Central Cooperative Debt Consolidation",
+      "ministry": "finance",
+      "type": "financial",
+      "scriptedQuarter": 7,
+      "proposal": {
+        "party": "Kla Tham",
+        "bloc": "Kla Tham",
+        "colour": "#50C871",
+        "note": "A coalition proposal. Kla Tham's price for its fifty-eight seats is the rural credit agenda it was built on.",
+        "expiresAfter": 3,
+        "onPass": {
+          "Kla Tham": 9,
+          "Others": 3
+        },
+        "onIgnore": {
+          "Kla Tham": -7
+        }
+      },
+      "briefing": "6,092 cooperatives, 11 million members, and savings cooperatives alone holding between 2.27 and 2.7 trillion baht of loans — roughly 15% of all Thai household debt. Six of 1,369 savings cooperatives report to the credit bureau, so nobody can see a member's total obligations. Salary deduction at source means the cooperative is paid before the member eats, which removes any incentive to restructure. The proposal is a single central body to absorb and restructure farmer and teacher cooperative debt, with credit bureau reporting made mandatory as the price of entry.",
+      "options": [
+        {
+          "id": "consolidate",
+          "label": "Create the central body, with mandatory credit-bureau reporting",
+          "requiresLegislation": true,
+          "effects": {
+            "govConsumption": 0.1,
+            "transfers": 0.08,
+            "reformIndex": 10,
+            "formalisation": 0.22,
+            "savingsRate": 0.1,
+            "approvalBoost": 7,
+            "institutionalSupport": -4
+          },
+          "lag": {
+            "capacityQuarters": 8
+          },
+          "sets": [
+            "coop_debt_consolidated"
+          ],
+          "fit": {
+            "Kla Tham": 0.7,
+            "Pheu Thai": 0.5,
+            "Others": 0.2,
+            "Democrat": 0.1,
+            "People's": 0.2
+          },
+          "flavour": "The reporting requirement is worth more than the restructuring: you cannot fix a debt problem you cannot measure, and 1,363 of these institutions currently lend blind. The cooperative boards will fight it, because dividends are paid out of exactly the interest rates this exposes.",
+          "maximal": true
+        },
+        {
+          "id": "decline",
+          "label": "Leave the cooperatives to the registrar",
+          "effects": {},
+          "fit": {
+            "Kla Tham": -0.5,
+            "Pheu Thai": -0.2,
+            "Others": 0.2,
+            "Democrat": 0.1,
+            "People's": -0.1
+          },
+          "flavour": "The Cooperative Promotion Department has supervised this sector into 15% of national household debt. It will continue to."
+        }
+      ]
+    },
+    {
+      "id": "peoples_bank",
+      "name": "The People's Bank",
+      "ministry": "finance",
+      "type": "financial",
+      "scriptedQuarter": 12,
+      "proposal": {
+        "party": "Kla Tham",
+        "bloc": "Kla Tham",
+        "colour": "#50C871",
+        "note": "A coalition proposal. Kla Tham's price for its fifty-eight seats is the rural credit agenda it was built on.",
+        "expiresAfter": 3,
+        "onPass": {
+          "Kla Tham": 10,
+          "Pheu Thai": 2
+        },
+        "onIgnore": {
+          "Kla Tham": -8
+        }
+      },
+      "briefing": "A state bank for micro-loans at capped, below-market rates. The case for it is that household debt has passed 86% of GDP and the informal lenders charging the bottom decile are the reason a large part of it never amortises. The case against is every state credit institution Thailand has built: they lend to the politically legible rather than the creditworthy, capped rates ration by queue rather than price, and the losses arrive on the sovereign balance sheet several years after the government that created them has gone.",
+      "options": [
+        {
+          "id": "launch",
+          "label": "Charter the bank with capped rates",
+          "requiresLegislation": true,
+          "effects": {
+            "govConsumption": 0.08,
+            "transfers": 0.1,
+            "formalisation": 0.16,
+            "savingsRate": -0.06,
+            "approvalBoost": 10,
+            "reformIndex": 2,
+            "fdiSignal": -0.05,
+            "institutionalSupport": -3
+          },
+          "sets": [
+            "peoples_bank"
+          ],
+          "fit": {
+            "Kla Tham": 0.8,
+            "Pheu Thai": 0.5,
+            "Others": 0.1,
+            "People's": 0.0,
+            "Democrat": -0.4
+          },
+          "flavour": "Ten points of approval and a contingent liability nobody will price until it defaults. If it displaces the informal lenders it is the best thing in this section; if it becomes a channel for directed credit it is the Krung Thai story again, and the second is what usually happens.",
+          "maximal": true
+        },
+        {
+          "id": "decline",
+          "label": "Expand the existing state banks' mandate instead",
+          "effects": {
+            "formalisation": 0.04,
+            "reformIndex": 1
+          },
+          "fit": {
+            "Kla Tham": -0.5,
+            "Democrat": 0.4,
+            "Others": 0.2,
+            "Pheu Thai": -0.1,
+            "People's": 0.1
+          },
+          "flavour": "GSB and BAAC already do this, badly, and at least their losses are already on the books."
+        }
+      ]
+    }
+  ]
+}

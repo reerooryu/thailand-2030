@@ -1,0 +1,436 @@
+{
+ "_meta": {
+  "scenario": "base_2026",
+  "start": "2026-02",
+  "house_size": 500,
+  "vacant": 1,
+  "majority_threshold": 251,
+  "player_party": "Bhumjaithai",
+  "source": "User-supplied seat counts, Feb 2026 post-election House.",
+  "WARNING": "Ideology vectors are CONTESTABLE PLACEHOLDER ASSUMPTIONS on a -2..+2 scale, derived from broad public platform orientation. They are the most disputable content in the project and must be reviewed against actual party manifestos before playtesting. They live here, not in code, precisely so they can be argued with and replaced.",
+  "dimensions": [
+   "economic_liberalisation",
+   "fiscal_expansion",
+   "decentralisation",
+   "agricultural_support",
+   "social_spending",
+   "business_regulatory_reform",
+   "institutional_reform"
+  ]
+ },
+ "senate": {
+  "seats": 200,
+  "partisan": false,
+  "representation": "Not modelled as parties. Collapsed into a single 'establishment_alignment' scalar, 0-100. Gates constitutional and organic-law change, affects institutional_stability, and shifts the sovereign risk premium and FDI signal. See DESIGN §9.6.",
+  "initial_value": 55
+ },
+ "parties": {
+  "Bhumjaithai": {
+   "seats": 191,
+   "default_bloc": "government",
+   "regional_base": "Northeast (Isan), rural constituency",
+   "cohesion": 0.85,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": 1,
+    "decentralisation": 1,
+    "agricultural_support": 2,
+    "social_spending": 1,
+    "business_regulatory_reform": 1,
+    "institutional_reform": -1
+   },
+   "notes": "Player's party. Largest bloc but 60 short of a majority alone."
+  },
+  "People’s": {
+   "seats": 120,
+   "default_bloc": "opposition",
+   "regional_base": "Urban, Bangkok, younger voters",
+   "cohesion": 0.9,
+   "ideology": {
+    "economic_liberalisation": 1,
+    "fiscal_expansion": 1,
+    "decentralisation": 2,
+    "agricultural_support": -1,
+    "social_spending": 2,
+    "business_regulatory_reform": 2,
+    "institutional_reform": 2
+   },
+   "notes": "Largest opposition party. Most reform-aligned on structural/institutional dimensions; most distant on others."
+  },
+  "Pheu Thai": {
+   "seats": 74,
+   "default_bloc": "government",
+   "regional_base": "North, Northeast",
+   "cohesion": 0.8,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": 2,
+    "decentralisation": 1,
+    "agricultural_support": 1,
+    "social_spending": 2,
+    "business_regulatory_reform": 0,
+    "institutional_reform": 1
+   },
+   "notes": "Populist fiscal expansion; strong transfer/handout orientation."
+  },
+  "Kla Tham": {
+   "seats": 58,
+   "default_bloc": "opposition",
+   "regional_base": "Provincial, conservative networks",
+   "cohesion": 0.7,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": 1,
+    "decentralisation": -1,
+    "agricultural_support": 2,
+    "social_spending": 1,
+    "business_regulatory_reform": 0,
+    "institutional_reform": -2
+   },
+   "notes": "Kingmaker: BJT+Kla Tham = 249, two seats short of a majority."
+  },
+  "Democrat": {
+   "seats": 21,
+   "default_bloc": "opposition",
+   "regional_base": "South, urban middle class",
+   "cohesion": 0.65,
+   "ideology": {
+    "economic_liberalisation": 2,
+    "fiscal_expansion": -1,
+    "decentralisation": 1,
+    "agricultural_support": 0,
+    "social_spending": 1,
+    "business_regulatory_reform": 2,
+    "institutional_reform": 1
+   },
+   "notes": "Most fiscally conservative significant party."
+  },
+  "Thai Ruam Palang": {
+   "seats": 6,
+   "default_bloc": "opposition",
+   "regional_base": "Provincial",
+   "cohesion": 0.5,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": 1,
+    "decentralisation": 0,
+    "agricultural_support": 1,
+    "social_spending": 1,
+    "business_regulatory_reform": 0,
+    "institutional_reform": -1
+   },
+   "notes": ""
+  },
+  "Palang Pracharath": {
+   "seats": 5,
+   "default_bloc": "government",
+   "regional_base": "Provincial, establishment-aligned",
+   "cohesion": 0.6,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": 0,
+    "decentralisation": -1,
+    "agricultural_support": 1,
+    "social_spending": 1,
+    "business_regulatory_reform": 0,
+    "institutional_reform": -2
+   },
+   "notes": ""
+  },
+  "Prachachat": {
+   "seats": 5,
+   "default_bloc": "government",
+   "regional_base": "Deep South, Malay-Muslim constituency",
+   "cohesion": 0.85,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": 1,
+    "decentralisation": 2,
+    "agricultural_support": 1,
+    "social_spending": 2,
+    "business_regulatory_reform": 0,
+    "institutional_reform": 1
+   },
+   "notes": "Strong regional identity; decentralisation is its priority dimension."
+  },
+  "Economic": {
+   "seats": 3,
+   "default_bloc": "government",
+   "regional_base": "Provincial",
+   "cohesion": 0.5,
+   "ideology": {
+    "economic_liberalisation": 1,
+    "fiscal_expansion": 1,
+    "decentralisation": 0,
+    "agricultural_support": 1,
+    "social_spending": 1,
+    "business_regulatory_reform": 1,
+    "institutional_reform": 0
+   },
+   "notes": ""
+  },
+  "Pheu Chart Thai": {
+   "seats": 2,
+   "default_bloc": "government",
+   "regional_base": "Central",
+   "cohesion": 0.5,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": 1,
+    "decentralisation": 0,
+    "agricultural_support": 1,
+    "social_spending": 1,
+    "business_regulatory_reform": 0,
+    "institutional_reform": 0
+   },
+   "notes": ""
+  },
+  "Thai Sang Thai": {
+   "seats": 2,
+   "default_bloc": "government",
+   "regional_base": "Mixed",
+   "cohesion": 0.5,
+   "ideology": {
+    "economic_liberalisation": 1,
+    "fiscal_expansion": 1,
+    "decentralisation": 1,
+    "agricultural_support": 0,
+    "social_spending": 2,
+    "business_regulatory_reform": 1,
+    "institutional_reform": 1
+   },
+   "notes": ""
+  },
+  "United Thai Nation": {
+   "seats": 2,
+   "default_bloc": "government",
+   "regional_base": "Conservative, establishment-aligned",
+   "cohesion": 0.6,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": 0,
+    "decentralisation": -1,
+    "agricultural_support": 1,
+    "social_spending": 1,
+    "business_regulatory_reform": 0,
+    "institutional_reform": -2
+   },
+   "notes": ""
+  },
+  "Thai Liberal": {
+   "seats": 1,
+   "default_bloc": "opposition",
+   "regional_base": "Mixed",
+   "cohesion": 0.4,
+   "ideology": {
+    "economic_liberalisation": 1,
+    "fiscal_expansion": 0,
+    "decentralisation": 1,
+    "agricultural_support": 0,
+    "social_spending": 1,
+    "business_regulatory_reform": 1,
+    "institutional_reform": 1
+   },
+   "notes": ""
+  },
+  "Thai Pakdee": {
+   "seats": 1,
+   "default_bloc": "opposition",
+   "regional_base": "Conservative",
+   "cohesion": 0.4,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": -1,
+    "decentralisation": -1,
+    "agricultural_support": 1,
+    "social_spending": 0,
+    "business_regulatory_reform": 0,
+    "institutional_reform": -2
+   },
+   "notes": ""
+  },
+  "New": {
+   "seats": 1,
+   "default_bloc": "government",
+   "regional_base": "Provincial",
+   "cohesion": 0.3,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": 1,
+    "decentralisation": 0,
+    "agricultural_support": 1,
+    "social_spending": 1,
+    "business_regulatory_reform": 0,
+    "institutional_reform": -1
+   },
+   "notes": "Micro-party. Low cohesion, individually purchasable, decisive at the margin."
+  },
+  "New Alternative": {
+   "seats": 1,
+   "default_bloc": "government",
+   "regional_base": "Provincial",
+   "cohesion": 0.3,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": 1,
+    "decentralisation": 0,
+    "agricultural_support": 1,
+    "social_spending": 1,
+    "business_regulatory_reform": 0,
+    "institutional_reform": -1
+   },
+   "notes": "Micro-party. Low cohesion, individually purchasable, decisive at the margin."
+  },
+  "New Democracy": {
+   "seats": 1,
+   "default_bloc": "government",
+   "regional_base": "Provincial",
+   "cohesion": 0.3,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": 1,
+    "decentralisation": 0,
+    "agricultural_support": 1,
+    "social_spending": 1,
+    "business_regulatory_reform": 0,
+    "institutional_reform": -1
+   },
+   "notes": "Micro-party. Low cohesion, individually purchasable, decisive at the margin."
+  },
+  "New Dimension": {
+   "seats": 1,
+   "default_bloc": "government",
+   "regional_base": "Provincial",
+   "cohesion": 0.3,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": 1,
+    "decentralisation": 0,
+    "agricultural_support": 1,
+    "social_spending": 1,
+    "business_regulatory_reform": 0,
+    "institutional_reform": -1
+   },
+   "notes": "Micro-party. Low cohesion, individually purchasable, decisive at the margin."
+  },
+  "New Opportunity": {
+   "seats": 1,
+   "default_bloc": "government",
+   "regional_base": "Provincial",
+   "cohesion": 0.3,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": 1,
+    "decentralisation": 0,
+    "agricultural_support": 1,
+    "social_spending": 1,
+    "business_regulatory_reform": 0,
+    "institutional_reform": -1
+   },
+   "notes": "Micro-party. Low cohesion, individually purchasable, decisive at the margin."
+  },
+  "Ruam Jai Thai": {
+   "seats": 1,
+   "default_bloc": "government",
+   "regional_base": "Provincial",
+   "cohesion": 0.3,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": 1,
+    "decentralisation": 0,
+    "agricultural_support": 1,
+    "social_spending": 1,
+    "business_regulatory_reform": 0,
+    "institutional_reform": -1
+   },
+   "notes": "Micro-party. Low cohesion, individually purchasable, decisive at the margin."
+  },
+  "Thai Sub Thawee": {
+   "seats": 1,
+   "default_bloc": "government",
+   "regional_base": "Provincial",
+   "cohesion": 0.3,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": 1,
+    "decentralisation": 0,
+    "agricultural_support": 1,
+    "social_spending": 1,
+    "business_regulatory_reform": 0,
+    "institutional_reform": -1
+   },
+   "notes": "Micro-party. Low cohesion, individually purchasable, decisive at the margin."
+  },
+  "United People’s Power": {
+   "seats": 1,
+   "default_bloc": "government",
+   "regional_base": "Provincial",
+   "cohesion": 0.3,
+   "ideology": {
+    "economic_liberalisation": 0,
+    "fiscal_expansion": 1,
+    "decentralisation": 0,
+    "agricultural_support": 1,
+    "social_spending": 1,
+    "business_regulatory_reform": 0,
+    "institutional_reform": -1
+   },
+   "notes": "Micro-party. Low cohesion, individually purchasable, decisive at the margin."
+  }
+ },
+ "coalition_arithmetic": {
+  "player_seats": 191,
+  "seats_needed": 60,
+  "pivotal_parties": [
+   "People’s (120)",
+   "Pheu Thai (74)",
+   "Kla Tham (58)"
+  ],
+  "note": "Every other party is arithmetically decorative except as make-weights.",
+  "viable_coalitions": [
+   {
+    "partners": [
+     "Pheu Thai"
+    ],
+    "total": 265,
+    "surplus": 14,
+    "character": "Thin. Pheu Thai can credibly threaten collapse at any time. Expensive in transfer/handout policy."
+   },
+   {
+    "partners": [
+     "People’s"
+    ],
+    "total": 311,
+    "surplus": 60,
+    "character": "Comfortable arithmetic, hardest ideological fit. The only combination with a mandate large enough for structural reform."
+   },
+   {
+    "partners": [
+     "Kla Tham",
+     "Democrat"
+    ],
+    "total": 270,
+    "surplus": 19,
+    "character": "Conservative bloc. Cheap on social spending, hostile to institutional reform and decentralisation."
+   },
+   {
+    "partners": [
+     "Kla Tham",
+     "+2 seats from micro-parties"
+    ],
+    "total": 251,
+    "surplus": 0,
+    "character": "BJT+Kla Tham is 249 — exactly two short. Micro-parties become extortionately expensive per seat."
+   }
+  ],
+  "threat": {
+   "partners": [
+    "Pheu Thai",
+    "People’s",
+    "Kla Tham"
+   ],
+   "total": 252,
+   "note": "These three can form a majority WITHOUT the player. Coalition formation is therefore a negotiation under threat, not a shopping trip."
+  }
+ }
+}

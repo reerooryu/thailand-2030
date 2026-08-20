@@ -1,0 +1,50 @@
+{
+ "_meta": {
+  "purpose": "Identified historical shocks to the output gap, in percentage points per quarter. Fed to the dynamic simulation so the propagation mechanism can be tested separately from crisis prediction \u2014 the model cannot and should not forecast a financial crisis from within.",
+  "note": "Magnitudes for the 2011 floods and COVID come from the estimated dummies in ESTIMATION_OUTPUT.txt (-7.75 and -2.56 on the gap). AFC and GFC magnitudes are judgemental, shaped to the observed contraction profile. In the game these become shock cards (DESIGN section 10.4).",
+  "units": "percentage points added to the output gap in that quarter",
+  "investment_note": "Separate investment-rate shocks. Financial crises collapse investment through balance sheets and credit, not through the output gap: in 1998 private GFCF fell to 10.8% of GDP while the demand shock alone explains only part of it."
+ },
+ "shocks": {
+  "1997Q3": -2.5,
+  "1997Q4": -3.5,
+  "1998Q1": -3.0,
+  "1998Q2": -2.5,
+  "1998Q3": -1.5,
+  "1998Q4": -1.0,
+  "1999Q1": -0.5,
+  "2008Q4": -1.5,
+  "2009Q1": -3.0,
+  "2009Q2": -2.0,
+  "2009Q3": -0.8,
+  "2011Q4": -7.75,
+  "2012Q1": 2.0,
+  "2020Q1": -2.0,
+  "2020Q2": -8.0,
+  "2020Q3": 2.5,
+  "2020Q4": -1.0,
+  "2021Q1": -1.0,
+  "2021Q2": -1.5,
+  "2021Q3": -1.0
+ },
+ "labels": {
+  "1997Q3": "Asian Financial Crisis - baht float",
+  "2008Q4": "Global Financial Crisis",
+  "2011Q4": "Great Flood",
+  "2020Q2": "COVID-19"
+ },
+ "investment_shocks": {
+  "1997Q4": -1.5,
+  "1998Q1": -2.5,
+  "1998Q2": -2.5,
+  "1998Q3": -2.0,
+  "1998Q4": -1.5,
+  "1999Q1": -1.0,
+  "1999Q2": -0.8,
+  "1999Q3": -0.5,
+  "2009Q1": -0.8,
+  "2009Q2": -0.5,
+  "2020Q2": -1.2,
+  "2020Q3": -0.5
+ }
+}

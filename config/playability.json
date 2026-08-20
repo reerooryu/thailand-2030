@@ -1,0 +1,20 @@
+{
+ "_meta": {
+  "purpose": "Playability gains. Multipliers applied ON TOP of the estimated/literature parameters so that player decisions register on the dashboard within a year or two.",
+  "why": "The realistic model says no fiscal or reform strategy moves 2030 GDP per capita by more than 1.1% (SUPPLY.md section 3.2). That is true and it makes for no game. These gains are the single place where realism is traded for playability - the underlying parameters are untouched and auditable, and setting every gain to 1.0 restores the estimated model exactly.",
+  "tuning": "Raise to make decisions louder, lower for realism. Target: a good five-year run should move the headline number by 5-8 percent and clearly beat a bad one. infraTfp lowered 4.0 -> 2.2 for the same reason: infrastructure should build capital, not conjure productivity."
+ },
+ "gains": {
+  "fiscal": 3.0,
+  "monetary": 2.0,
+  "reformToInvestment": 4.5,
+  "reformToTfp": 3.6,
+  "infraTfp": 2.2,
+  "crowdingOut": 1.8,
+  "gapToOutput": 1.0
+ },
+ "gestation": {
+  "infraQuarters": 16,
+  "note": "16 quarters (4 years). Briefly ran at 12, which made a first-year megaproject land inside the term and turned building things into a Legacy shortcut \u2014 undercutting the whole point that correct long-horizon policy is invisible on the scoreboard. 16 keeps a Q1 commitment barely delivering by 2030 and anything later delivering to a successor."
+ }
+}

@@ -1,0 +1,1292 @@
+{
+ "_meta": {
+  "purpose": "Blocking news events. An event appears in the inbox and the turn CANNOT be advanced until it is resolved — unlike policy cards, which may be ignored. This is what makes consequences feel imposed rather than shopped for.",
+  "triggers": {
+   "afterOption": "Fires N quarters after a specific card option was enacted. Consequence chains.",
+   "flag": "Fires when a flag is set.",
+   "threshold": "Fires when a state variable crosses a value.",
+   "hazard": "Random, with a per-quarter probability."
+  },
+  "note": "Options carry opinion deltas directly, since events are where relationships actually move between turns.",
+  "scripted": "Events with a scriptedQuarter fire on that quarter of the run regardless of player action. These are the things that were already happening in 2026 — the Hormuz closure, the Constitutional Court petition, the baht/tourism row. The player inherits them.",
+  "fail_states": "Two events now carry real jeopardy. forced_consolidation fires above 79% of GDP and takes spending out of the player's hands. confidence_crisis fires below 31% approval and can end the run outright if the player calls a bluff that was not one."
+ },
+ "events": [
+  {
+   "id": "land_bridge_opposition",
+   "headline": "Southern provinces erupt over Land Bridge land seizures",
+   "trigger": {
+    "type": "afterOption",
+    "card": "land_bridge",
+    "option": "proceed",
+    "inQuarters": 1
+   },
+   "blocking": true,
+   "body": "Expropriation notices in Ranong and Chumphon have brought thousands onto the streets. Fishing communities say the deep-sea port will end their livelihoods; the environmental review is still contested in court. The People's Party has tabled an urgent debate. Your Transport Minister wants to press on. The Interior Ministry is quietly asking whether the police can be relied upon to clear the sites.",
+   "options": [
+    {
+     "id": "force",
+     "label": "Force it through",
+     "body": "Sites cleared, construction notice issued, and the project becomes irreversible.",
+     "opinion": {
+      "Pheu Thai": 6,
+      "People's": -10,
+      "Democrat": -7,
+      "Others": -5,
+      "Kla Tham": -2
+     },
+     "effects": {
+      "capitalSpend": 0.55,
+      "approvalBoost": -6,
+      "institutionalSupport": -5
+     },
+     "sets": [
+      "land_bridge_committed",
+      "land_bridge_forced"
+     ],
+     "flavour": "You now own every photograph taken in Ranong for the next six years."
+    },
+    {
+     "id": "pull_back",
+     "label": "Pull back — build the rail link instead",
+     "body": "Cancel the ports, keep the corridor, recover part of the committed capital.",
+     "opinion": {
+      "Pheu Thai": -8,
+      "Democrat": 6,
+      "Others": 4,
+      "People's": 3,
+      "Kla Tham": -1
+     },
+     "effects": {
+      "capitalSpend": 0.16,
+      "approvalBoost": 2,
+      "institutionalSupport": 4,
+      "fdiSignal": -0.1
+     },
+     "clears": [
+      "land_bridge_committed"
+     ],
+     "sets": [
+      "land_bridge_scrapped",
+      "chumphon_rail_via_climbdown"
+     ],
+     "flavour": "The climbdown reads as competence to everyone except the people you promised a trillion baht to."
+    }
+   ]
+  },
+  {
+   "id": "civil_service_backlash",
+   "headline": "Civil service unions call coordinated slowdown",
+   "trigger": {
+    "type": "afterOption",
+    "card": "civil_service_reform",
+    "option": "full",
+    "inQuarters": 2
+   },
+   "blocking": true,
+   "body": "Provincial offices are processing permits at a fraction of normal speed. Nothing is technically a strike. The Office of the Civil Service Commission says the early-retirement terms are being misrepresented; the unions say 414,000 people are being pushed out at forty with a lump sum and a reskilling leaflet. Budget disbursement has stalled in eleven ministries.",
+   "options": [
+    {
+     "id": "concede",
+     "label": "Improve the severance terms",
+     "body": "More generous package, faster uptake, larger bill.",
+     "opinion": {
+      "Others": 7,
+      "Kla Tham": 3,
+      "Democrat": -4,
+      "People's": -2
+     },
+     "effects": {
+      "govConsumption": 0.2,
+      "institutionalSupport": 6,
+      "executionBonus": 0.02
+     },
+     "flavour": "Bought back the bureaucracy at roughly the price it asked."
+    },
+    {
+     "id": "hold_firm",
+     "label": "Hold the line",
+     "body": "No renegotiation. The slowdown continues for two more quarters.",
+     "opinion": {
+      "Others": -8,
+      "Kla Tham": -4,
+      "Democrat": 5,
+      "People's": 4
+     },
+     "effects": {
+      "executionBonus": -0.08,
+      "approvalBoost": -5,
+      "institutionalSupport": -6
+     },
+     "flavour": "Execution collapses in the short run. If you survive it, the reform survives too."
+    },
+    {
+     "id": "narrow",
+     "label": "Exempt frontline services",
+     "body": "Teachers, health and police carved out. Two thirds of the saving, a third of the fight.",
+     "opinion": {
+      "Others": 3,
+      "Kla Tham": 1,
+      "Democrat": 1,
+      "People's": 1
+     },
+     "effects": {
+      "govConsumption": 0.1,
+      "reformIndex": -8,
+      "institutionalSupport": 2
+     },
+     "flavour": "The politically survivable version, which is also the version that does not reach 1.35 million."
+    }
+   ]
+  },
+  {
+   "id": "vat_street_protest",
+   "headline": "VAT rise triggers largest protests since 2020",
+   "trigger": {
+    "type": "afterOption",
+    "card": "vat_reform",
+    "option": "immediate",
+    "inQuarters": 1
+   },
+   "blocking": true,
+   "body": "Three percentage points overnight, on everything, in an economy that was in deflation five months ago. Bangkok is blocked. The opposition has found a slogan and the coalition backbenches are visibly nervous.",
+   "options": [
+    {
+     "id": "hold",
+     "label": "Hold the rate",
+     "opinion": {
+      "Pheu Thai": -10,
+      "Kla Tham": -8,
+      "People's": -3,
+      "Democrat": 6,
+      "Others": 3
+     },
+     "effects": {
+      "approvalBoost": -10
+     },
+     "flavour": "The revenue is real and so is the anger."
+    },
+    {
+     "id": "compensate",
+     "label": "Add a low-income rebate",
+     "opinion": {
+      "Pheu Thai": 4,
+      "People's": 4,
+      "Democrat": -3,
+      "Kla Tham": 1
+     },
+     "effects": {
+      "transfers": 0.45,
+      "approvalBoost": 4
+     },
+     "flavour": "Gives back a quarter of what you took, from the quarter that could least afford it."
+    },
+    {
+     "id": "retreat",
+     "label": "Phase it after all",
+     "opinion": {
+      "Democrat": -8,
+      "Others": -4,
+      "Pheu Thai": 5,
+      "Kla Tham": 5
+     },
+     "effects": {
+      "taxRate": -0.82,
+      "approvalBoost": 6
+     },
+     "flavour": "You spent the political capital and kept half the revenue."
+    }
+   ]
+  },
+  {
+   "id": "eastern_hsr_arbitration",
+   "headline": "Concessionaire files for international arbitration",
+   "trigger": {
+    "type": "afterOption",
+    "card": "eastern_hsr",
+    "option": "terminate",
+    "inQuarters": 2
+   },
+   "blocking": true,
+   "body": "Asia Era One is seeking compensation well above the 12 billion baht it says it has spent. Foreign chambers of commerce have written jointly to the Prime Minister's Office. The Board of Investment reports three unrelated concession enquiries have gone quiet.",
+   "options": [
+    {
+     "id": "settle",
+     "label": "Settle quickly",
+     "opinion": {
+      "Others": 4,
+      "Democrat": -5,
+      "People's": -5,
+      "Pheu Thai": 2
+     },
+     "effects": {
+      "capitalSpend": 0.18,
+      "fdiSignal": 0.25,
+      "approvalBoost": -4
+     },
+     "flavour": "Expensive, and it stops the bleeding on every other concession in the country."
+    },
+    {
+     "id": "fight",
+     "label": "Contest it",
+     "opinion": {
+      "People's": 6,
+      "Democrat": 4,
+      "Others": -4,
+      "Pheu Thai": -3
+     },
+     "effects": {
+      "fdiSignal": -0.35,
+      "approvalBoost": 3
+     },
+     "flavour": "Popular at home. Every infrastructure investor in Asia is reading the filing."
+    }
+   ]
+  },
+  {
+   "id": "energy_shock",
+   "headline": "Global energy prices spike — fuel and transport costs surge",
+   "trigger": {
+    "type": "hazard",
+    "probabilityPerQuarter": 0.09
+   },
+   "blocking": true,
+   "body": "Headline inflation will move within the month regardless of what you do. Energy passes into headline CPI at more than four times the rate it passes into core, and fuel prices are the number voters actually notice.",
+   "options": [
+    {
+     "id": "subsidise",
+     "label": "Cap retail fuel prices",
+     "opinion": {
+      "Pheu Thai": 5,
+      "Kla Tham": 5,
+      "Others": 2,
+      "Democrat": -6,
+      "People's": -3
+     },
+     "effects": {
+      "transfers": 0.35,
+      "approvalBoost": 7
+     },
+     "flavour": "Immediate relief, permanent expectation. Thailand has done this before and never unwound it cleanly."
+    },
+    {
+     "id": "targeted",
+     "label": "Targeted transport subsidy only",
+     "opinion": {
+      "Democrat": 2,
+      "People's": 2,
+      "Pheu Thai": -2
+     },
+     "effects": {
+      "transfers": 0.12,
+      "approvalBoost": 2
+     },
+     "flavour": "A third of the cost, a third of the credit."
+    },
+    {
+     "id": "absorb",
+     "label": "Let prices pass through",
+     "opinion": {
+      "Democrat": 5,
+      "People's": 2,
+      "Pheu Thai": -6,
+      "Kla Tham": -5,
+      "Others": -2
+     },
+     "effects": {
+      "approvalBoost": -8
+     },
+     "flavour": "Correct, cheap, and the reason governments lose by-elections."
+    }
+   ]
+  },
+  {
+   "id": "debt_ceiling_warning",
+   "headline": "Fiscal Policy Office warns debt ceiling will be breached",
+   "trigger": {
+    "type": "threshold",
+    "variable": "debtHeadroom",
+    "below": 1.5
+   },
+   "blocking": true,
+   "body": "Gross public debt is within a point and a half of the statutory ceiling. The Fiscal Policy Office has written formally. Rating agencies have not moved yet, but two have asked for a meeting.",
+   "options": [
+    {
+     "id": "raise_ceiling",
+     "label": "Legislate a higher ceiling — 70% to 78%",
+     "requiresLegislation": true,
+     "opinion": {
+      "Democrat": -10,
+      "Others": -6,
+      "People's": -4,
+      "Pheu Thai": 4,
+      "Kla Tham": 3
+     },
+     "effects": {
+      "fdiSignal": -0.2
+     },
+     "sets": [
+      "debt_ceiling_raised"
+     ],
+     "flavour": "The ceiling has been raised before. It buys eight points of headroom, it does not buy a lower risk premium, and the next government inherits a number that no longer means anything."
+    },
+    {
+     "id": "consolidate",
+     "label": "Cut spending to stay under",
+     "opinion": {
+      "Democrat": 8,
+      "Others": 4,
+      "Pheu Thai": -9,
+      "Kla Tham": -6
+     },
+     "effects": {
+      "capitalSpend": -0.4,
+      "govConsumption": -0.3,
+      "approvalBoost": -6
+     },
+     "flavour": "Capital spending is the easiest line to cut and the most expensive one to lose."
+    },
+    {
+     "id": "ignore",
+     "label": "Note the warning and proceed",
+     "opinion": {
+      "Democrat": -6,
+      "Others": -3
+     },
+     "effects": {
+      "fdiSignal": -0.15
+     },
+     "flavour": "Nothing happens immediately. That is the problem with ceilings."
+    }
+   ]
+  },
+  {
+   "id": "hormuz_energy_shock",
+   "headline": "Strait of Hormuz closed — fuel imports at risk",
+   "trigger": {
+    "type": "afterOption",
+    "card": "__start__",
+    "option": "__start__",
+    "inQuarters": 0
+   },
+   "scriptedQuarter": 0,
+   "blocking": true,
+   "body": "Roughly half of Thailand's crude and a third of its LNG transit Hormuz. Panic buying has taken daily consumption from 67 to 84 million litres. The Federation of Thai Industries warns production costs could rise 50% for heavy industry. Headline CPI was negative three months ago; it will not be negative next month. Energy passes into headline inflation at more than four times the rate it reaches core, and fuel is the number voters actually see.",
+   "options": [
+    {
+     "id": "copayment",
+     "label": "Co-payment fuel credits (2,000–2,400 baht)",
+     "body": "Digital wallet credits against fuel and transport, as drafted.",
+     "opinion": {
+      "Pheu Thai": 6,
+      "Kla Tham": 5,
+      "Others": 3,
+      "Democrat": -6,
+      "People's": -3
+     },
+     "effects": {
+      "transfers": 0.55,
+      "approvalBoost": 9
+     },
+     "flavour": "Fast, popular, and the expectation never unwinds. Thailand has done this before."
+    },
+    {
+     "id": "strategic_reserve",
+     "label": "Release strategic reserves, cap refinery margins",
+     "body": "No cash out the door. Pressure on refiners instead.",
+     "opinion": {
+      "Democrat": 3,
+      "People's": 2,
+      "Others": -4,
+      "Pheu Thai": -2
+     },
+     "effects": {
+      "approvalBoost": 2,
+      "fdiSignal": -0.1,
+      "institutionalSupport": -3
+     },
+     "flavour": "Cheaper for the budget, and the energy sector will remember which government did it."
+    },
+    {
+     "id": "pass_through",
+     "label": "Let it pass through",
+     "body": "Prices move. Nothing is spent.",
+     "opinion": {
+      "Democrat": 6,
+      "People's": 3,
+      "Pheu Thai": -7,
+      "Kla Tham": -6,
+      "Others": -2
+     },
+     "effects": {
+      "approvalBoost": -11
+     },
+     "flavour": "Correct, and the first thing every headline will say is that you did nothing."
+    }
+   ]
+  },
+  {
+   "id": "constitutional_court_petition",
+   "headline": "Constitutional Court accepts petition against the February election",
+   "trigger": {
+    "type": "afterOption",
+    "card": "__start__",
+    "option": "__start__",
+    "inQuarters": 1
+   },
+   "scriptedQuarter": 1,
+   "blocking": true,
+   "body": "The Court has voted 6–3 to accept a challenge to the legality of the February 8 election. The complaint argues that barcodes and QR codes printed on ballots could be used to trace voter identity, violating ballot secrecy. A ruling against the Election Commission could annul the result outright. Your mandate is now conditional on nine people who did not stand for it.",
+   "options": [
+    {
+     "id": "defend_ec",
+     "label": "Defend the Election Commission publicly",
+     "opinion": {
+      "Others": 6,
+      "Kla Tham": 3,
+      "People's": -7,
+      "Democrat": -3
+     },
+     "effects": {
+      "institutionalSupport": 5,
+      "fdiSignal": -0.05
+     },
+     "flavour": "Ties your government to an institution the petitioners are trying to discredit."
+    },
+    {
+     "id": "reform_ballots",
+     "label": "Concede the point, legislate ballot reform",
+     "requiresLegislation": true,
+     "opinion": {
+      "People's": 9,
+      "Democrat": 7,
+      "Others": -5,
+      "Kla Tham": -4,
+      "Pheu Thai": 2
+     },
+     "effects": {
+      "reformIndex": 8,
+      "approvalBoost": 3,
+      "institutionalSupport": -4
+     },
+     "sets": [
+      "ballot_reform_passed"
+     ],
+     "flavour": "Cheap, popular with the people who will never vote for you, and it concedes the election was flawed."
+    },
+    {
+     "id": "say_nothing",
+     "label": "Say nothing and govern",
+     "opinion": {
+      "People's": -2,
+      "Democrat": -2,
+      "Others": 2
+     },
+     "effects": {
+      "fdiSignal": -0.15
+     },
+     "flavour": "Every investor decision for the next two quarters is now provisional."
+    }
+   ]
+  },
+  {
+   "id": "baht_tourism_pressure",
+   "headline": "Tourism industry demands the BOT weaken the baht",
+   "trigger": {
+    "type": "afterOption",
+    "card": "__start__",
+    "option": "__start__",
+    "inQuarters": 3
+   },
+   "scriptedQuarter": 3,
+   "blocking": true,
+   "body": "ATTA projects 39 million arrivals this year on the back of a Chinese recovery, and says it will not happen at this exchange rate. A Chinese visitor now gets about 4.4 baht to the yuan against 5.4 before — a fifth of their purchasing power gone. The association wants the BOT to manage the rate to 40, or at minimum back to the 35 of 2019. Arrivals were down 18% in January. Services exports are 13.2% of GDP.",
+   "options": [
+    {
+     "id": "pressure_bot",
+     "label": "Publicly press the BOT to intervene",
+     "opinion": {
+      "Pheu Thai": 5,
+      "Kla Tham": 4,
+      "Others": -6,
+      "Democrat": -7,
+      "People's": -4
+     },
+     "effects": {
+      "approvalBoost": 4,
+      "fdiSignal": -0.25,
+      "institutionalSupport": -7
+     },
+     "flavour": "The Bank will not thank you and may not comply. Central bank independence is one of the few things foreign investors still price into Thai assets."
+    },
+    {
+     "id": "tourism_support",
+     "label": "Fund a tourism marketing and subsidy push instead",
+     "opinion": {
+      "Pheu Thai": 4,
+      "Others": 3,
+      "Democrat": -2,
+      "People's": -1
+     },
+     "effects": {
+      "transfers": 0.18,
+      "approvalBoost": 3
+     },
+     "flavour": "Treats the symptom, leaves the rate alone, and the hotels are grateful for a season."
+    },
+    {
+     "id": "decline",
+     "label": "Decline — the rate is not the government's to set",
+     "opinion": {
+      "Democrat": 6,
+      "People's": 3,
+      "Others": 4,
+      "Pheu Thai": -5,
+      "Kla Tham": -4
+     },
+     "effects": {
+      "approvalBoost": -4,
+      "fdiSignal": 0.15
+     },
+     "flavour": "Institutionally correct. The Andaman hotel association has your Transport Minister's number."
+    }
+   ]
+  },
+  {
+   "id": "forced_consolidation",
+   "headline": "Bond auction undersubscribed — Treasury forces a consolidation",
+   "trigger": {
+    "type": "threshold",
+    "variable": "debtOverCeiling",
+    "above": 9
+   },
+   "blocking": true,
+   "body": "A ten-year auction cleared with a third of the book unfilled. The risk premium on Thai paper has widened to the point where the debt stock is compounding faster than nominal GDP, and the Public Debt Management Office says it cannot fund the current programme at any price it is willing to pay. The ceiling, wherever you last moved it, is nine points behind you. This is not a warning. Something is getting cut this quarter, and capital is the only line that can move fast.",
+   "options": [
+    {
+     "id": "capital",
+     "label": "Cut the capital programme",
+     "opinion": {
+      "Pheu Thai": -9,
+      "Kla Tham": -6,
+      "Others": -7,
+      "Democrat": 6
+     },
+     "effects": {
+      "capitalSpend": -1.2,
+      "approvalBoost": -7,
+      "fdiSignal": -0.1
+     },
+     "flavour": "The easiest line to cut and the most expensive one to lose. Every project slips a year."
+    },
+    {
+     "id": "transfers",
+     "label": "Cut transfers and subsidies",
+     "opinion": {
+      "Pheu Thai": -14,
+      "Kla Tham": -10,
+      "Democrat": 8,
+      "People's": -3
+     },
+     "effects": {
+      "transfers": -0.9,
+      "govConsumption": -0.3,
+      "approvalBoost": -13
+     },
+     "flavour": "Protects the investment programme by taking money from people who will notice immediately."
+    },
+    {
+     "id": "sell_assets",
+     "label": "Sell state enterprise stakes",
+     "opinion": {
+      "Others": -12,
+      "Kla Tham": -8,
+      "People's": 4,
+      "Democrat": 3
+     },
+     "effects": {
+      "capitalSpend": -0.4,
+      "institutionalSupport": -10,
+      "fdiSignal": 0.2,
+      "approvalBoost": -4
+     },
+     "flavour": "Raises the money once. The people who ran those enterprises have long memories."
+    }
+   ]
+  },
+  {
+   "id": "confidence_crisis",
+   "headline": "Coalition partner threatens to withdraw",
+   "trigger": {
+    "type": "threshold",
+    "variable": "approval",
+    "below": 31
+   },
+   "blocking": true,
+   "body": "Approval has fallen far enough that your partners are being asked, daily, why they are still in this government. A withdrawal would take the coalition below 251 and end it. Their price is not a secret: portfolios, a policy concession, or a signal that the unpopular programme stops here.",
+   "options": [
+    {
+     "id": "concede_portfolios",
+     "label": "Hand over two ministries",
+     "opinion": {
+      "Pheu Thai": 12,
+      "Kla Tham": 12,
+      "Others": 10,
+      "Democrat": 5
+     },
+     "effects": {
+      "executionBonus": -0.05,
+      "reformIndex": -12
+     },
+     "flavour": "They stay. You have given away the agenda to keep the office."
+    },
+    {
+     "id": "policy_retreat",
+     "label": "Abandon the unpopular programme",
+     "opinion": {
+      "Pheu Thai": 9,
+      "Kla Tham": 9,
+      "Others": 8,
+      "People's": -4,
+      "Democrat": -6
+     },
+     "effects": {
+      "reformIndex": -25,
+      "approvalBoost": 8
+     },
+     "flavour": "Everything you spent four years passing, quietly stops being enforced."
+    },
+    {
+     "id": "call_bluff",
+     "label": "Call their bluff",
+     "opinion": {
+      "Pheu Thai": -21,
+      "Kla Tham": -21,
+      "Others": -17,
+      "People's": 3,
+      "Democrat": 4
+     },
+     "effects": {
+      "approvalBoost": 2
+     },
+     "flavour": "If they walk, the government falls and the run ends here. If they do not, you never hear this threat again. There is no way to find out which without doing it.",
+     "body": "No concession. The threat is tested.",
+     "sets": [
+      "called_the_bluff"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mou44_termination",
+   "headline": "Cabinet has the MOU 2544 termination instrument on the table",
+   "trigger": {
+    "type": "afterOption",
+    "card": "__start__",
+    "option": "__start__",
+    "inQuarters": 1
+   },
+   "scriptedQuarter": 0,
+   "blocking": true,
+   "body": "The 2001 memorandum framed a quarter-century of going nowhere on the Overlapping Claims Area — 26,000 square kilometres of Gulf seabed with an estimated 10 trillion baht of gas under it, undeveloped because neither side will concede a boundary. After the border fighting the political question answers itself. Terminating moves the dispute to UNCLOS conciliation and ends the joint-development framework. The gas was not coming out this decade either way.",
+   "options": [
+    {
+     "id": "scrap",
+     "label": "Terminate the memorandum",
+     "body": "Instrument signed. The dispute goes to international law.",
+     "opinion": {
+      "Kla Tham": 7,
+      "Others": 8,
+      "Pheu Thai": 4,
+      "Democrat": 4,
+      "People's": -1
+     },
+     "effects": {
+      "approvalBoost": 9,
+      "institutionalSupport": 6,
+      "fdiSignal": -0.12
+     },
+     "sets": [
+      "mou44_scrapped"
+     ],
+     "flavour": "Popular, sovereign, and it forecloses the only framework under which that gas was ever going to be extracted. Nobody in the room thinks the field gets developed this decade either way."
+    },
+    {
+     "id": "keep",
+     "label": "Retain the memorandum",
+     "unavailable": true,
+     "opinion": {},
+     "effects": {},
+     "flavour": "Are you all right?"
+    }
+   ]
+  },
+  {
+   "id": "bkk_city_plan",
+   "headline": "The fourth revision of the Bangkok comprehensive plan takes effect",
+   "trigger": {
+    "type": "afterOption",
+    "card": "__start__",
+    "option": "__start__",
+    "inQuarters": 1
+   },
+   "scriptedQuarter": 3,
+   "blocking": true,
+   "body": "The 2013 master plan finally expires. The replacement rezones the corridors along the electric rail network for higher-density mixed use and hands out floor-area bonuses within walking distance of stations. City Hall wrote it, the ministry signed it, and it lands on your desk as a fait accompli. The effect on your numbers arrives through the construction pipeline over several years, not this quarter.",
+   "options": [
+    {
+     "id": "note",
+     "label": "Note the plan and let the pipeline run",
+     "body": "The plan is gazetted. Developers start redrawing sites along the rail lines.",
+     "opinion": {
+      "Others": 2,
+      "Democrat": 1
+     },
+     "effects": {
+      "capitalSpend": 0.05,
+      "fdiSignal": 0.03,
+      "setSupport": 0.4
+     },
+     "flavour": "Property counters rally on the announcement. The floor space it authorises will take most of a decade to actually get built, which is roughly how long you have.",
+     "sets": [
+      "bkk_city_plan_2027"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "map_ta_phut_p3",
+   "headline": "Map Ta Phut Phase 3 hands over Stage 1",
+   "trigger": {
+    "type": "afterOption",
+    "card": "__start__",
+    "option": "__start__",
+    "inQuarters": 1
+   },
+   "scriptedQuarter": 5,
+   "blocking": true,
+   "body": "Stage 1 of the third phase of the Map Ta Phut industrial port is complete — reclaimed area and the marine works for the gas and petrochemical berths in the Eastern Economic Corridor. It was tendered years before you took office. You cut the ribbon.",
+   "options": [
+    {
+     "id": "note",
+     "label": "Attend the handover",
+     "body": "Stage 1 is accepted. Terminal construction on top of it continues.",
+     "opinion": {
+      "Others": 2,
+      "Kla Tham": 1
+     },
+     "effects": {
+      "capitalSpend": 0.04,
+      "fdiSignal": 0.05,
+      "executionBonus": 0.02
+     },
+     "flavour": "A genuine EEC delivery, on schedule, that you had nothing to do with. Take the photograph anyway.",
+     "sets": [
+      "map_ta_phut_p3_stage1"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "laem_chabang_wharf_f",
+   "headline": "Laem Chabang Phase 3 opens Wharf F",
+   "trigger": {
+    "type": "afterOption",
+    "card": "__start__",
+    "option": "__start__",
+    "inQuarters": 1
+   },
+   "scriptedQuarter": 6,
+   "blocking": true,
+   "body": "Wharf F, the industrial-goods berth of the third phase at Laem Chabang, begins operations. It is the first revenue-earning piece of an expansion that has slipped repeatedly since the concession was signed. Container handling capacity at the country's main gateway steps up.",
+   "options": [
+    {
+     "id": "note",
+     "label": "Open the wharf",
+     "body": "Wharf F is operational. The Port Authority publishes revised throughput targets.",
+     "opinion": {
+      "Others": 2,
+      "Pheu Thai": 1
+     },
+     "effects": {
+      "capitalSpend": 0.04,
+      "fdiSignal": 0.06,
+      "executionBonus": 0.02
+     },
+     "flavour": "Logistics cost per container falls a little. Exporters notice; voters do not.",
+     "sets": [
+      "laem_chabang_wharf_f"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "orange_line_east",
+   "headline": "MRT Orange Line eastern section enters commercial service",
+   "trigger": {
+    "type": "afterOption",
+    "card": "__start__",
+    "option": "__start__",
+    "inQuarters": 1
+   },
+   "scriptedQuarter": 7,
+   "blocking": true,
+   "body": "Thailand Cultural Centre to Minburi opens to passengers after test running through late 2027. The eastern half of the east-west corridor is live; the western half is still years out, so for now the line terminates where the litigation over the western contract began.",
+   "options": [
+    {
+     "id": "note",
+     "label": "Open the line",
+     "body": "The eastern section carries its first fare-paying passengers.",
+     "opinion": {
+      "Others": 2,
+      "Pheu Thai": 1,
+      "People's": 1
+     },
+     "effects": {
+      "capitalSpend": 0.05,
+      "executionBonus": 0.02,
+      "setSupport": 0.3
+     },
+     "flavour": "Minburi gets a train after a decade of being promised one. Ridership on a half-finished corridor will disappoint, and the disappointment will be reported as your failure.",
+     "sets": [
+      "orange_line_east_open"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "purple_line_south",
+   "headline": "MRT Purple Line southern extension opens",
+   "trigger": {
+    "type": "afterOption",
+    "card": "__start__",
+    "option": "__start__",
+    "inQuarters": 1
+   },
+   "scriptedQuarter": 12,
+   "blocking": true,
+   "body": "Tao Poon to Rat Burana enters service, running the Purple Line through the old city and across the river. It closes one of the more expensive gaps in the network — the section where an interchange has been forcing a bus transfer for years.",
+   "options": [
+    {
+     "id": "note",
+     "label": "Open the extension",
+     "body": "Through service from Khlong Bang Phai to Rat Burana begins.",
+     "opinion": {
+      "Others": 2,
+      "Pheu Thai": 1
+     },
+     "effects": {
+      "capitalSpend": 0.04,
+      "executionBonus": 0.02,
+      "setSupport": 0.3
+     },
+     "flavour": "The rare infrastructure event that improves someone's commute the day it opens.",
+     "sets": [
+      "purple_line_south_open"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "orange_line_west",
+   "headline": "MRT Orange Line western section completes the corridor",
+   "trigger": {
+    "type": "afterOption",
+    "card": "__start__",
+    "option": "__start__",
+    "inQuarters": 1
+   },
+   "scriptedQuarter": 15,
+   "blocking": true,
+   "body": "Bang Khunnon to Thailand Cultural Centre opens, joining the two halves. Bangkok gets a continuous east-west heavy rail spine for the first time, a decade and one Supreme Administrative Court case after the project was approved.",
+   "options": [
+    {
+     "id": "note",
+     "label": "Complete the corridor",
+     "body": "The full Orange Line runs end to end.",
+     "opinion": {
+      "Others": 3,
+      "Pheu Thai": 1,
+      "People's": 1
+     },
+     "effects": {
+      "capitalSpend": 0.05,
+      "executionBonus": 0.03,
+      "fdiSignal": 0.04,
+      "setSupport": 0.5
+     },
+     "flavour": "The last big ribbon of your term, and the one that most clearly belongs to your predecessors. Ridership finally makes sense once both halves run.",
+     "sets": [
+      "orange_line_west_open"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ai_bloc_alignment",
+   "headline": "Thailand is asked to sign — Pax Silica, WAICO, or neither",
+   "trigger": {
+    "type": "afterOption",
+    "card": "__start__",
+    "option": "__start__",
+    "inQuarters": 1
+   },
+   "scriptedQuarter": 2,
+   "blocking": true,
+   "body": "Washington's Pax Silica declaration has gone from seven signatories to more than two dozen in a year: chips, rare earths, energy and the supply chains between them, routed deliberately around China. Beijing answered in July with WAICO, a treaty organisation on AI governance and access rules, thirty founding members. Neither instrument binds much on paper. Both function as a membership list. Thailand's two largest trading relationships sit on opposite lists and the foreign ministry wants a decision before the ASEAN summit.",
+   "options": [
+    {
+     "id": "pax_silica",
+     "label": "Sign Pax Silica",
+     "body": "Thailand signs the declaration. Advanced chip access and the data-centre pipeline come with it.",
+     "opinion": {
+      "Democrat": 5,
+      "People's": 4,
+      "Others": 3,
+      "Pheu Thai": -3,
+      "Kla Tham": -2
+     },
+     "effects": {
+      "fdiSignal": 0.25,
+      "humanCapital": 0.4,
+      "reformIndex": 2,
+      "setSupport": 0.8
+     },
+     "sets": [
+      "pax_silica"
+     ],
+     "flavour": "The hyperscalers can now site compute here without an export licence fight. Chinese EV and electronics investment in the EEC — the single largest source of new FDI since 2023 — reads the signature exactly as intended."
+    },
+    {
+     "id": "waico",
+     "label": "Join WAICO",
+     "body": "Thailand accedes to the WAICO treaty and its governance framework.",
+     "opinion": {
+      "Pheu Thai": 5,
+      "Kla Tham": 3,
+      "Others": -4,
+      "Democrat": -5,
+      "People's": -4
+     },
+     "effects": {
+      "capitalSpend": 0.1,
+      "fdiSignal": 0.08,
+      "humanCapital": -0.2,
+      "setSupport": -0.4
+     },
+     "sets": [
+      "waico"
+     ],
+     "flavour": "Chinese capital for grid and data-centre build-out arrives fast and on concessional terms. The frontier accelerators do not, and everything downstream of them gets built somewhere else."
+    },
+    {
+     "id": "neutral",
+     "label": "Stay out of both",
+     "body": "Thailand declines to sign either and keeps the door open.",
+     "opinion": {
+      "Others": 4,
+      "Pheu Thai": 2,
+      "Democrat": 1,
+      "People's": 1
+     },
+     "effects": {
+      "institutionalSupport": 3,
+      "approvalBoost": 2,
+      "fdiSignal": 0.03
+     },
+     "sets": [
+      "ai_nonaligned"
+     ],
+     "flavour": "The classical Thai answer, and it has worked for two centuries. It works less well when the thing being divided is a supply chain rather than a border, because nobody builds the fab in the country that has not chosen."
+    },
+    {
+     "id": "sovereign",
+     "label": "Chart a sovereign AI course",
+     "body": "A national compute programme, a Thai foundation model, and a domestic data-sovereignty regime.",
+     "opinion": {
+      "Kla Tham": 4,
+      "Others": -3,
+      "Democrat": -2,
+      "People's": -2,
+      "Pheu Thai": 1
+     },
+     "effects": {
+      "capitalSpend": 0.18,
+      "approvalBoost": 7,
+      "fdiSignal": -0.12,
+      "humanCapital": 0.2,
+      "reformIndex": 1
+     },
+     "sets": [
+      "sovereign_ai"
+     ],
+     "flavour": "Magnificent on the podium. A sovereign model trained on chips you cannot buy, in a country that graduates a few hundred relevant PhDs a year, is a subsidy to the electricity bill."
+    }
+   ]
+  },
+  {
+   "id": "nesdp14_energy",
+   "headline": "The 14th National Plan lands with the energy transition inside it",
+   "trigger": {
+    "type": "afterOption",
+    "card": "__start__",
+    "option": "__start__",
+    "inQuarters": 1
+   },
+   "scriptedQuarter": 7,
+   "blocking": true,
+   "body": "The 14th National Economic and Social Development Plan runs 2028 to 2032 and, unlike its predecessors, carries a hard number: the Power Development Plan's target of 51% renewable generation by 2037, with the gas share falling, firm-capacity procurement, a small modular reactor programme under study, and the grid rebuild that all of it presupposes. NESDC has drafted it. Cabinet decides how much of it to fund.",
+   "options": [
+    {
+     "id": "full",
+     "label": "Fund the transition in full",
+     "body": "The plan is adopted with the grid and procurement programme fully funded.",
+     "opinion": {
+      "People's": 6,
+      "Democrat": 4,
+      "Others": 3,
+      "Pheu Thai": 1,
+      "Kla Tham": -3
+     },
+     "effects": {
+      "capitalSpend": 0.35,
+      "reformIndex": 4,
+      "fdiSignal": 0.15,
+      "executionBonus": 0.02,
+      "setSupport": 0.5
+     },
+     "sets": [
+      "nesdp14_full",
+      "energy_transition_funded"
+     ],
+     "flavour": "Transmission and storage are the binding constraint, not panels, and this is the one window to build them. It is also a decade of capital spending whose return lands after two more governments."
+    },
+    {
+     "id": "phased",
+     "label": "Adopt the plan, fund the first tranche",
+     "body": "The targets are adopted; the grid programme is funded to 2030 and reviewed.",
+     "opinion": {
+      "Others": 4,
+      "Democrat": 2,
+      "People's": 1,
+      "Kla Tham": 1
+     },
+     "effects": {
+      "capitalSpend": 0.14,
+      "reformIndex": 2,
+      "fdiSignal": 0.06,
+      "institutionalSupport": 2
+     },
+     "sets": [
+      "nesdp14_phased"
+     ],
+     "flavour": "Fiscally defensible and the honest reading of your debt position. Half a grid connects nothing, and the review will land on a successor who did not sign up to the target."
+    }
+   ]
+  },
+  {
+   "id": "semiconductor_board",
+   "headline": "The National Semiconductor Board wants a decision, and a budget",
+   "trigger": {
+    "type": "afterOption",
+    "card": "__start__",
+    "option": "__start__",
+    "inQuarters": 1
+   },
+   "scriptedQuarter": 1,
+   "blocking": true,
+   "body": "The committee has existed since October 2024, chaired by whoever is prime minister, which now means you. The roadmap in front of it is not modest: 500 billion baht of expected foreign investment, 86,000 engineers and scientists inside five years, and a stated ambition to move Thailand off the back end of the chain. Thailand today does assembly, test and packaging — the least lucrative link — and has no wafer fabrication at all. The board can be a standing cabinet priority with money and a secretariat, or it can be a committee that meets.",
+   "options": [
+    {
+     "id": "commit",
+     "label": "Chair it yourself and fund the secretariat",
+     "body": "The board becomes a standing cabinet priority with a budget line and a workforce programme.",
+     "opinion": {
+      "Others": 4,
+      "Democrat": 3,
+      "People's": 2,
+      "Kla Tham": 1,
+      "Pheu Thai": 1
+     },
+     "effects": {
+      "govConsumption": 0.03,
+      "humanCapital": 0.15,
+      "reformIndex": 2,
+      "fdiSignal": 0.08
+     },
+     "sets": [
+      "semiconductor_board_committed",
+      "semiconductor_board_seen"
+     ],
+     "flavour": "Engineers take six years to train and you have four. Everything you fund here is collected by somebody else, which is the definition of the work and the reason it usually does not get done."
+    },
+    {
+     "id": "note",
+     "label": "Let the board meet and see what it produces",
+     "body": "The committee continues on its existing footing.",
+     "opinion": {
+      "Kla Tham": 1,
+      "Pheu Thai": 1
+     },
+     "effects": {
+      "fdiSignal": 0.01
+     },
+     "sets": [
+      "semiconductor_board_seen"
+     ],
+     "flavour": "It will produce a roadmap, a launch event and a set of targets nobody is accountable for. There is no political cost to this whatsoever, which is exactly why it is the usual outcome."
+    }
+   ]
+  },
+  {
+   "id": "datacentre_grid",
+   "headline": "EGAT seeks a ruling on power for the data-centre pipeline as capacity requests pass 850 MW",
+   "trigger": {
+    "type": "afterOption",
+    "card": "__start__",
+    "option": "__start__",
+    "inQuarters": 1
+   },
+   "scriptedQuarter": 4,
+   "blocking": true,
+   "body": "Thailand took USD 16 billion of data-centre commitments across 28 projects in a single half-year — AWS at 5 billion through 2037, TikTok at 3.8 across three provinces, Google at 1 in Chonburi, a 300 MW campus in Rayong. Installed capacity is about 200 MW and the pipeline implies more than 850 MW inside three years. BOI has the incentives written: eight-year exemptions for the efficient builds that offer GPU services, five for the rest. What is not written is where the firm power comes from, at what tariff, and whether it is clean enough for the customers' own procurement rules. EGAT wants a decision before it commits transmission.",
+   "options": [
+    {
+     "id": "guarantee",
+     "label": "Guarantee firm clean supply and build the transmission",
+     "body": "A dedicated tariff and transmission programme for the digital corridor.",
+     "opinion": {
+      "Democrat": 4,
+      "Others": 3,
+      "People's": 2,
+      "Pheu Thai": 2,
+      "Kla Tham": -1
+     },
+     "effects": {
+      "capitalSpend": 0.11,
+      "fdiSignal": 0.34,
+      "humanCapital": 0.1,
+      "reformIndex": 3,
+      "setSupport": 0.9
+     },
+     "sets": [
+      "datacentre_grid_guaranteed"
+     ],
+     "flavour": "The investment is real and the jobs are not: a 300 MW campus employs a few hundred people and imports almost every component in it. What it does buy is the one piece of AI infrastructure that cannot be relocated once poured."
+    },
+    {
+     "id": "queue",
+     "label": "Let them queue on the standard connection process",
+     "body": "No dedicated programme. Projects connect as capacity becomes available.",
+     "opinion": {
+      "Kla Tham": 2,
+      "People's": 1,
+      "Others": -2,
+      "Democrat": -2
+     },
+     "effects": {
+      "fdiSignal": -0.1,
+      "setSupport": -0.3,
+      "institutionalSupport": -1
+     },
+     "sets": [
+      "datacentre_queue"
+     ],
+     "flavour": "Defensible — households should not subsidise transmission for the largest companies on earth. Johor and Batam have already built theirs, and a hyperscaler's site decision has a shelf life of about eighteen months."
+    }
+   ]
+  },
+  {
+   "id": "utapao_phase1",
+   "headline": "U-Tapao Phase 1 arrives, at a quarter of the airport that was promised",
+   "trigger": {
+    "type": "afterOption",
+    "card": "__start__",
+    "option": "__start__",
+    "inQuarters": 1
+   },
+   "scriptedQuarter": 12,
+   "blocking": true,
+   "body": "Construction started in April 2026 under a fifty-year concession, five years late, unblocked only when the condition tying it to the unfinished three-airport rail link was waived. Runway 2 came in from the Navy in 2028. Now the terminal lands — and Phase 1 was rescoped somewhere in those five years from 12–15 million passengers a year to 3–4, about 10 billion baht of a 290-billion-baht programme. The Eastern Aviation City around it is drawn but unbuilt.",
+   "options": [
+    {
+     "id": "restore",
+     "label": "Fund the terminal back to the original specification",
+     "body": "Cabinet funds the terminal expansion and the aviation city groundworks.",
+     "opinion": {
+      "Others": 3,
+      "Pheu Thai": 3,
+      "Democrat": 1,
+      "Kla Tham": 1,
+      "People's": -2
+     },
+     "effects": {
+      "capitalSpend": 0.13,
+      "fdiSignal": 0.1,
+      "reformIndex": 1
+     },
+     "sets": [
+      "utapao_restored"
+     ],
+     "flavour": "An airport built for traffic that does not exist yet is either vision or Suvarnabhumi's second runway argument again. The EEC case only works if the aviation city gets built, and the aviation city only gets built if the terminal is bigger than this."
+    },
+    {
+     "id": "accept",
+     "label": "Open it at the reduced scope and review in five years",
+     "body": "Phase 1 opens as built. Expansion is deferred to a later review.",
+     "opinion": {
+      "People's": 3,
+      "Others": 2,
+      "Democrat": 2,
+      "Kla Tham": 1
+     },
+     "effects": {
+      "institutionalSupport": 2,
+      "approvalBoost": 2,
+      "fdiSignal": 0.02
+     },
+     "sets": [
+      "utapao_reduced"
+     ],
+     "flavour": "Three million passengers is what the route network actually supports today, and the concessionaire carries the demand risk, not you. It also quietly concedes that the Eastern Aviation City is a rendering."
+    }
+   ]
+  },
+  {
+   "id": "korat_expo",
+   "headline": "Expo 2029 Korat opens in Khong district",
+   "trigger": {
+    "type": "afterOption",
+    "card": "__start__",
+    "option": "__start__",
+    "inQuarters": 1
+   },
+   "scriptedQuarter": 14,
+   "blocking": true,
+   "body": "The International Horticultural Exposition — Category A1, recognised by both AIPH and the BIE — opens on 10 November for 110 days, closing at the end of February. Cabinet approved about 6.7 billion baht for it, the theme is 'Nature and Greenery', and it is the first event of its class Thailand has hosted since Royal Flora Ratchaphruek in 2006. It is also, unmistakably, a Northeastern project in a Northeastern province, which is where your seats are.",
+   "options": [
+    {
+     "id": "open",
+     "label": "Open the exposition",
+     "body": "The expo runs to the end of February 2030 — through the election.",
+     "opinion": {
+      "Others": 3,
+      "Kla Tham": 2,
+      "Pheu Thai": 2,
+      "Democrat": 1
+     },
+     "effects": {
+      "govConsumption": 0.02,
+      "approvalBoost": 3,
+      "fdiSignal": 0.02,
+      "setSupport": 0.2
+     },
+     "sets": [
+      "korat_expo_open"
+     ],
+     "flavour": "Six point seven billion baht of horticulture, and it closes four weeks before the country votes. Nobody involved in the scheduling has ever admitted noticing."
+    }
+   ]
+  }
+ ]
+}

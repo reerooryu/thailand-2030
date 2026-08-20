@@ -1,0 +1,15 @@
+{
+  "name": "thai2030-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Semi-structural macro engine for Thailand 2030. Pure, deterministic, headless.",
+  "scripts": {
+    "backtest": "tsx src/backtest.ts",
+    "calibrate": "tsx src/calibrate.ts",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0"
+  }
+}

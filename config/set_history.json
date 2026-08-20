@@ -1,0 +1,299 @@
+{
+ "source": "SET Index monthly, investing.com export",
+ "instrument": "SET Index",
+ "frequency": "monthly",
+ "range": [
+  "2024-01",
+  "2026-08"
+ ],
+ "observations": [
+  {
+   "month": "2024-01",
+   "close": 1364.52,
+   "open": 1415.7,
+   "high": 1438.1,
+   "low": 1352.48,
+   "volume_thb": "379.33B",
+   "change_pct": -3.63
+  },
+  {
+   "month": "2024-02",
+   "close": 1370.67,
+   "open": 1363.65,
+   "high": 1405.13,
+   "low": 1357.39,
+   "volume_thb": "388.31B",
+   "change_pct": 0.45
+  },
+  {
+   "month": "2024-03",
+   "close": 1377.94,
+   "open": 1369.63,
+   "high": 1395.88,
+   "low": 1350.98,
+   "volume_thb": "361.09B",
+   "change_pct": 0.53
+  },
+  {
+   "month": "2024-04",
+   "close": 1367.95,
+   "open": 1379.86,
+   "high": 1411.46,
+   "low": 1330.24,
+   "volume_thb": "239.45B",
+   "change_pct": -0.72
+  },
+  {
+   "month": "2024-05",
+   "close": 1345.66,
+   "open": 1368.24,
+   "high": 1389.28,
+   "low": 1340.83,
+   "volume_thb": "271.20B",
+   "change_pct": -1.63
+  },
+  {
+   "month": "2024-06",
+   "close": 1300.96,
+   "open": 1350.9,
+   "high": 1354.75,
+   "low": 1281.87,
+   "volume_thb": "232.87B",
+   "change_pct": -3.32
+  },
+  {
+   "month": "2024-07",
+   "close": 1320.86,
+   "open": 1301.96,
+   "high": 1332.76,
+   "low": 1286.79,
+   "volume_thb": "201.91B",
+   "change_pct": 1.53
+  },
+  {
+   "month": "2024-08",
+   "close": 1359.07,
+   "open": 1322.51,
+   "high": 1370.67,
+   "low": 1273.17,
+   "volume_thb": "203.12B",
+   "change_pct": 2.89
+  },
+  {
+   "month": "2024-09",
+   "close": 1448.83,
+   "open": 1355.16,
+   "high": 1471.69,
+   "low": 1352.11,
+   "volume_thb": "239.78B",
+   "change_pct": 6.6
+  },
+  {
+   "month": "2024-10",
+   "close": 1466.04,
+   "open": 1449.81,
+   "high": 1506.82,
+   "low": 1432.22,
+   "volume_thb": "269.24B",
+   "change_pct": 1.19
+  },
+  {
+   "month": "2024-11",
+   "close": 1427.54,
+   "open": 1464.17,
+   "high": 1487.58,
+   "low": 1421.96,
+   "volume_thb": "266.98B",
+   "change_pct": -2.63
+  },
+  {
+   "month": "2024-12",
+   "close": 1400.21,
+   "open": 1430.55,
+   "high": 1457.71,
+   "low": 1361.34,
+   "volume_thb": "167.48B",
+   "change_pct": -1.91
+  },
+  {
+   "month": "2025-01",
+   "close": 1314.5,
+   "open": 1397.93,
+   "high": 1399.35,
+   "low": 1310.72,
+   "volume_thb": "179.18B",
+   "change_pct": -6.12
+  },
+  {
+   "month": "2025-02",
+   "close": 1203.72,
+   "open": 1276.91,
+   "high": 1316.41,
+   "low": 1186.36,
+   "volume_thb": "174.40B",
+   "change_pct": -8.43
+  },
+  {
+   "month": "2025-03",
+   "close": 1158.09,
+   "open": 1207.27,
+   "high": 1211.21,
+   "low": 1155.05,
+   "volume_thb": "175.19B",
+   "change_pct": -3.79
+  },
+  {
+   "month": "2025-04",
+   "close": 1197.26,
+   "open": 1165.76,
+   "high": 1197.26,
+   "low": 1056.41,
+   "volume_thb": "155.03B",
+   "change_pct": 3.38
+  },
+  {
+   "month": "2025-05",
+   "close": 1149.18,
+   "open": 1210.7,
+   "high": 1231.02,
+   "low": 1149.18,
+   "volume_thb": "168.89B",
+   "change_pct": -4.02
+  },
+  {
+   "month": "2025-06",
+   "close": 1089.56,
+   "open": 1147.66,
+   "high": 1149.68,
+   "low": 1053.79,
+   "volume_thb": "161.14B",
+   "change_pct": -5.19
+  },
+  {
+   "month": "2025-07",
+   "close": 1242.35,
+   "open": 1094.91,
+   "high": 1251.16,
+   "low": 1086.56,
+   "volume_thb": "194.21B",
+   "change_pct": 14.02
+  },
+  {
+   "month": "2025-08",
+   "close": 1236.61,
+   "open": 1252.5,
+   "high": 1283.55,
+   "low": 1212.68,
+   "volume_thb": "184.38B",
+   "change_pct": -0.46
+  },
+  {
+   "month": "2025-09",
+   "close": 1274.17,
+   "open": 1234.94,
+   "high": 1312.74,
+   "low": 1230.55,
+   "volume_thb": "201.70B",
+   "change_pct": 3.04
+  },
+  {
+   "month": "2025-10",
+   "close": 1309.5,
+   "open": 1272.46,
+   "high": 1345.86,
+   "low": 1266.38,
+   "volume_thb": "163.64B",
+   "change_pct": 2.77
+  },
+  {
+   "month": "2025-11",
+   "close": 1256.69,
+   "open": 1315.69,
+   "high": 1317.48,
+   "low": 1248.89,
+   "volume_thb": "129.64B",
+   "change_pct": -4.03
+  },
+  {
+   "month": "2025-12",
+   "close": 1259.67,
+   "open": 1259.02,
+   "high": 1284.32,
+   "low": 1243.94,
+   "volume_thb": "111.96B",
+   "change_pct": 0.24
+  },
+  {
+   "month": "2026-01",
+   "close": 1325.62,
+   "open": 1271.72,
+   "high": 1344.87,
+   "low": 1232.4,
+   "volume_thb": "139.56B",
+   "change_pct": 5.24
+  },
+  {
+   "month": "2026-02",
+   "close": 1528.26,
+   "open": 1321.15,
+   "high": 1545.31,
+   "low": 1308.04,
+   "volume_thb": "206.57B",
+   "change_pct": 15.29
+  },
+  {
+   "month": "2026-03",
+   "close": 1448.14,
+   "open": 1491.91,
+   "high": 1515.99,
+   "low": 1331.23,
+   "volume_thb": "225.43B",
+   "change_pct": -5.24
+  },
+  {
+   "month": "2026-04",
+   "close": 1493.69,
+   "open": 1471.72,
+   "high": 1510.08,
+   "low": 1438.33,
+   "volume_thb": "150.61B",
+   "change_pct": 3.15
+  },
+  {
+   "month": "2026-05",
+   "close": 1568.37,
+   "open": 1498.27,
+   "high": 1581.74,
+   "low": 1481.95,
+   "volume_thb": "197.61B",
+   "change_pct": 5.0
+  },
+  {
+   "month": "2026-06",
+   "close": 1591.24,
+   "open": 1574.74,
+   "high": 1609.71,
+   "low": 1536.37,
+   "volume_thb": "220.08B",
+   "change_pct": 1.46
+  },
+  {
+   "month": "2026-07",
+   "close": 1623.64,
+   "open": 1600.98,
+   "high": 1657.55,
+   "low": 1574.13,
+   "volume_thb": "248.65B",
+   "change_pct": 2.04
+  },
+  {
+   "month": "2026-08",
+   "close": 1621.62,
+   "open": 1626.54,
+   "high": 1632.08,
+   "low": 1605.13,
+   "volume_thb": "114.88B",
+   "change_pct": -0.12
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thailand 2030</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div id="player">
+  <button id="mus-toggle" aria-label="Play or pause the campaign song">▶</button>
+  <div class="mus-meta"><div class="mus-title">อนุทินเป็นนายกฯ</div><div class="mus-sub">Bhumjaithai, 2023</div></div>
+</div>
+<audio id="anthem" src="assets/anthem.mp3" loop preload="auto"></audio>
+<div id="prologue"></div>
+<div id="game" hidden>
+  <div class="topbar">
+    <div class="game-title">Thailand 2030</div>
+    <div id="turn-label"></div>
+    <div class="muted" id="turns-left"></div>
+    <div id="actions"></div>
+    <div class="spacer"></div>
+    <button id="end-turn" class="primary">End quarter →</button>
+  </div>
+  <div id="kpis" class="row"></div>
+  <div id="secondary" class="row"></div>
+  <div id="politics"></div>
+  <div class="layout">
+    <div>
+      <div class="panel-title">On your desk</div>
+      <div id="deck"></div>
+    </div>
+    <div>
+      <div class="panel-title">News</div>
+      <div id="news"></div>
+    </div>
+  </div>
+  <div class="panel-title">The House</div>
+  <div id="parliament"></div>
+</div>
+<div id="toasts"></div>
+<script src="engine.js"></script>
+<script type="module" src="app.js"></script>
+</body></html>
