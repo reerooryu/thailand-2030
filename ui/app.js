@@ -879,10 +879,16 @@ renderPrologue();
      3. nothing at all — the transport hides and the game is silent
 
    Everything below the source layer is shared: one transport, one paint(), one
-   rule about consent. Autoplay is blocked until the page has been interacted
-   with, so each backend tries immediately and falls back to starting on the
-   first click; once the player has paused it deliberately, we never start it
-   again behind their back. */
+   rule about consent.
+
+   AUTOPLAY. It should be playing the moment the page opens, and the transport
+   is there to stop it — not to start it. Every browser blocks *audible*
+   autoplay without a prior user gesture, but none of them blocks MUTED
+   autoplay, so the sequence is: try it with sound; if that is refused, start
+   muted anyway and unmute on the first thing the player touches. The track is
+   therefore always running from load, and the sound arrives at the first click
+   — which, in this game, is choosing a coalition. Once the player has paused it
+   deliberately, we never start it again behind their back. */
 (function music() {
   const btn = document.getElementById('mus-toggle');
   const box = document.getElementById('player');
@@ -894,29 +900,57 @@ renderPrologue();
     btn.textContent = playing ? '❙❙' : '▶';
     box.classList.toggle('paused', !playing);
   };
-  /** Start on the first user gesture anywhere, once. Both backends need this
-   *  and neither should install its own listener. */
-  const onFirstClick = fn => document.addEventListener('click', function once() {
-    document.removeEventListener('click', once, true);
-    fn();
-  }, true);
+  /** The first user gesture anywhere, once. `fn` is told whether the gesture
+   *  was aimed at the transport itself, because a player whose first act is to
+   *  press pause must not be overruled by the unmute handler. */
+  const onFirstGesture = fn => {
+    const once = e => {
+      document.removeEventListener('click', once, true);
+      document.removeEventListener('keydown', once, true);
+      fn(box.contains(e.target));
+    };
+    document.addEventListener('click', once, true);
+    document.addEventListener('keydown', once, true);
+  };
+
+  /** Chrome 110+ exposes the decision the browser has already made, so we can
+   *  ask instead of attempting-and-failing. 'allowed' means this visitor has
+   *  enough engagement with the site for audible autoplay — a returning player
+   *  gets sound immediately. Everywhere else we start muted, which is permitted
+   *  universally, and lift it on first contact. Browsers without the API get
+   *  the safe branch. */
+  const mayBeAudible = () => {
+    try { return navigator.getAutoplayPolicy('mediaelement') === 'allowed'; }
+    catch { return false; }
+  };
 
   const local = el => {
     el.volume = 0.45;
     const sync = () => { playing = !el.paused; paint(); };
+    // Muted from the outset unless the browser says audible is allowed. Never
+    // attempt-then-retry: Chrome does not re-evaluate its decision on an
+    // element it has already refused, so muting after a rejection is declined
+    // a second time and the track never starts at all.
+    el.muted = !mayBeAudible();
     const start = () => { if (!userPaused) el.play().then(sync).catch(() => {}); };
     btn.onclick = () => {
+      el.muted = false;
       if (el.paused) { userPaused = false; el.play().then(sync).catch(sync); }
       else { userPaused = true; el.pause(); sync(); }
     };
     el.onplay = sync; el.onpause = sync;
-    start(); onFirstClick(() => { if (el.paused) start(); }); sync();
+    start();
+    onFirstGesture(onTransport => {
+      el.muted = false;
+      if (!onTransport && !userPaused && el.paused) start();
+    });
+    sync();
   };
 
   const youtube = id => {
     const frame = document.getElementById('yt-frame');
     if (!frame || !window.location.protocol.startsWith('http')) return hide();
-    let player = null, ready = false;
+    let player = null, ready = false, muted = false;
     // If the API never arrives — offline, blocked, or the embed is disabled for
     // this video — there is nothing to control, so remove the transport rather
     // than leaving a button that does nothing.
@@ -932,8 +966,17 @@ renderPrologue();
           onReady: e => {
             ready = true; clearTimeout(giveUp);
             e.target.setVolume(45);
+            // Same rule as the local backend: muted autoplay is permitted
+            // everywhere, audible autoplay is permitted almost nowhere, and the
+            // embed reports no error when it is refused — it simply never
+            // reaches PLAYING. So start muted and lift it on first contact.
+            muted = !mayBeAudible();
+            if (muted) e.target.mute();
             if (!userPaused) e.target.playVideo();
-            onFirstClick(() => { if (!userPaused && !playing) e.target.playVideo(); });
+            onFirstGesture(onTransport => {
+              if (muted) { muted = false; e.target.unMute(); e.target.setVolume(45); }
+              if (!onTransport && !userPaused && !playing) e.target.playVideo();
+            });
             paint();
           },
           onStateChange: e => { playing = e.data === window.YT.PlayerState.PLAYING; paint(); },
@@ -944,6 +987,7 @@ renderPrologue();
 
     btn.onclick = () => {
       if (!player || !ready) return;
+      if (muted) { muted = false; player.unMute(); player.setVolume(45); }
       if (playing) { userPaused = true; player.pauseVideo(); }
       else { userPaused = false; player.playVideo(); }
     };
