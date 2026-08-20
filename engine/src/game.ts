@@ -15,7 +15,7 @@ import {
   scheduleFrom, due, resolve, makeRng,
   type GameEvent, type EventOption, type Scheduled,
 } from './events.js';
-import { step } from './engine.js';
+import { step, reformEffort } from './engine.js';
 import { BASE } from './params.js';
 import { applyGains } from './playability.js';
 import { loadPanel, col } from './panel.js';
@@ -307,7 +307,7 @@ export class Game {
       govConsumption: BASELINE.govConsumption + (this.stance.govConsumption ?? 0) * ramp,
       transfers: Math.min(stimCap, this.stance.transfers * ramp),
       taxRate: BASELINE.taxRate + this.stance.taxRate * ramp,
-      reformIndex: Math.min(100, this.stance.reformIndex) * (this.ps.effects.reformCapacity ?? 0.7),
+      reformIndex: reformEffort(this.stance.reformIndex) * (this.ps.effects.reformCapacity ?? 0.7),
       fdiSignal: (this.stance.fdiSignal ?? 0) * ramp,
       humanCapital: (this.stance.humanCapital ?? 0) * ramp,
       formalisation: (this.stance.formalisation ?? 0) * ramp,

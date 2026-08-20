@@ -52,6 +52,10 @@ export const PROVENANCE: Record<keyof Params, ParamSource> = {
   consConst: 'fitted',
   consGap: 'fitted',
   consHhDebt: 'estimated',
+  hhCreditTrend: 'fitted',
+  hhCreditRealRate: 'literature',
+  transfersToHhCredit: 'prior',
+  formalisationToHhCredit: 'prior',
 
   alpha: 'estimated',
   depreciation: 'prior',
@@ -157,6 +161,18 @@ export const BASE: Params = {
   consConst: -2.6951,
   consGap: 0.7876,          // FITTED
   consHhDebt: -0.213,
+
+  // --- household credit, % of GDP. Calibrated so the PASSIVE path holds the
+  // ratio roughly flat at its 87.5 starting point: trend credit growth is set
+  // to baseline nominal GDP growth, and everything else is a deviation from it.
+  // A government that transfers income to households reduces their need to
+  // borrow; formalisation moves informal debt onto cheaper formal terms; a
+  // higher real rate slows new credit. None of these is fast, all of them
+  // compound, and the payoff is a monetary transmission channel that works.
+  hhCreditTrend: 3.2,
+  hhCreditRealRate: -0.6,
+  transfersToHhCredit: -0.8,
+  formalisationToHhCredit: -1.5,
 
   // --- supply side, calibrated in scripts/supply.py
   // K/Y fell from 6.12 (1995) to 3.58 (2025) — the capital deepening of the
