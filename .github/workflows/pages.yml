@@ -1,0 +1,68 @@
+# Build the game and publish it to GitHub Pages.
+#
+# The built HTML is deliberately NOT in the repository (see .gitignore) — it is
+# a ~250 KB generated artifact rewritten on every build, and keeping it in git
+# history serves nobody. So Pages builds it here instead: this workflow is the
+# reason the ignore rule is affordable.
+#
+# Note that a clean checkout has no ui/assets/anthem.mp3 — it is a third-party
+# recording and excluded — so the published site is silent by design. The build
+# detects that and omits the music player; everything else is identical.
+name: Deploy to Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:        # lets you redeploy from the Actions tab by hand
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race. A push mid-deploy queues rather than clobbers.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install engine dependencies
+        run: npm --prefix engine ci || npm --prefix engine install
+
+      - name: Build
+        run: ./build.sh
+
+      - name: Assemble the site
+        # Pages serves index.html from the site root; the game is one file, so
+        # that is the entire deployment.
+        run: |
+          mkdir -p _site
+          cp ui/thailand-2030.html _site/index.html
+          ls -lh _site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

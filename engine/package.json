@@ -7,9 +7,12 @@
   "scripts": {
     "backtest": "tsx src/backtest.ts",
     "calibrate": "tsx src/calibrate.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "bundle": "esbuild src/browser.ts --bundle --format=iife --global-name=THAI --outfile=../ui/engine.js"
   },
   "devDependencies": {
-    "@types/node": "^26.2.0"
+    "@types/node": "^26.2.0",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.12"
   }
 }

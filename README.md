@@ -15,7 +15,9 @@ a graph on top.
 ```
 
 That HTML file is the entire game: no server, no install, no network. It runs
-from a local file, an internal share or GitHub Pages equally well.
+from a local file, an internal share or GitHub Pages equally well — and
+`.github/workflows/pages.yml` builds and publishes it on every push to `main`,
+so the live site is never a stale copy of a build somebody forgot to run.
 
 ---
 
