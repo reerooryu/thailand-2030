@@ -271,6 +271,9 @@ export class BrowserGame {
     if (i < 0) return;
     const e = this.pending[i];
     const opt = e.options.find(o => o.id === optionId)!;
+    // Defensive: the UI greys locked options, but nothing stopped a caller
+    // resolving one directly, and every headless harness does exactly that.
+    if (opt.unavailable || !isUnlocked(opt as any, this.flags)) return;
     const res = resolve(this.opinion, this.flags, opt);
     this.opinion = res.opinion; this.flags = res.flags;
     this.apply(res.effects);

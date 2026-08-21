@@ -1408,7 +1408,7 @@
     },
     {
       "id": "network_confrontation",
-      "headline": "They are in the outer office, and they want an explanation",
+      "headline": "They are coming",
       "trigger": {
         "type": "afterOption",
         "card": "justice_reform",
@@ -1416,12 +1416,12 @@
         "inQuarters": 1
       },
       "blocking": true,
-      "body": "The prosecution service has been able to open a file without a police referral for one quarter, and the first files are not about the opposition. They are about provincial members of your own party, the contractors who fund them, and two people who were in the room when this coalition was assembled. Nobody in the outer office is threatening anything. They are pointing out, correctly, that they delivered the constituencies that made you prime minister, that the arrangement they are being prosecuted under is the arrangement every government since the nineties has run on, and that they were not told the rules had changed. They would like to know whether the files are going to be withdrawn.",
+      "body": "The prosecution service has been able to open a file without a police referral for one quarter. The first files are not about the opposition. They are about provincial members of your own party, the contractors who fund them, and two people who were in the room when this coalition was assembled.\n\nNobody has telephoned. Nobody has written anything down. The Secretary-General cleared his afternoon without being asked and will not say why. Three provincial chairmen flew into Bangkok this morning on three separate flights. The chief whip of your own parliamentary party has stopped answering.\n\nThey will be in the outer office within the hour, and they will ask you one question.\n\nAre the files going to be withdrawn?",
       "options": [
         {
           "id": "concessions",
-          "label": "Make concessions — narrow the mandate, withdraw the files",
-          "body": "The prosecution service is instructed. The Act stays on the books.",
+          "label": "Of course not — this was never aimed at you",
+          "body": "The mandate is narrowed. The files come back.",
           "opinion": {
             "Others": 9,
             "Kla Tham": 6,
@@ -1440,12 +1440,12 @@
             "networks_appeased",
             "hollow_reform"
           ],
-          "flavour": "The easy way out, and it is genuinely survivable — the networks go back to work, the establishment exhales, and the machine that delivers your seats is intact. What does not come back is the reform itself. An enforcement body that has been publicly instructed once is a body everyone now knows can be instructed, and the country watches it happen. This is written into the record permanently."
+          "flavour": "No — no, listen to me, this was never about any of you. There has been an overreach at the agency, obviously there has, and it will be corrected. I will correct it. The mandate was drafted too broadly, everybody accepts that now, we all said so at the time. We narrow the mandate, the files come back, and none of this ever has to reach a newspaper. You built this party. Nobody in this room is forgetting who built this party.\n\nIt works. They go back to work. The Act stays on the books and the whole country now knows exactly what it is worth."
         },
         {
           "id": "stand",
-          "label": "Stand your ground — the files proceed",
-          "body": "The prosecution service is left alone. Expect this to cost you the election you were otherwise going to win comfortably.",
+          "label": "No.",
+          "body": "The files proceed. The organisation that delivers your seats will not forget this.",
           "opinion": {
             "People's": 11,
             "Democrat": 8,
@@ -1471,8 +1471,8 @@
             "oecd_accelerating",
             "approval_over_50"
           ],
-          "lockedNote": "Locked. Refusing the networks is only survivable from a position you have to have built first: a civil service already cut, digital government mandated across the state, OECD accession accelerated so the standard is external rather than yours to soften, and approval above 50% — because a government polling below that does not refuse anybody anything.",
-          "flavour": "Patriot."
+          "lockedNote": "You are not in a position to say it.",
+          "flavour": "Oh my God."
         }
       ]
     }
