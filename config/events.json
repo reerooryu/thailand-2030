@@ -1290,7 +1290,7 @@
     },
     {
       "id": "pdp2026",
-      "headline": "The Power Development Plan lands with four scenarios and a reactor in all of them",
+      "headline": "Power Development Plan",
       "trigger": {
         "type": "afterOption",
         "card": "__start__",
@@ -1299,7 +1299,7 @@
       },
       "scriptedQuarter": 2,
       "blocking": true,
-      "body": "The PDP drafting subcommittee has closed four supply scenarios covering 2026 to 2050. They differ on gas, on renewables and on whether carbon capture is costed into fossil generation — and they agree on the one thing nobody expected them to agree on: every scenario carries Thailand's first 300 MW small modular reactor into the system in 2037, and about 9,000 MW by 2050. That is roughly thirty plants, in a country whose dedicated nuclear office was set up in 2011 and abolished after Fukushima. The first ten years look much the same whichever is chosen — about 36,400 MW of new capacity, overwhelmingly solar — and none of it is a new gas plant, because the global queue for gas turbines now runs five years and there is no point writing a plant into a plan that cannot be delivered inside it. Existing gas units get their lives extended instead. Public consultation opens in September; the National Energy Policy Council wants an answer by the end of the year.",
+      "body": "Four supply scenarios covering 2026 to 2050, and they disagree about nearly everything: how much gas, how much solar and wind, and whether carbon capture is costed into the tariff or simply assumed. They agree on one thing. Every scenario carries Thailand's first 300 MW small modular reactor in 2037, and about 9,000 MW by 2050 — some thirty plants, in a country whose dedicated nuclear office was abolished after Fukushima. The first decade looks much the same whichever is chosen, and contains no new gas plants at all: the global queue for turbines now runs five years, so the existing fleet has its life extended instead. Consultation opens in September; the National Energy Policy Council wants an answer by the end of the year.",
       "options": [
         {
           "id": "base_gas",
