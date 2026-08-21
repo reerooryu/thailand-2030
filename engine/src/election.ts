@@ -58,6 +58,10 @@ export interface ElectionInput {
   reformStock?: number;
   debtGdp?: number;
   ceiling?: number;
+  /** The provincial organisation stopped working for you — see the
+   *  withdrawal block below. Set by refusing the networks after the
+   *  prosecution service reached your own members. */
+  machineBroken?: boolean;
 }
 
 export interface PartyResult {
@@ -243,6 +247,45 @@ export function runElection(e: ElectionInput): ElectionResult {
         if (residual === 0) break;
       }
       if (!moved2) break;
+    }
+    results.forEach(r => { r.change = r.after - r.before; });
+  }
+
+  // ---- the machine, withdrawn.
+  // A government that let the prosecutions reach its own provincial members does
+  // not lose its vote. It loses the CONVERSION — Bhumjaithai's constituency
+  // yield has always run far above its list share, and the gap between the two
+  // is precisely the organisation now declining to work. So the 2026 base
+  // survives, most of the gain above it evaporates, and a bloc of members leaves
+  // outright for whoever will still take their calls. Everything above this line
+  // is scored on the record; this is scored on who was still willing to deliver.
+  if (e.machineBroken) {
+    const me = results.find(r => r.party === PLAYER)!;
+    const base = e.seats[PLAYER] ?? 191;
+    const bound = BOUNDS[PLAYER] ?? [55, 330];
+    const kept = Math.max(bound[0], Math.round(base + Math.max(0, me.after - base) * 0.42) - 18);
+    const lost = me.after - kept;
+    if (lost > 0) {
+      me.after = kept;
+      // The seats do not vanish from the House — they go to the rivals best able
+      // to absorb a defecting provincial network, in proportion to their size.
+      const rivals = results.filter(r => r.party !== PLAYER);
+      const weight = (r: typeof rivals[number]) =>
+        r.after * (r.party === 'Kla Tham' || r.party === 'Others' ? 2.5 : 1);
+      const totalW = rivals.reduce((a, r) => a + weight(r), 0) || 1;
+      let handed = 0;
+      for (const r of rivals) {
+        const b = BOUNDS[r.party] ?? [5, 250];
+        const take = Math.min(Math.round(lost * weight(r) / totalW), b[1] - r.after);
+        r.after += take; handed += take;
+      }
+      // rounding remainder, wherever there is still room
+      for (const r of rivals) {
+        if (handed >= lost) break;
+        const b = BOUNDS[r.party] ?? [5, 250];
+        const take = Math.min(lost - handed, b[1] - r.after);
+        r.after += take; handed += take;
+      }
     }
     results.forEach(r => { r.change = r.after - r.before; });
   }

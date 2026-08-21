@@ -46,7 +46,7 @@ four, which is the point.
 At the end: the March 2030 count, seat by seat, followed by a coalition
 renegotiation with whoever survived it. Then an assessment written as an outside
 analyst, the cabinet's revealed economic ideology read off four years of budget
-composition, and twenty-two achievements naming the strategies that were
+composition, and twenty-three achievements naming the strategies that were
 available to you — including the ones you did not take.
 
 ---
@@ -86,11 +86,11 @@ available to you — including the ones you did not take.
 | `engine/src/browser.ts` | The game host: turns, cards, votes, flags, scoring. |
 | `engine/src/politics.ts` | Coalition formation, whip counts, crossbench defection. |
 | `engine/src/election.ts` | The March 2030 count and the coalition renegotiation. |
-| `engine/src/achievements.ts` | Twenty-two end-of-term predicates. Nothing feeds back. |
+| `engine/src/achievements.ts` | Twenty-three end-of-term predicates. Nothing feeds back. |
 | `engine/src/ideology.ts` | Reads a revealed economic position off the budget. |
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoils the game. |
 | `config/policies.json` | 35 cards, 96 options. |
-| `config/events.json` | 25 news events, 56 options. |
+| `config/events.json` | 26 news events, 58 options. |
 | `config/coalitions.json` | The four coalitions and what each does to your capacity. |
 | `ui/` | Single-page front end. `app.js` is the whole client. |
 | `scripts/` | Data builders (Python) and analysis tools (TypeScript). |

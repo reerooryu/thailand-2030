@@ -403,7 +403,10 @@
             "super_licence_done"
           ],
           "lockedNote": "Requires the Super Licence. OECD investment-openness chapters cannot be answered while approvals still run ministry by ministry.",
-          "maximal": true
+          "maximal": true,
+          "sets": [
+            "oecd_accelerating"
+          ]
         },
         {
           "id": "steady",
@@ -1401,33 +1404,39 @@
             "Pheu Thai": -0.3,
             "People's": -0.6
           },
-          "flavour": "Enormously popular and constitutionally radioactive. Mandatory execution removes judicial discretion, which is what the drafters intend and what the Constitutional Court exists to object to; the OECD accession file will need a chapter explaining it. Corruption in Thailand has never been under-penalised. It has been under-prosecuted.",
-          "maximal": true
+          "flavour": "Do you dare have the gall to do this?",
+          "unavailable": true
         },
         {
           "id": "teeth_no_rope",
           "label": "Take the enforcement, drop the death penalty",
           "requiresLegislation": true,
           "effects": {
-            "reformIndex": 13,
-            "fdiSignal": 0.14,
-            "formalisation": 0.18,
-            "approvalBoost": 5,
-            "executionBonus": 0.03,
-            "institutionalSupport": -4
+            "reformIndex": 15,
+            "fdiSignal": 0.16,
+            "formalisation": 0.2,
+            "approvalBoost": 9,
+            "executionBonus": 0.02,
+            "institutionalSupport": -18
           },
           "sets": [
             "zero_corruption_act",
             "anticorruption_enforcement"
           ],
           "fit": {
-            "Others": 0.3,
-            "Democrat": 0.4,
-            "People's": 0.3,
+            "People's": 0.6,
+            "Democrat": 0.5,
             "Pheu Thai": 0.1,
-            "Kla Tham": 0.0
+            "Others": -0.5,
+            "Kla Tham": -0.6
           },
-          "flavour": "Asset declarations with real audit, whistleblower protection, and a prosecution service that can act without a police referral. Everything that actually reduces graft, and none of the headline the Economic Party wanted."
+          "flavour": "The most popular thing on this desk and the most dangerous. Enforcement with teeth does not primarily inconvenience the opposition — it reaches your own donors, your own provincial members and the people who deliver your seats. Institutional support does not fall because the establishment disapproves. It falls because you have begun prosecuting it.",
+          "maximal": true,
+          "requiresFlags": [
+            "oecd_accelerating",
+            "civil_service_shrinking"
+          ],
+          "lockedNote": "Locked. Enforcement needs somewhere to land: an accelerated OECD accession that binds you to an external standard, and a civil service that has already been cut. Without both, an anti-corruption body is a new office in the same building, staffed by the same people."
         },
         {
           "id": "shelve",
@@ -1484,11 +1493,6 @@
             "institutionalSupport": -11,
             "approvalBoost": 6
           },
-          "dependsOn": {
-            "flag": "anticorruption_enforcement",
-            "withoutFactor": 0.75,
-            "note": "Without the enforcement machinery from the Zero Corruption Act there is no prosecution service capable of directing anything."
-          },
           "sets": [
             "justice_reform_done"
           ],
@@ -1500,7 +1504,11 @@
             "Kla Tham": -0.5
           },
           "flavour": "This is the reform that dissolves grey capital, and it is the reform the police have defeated for twenty years. Passing it costs you the one institution every Thai government needs quiet cooperation from, and buys an economy where the informal sector has a reason to formalise.",
-          "maximal": true
+          "maximal": true,
+          "requiresFlags": [
+            "anticorruption_enforcement"
+          ],
+          "lockedNote": "Locked until the Zero Corruption Act passes with real enforcement. Separating investigation from arrest without a body able to prosecute what it finds simply moves the bottleneck."
         },
         {
           "id": "pilot",

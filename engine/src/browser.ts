@@ -170,6 +170,18 @@ export class BrowserGame {
    *  both ends of the turn because a card can be unlocked by a flag set inside
    *  the turn that opened it — and once a partner has asked, letting the bill
    *  lapse still counts against you at the end. */
+  /** Flags that mirror CONTINUOUS state, refreshed every quarter.
+   *  Option gating in the card schema is flag-based only, so a condition like
+   *  "approval above 50%" has no way to be expressed — and some choices are
+   *  genuinely unavailable to a weak government rather than merely expensive.
+   *  Stamping the condition as a flag lets the existing `requiresFlags` machinery
+   *  grey the option out on its own, and the flag clears again the moment the
+   *  polling does. Nothing persistent should ever be keyed off these. */
+  private syncStateFlags() {
+    if (this.approval > 50) this.flags.add('approval_over_50');
+    else this.flags.delete('approval_over_50');
+  }
+
   private censusProposals() {
     for (const c of availableCards(cat, this.flags, this.quarter, this.ps.coalition))
       if (c.proposal) this.proposalsSeen.add(c.id);
@@ -202,6 +214,7 @@ export class BrowserGame {
     this.deferred = this.deferred.filter(d => d.returnsAtQuarter > this.quarter);
 
     this.censusProposals();
+    this.syncStateFlags();
 
     // A partner's bill left to die on the desk. They notice, and they say so.
     for (const c of lapsedProposals(cat, this.quarter, this.flags, this.ps.coalition, this.playedCards)) {
@@ -313,6 +326,7 @@ export class BrowserGame {
   endTurn(): { ok: boolean; msg?: string; fallen?: boolean; walked?: string[] } {
     if (this.pending.length) return { ok: false, msg: 'Resolve the news first' };
     this.censusProposals();
+    this.syncStateFlags();
     const h = this.history, s = h[h.length - 1], lag4 = h[h.length - 4];
     const simRr = h.slice(-4).reduce((a, v) => a + (v.policyRate - v.cpiYoy), 0) / 4;
     const prev = { ...h[h.length - 2], realRate: simRr } as State;
@@ -433,6 +447,7 @@ export class BrowserGame {
       reformStock: this.state.reformStock,
       debtGdp: this.state.debtGdp,
       ceiling: this.debtCeiling,
+      machineBroken: this.flags.has('patriot'),
     });
   }
 
