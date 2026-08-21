@@ -90,7 +90,7 @@ available to you — including the ones you did not take.
 | `engine/src/ideology.ts` | Reads a revealed economic position off the budget. |
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoils the game. |
 | `config/policies.json` | 35 cards, 96 options. |
-| `config/events.json` | 26 news events, 58 options. |
+| `config/events.json` | 27 news events, 61 options. |
 | `config/coalitions.json` | The four coalitions and what each does to your capacity. |
 | `ui/` | Single-page front end. `app.js` is the whole client. |
 | `scripts/` | Data builders (Python) and analysis tools (TypeScript). |

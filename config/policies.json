@@ -916,9 +916,7 @@
           "label": "Push ahead with Phase 1",
           "requiresLegislation": true,
           "effects": {
-            "capitalSpend": 0.55,
-            "reformIndex": 0,
-            "importContent": "high"
+            "capitalSpend": 0.55
           },
           "lag": {
             "capacityQuarters": 20,

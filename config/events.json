@@ -1324,7 +1324,7 @@
             "pdp2026_adopted",
             "pdp_base_gas"
           ],
-          "flavour": "The cheapest tariff of the four and the least argument with anybody who matters. It also books a 35% fossil share out to 2050 and squares that with net zero by assuming carbon capture arrives — an assumption the plan makes without costing it, which is the entire objection to it."
+          "flavour": "The cheapest tariff of the four and the least argument with anybody who matters. It also books a 35% fossil share out to 2050 and squares that with net zero by assuming capture arrives — which the plan never costs."
         },
         {
           "id": "base_ccs",
@@ -1350,7 +1350,7 @@
             "pdp_base_ccs",
             "ccs_costed"
           ],
-          "flavour": "The honest version of scenario one: if the fossil share is going to be defended by capture, the capture belongs in the tariff. Voters meet the number in a monthly bill and the technology is not commercially proven at this scale anywhere, so you are asking them to pay now for something that might not work later. Every energy economist will call this the responsible choice."
+          "flavour": "If the fossil share is going to be defended by capture, the capture belongs in the tariff. Voters meet that number monthly, and the technology is not proven at this scale anywhere."
         },
         {
           "id": "renewables",
@@ -1376,7 +1376,7 @@
             "pdp_renewables",
             "grid_rebuild_committed"
           ],
-          "flavour": "The only scenario that reaches net zero without betting on a technology that does not exist yet — and it does so by betting on five times the wind capacity Thailand has ever built, plus a battery fleet larger than the grid it stabilises. The land alone is a decade of negotiations. The generators, the gas importers and every province that hosts a plant will fight this, and the tariff carries the storage."
+          "flavour": "The only path to net zero that does not depend on a technology nobody has proven. It runs on five times the wind Thailand has ever built and a battery fleet larger than the grid it steadies, and every generator and host province will fight it."
         },
         {
           "id": "domestic_mix",
@@ -1402,7 +1402,7 @@
             "pdp_domestic_mix",
             "ccs_costed"
           ],
-          "flavour": "Maximises what Thailand already owns or can buy next door, which is the strongest energy-security argument available and the weakest climate one. It also ties a quarter of the 2050 grid to Gulf fields in decline and to gas imported across a border that has closed twice in living memory."
+          "flavour": "Maximises what Thailand already owns or can buy next door: the strongest energy-security case available and the weakest climate one. It also ties a quarter of the 2050 grid to declining Gulf fields and to a border that has closed twice in living memory."
         }
       ]
     },
@@ -1473,6 +1473,84 @@
           ],
           "lockedNote": "You are not in a position to say it.",
           "flavour": "Oh my God."
+        }
+      ]
+    },
+    {
+      "id": "debt_ceiling_second",
+      "headline": "The ceiling has been reached again",
+      "trigger": {
+        "type": "threshold",
+        "variable": "debtHeadroom",
+        "below": 1.2,
+        "requiresFlag": "debt_ceiling_raised"
+      },
+      "blocking": true,
+      "body": "Gross debt is within a point of the 78% ceiling this cabinet legislated for itself two years ago, and the argument that worked the first time is not available a second time. The Fiscal Policy Office has written again, in harder language. Both rating agencies that asked for a meeting in the first instance have now scheduled one. The specific thing they want explained is not the level — it is the pattern: a government that moves the limit whenever it reaches it does not have a limit, it has a formality, and sovereign debt is priced on which of those two things a country is running.",
+      "options": [
+        {
+          "id": "raise_again",
+          "label": "Legislate again — 78% to 85%",
+          "body": "Seven more points of headroom. The line stops meaning anything.",
+          "opinion": {
+            "Pheu Thai": 4,
+            "Kla Tham": 3,
+            "People's": -9,
+            "Others": -14,
+            "Democrat": -18
+          },
+          "effects": {
+            "fdiSignal": -0.55,
+            "setSupport": -1.7,
+            "institutionalSupport": -11,
+            "approvalBoost": -8,
+            "executionBonus": -0.02
+          },
+          "sets": [
+            "debt_ceiling_raised_again"
+          ],
+          "flavour": "The second raise is not twice as expensive as the first. It is categorically different: the first moved a number, the second establishes that the number moves. Everything the state borrows reprices against that, and so does everything borrowed by every firm in the country."
+        },
+        {
+          "id": "emergency_consolidation",
+          "label": "Emergency consolidation — no second raise",
+          "body": "Capital programmes stopped mid-flight. Transfers cut. The limit stays where it is.",
+          "opinion": {
+            "Democrat": 14,
+            "Others": 9,
+            "People's": 1,
+            "Kla Tham": -11,
+            "Pheu Thai": -15
+          },
+          "effects": {
+            "capitalSpend": -0.95,
+            "govConsumption": -0.55,
+            "transfers": -0.4,
+            "reformIndex": 4,
+            "approvalBoost": -17,
+            "fdiSignal": 0.12,
+            "setSupport": 0.4
+          },
+          "flavour": "The most painful thing available and the only one that leaves the limit meaning what it says. Half-built projects are the ones that get stopped, because finished projects have constituencies and unfinished ones have contractors. Whatever this costs politically, it is charged in full and inside the term."
+        },
+        {
+          "id": "breach",
+          "label": "Do nothing and go through it",
+          "body": "No legislation, no cuts. The debt simply passes the ceiling.",
+          "opinion": {
+            "Kla Tham": 1,
+            "Pheu Thai": -2,
+            "People's": -8,
+            "Others": -11,
+            "Democrat": -15
+          },
+          "effects": {
+            "fdiSignal": -0.75,
+            "setSupport": -2.1,
+            "institutionalSupport": -9,
+            "approvalBoost": -3
+          },
+          "flavour": "The worst of the three and the easiest to arrive at, because it requires no decision and no vote. A ceiling breached without being amended tells lenders that the constraint was never real and that nobody in the building is willing to say so out loud."
         }
       ]
     }
