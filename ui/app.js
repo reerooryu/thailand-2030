@@ -339,12 +339,21 @@ function renderNews() {
       // gated event choice rendered as an ordinary clickable button and the gate
       // existed only in the data. Anything conditional on the tech tree was
       // therefore free.
-      const locked = o.unavailable || !isUnlocked(o, g.flags);
+      // Two different kinds of unselectable, and they must not render alike.
+      // `unavailable` is a choice that is permanently off the table and exists
+      // for the line underneath it — the flavour IS the point, so it stays. A
+      // failed `requiresFlags` is a choice you have not earned yet, where the
+      // flavour would be a spoiler and the note explains the gate instead.
+      // Collapsing the two printed an empty "Requires:" over the joke.
+      const gated = !isUnlocked(o, g.flags) && !o.unavailable;
+      const locked = o.unavailable || gated;
       const b = el('button', 'opt' + (locked ? ' locked' : ''));
       b.innerHTML = `<div class="o-label">${o.label}</div>` +
-        (o.flavour && !locked ? `<div class="o-flavour">${o.flavour}</div>` : '') +
-        (locked ? `<div class="o-lock">${o.lockedNote ||
-            'Requires: ' + (o.requiresFlags || []).join(', ')}</div>` : renderDeltas(o.opinion));
+        (gated
+          ? `<div class="o-lock">${o.lockedNote ||
+              'Requires: ' + (o.requiresFlags || []).join(', ')}</div>`
+          : (o.flavour ? `<div class="o-flavour">${o.flavour}</div>` : '')) +
+        (locked ? '' : renderDeltas(o.opinion));
       if (locked) b.disabled = true;
       else b.onclick = () => { g.resolveEvent(e.id, o.id); render(); };
       opts.appendChild(b);
