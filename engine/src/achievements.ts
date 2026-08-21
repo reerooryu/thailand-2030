@@ -323,6 +323,27 @@ export const ACHIEVEMENTS: Achievement[] = [
     test: c => atMost(c.hhDebt, 80, 1) && !c.fell,
   },
   {
+    id: 'ecological_revolution',
+    name: 'Ecological Revolution',
+    requirement: 'Take the renewables pathway in the Power Development Plan, fund the 14th Plan energy ' +
+                 'transition in full, and order both reactors with a regulator behind them.',
+    flavour: 'The maximal decarbonisation line, taken in full and in the right order: the only supply pathway ' +
+             'that reaches net zero without betting on carbon capture, the grid rebuild that variable ' +
+             'generation actually requires, and two reactors for the baseload that wind and solar cannot ' +
+             'carry. It is a coalition of people who do not like each other — the renewables lobby has spent ' +
+             'twenty years arguing that nuclear is unnecessary and the nuclear engineers have spent twenty ' +
+             'years arguing that renewables are unserious — and this cabinet simply funded both. None of it ' +
+             'generates a kilowatt before 2037. All of it had to be decided now.',
+    rarity: 'uncommon',
+    // `energy_transition_funded` is strictly implied by ordering the reactors,
+    // since the SMR card only enters the deck once the 14th Plan is funded in
+    // full. It is tested anyway so the requirement line reads as the three
+    // decisions the player actually made rather than two of them and an
+    // invisible precondition.
+    test: c => has(c, 'pdp_renewables') && has(c, 'energy_transition_funded') &&
+               has(c, 'smr_both_units'),
+  },
+  {
     id: 'winter_is_coming',
     name: 'Winter Is Coming',
     requirement: 'Complete the term without touching the ageing agenda at all.',
