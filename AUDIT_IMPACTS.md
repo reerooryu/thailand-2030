@@ -57,7 +57,7 @@ number that actually matters.
 | Senior Plus 1 — Employment Incentive | Raise the ceiling only, keep the 10% headcount cap | +4 | +0.01 | -0.0 | +0.03 | +0.3 | +1.0 |  |
 | Senior Plus 2 — Income Tax Relief | Grant the full 50% deduction under 1.5 million baht | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | not in this coalition's deck |
 | Senior Plus 2 — Income Tax Relief | A limited 25% deduction, reviewed after two years | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | not in this coalition's deck |
-| Land Bridge (Chumphon–Ranong) | Push ahead with Phase 1 | +19 | -0.03 | +3.7 | -0.47 | -1.7 | 0.0 |  |
+| Land Bridge (Chumphon–Ranong) | Push ahead with Phase 1 | +17 | -0.03 | +3.7 | -0.59 | -8.6 | 0.0 |  |
 | Land Bridge (Chumphon–Ranong) | Delay pending review | +0 | +0.00 | -0.0 | +0.00 | +0.1 | 0.0 | **no measurable effect** |
 | Land Bridge (Chumphon–Ranong) | Cancel outright | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | FAILS  Land Bridge (Chumphon–Ranong) — Cancel outright (196 yes, 55 short) |
 | Chumphon–Ranong Rail Link | Build the rail link | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | not in this coalition's deck |
@@ -181,6 +181,9 @@ number that actually matters.
 | Power Development Plan | Take the middle path — domestic gas, capture and renewables | +4 | +0.01 | +0.3 | +0.03 | -0.4 |  |
 | They are coming | I will, I will — this was never aimed at you | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
 | They are coming | No. | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
+| The ceiling has been reached again | Legislate again — 78% to 85% | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
+| The ceiling has been reached again | Emergency consolidation — no second raise | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
+| The ceiling has been reached again | Do nothing and go through it | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
 
 ## Ranking — what actually moves the Legacy score
 

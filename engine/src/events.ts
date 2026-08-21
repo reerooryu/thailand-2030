@@ -9,11 +9,19 @@
 import type { PolicyEffects } from './policies.js';
 
 
-export type Trigger =
+/** A gate that applies to any trigger: the event cannot fire unless this flag
+ *  is already set. Threshold triggers are ambient — they watch a number and go
+ *  off whenever it crosses — which makes them useless for a SECOND crossing
+ *  that only exists because of an earlier decision. The debt ceiling is the
+ *  case: headroom falls below the line twice, and the second time is only
+ *  reachable by a government that legislated the first raise. */
+type TriggerGate = { requiresFlag?: string };
+
+export type Trigger = TriggerGate & (
   | { type: 'afterOption'; card: string; option: string; inQuarters: number }
   | { type: 'flag'; flag: string; inQuarters?: number }
   | { type: 'threshold'; variable: string; above?: number; below?: number }
-  | { type: 'hazard'; probabilityPerQuarter: number };
+  | { type: 'hazard'; probabilityPerQuarter: number });
 
 export interface EventOption {
   id: string; label: string; body?: string;
@@ -87,6 +95,7 @@ export function due(
 
   for (const e of events) {
     if (alreadyFired.has(e.id) || fired.includes(e)) continue;
+    if (e.trigger?.requiresFlag && !flags.has(e.trigger.requiresFlag)) continue;
     if (e.scriptedQuarter != null) { if (e.scriptedQuarter === quarter) fired.push(e); continue; }
     const t = e.trigger;
     if (t.type === 'threshold') {
