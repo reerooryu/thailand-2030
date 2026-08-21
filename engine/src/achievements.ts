@@ -327,14 +327,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     name: 'Patriot',
     requirement: 'Pass the Zero Corruption Act with real enforcement, separate investigation from arrest ' +
                  'nationwide — and then refuse the networks when they come for the files.',
-    flavour: 'Every other achievement here is won by choosing well among options the game offers you. This ' +
-             'one is won by choosing against yourself. The prosecutions reached your own provincial members, ' +
-             'your own donors and two people who were in the room when this coalition was assembled, and the ' +
-             'files were allowed to proceed. The organisation that converts Bhumjaithai votes into ' +
-             'Bhumjaithai seats at a rate no other party manages then declined to convert them, which is why ' +
-             'the count you are looking at is smaller than the record deserved. It is the only decision in ' +
-             'the game with a guaranteed price and no compensating line anywhere in the model. Nobody has to ' +
-             'do this. That is what the word means.',
+    flavour: 'Stand up to them.',
     rarity: 'legendary',
     test: c => has(c, 'patriot') && !c.fell,
   },

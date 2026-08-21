@@ -334,11 +334,18 @@ function renderNews() {
     c.appendChild(el('div', 'n-body', e.body));
     const opts = el('div', 'n-opts');
     for (const o of e.options) {
-      const b = el('button', 'opt' + (o.unavailable ? ' locked' : ''));
+      // Event options honour `requiresFlags` exactly as card options do. They did
+      // not until now — the check simply was not written on this path — so a
+      // gated event choice rendered as an ordinary clickable button and the gate
+      // existed only in the data. Anything conditional on the tech tree was
+      // therefore free.
+      const locked = o.unavailable || !isUnlocked(o, g.flags);
+      const b = el('button', 'opt' + (locked ? ' locked' : ''));
       b.innerHTML = `<div class="o-label">${o.label}</div>` +
-        (o.flavour ? `<div class="o-flavour">${o.flavour}</div>` : '') +
-        (o.unavailable ? '' : renderDeltas(o.opinion));
-      if (o.unavailable) b.disabled = true;
+        (o.flavour && !locked ? `<div class="o-flavour">${o.flavour}</div>` : '') +
+        (locked ? `<div class="o-lock">${o.lockedNote ||
+            'Requires: ' + (o.requiresFlags || []).join(', ')}</div>` : renderDeltas(o.opinion));
+      if (locked) b.disabled = true;
       else b.onclick = () => { g.resolveEvent(e.id, o.id); render(); };
       opts.appendChild(b);
     }
