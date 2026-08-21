@@ -324,7 +324,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'patriot',
-    name: 'Patriot',
+    name: 'PATRIOT',
     requirement: 'Pass the Zero Corruption Act with real enforcement, separate investigation from arrest ' +
                  'nationwide — and then refuse the networks when they come for the files.',
     flavour: 'Stand up to them.',
