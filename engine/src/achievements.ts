@@ -130,7 +130,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     name: 'Horse before the Cart',
     requirement: 'Complete the full civil service programme and the full justice reform with real ' +
                  'anti-corruption enforcement, then finish inside your debt ceiling with a risk premium ' +
-                 'under 0.25pp, a primary deficit no worse than 4% of GDP, and a reform stock above 60.',
+                 'under 0.25pp, a primary deficit no worse than 5% of GDP, and a reform stock above 60.',
     flavour: 'Institutions before concrete, and paid for rather than borrowed against. Every part of this ' +
              'is unglamorous: an early-retirement programme nobody photographs, a prosecution service that ' +
              'can act without a police referral, investigation separated from arrest, and a balance sheet ' +
@@ -147,7 +147,7 @@ export const ACHIEVEMENTS: Achievement[] = [
                has(c, 'zero_corruption_act') && has(c, 'anticorruption_enforcement') &&
                has(c, 'justice_reform_done') &&
                atMost(c.debtGdp, c.ceiling, 1) && atMost(c.riskPremium, 0.25) &&
-               atLeast(c.primaryBalance, -4.0) && atLeast(c.reformStock, 60, 1) && !c.fell,
+               atLeast(c.primaryBalance, -5.0) && atLeast(c.reformStock, 60, 1) && !c.fell,
   },
   {
     id: 'unlikely_reconciliation',
@@ -321,6 +321,22 @@ export const ACHIEVEMENTS: Achievement[] = [
              'has not been elected. There is no constituency for this and no headline in it.',
     rarity: 'uncommon',
     test: c => atMost(c.hhDebt, 80, 1) && !c.fell,
+  },
+  {
+    id: 'patriot',
+    name: 'Patriot',
+    requirement: 'Pass the Zero Corruption Act with real enforcement, separate investigation from arrest ' +
+                 'nationwide — and then refuse the networks when they come for the files.',
+    flavour: 'Every other achievement here is won by choosing well among options the game offers you. This ' +
+             'one is won by choosing against yourself. The prosecutions reached your own provincial members, ' +
+             'your own donors and two people who were in the room when this coalition was assembled, and the ' +
+             'files were allowed to proceed. The organisation that converts Bhumjaithai votes into ' +
+             'Bhumjaithai seats at a rate no other party manages then declined to convert them, which is why ' +
+             'the count you are looking at is smaller than the record deserved. It is the only decision in ' +
+             'the game with a guaranteed price and no compensating line anywhere in the model. Nobody has to ' +
+             'do this. That is what the word means.',
+    rarity: 'legendary',
+    test: c => has(c, 'patriot') && !c.fell,
   },
   {
     id: 'ecological_revolution',

@@ -138,7 +138,20 @@ export class Game {
     return this.ps;
   }
 
+  /** Flags that mirror CONTINUOUS state, refreshed every quarter.
+   *  Option gating in the card schema is flag-based only, so a condition like
+   *  "approval above 50%" has no way to be expressed — and some choices are
+   *  genuinely unavailable to a weak government rather than merely expensive.
+   *  Stamping the condition as a flag lets the existing `requiresFlags` machinery
+   *  grey the option out on its own, and the flag clears again the moment the
+   *  polling does. Nothing persistent should ever be keyed off these. */
+  private syncStateFlags() {
+    if (this.approval > 50) this.flags.add('approval_over_50');
+    else this.flags.delete('approval_over_50');
+  }
+
   deck(): PolicyCard[] {
+    this.syncStateFlags();
     return availableCards(this.cat, this.flags, this.quarter, this.ps.coalition).filter(c =>
       !this.playedCards.has(c.id) &&
       !this.deferred.some(d => d.cardId === c.id && d.returnsAtQuarter > this.quarter));

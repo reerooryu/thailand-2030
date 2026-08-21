@@ -890,6 +890,20 @@ function verdictSections(g, s, realCagr, setChg, gov) {
       `achieved was achieved early. The remainder was survival, and survival is not a programme.` },
   ], g.approval);
 
+  // The chain that runs through the Zero Corruption Act ends in a decision the
+  // record cannot show on its own, so the assessment says it outright.
+  if (g.flags.has('patriot'))
+    politics.t += ` One line does not appear in any of the numbers above. When the prosecution service ` +
+      `reached this government's own provincial members, the files were allowed to proceed — and the ` +
+      `organisation that converts Bhumjaithai votes into Bhumjaithai seats stopped converting them. The ` +
+      `count is smaller than the record earned, deliberately, and everyone involved understood the trade ` +
+      `before it was made.`;
+  else if (g.flags.has('hollow_reform'))
+    politics.t += ` And one thing the seat total conceals: the anti-corruption body this cabinet built was ` +
+      `publicly instructed to withdraw the files when they reached its own side. The Act remains on the ` +
+      `books, the machine went back to work, and the country now knows exactly what the enforcement is ` +
+      `worth. Whatever else was reformed here, that was not.`;
+
   const markets = pick([
     { min: 60, tag: 'euphoric', t:
       `The SET closed at ${n(g.set)}, up ${fmt(setChg)}%, against real growth of ${fmt(realCagr, 2)}% ` +
