@@ -495,6 +495,7 @@ function showEnd(walked) {
   $('#game').hidden = true;
   const w = $('#prologue');
   w.hidden = false;
+  const moved = elec && elec.results.some(r => r.before !== r.origin);
   const fell = !!walked;
   const yrs = (g.quarter) / 4;
   const realCagr = (Math.pow(s.rgdp / start.rgdp, 1 / Math.max(yrs, 0.5)) - 1) * 100;
@@ -522,11 +523,14 @@ function showEnd(walked) {
           <span class="${elec.playerSeats >= 191 ? 'up' : 'down'}">${elec.playerSeats >= 191 ? '+' : ''}${elec.playerSeats - 191}</span></div>
       </div>
       <p class="el-detail">${elec.detail}</p>
+      ${moved ? '<p class="el-note">Members changed party during the term, so the House fought this '
+        + 'election is not the House elected in 2026. Changes are measured against 2026.</p>' : ''}
       <table class="el-table">
-        <tr><th>Party</th><th>2026</th><th>2030</th><th></th><th>After the count</th></tr>
+        <tr><th>Party</th><th>2026</th>${moved ? '<th>Dissolution</th>' : ''}<th>2030</th><th></th><th>After the count</th></tr>
         ${elec.results.map(r => `<tr class="${r.inGov ? 'was-gov' : ''}">
           <td class="el-p">${r.party}${r.inGov ? ' <span class="gov-chip">gov</span>' : ''}</td>
-          <td class="el-n muted">${r.before}</td>
+          <td class="el-n muted">${r.origin}</td>
+          ${moved ? `<td class="el-n ${r.before !== r.origin ? (r.before > r.origin ? 'up' : 'down') : 'muted'}">${r.before}</td>` : ''}
           <td class="el-n"><b>${r.after}</b></td>
           <td class="el-n ${r.change > 0 ? 'up' : r.change < 0 ? 'down' : 'muted'}">${r.change > 0 ? '+' : ''}${r.change}</td>
           <td class="el-r ${r.willJoin ? '' : 'muted'}">${r.party === 'Bhumjaithai' ? '' : r.reason}</td>

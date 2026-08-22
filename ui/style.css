@@ -318,3 +318,7 @@ details.whip td{padding:2px 0;vertical-align:baseline}
    off-screen at 1px rather than hidden. Audio only; nobody sees the video. */
 #yt-host{position:fixed;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;
   opacity:0;pointer-events:none}
+
+/* Shown only when members changed party mid-term, so the "2026" column and the
+   House that actually fought the election are no longer the same thing. */
+.el-note{margin:6px 0 10px;font-size:12px;color:var(--ink-3);font-style:italic}
