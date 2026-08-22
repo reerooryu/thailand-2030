@@ -15,7 +15,7 @@ import {
   type PolicyCatalogue, type PolicyCard, type PolicyEffects, type PolicyOption,
 } from './policies.js';
 import {
-  scheduleFrom, due, resolve, makeRng,
+  scheduleFrom, due, resolve, isEventOptionUnlocked, makeRng,
   type GameEvent, type Scheduled,
 } from './events.js';
 import type { Params, State, Exog, Policy } from './types.js';
@@ -186,6 +186,8 @@ export class BrowserGame {
   private syncStateFlags() {
     if (this.approval > 50) this.flags.add('approval_over_50');
     else this.flags.delete('approval_over_50');
+    if ((this.opinion["People's"] ?? 0) > 60) this.flags.add('peoples_opinion_over_60');
+    else this.flags.delete('peoples_opinion_over_60');
   }
 
   private censusProposals() {
@@ -279,10 +281,12 @@ export class BrowserGame {
     const opt = e.options.find(o => o.id === optionId)!;
     // Defensive: the UI greys locked options, but nothing stopped a caller
     // resolving one directly, and every headless harness does exactly that.
-    if (opt.unavailable || !isUnlocked(opt as any, this.flags)) return;
+    this.syncStateFlags();
+    if (!isEventOptionUnlocked(opt, this.flags)) return;
     const res = resolve(this.opinion, this.flags, opt);
     this.opinion = res.opinion; this.flags = res.flags;
     this.apply(res.effects);
+    this.syncStateFlags();
     this.syncCeiling();
     // Members leaving the party. Mutates the live seat table, so the whip count
     // for every later division reflects it — and a large enough exodus ends the
@@ -296,6 +300,14 @@ export class BrowserGame {
       const lost = Object.entries(shift).filter(([, d]) => d < 0)
         .map(([p, d]) => `${p} ${d}`).join(', ');
       if (lost) this.log.push({ quarter: this.quarter, kind: 'note', text: `Seats change hands — ${lost}` });
+    }
+    const coalitionChange = opt.coalitionChange;
+    if (coalitionChange) {
+      const leaving = new Set(coalitionChange.leave ?? []);
+      this.ps.coalition = this.ps.coalition.filter(p => !leaving.has(p));
+      for (const party of coalitionChange.join ?? []) {
+        if (!this.ps.coalition.includes(party)) this.ps.coalition.push(party);
+      }
     }
     this.pending.splice(i, 1);
     // Events can schedule follow-ups exactly as cards do. They could not before:

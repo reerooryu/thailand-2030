@@ -1619,6 +1619,84 @@
           "sets": [
             "party_rebuild_available"
           ]
+        },
+        {
+          "id": "invite_peoples",
+          "label": "Invite the People's Party in — Others leaves",
+          "requiresFlags": [
+            "peoples_opinion_over_60"
+          ],
+          "lockedNote": "The People's Party will not cross the threshold for you.",
+          "seatShift": {
+            "Bhumjaithai": -12,
+            "Kla Tham": 8,
+            "Others": 4
+          },
+          "opinion": {
+            "Kla Tham": 2,
+            "Others": 1
+          },
+          "effects": {
+            "approvalBoost": -2,
+            "institutionalSupport": -3,
+            "executionBonus": -0.01
+          },
+          "sets": [
+            "party_rebuild_available",
+            "peoples_rescued_government",
+            "others_exited"
+          ],
+          "coalitionChange": {
+            "join": [
+              "People's"
+            ],
+            "leave": [
+              "Others"
+            ]
+          },
+          "flavour": "The arithmetic is ugly, but it is arithmetic. The People's Party will not save the networks, and the networks will not remain in a government that let the files proceed. They come in because the alternative is a collapse they can no longer pretend is somebody else's problem."
+        }
+      ]
+    },
+    {
+      "id": "defection_wave_3",
+      "headline": "The mass defection",
+      "trigger": {
+        "type": "afterOption",
+        "card": "network_confrontation",
+        "option": "stand",
+        "inQuarters": 3
+      },
+      "blocking": true,
+      "body": "Thirty-five more members leave in a single morning. This is no longer a faction making a point or a whip testing the Prime Minister. It is the provincial organisation deciding, in public, that the party it built is no longer the party it serves.",
+      "options": [
+        {
+          "id": "ack",
+          "label": "Accept the mass resignations",
+          "seatShift": {
+            "Bhumjaithai": -35,
+            "Kla Tham": 20,
+            "Others": 15
+          },
+          "opinion": {
+            "Kla Tham": 2,
+            "Others": 1
+          },
+          "effects": {
+            "approvalBoost": -3,
+            "institutionalSupport": -4,
+            "executionBonus": -0.01
+          },
+          "sets": [
+            "party_rebuild_available",
+            "others_exited"
+          ],
+          "coalitionChange": {
+            "leave": [
+              "Others"
+            ]
+          },
+          "flavour": "Thirty-five seats is not a warning. It is the organisation taking its name off the door and carrying the furniture with it."
         }
       ]
     },
@@ -1629,7 +1707,7 @@
         "type": "afterOption",
         "card": "network_confrontation",
         "option": "stand",
-        "inQuarters": 3
+        "inQuarters": 4
       },
       "blocking": true,
       "body": "A petition reaches the Constitutional Court. Dissolution of Bhumjaithai, and a ten-year ban for every member of its executive committee, over a 2023 donation that was declared, audited and signed off at the time.\n\nThe petitioner is a man nobody has heard of. Nobody is confused about who is paying for the lawyers.\n\nThis is how Thai parties die. It has worked every previous time.",
@@ -1661,7 +1739,7 @@
         "type": "afterOption",
         "card": "network_confrontation",
         "option": "stand",
-        "inQuarters": 4
+        "inQuarters": 5
       },
       "blocking": true,
       "body": "The polling moved after the ruling, and it did not move back. Nobody has changed their mind about the Land Bridge, or the tax rises, or the price of anything. What changed is a smaller and older question, which is whether the people who run the country are the people who were elected to run it.\n\nThe provincial networks are gone and will not return. What arrived instead is harder to bank and, on the evidence of the last four decades, considerably rarer.",
