@@ -172,7 +172,8 @@ function render() {
   $('#politics').innerHTML = `
     <div class="pol-head">
       <div><span class="pol-seats">${seats}</span> <span class="muted">of 500 · majority 251 ·
-        Bhumjaithai ${g.ps.seats['Bhumjaithai']}</span></div>
+        Bhumjaithai ${g.ps.seats['Bhumjaithai']}${g.ps.seats['Bhumjaithai'] !== g.seats2026['Bhumjaithai']
+          ? ` <span class="down">${g.ps.seats['Bhumjaithai'] - g.seats2026['Bhumjaithai']}</span>` : ''}</span></div>
       <div class="muted">${g.ps.coalition.join(' + ')}</div>
       <div><span class="muted">Approval</span> <b>${g.approval}%</b></div>
     </div>
@@ -181,7 +182,10 @@ function render() {
         const b = g.bandOf(k);
         const inGov = g.ps.coalition.includes(k);
         return `<div class="party${inGov ? ' in-gov' : ''}">
-          <div class="p-name">${k}${inGov ? ' <span class="gov-chip">gov</span>' : ''}</div>
+          <div class="p-name">${k}${inGov ? ' <span class="gov-chip">gov</span>' : ''}
+            <span class="p-seats">${g.ps.seats[k]}${g.ps.seats[k] !== g.seats2026[k]
+              ? ` <span class="${g.ps.seats[k] > g.seats2026[k] ? 'up' : 'down'}">${
+                  g.ps.seats[k] > g.seats2026[k] ? '+' : ''}${g.ps.seats[k] - g.seats2026[k]}</span>` : ''}</span></div>
           <div class="p-bar"><div class="p-fill b${Math.floor(v / 12.5)}" style="width:${v}%"></div></div>
           <div class="p-val">${v} <span class="muted">${b.label}</span></div>
         </div>`;
@@ -495,7 +499,6 @@ function showEnd(walked) {
   $('#game').hidden = true;
   const w = $('#prologue');
   w.hidden = false;
-  const moved = elec && elec.results.some(r => r.before !== r.origin);
   const fell = !!walked;
   const yrs = (g.quarter) / 4;
   const realCagr = (Math.pow(s.rgdp / start.rgdp, 1 / Math.max(yrs, 0.5)) - 1) * 100;
@@ -515,6 +518,9 @@ function showEnd(walked) {
      through it: a government returned to office gets to answer for its own
      December 2030 promise, and one that is not, does not. */
   const elec = fell ? null : g.election();
+  // Did anyone change party mid-term? Decides whether the seat table needs a
+  // dissolution column. Must come AFTER `elec` exists.
+  const moved = !!elec && elec.results.some(r => r.before !== r.origin);
   const electionBlock = !elec ? '' : `
     <div class="election ${elec.verdict}">
       <div class="el-head">
