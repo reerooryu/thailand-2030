@@ -322,3 +322,7 @@ details.whip td{padding:2px 0;vertical-align:baseline}
 /* Shown only when members changed party mid-term, so the "2026" column and the
    House that actually fought the election are no longer the same thing. */
 .el-note{margin:6px 0 10px;font-size:12px;color:var(--ink-3);font-style:italic}
+
+/* Seat count beside each party in the politics panel, with the change against
+   February 2026 — otherwise a mid-term defection is invisible until the count. */
+.p-seats{font-size:11px;color:var(--ink-3);margin-left:6px;font-variant-numeric:tabular-nums}
