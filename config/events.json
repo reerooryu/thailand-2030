@@ -1556,7 +1556,7 @@
     },
     {
       "id": "defection_wave_1",
-      "headline": "Fourteen members resign the whip",
+      "headline": "The Tsunami",
       "trigger": {
         "type": "afterOption",
         "card": "network_confrontation",
@@ -1588,7 +1588,7 @@
     },
     {
       "id": "defection_wave_2",
-      "headline": "A second wave, and this one takes the whips",
+      "headline": "Off the Cliff",
       "trigger": {
         "type": "afterOption",
         "card": "network_confrontation",
@@ -1622,7 +1622,7 @@
         },
         {
           "id": "invite_peoples",
-          "label": "Invite the People's Party in — Others leaves",
+          "label": "Get the opposition on the line",
           "requiresFlags": [
             "peoples_opinion_over_60"
           ],
@@ -1654,13 +1654,13 @@
               "Others"
             ]
           },
-          "flavour": "The arithmetic is ugly, but it is arithmetic. The People's Party will not save the networks, and the networks will not remain in a government that let the files proceed. They come in because the alternative is a collapse they can no longer pretend is somebody else's problem."
+          "flavour": "The enemy of my enemy is my friend."
         }
       ]
     },
     {
       "id": "defection_wave_3",
-      "headline": "The mass defection",
+      "headline": "All Alone",
       "trigger": {
         "type": "afterOption",
         "card": "network_confrontation",
