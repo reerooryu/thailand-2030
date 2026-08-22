@@ -12,7 +12,7 @@ import {
   type PolicyCatalogue, type PolicyCard, type PolicyEffects,
 } from './policies.js';
 import {
-  scheduleFrom, due, resolve, makeRng,
+  scheduleFrom, due, resolve, isEventOptionUnlocked, makeRng,
   type GameEvent, type EventOption, type Scheduled,
 } from './events.js';
 import { step, reformEffort } from './engine.js';
@@ -148,6 +148,8 @@ export class Game {
   private syncStateFlags() {
     if (this.approval > 50) this.flags.add('approval_over_50');
     else this.flags.delete('approval_over_50');
+    if ((this.opinion["People's"] ?? 0) > 60) this.flags.add('peoples_opinion_over_60');
+    else this.flags.delete('peoples_opinion_over_60');
   }
 
   deck(): PolicyCard[] {
@@ -243,10 +245,14 @@ export class Game {
     const e = this.pending[i];
     const opt = e.options.find(o => o.id === optionId);
     if (!opt) throw new Error(`${eventId}: no option ${optionId}`);
+    this.syncStateFlags();
+    if (!isEventOptionUnlocked(opt, this.flags))
+      throw new Error(`${eventId}/${optionId}: option is locked`);
     const res = resolve(this.opinion, this.flags, opt);
     this.opinion = res.opinion;
     this.flags = res.flags;
     this.applyEffects(res.effects);        // <- event effects now reach the engine
+    this.syncStateFlags();
     this.syncCeiling();
     // Members changing party mid-term. Mutates the live seat table, so the whip
     // count for every later division reflects it — and a large enough exodus
@@ -256,6 +262,14 @@ export class Game {
       for (const [party, d] of Object.entries(shift)) {
         if (this.ps.seats[party] == null) continue;
         this.ps.seats[party] = Math.max(0, this.ps.seats[party] + d);
+      }
+    }
+    const coalitionChange = opt.coalitionChange;
+    if (coalitionChange) {
+      const leaving = new Set(coalitionChange.leave ?? []);
+      this.ps.coalition = this.ps.coalition.filter(p => !leaving.has(p));
+      for (const party of coalitionChange.join ?? []) {
+        if (!this.ps.coalition.includes(party)) this.ps.coalition.push(party);
       }
     }
     this.pending.splice(i, 1);
