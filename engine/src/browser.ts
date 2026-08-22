@@ -278,7 +278,25 @@ export class BrowserGame {
     this.opinion = res.opinion; this.flags = res.flags;
     this.apply(res.effects);
     this.syncCeiling();
+    // Members leaving the party. Mutates the live seat table, so the whip count
+    // for every later division reflects it — and a large enough exodus ends the
+    // government the same way a partner walking out does.
+    const shift = (opt as any).seatShift as Record<string, number> | undefined;
+    if (shift) {
+      for (const [party, d] of Object.entries(shift)) {
+        if (this.ps.seats[party] == null) continue;
+        this.ps.seats[party] = Math.max(0, this.ps.seats[party] + d);
+      }
+      const lost = Object.entries(shift).filter(([, d]) => d < 0)
+        .map(([p, d]) => `${p} ${d}`).join(', ');
+      if (lost) this.log.push({ quarter: this.quarter, kind: 'note', text: `Seats change hands — ${lost}` });
+    }
     this.pending.splice(i, 1);
+    // Events can schedule follow-ups exactly as cards do. They could not before:
+    // scheduleFrom was only ever called from playCard, so an `afterOption`
+    // trigger naming an EVENT never fired and consequence chains had to start
+    // from a card.
+    this.scheduled = scheduleFrom(this.scheduled, events, e.id, opt.id, this.quarter);
     this.log.push({ quarter: this.quarter, kind: 'event', text: `${e.headline} → ${opt.label}` });
   }
 
@@ -451,6 +469,7 @@ export class BrowserGame {
       debtGdp: this.state.debtGdp,
       ceiling: this.debtCeiling,
       machineBroken: this.flags.has('patriot'),
+      partySystemReformed: this.flags.has('party_system_reformed'),
     });
   }
 

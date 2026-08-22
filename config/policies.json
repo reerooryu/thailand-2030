@@ -313,6 +313,73 @@
       ]
     },
     {
+      "id": "party_finance",
+      "name": "Party Finance and Organisation Act",
+      "ministry": "pm office",
+      "type": "institutional",
+      "requires": [
+        "party_rebuild_available"
+      ],
+      "briefing": "The networks are gone and the party still has to fight an election. The Political Party Development Fund shared 117 million baht across 77 parties in 2020 — thirteen to seventeen million each for the large ones, which pays for an office, not a campaign. The allocation formula has weighted votes at 40%, membership dues at 40% and branches at 20% since 2017, and it is gamed: branches that exist on paper until the audit, members enrolled without their knowledge, subsidies drawn against both. That formula is already the instrument. A big house delivers votes without members and without branches, so enforcing the weights it already has moves money from machines to organisations — and this is the one parliament in which the governing party has no machine left to protect.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Enforce the formula, audit the branches, fund against projects",
+          "requiresLegislation": true,
+          "effects": {
+            "reformIndex": 13,
+            "formalisation": 0.07,
+            "govConsumption": 0.04,
+            "approvalBoost": 4,
+            "institutionalSupport": -9
+          },
+          "sets": [
+            "party_system_reformed"
+          ],
+          "fit": {
+            "People's": 0.7,
+            "Democrat": 0.6,
+            "Pheu Thai": 0.0,
+            "Others": -0.6,
+            "Kla Tham": -0.8
+          },
+          "flavour": "Dues and branches decide the money, disbursement is against audited projects rather than a lump sum, and constituency spending is capped. None of it is new law so much as the existing law meant seriously. Parties that are organisations gain; parties that are a name attached to thirty families lose, and two of those are sitting in this parliament.",
+          "maximal": true
+        },
+        {
+          "id": "fund_only",
+          "label": "Enlarge the fund, leave the formula alone",
+          "requiresLegislation": true,
+          "effects": {
+            "reformIndex": 4,
+            "govConsumption": 0.05,
+            "approvalBoost": 2,
+            "institutionalSupport": -1
+          },
+          "fit": {
+            "People's": 0.3,
+            "Democrat": 0.3,
+            "Pheu Thai": 0.2,
+            "Kla Tham": 0.2,
+            "Others": 0.2
+          },
+          "flavour": "More money through the same formula, which every party welcomes precisely because it changes nothing. The ghost branches draw a larger subsidy than they did last year."
+        },
+        {
+          "id": "decline",
+          "label": "Not this parliament",
+          "effects": {},
+          "fit": {
+            "Kla Tham": 0.4,
+            "Others": 0.4,
+            "People's": -0.4,
+            "Democrat": -0.3
+          },
+          "flavour": "The party has renounced patronage finance and has not replaced it, which is a condition with a name and a short life expectancy."
+        }
+      ]
+    },
+    {
       "id": "negative_income_tax",
       "name": "Negative Income Tax",
       "ministry": "finance",

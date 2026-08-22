@@ -62,6 +62,10 @@ export interface ElectionInput {
    *  withdrawal block below. Set by refusing the networks after the
    *  prosecution service reached your own members. */
   machineBroken?: boolean;
+  /** Party finance enforced: dues and branches decide the subsidy, branches are
+   *  audited, constituency spending is capped. Shifts conversion away from
+   *  parties that are a name attached to a few dozen families. */
+  partySystemReformed?: boolean;
 }
 
 export interface PartyResult {
@@ -257,13 +261,20 @@ export function runElection(e: ElectionInput): ElectionResult {
   // yield has always run far above its list share, and the gap between the two
   // is precisely the organisation now declining to work. So the 2026 base
   // survives, most of the gain above it evaporates, and a bloc of members leaves
-  // outright for whoever will still take their calls. Everything above this line
+  // outright. Softened once the defection waves landed: members now leave DURING
+  // the term and the outgoing House already reflects it, so charging the full
+  // original penalty here as well was billing twice for one withdrawal. What
+  // remains still has to be strong, and the reason is the payoff event: a
+  // government that faces the networks down finishes MORE popular, not less,
+  // and popularity is the largest term in the swing. Without a hard multiplier
+  // here the whole sequence reads as a reward — votes it cannot convert is
+  // exactly the point, and conversion is what this number is. Everything above this line
   // is scored on the record; this is scored on who was still willing to deliver.
   if (e.machineBroken) {
     const me = results.find(r => r.party === PLAYER)!;
     const base = e.seats[PLAYER] ?? 191;
     const bound = BOUNDS[PLAYER] ?? [55, 330];
-    const kept = Math.max(bound[0], Math.round(base + Math.max(0, me.after - base) * 0.42) - 18);
+    const kept = Math.max(bound[0], Math.round(base + Math.max(0, me.after - base) * 0.40) - 14);
     const lost = me.after - kept;
     if (lost > 0) {
       me.after = kept;
@@ -286,6 +297,41 @@ export function runElection(e: ElectionInput): ElectionResult {
         const take = Math.min(lost - handed, b[1] - r.after);
         r.after += take; handed += take;
       }
+    }
+    results.forEach(r => { r.change = r.after - r.before; });
+  }
+
+  // ---- the machines, defunded.
+  // A big house delivers votes without members and without branches, so a
+  // subsidy that actually weights members and branches starves it while paying
+  // parties that are organisations. Applied to the two parties whose seats are
+  // overwhelmingly constituency conversions, and handed to the three that carry
+  // a national list vote. Bhumjaithai is deliberately exempt: this card can only
+  // be reached by a government whose own machine has already withdrawn, and
+  // charging it twice for the same conversion would be double-counting.
+  if (e.partySystemReformed) {
+    const MACHINES = ['Kla Tham', 'Others'];
+    const NATIONAL = ["People's", 'Democrat', 'Pheu Thai'];
+    let pool = 0;
+    for (const p of MACHINES) {
+      const r = results.find(x => x.party === p); if (!r) continue;
+      const floor = (BOUNDS[p] ?? [5, 250])[0];
+      const take = Math.round(Math.max(0, r.after - floor) * 0.20);
+      r.after -= take; pool += take;
+    }
+    const recipients = NATIONAL.map(p => results.find(x => x.party === p)).filter(Boolean) as PartyResult[];
+    const weight = recipients.reduce((a, r) => a + r.after, 0) || 1;
+    let handed = 0;
+    for (const r of recipients) {
+      const cap = (BOUNDS[r.party] ?? [5, 250])[1];
+      const give = Math.min(Math.round(pool * r.after / weight), cap - r.after);
+      r.after += give; handed += give;
+    }
+    for (const r of recipients) {
+      if (handed >= pool) break;
+      const cap = (BOUNDS[r.party] ?? [5, 250])[1];
+      const give = Math.min(pool - handed, cap - r.after);
+      r.after += give; handed += give;
     }
     results.forEach(r => { r.change = r.after - r.before; });
   }

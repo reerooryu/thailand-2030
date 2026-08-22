@@ -248,7 +248,21 @@ export class Game {
     this.flags = res.flags;
     this.applyEffects(res.effects);        // <- event effects now reach the engine
     this.syncCeiling();
+    // Members changing party mid-term. Mutates the live seat table, so the whip
+    // count for every later division reflects it — and a large enough exodus
+    // ends the government the same way a partner walking out does.
+    const shift = (opt as any).seatShift as Record<string, number> | undefined;
+    if (shift) {
+      for (const [party, d] of Object.entries(shift)) {
+        if (this.ps.seats[party] == null) continue;
+        this.ps.seats[party] = Math.max(0, this.ps.seats[party] + d);
+      }
+    }
     this.pending.splice(i, 1);
+    // Events can schedule follow-ups exactly as cards do — scheduleFrom used to
+    // be reachable only from playCard, so an `afterOption` trigger naming an
+    // EVENT never fired.
+    this.scheduled = scheduleFrom(this.scheduled, this.events, e.id, opt.id, this.quarter);
     this.log.push({ quarter: this.quarter, kind: 'event', text: `${e.headline} -> ${opt.label}` });
   }
 
