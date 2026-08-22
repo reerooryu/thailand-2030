@@ -26,6 +26,13 @@ export type Trigger = TriggerGate & (
 export interface EventOption {
   id: string; label: string; body?: string;
   requiresLegislation?: boolean;
+  /** Members changing party MID-TERM, not at the count. The House is fixed at
+   *  coalition formation everywhere else in this game, which is wrong for the
+   *  one thing Thai MPs do constantly: a member elected on a provincial machine
+   *  is loyal to the house, not the letterhead, and does not wait four years to
+   *  act on that. Applied to the live seat table, so it moves the whip count for
+   *  every remaining division and can end a government outright. */
+  seatShift?: Record<string, number>;
   /** Shown for colour, never selectable. Some choices are not choices. */
   unavailable?: boolean;
   opinion?: Record<string, number>;

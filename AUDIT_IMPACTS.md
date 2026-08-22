@@ -34,6 +34,9 @@ number that actually matters.
 | Ministry Restructure — Tourism, Culture and Sport | Split sport out and merge tourism with culture | +8 | +0.03 | +0.1 | +0.10 | +0.2 | +3.2 |  |
 | Ministry Restructure — Tourism, Culture and Sport | Create the sports ministry, leave tourism where it is | +2 | +0.01 | +0.1 | +0.03 | +0.4 | +1.5 |  |
 | Ministry Restructure — Tourism, Culture and Sport | Leave the machinery alone | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | **no measurable effect** |
+| Party Finance and Organisation Act | Enforce the formula, audit the branches, fund against projects | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | not in this coalition's deck |
+| Party Finance and Organisation Act | Enlarge the fund, leave the formula alone | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | not in this coalition's deck |
+| Party Finance and Organisation Act | Not this parliament | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | not in this coalition's deck |
 | Negative Income Tax | Implement, funded from general revenue | +5 | +0.05 | +1.2 | +0.04 | +0.4 | +9.2 |  |
 | Negative Income Tax | Transfers without the VAT rise | +13 | +0.01 | +2.5 | -0.21 | -0.3 | +3.8 |  |
 | Negative Income Tax | Defer to the next government | +0 | +0.00 | -0.0 | +0.00 | 0.0 | 0.0 | **no measurable effect** |
@@ -184,6 +187,10 @@ number that actually matters.
 | The ceiling has been reached again | Legislate again — 78% to 85% | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
 | The ceiling has been reached again | Emergency consolidation — no second raise | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
 | The ceiling has been reached again | Do nothing and go through it | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
+| Fourteen members resign the whip | Accept the resignations | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
+| A second wave, and this one takes the whips | Accept the resignations | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
+| Screw you | Fight it | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
+| The country was watching | Note the polling | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
 
 ## Ranking — what actually moves the Legacy score
 

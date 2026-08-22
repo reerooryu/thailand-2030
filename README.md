@@ -28,7 +28,7 @@ Each quarter opens with the news. Some of it is a courtesy; some of it is
 **blocking**, and the turn will not end until you have answered it — the Strait
 of Hormuz closing, the Constitutional Court ruling on ballot reform, the
 southern provinces rising against the Land Bridge, a coalition partner
-threatening to walk. Then you spend up to three actions from a deck of 35
+threatening to walk. Then you spend up to three actions from a deck of 36
 policy cards, each with two to four options: the full programme, the pilot, the
 phase-in, or nothing.
 
@@ -89,8 +89,8 @@ available to you — including the ones you did not take.
 | `engine/src/achievements.ts` | Twenty-three end-of-term predicates. Nothing feeds back. |
 | `engine/src/ideology.ts` | Reads a revealed economic position off the budget. |
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoils the game. |
-| `config/policies.json` | 35 cards, 96 options. |
-| `config/events.json` | 27 news events, 61 options. |
+| `config/policies.json` | 36 cards, 99 options. |
+| `config/events.json` | 31 news events, 65 options. |
 | `config/coalitions.json` | The four coalitions and what each does to your capacity. |
 | `ui/` | Single-page front end. `app.js` is the whole client. |
 | `scripts/` | Data builders (Python) and analysis tools (TypeScript). |

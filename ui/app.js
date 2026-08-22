@@ -171,7 +171,8 @@ function render() {
   const seats = g.coalitionSeats();
   $('#politics').innerHTML = `
     <div class="pol-head">
-      <div><span class="pol-seats">${seats}</span> <span class="muted">of 500 · majority 251</span></div>
+      <div><span class="pol-seats">${seats}</span> <span class="muted">of 500 · majority 251 ·
+        Bhumjaithai ${g.ps.seats['Bhumjaithai']}</span></div>
       <div class="muted">${g.ps.coalition.join(' + ')}</div>
       <div><span class="muted">Approval</span> <b>${g.approval}%</b></div>
     </div>

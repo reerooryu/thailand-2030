@@ -1553,6 +1553,138 @@
           "flavour": "The worst of the three and the easiest to arrive at, because it requires no decision and no vote. A ceiling breached without being amended tells lenders that the constraint was never real and that nobody in the building is willing to say so out loud."
         }
       ]
+    },
+    {
+      "id": "defection_wave_1",
+      "headline": "Fourteen members resign the whip",
+      "trigger": {
+        "type": "afterOption",
+        "card": "network_confrontation",
+        "option": "stand",
+        "inQuarters": 1
+      },
+      "blocking": true,
+      "body": "They resigned together, in the morning, with a joint letter about conscience and the direction of the party. Two of them are under investigation. Four more expect to be. By the afternoon eleven had been photographed at another party's headquarters, which is roughly the interval these things take.\n\nThey keep their seats. They were never really yours.",
+      "options": [
+        {
+          "id": "ack",
+          "label": "Accept the resignations",
+          "seatShift": {
+            "Bhumjaithai": -16,
+            "Kla Tham": 11,
+            "Others": 5
+          },
+          "opinion": {
+            "Kla Tham": 2,
+            "Others": 1
+          },
+          "effects": {
+            "approvalBoost": -3,
+            "institutionalSupport": -4
+          },
+          "flavour": "A member elected on a provincial machine belongs to the machine, not to the letterhead, and does not wait four years to act on it. The arithmetic of every remaining division in this parliament has just changed."
+        }
+      ]
+    },
+    {
+      "id": "defection_wave_2",
+      "headline": "A second wave, and this one takes the whips",
+      "trigger": {
+        "type": "afterOption",
+        "card": "network_confrontation",
+        "option": "stand",
+        "inQuarters": 2
+      },
+      "blocking": true,
+      "body": "Ten more, including two deputy chief whips — the people whose job was counting the votes you no longer have. The first wave was the members with something to lose. This is the wave that waited a quarter to see whether you would climb down, and concluded that you would not.",
+      "options": [
+        {
+          "id": "ack",
+          "label": "Accept the resignations",
+          "seatShift": {
+            "Bhumjaithai": -12,
+            "Kla Tham": 8,
+            "Others": 4
+          },
+          "opinion": {
+            "Kla Tham": 2,
+            "Others": 1
+          },
+          "effects": {
+            "approvalBoost": -2,
+            "institutionalSupport": -3,
+            "executionBonus": -0.01
+          },
+          "flavour": "The second wave is always the more damaging one, because it is not made of the implicated. It is made of people who read the situation and decided which way it was going.",
+          "sets": [
+            "party_rebuild_available"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dissolution_case",
+      "headline": "Screw you",
+      "trigger": {
+        "type": "afterOption",
+        "card": "network_confrontation",
+        "option": "stand",
+        "inQuarters": 3
+      },
+      "blocking": true,
+      "body": "A petition reaches the Constitutional Court. Dissolution of Bhumjaithai, and a ten-year ban for every member of its executive committee, over a 2023 donation that was declared, audited and signed off at the time.\n\nThe petitioner is a man nobody has heard of. Nobody is confused about who is paying for the lawyers.\n\nThis is how Thai parties die. It has worked every previous time.",
+      "options": [
+        {
+          "id": "ack",
+          "label": "Fight it",
+          "opinion": {
+            "People's": 4,
+            "Democrat": 3,
+            "Kla Tham": -2,
+            "Others": -3
+          },
+          "effects": {
+            "setSupport": -1.2,
+            "fdiSignal": -0.25,
+            "approvalBoost": -5,
+            "executionBonus": -0.02,
+            "institutionalSupport": -4
+          },
+          "flavour": "Dismissed, unanimously, by a court whose independence this cabinet legislated eighteen months ago. Three years earlier the ruling goes the other way and everyone in the building knows it. The case still cost two quarters of government, most of a legal budget, and every ministry a reason to wait and see."
+        }
+      ]
+    },
+    {
+      "id": "networks_verdict",
+      "headline": "The country was watching",
+      "trigger": {
+        "type": "afterOption",
+        "card": "network_confrontation",
+        "option": "stand",
+        "inQuarters": 4
+      },
+      "blocking": true,
+      "body": "The polling moved after the ruling, and it did not move back. Nobody has changed their mind about the Land Bridge, or the tax rises, or the price of anything. What changed is a smaller and older question, which is whether the people who run the country are the people who were elected to run it.\n\nThe provincial networks are gone and will not return. What arrived instead is harder to bank and, on the evidence of the last four decades, considerably rarer.",
+      "options": [
+        {
+          "id": "ack",
+          "label": "Note the polling",
+          "opinion": {
+            "People's": 9,
+            "Democrat": 7,
+            "Pheu Thai": 3,
+            "Kla Tham": -4,
+            "Others": -4
+          },
+          "effects": {
+            "approvalBoost": 9,
+            "setSupport": 0.7,
+            "fdiSignal": 0.15,
+            "reformIndex": 3
+          },
+          "flavour": "This is the return on the whole sequence, and it arrives in the one currency the machine could never supply: people who vote for the party because of what it did rather than because of who asked them to."
+        }
+      ]
     }
   ]
 }
