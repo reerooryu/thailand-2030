@@ -236,11 +236,14 @@ function renderParliament() {
   const colours = cfg.seatColours || {};
   const total = 500;
   const pts = seatPositions(total, 12, 108, 232);
+  // Live seats, not the config's February 2026 figures — members change party.
+  const seatsOf = (p) => (g.ps.seats && g.ps.seats[p] != null) ? g.ps.seats[p] : cfg.parties[p].seats;
+  const vacant = Math.max(0, total - present.reduce((a, p) => a + seatsOf(p), 0));
 
   let idx = 0;
   const seatEls = [];
   for (const party of present) {
-    const n = cfg.parties[party].seats;
+    const n = seatsOf(party);
     for (let k = 0; k < n && idx < pts.length; k++, idx++) {
       const p = pts[idx];
       seatEls.push(`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4.1"
@@ -258,11 +261,11 @@ function renderParliament() {
   box.innerHTML = `
     <div class="parl-head">
       <div><span class="parl-seats">${seatsHeld}</span> <span class="muted">government seats · 251 needed</span></div>
-      <div class="muted">House of Representatives · 500 seats · 1 vacant</div>
+      <div class="muted">House of Representatives · 500 seats · ${vacant} vacant</div>
     </div>
     <div class="parl-wrap">
       <svg viewBox="-250 -252 500 268" class="parl-svg" role="img"
-           aria-label="Parliament: ${present.map(p => p + ' ' + cfg.parties[p].seats).join(', ')}">
+           aria-label="Parliament: ${present.map(p => p + ' ' + seatsOf(p)).join(', ')}">
         ${seatEls.join('')}
       </svg>
       <div class="parl-tip" id="parl-tip" hidden></div>
@@ -277,7 +280,9 @@ function renderParliament() {
       return `<button class="lg" data-party="${p}">
         <span class="lg-dot" style="background:${colours[p]}"></span>
         <span class="lg-name">${p}</span>
-        <span class="lg-seats">${cfg.parties[p].seats}</span>
+        <span class="lg-seats">${seatsOf(p)}${seatsOf(p) !== g.seats2026[p]
+          ? ` <span class="${seatsOf(p) > g.seats2026[p] ? 'up' : 'down'}">${
+              seatsOf(p) > g.seats2026[p] ? '+' : ''}${seatsOf(p) - g.seats2026[p]}</span>` : ''}</span>
         ${p === 'Bhumjaithai' ? '<span class="lg-band">you</span>'
           : `<span class="lg-band">${g.opinion[p]} ${b.label}</span>`}
         ${inGov ? '<span class="gov-chip">gov</span>' : ''}
@@ -292,7 +297,7 @@ function renderParliament() {
       const cp = cfg.parties[party];
       const inGov = g.ps.coalition.includes(party);
       const b = g.bandOf(party);
-      tip.innerHTML = `<div class="tip-name">${party} <span class="tip-seats">${cp.seats} seats</span></div>
+      tip.innerHTML = `<div class="tip-name">${party} <span class="tip-seats">${seatsOf(party)} seats</span></div>
         <div class="tip-meta">${cp.short || ''}${inGov ? ' · <b>in government</b>' : ' · opposition'}</div>
         ${party === 'Bhumjaithai' ? '' :
           `<div class="tip-meta">Relations <b>${g.opinion[party]}</b> — ${b.label}. ${b.note}</div>`}
