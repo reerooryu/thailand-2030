@@ -43,7 +43,11 @@
  */
 
 export interface ElectionInput {
-  seats: Record<string, number>;      // the outgoing House
+  seats: Record<string, number>;      // the House AT DISSOLUTION, after any defections
+  /** The February 2026 result. Distinct from `seats` as soon as members change
+   *  party mid-term: the count is fought from the House you actually hold, but
+   *  every comparison a reader makes is against the election before it. */
+  seatsAt2026?: Record<string, number>;
   coalition: string[];                // parties in government at dissolution
   opinion: Record<string, number>;    // relations at dissolution
   approval: number;
@@ -69,7 +73,10 @@ export interface ElectionInput {
 }
 
 export interface PartyResult {
-  party: string; before: number; after: number; change: number;
+  /** `origin` is February 2026, `before` is the House at dissolution, and they
+   *  differ by however many members walked. `change` is measured against 2026,
+   *  because that is the election this one is compared to. */
+  party: string; origin: number; before: number; after: number; change: number;
   inGov: boolean; willJoin: boolean; reason: string;
 }
 
@@ -192,7 +199,8 @@ export function runElection(e: ElectionInput): ElectionResult {
     // a partner held in contempt for four years underperforms on its own account
     if (p !== PLAYER && gov.has(p)) delta += clamp((e.opinion[p] - 50) * 0.3, -14, 10);
     const after = bound(p, before + delta);
-    results.push({ party: p, before, after, change: after - before,
+    results.push({ party: p, origin: (e.seatsAt2026 ?? e.seats)[p] ?? before,
+                   before, after, change: after - ((e.seatsAt2026 ?? e.seats)[p] ?? before),
                    inGov: gov.has(p), willJoin: false, reason: '' });
   }
 
@@ -234,7 +242,7 @@ export function runElection(e: ElectionInput): ElectionResult {
       });
       results.forEach(r => {
         r.after = bound(r.party, r.after);
-        r.change = r.after - r.before;
+        r.change = r.after - r.origin;
       });
       residual = 500 - results.reduce((a, r) => a + r.after, 0);
     }
@@ -252,7 +260,7 @@ export function runElection(e: ElectionInput): ElectionResult {
       }
       if (!moved2) break;
     }
-    results.forEach(r => { r.change = r.after - r.before; });
+    results.forEach(r => { r.change = r.after - r.origin; });
   }
 
   // ---- the machine, withdrawn.
@@ -298,7 +306,7 @@ export function runElection(e: ElectionInput): ElectionResult {
         r.after += take; handed += take;
       }
     }
-    results.forEach(r => { r.change = r.after - r.before; });
+    results.forEach(r => { r.change = r.after - r.origin; });
   }
 
   // ---- the machines, defunded.
@@ -333,7 +341,7 @@ export function runElection(e: ElectionInput): ElectionResult {
       const give = Math.min(pool - handed, cap - r.after);
       r.after += give; handed += give;
     }
-    results.forEach(r => { r.change = r.after - r.before; });
+    results.forEach(r => { r.change = r.after - r.origin; });
   }
 
   results.sort((a, b) => b.after - a.after);
@@ -351,11 +359,11 @@ export function runElection(e: ElectionInput): ElectionResult {
   const formed = total >= MAJORITY;
 
   const verdict: ElectionResult['verdict'] =
-    !formed ? (playerSeats < (e.seats[PLAYER] ?? 191) - 30 ? 'defeated' : 'hung')
+    !formed ? (playerSeats < ((e.seatsAt2026 ?? e.seats)[PLAYER] ?? 191) - 30 ? 'defeated' : 'hung')
     : total >= 315 || playerSeats >= MAJORITY ? 'landslide' : 'returned';
   const historic = playerSeats >= 300;
 
-  const swingSeats = playerSeats - (e.seats[PLAYER] ?? 191);
+  const swingSeats = playerSeats - ((e.seatsAt2026 ?? e.seats)[PLAYER] ?? 191);
   const soloMajority = playerSeats >= MAJORITY;
   const headline =
     historic ? 'A supermajority, and a realignment'

@@ -99,8 +99,14 @@ export class BrowserGame {
   setHistory: number[] = [];
   private rng: () => number;
 
+  /** The February 2026 result, frozen. `ps.seats` is the LIVE House and moves
+   *  when members defect, so the original has to be kept or every comparison on
+   *  the end screen silently rebases itself. */
+  seats2026: Record<string, number>;
+
   constructor(coalitionId: string, seed = 20260201) {
     this.ps = formCoalition(cfg, coalitionId);
+    this.seats2026 = { ...this.ps.seats };
     this.opinion = { ...this.ps.opinion };
     this.flags = new Set((cat._meta as any).initial_flags ?? []);
     this.rng = makeRng(seed);
@@ -456,6 +462,7 @@ export class BrowserGame {
     const realGrowth = (Math.pow(this.state.rgdp / start.rgdp, 1 / Math.max(yrs, 0.5)) - 1) * 100;
     return runElection({
       seats: this.ps.seats,
+      seatsAt2026: this.seats2026,
       coalition: this.ps.coalition.filter(p => !gov.walked.includes(p)),
       opinion: this.opinion,
       approval: this.approval,
