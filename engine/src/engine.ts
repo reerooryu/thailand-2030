@@ -132,7 +132,7 @@ export function step(input: StepInput): State {
     (1 - p.reformDecay) * s.reformStock + p.reformAdoption * policy.reformIndex;
 
   // sovereign risk premium on last quarter's debt stock
-  const riskPremium = riskPremiumOf(s.debtGdp, p);
+  const riskPremium = riskPremiumOf(s.debtGdp, p) + (policy.ratingPremium ?? 0);
 
   const invRate =
     p.invRateConst +

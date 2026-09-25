@@ -106,6 +106,22 @@ function yoySeries() {
 
 /* ---------- main render ---------- */
 
+/* Sovereign ratings: three agencies, one small box. Outlook as an arrow. */
+function ratingLabel(a) {
+  return (a.name === "Moody's" ? ['Baa3', 'Baa2', 'Baa1', 'A3'] : ['BBB-', 'BBB', 'BBB+', 'A-'])[a.notch];
+}
+function ratingsBox() {
+  const out = { '-1': ['▼', 'down', 'negative'], '0': ['', 'muted', 'stable'], '1': ['▲', 'up', 'positive'] };
+  return `<div class="ratings" title="Sovereign credit ratings. Bounded A- to BBB-, the last investment grade.">
+    ${g.agencies.map(a => {
+      const [arrow, cls, word] = out[a.outlook];
+      return `<span class="rt${a.notch <= 1 ? ' low' : a.notch >= 3 ? ' high' : ''}"
+        title="${a.name}: ${ratingLabel(a)}, outlook ${word}">
+        <span class="rt-a">${a.name}</span> <b>${ratingLabel(a)}</b>${arrow ? ` <span class="${cls}">${arrow}</span>` : ''}</span>`;
+    }).join('')}
+  </div>`;
+}
+
 function render() {
   const s = g.state;
   const hist = g.history.slice(-10);
@@ -159,6 +175,7 @@ function render() {
         <span class="${s.riskPremium > 0.05 ? 'down' : 'muted'}">${s.riskPremium > 0.05
           ? `risk premium +${fmt(s.riskPremium, 2)}pp` : 'no risk premium'}</span>
         <span class="muted">90</span></div>
+      ${ratingsBox()}
     </div>
     ${tile('Private investment', fmt(s.invRate), '% of GDP', '31.2% in 1996 · never recovered',
            hist.map(h => h.invRate), 'var(--series-3)')}
@@ -489,6 +506,8 @@ function toast(msg, kind) {
 $('#end-turn').onclick = () => {
   const r = g.endTurn();
   if (!r.ok) { toast(r.msg, 'warning'); return; }
+  (g.lastRatingActions || []).forEach(t => toast(t, /downgrade|negative/.test(t) ? 'warning' : 'info'));
+  if (r.snap) { showEnd(null, true); return; }
   if (r.fallen) { showEnd(r.walked); return; }
   if (g.quarter >= 16) { showEnd(); return; }
   g.openTurn();
@@ -496,7 +515,7 @@ $('#end-turn').onclick = () => {
   if (g.pending.length) toast('News requires your attention', 'warning');
 };
 
-function showEnd(walked) {
+function showEnd(walked, snap = false) {
   $('#toasts').innerHTML = '';
   const s = g.state;
   const start = g.history[3];
@@ -515,6 +534,9 @@ function showEnd(walked) {
     ? `<h1 class="title fallen">The government has fallen</h1>
        <p class="sub"><b>${walked.join(' and ')}</b> withdrew in ${g.label}, taking the coalition below 251.
        You leave office ${g.turnsLeft} quarter${g.turnsLeft === 1 ? '' : 's'} early. Someone else inherits the arithmetic.</p>`
+    : snap
+    ? `<h1 class="title">Snap election · ${g.label}</h1>
+       <p class="sub">You dissolved the House ${g.turnsLeft} quarter${g.turnsLeft === 1 ? '' : 's'} early. The country votes on what you have done so far.</p>`
     : `<h1 class="title">March 2030</h1>
        <p class="sub">The House elected in February 2026 has expired. The country votes.</p>`;
 
@@ -536,7 +558,7 @@ function showEnd(walked) {
       ${moved ? '<p class="el-note">Members changed party during the term. '
         + 'Changes are measured against 2026.</p>' : ''}
       <table class="el-table">
-        <tr><th>Party</th><th>2026</th>${moved ? '<th>Dissolution</th>' : ''}<th>2030</th><th></th><th>After the count</th></tr>
+        <tr><th>Party</th><th>2026</th>${moved ? '<th>Dissolution</th>' : ''}<th>${snap ? g.label.slice(0, 4) : '2030'}</th><th></th><th>After the count</th></tr>
         ${elec.results.map(r => `<tr class="${r.inGov ? 'was-gov' : ''}">
           <td class="el-p">${r.party}${r.inGov ? ' <span class="gov-chip">gov</span>' : ''}</td>
           <td class="el-n muted">${r.origin}</td>
@@ -558,8 +580,9 @@ function showEnd(walked) {
 
   w.innerHTML = head + electionBlock + `
     <div class="endgrid">
-      ${endTile('Headline', Math.round(h).toLocaleString() + ' USD', 'IMF baseline was 9,092',
-                h >= 9092 ? 'good' : 'critical')}
+      ${endTile('Headline', Math.round(h).toLocaleString() + ' USD',
+                `IMF baseline ${g.quarter < 16 ? 'for ' + g.label : 'was'} ${g.baseline().toLocaleString()}`,
+                h >= g.baseline() ? 'good' : 'critical')}
       ${endTile('Legacy', fmt(s.potentialGrowthYoy, 2) + '%', 'potential growth you leave behind',
                 s.potentialGrowthYoy >= 2.4 ? 'good' : 'warning')}
       ${endTile('Debt', fmt(s.debtGdp) + '% of GDP',
@@ -591,6 +614,9 @@ function showEnd(walked) {
         <table class="stats">
           ${row('Gross debt', fmt(s.debtGdp) + '%', `of GDP · ceiling ${g.debtCeiling}%`,
                 s.debtGdp >= g.debtCeiling ? 'critical' : '')}
+          ${row('Credit ratings', g.agencies.map(ratingLabel).join(' / '), 'S&P / Fitch / Moody\'s',
+                g.agencies.some(a => a.notch === 0) ? 'critical' : g.agencies.some(a => a.notch < 2) ? 'warning'
+                : g.agencies.some(a => a.notch > 2) ? 'good' : '')}
           ${row('Risk premium', '+' + fmt(s.riskPremium, 2) + 'pp', 'over the base borrowing rate',
                 s.riskPremium > 0.4 ? 'critical' : s.riskPremium > 0.05 ? 'warning' : '')}
           ${row('Primary balance', (s.primaryBalance >= 0 ? '+' : '') + fmt(s.primaryBalance, 2) + '%',
@@ -615,7 +641,7 @@ function showEnd(walked) {
     </div>
 
     <div class="verdict">
-      <div class="verdict-h">Assessment · Second Anutin Cabinet (2026–2030)</div>
+      <div class="verdict-h">Assessment · Second Anutin Cabinet (2026–${g.label.slice(0, 4)})</div>
       ${renderIdeology(g.ideology())}
       ${verdictSections(g, s, realCagr, setChg, gov).map(v => `
         <div class="vsec">
@@ -643,7 +669,8 @@ function verdictSections(g, s, realCagr, setChg, gov) {
   const start = g.history[3];
   const pick = (bands, v) => (bands.find(b => v >= b.min) || bands[bands.length - 1]);
   const h = g.headline();
-  const gap = h - 9092;
+  const base = g.baseline();
+  const gap = h - base;
   const n = x => Math.round(x).toLocaleString();
   const pb = fmt(Math.abs(s.primaryBalance), 2);
   const rs = fmt(s.reformStock, 0);
@@ -662,7 +689,7 @@ function verdictSections(g, s, realCagr, setChg, gov) {
       `${n(h)} dollars per head, ${n(gap)} above the IMF baseline. A clear beat, if not a dramatic one, and ` +
       `beating the Fund's Thailand number is not routine. The 15,000 target was always a campaign number.` },
     { min: -80, tag: 'at baseline', t:
-      `${n(h)} dollars per head against a baseline of 9,092: almost exactly what the IMF expected from any ` +
+      `${n(h)} dollars per head against a baseline of ${n(base)}: almost exactly what the IMF expected from any ` +
       `government at all. Nothing to show at the top line. Judge the term on what sits underneath it.` },
     { min: -300, tag: 'behind', t:
       `${n(h)} dollars per head, ${n(-gap)} below the do-nothing projection. A narrow miss, not a catastrophe. ` +
@@ -905,7 +932,7 @@ function verdictClose(g, s, gov, elec) {
   // Not a single threshold. A record is the whole picture: capacity, the
   // investment rate, the reform stock, and whether the level beat the Fund.
   const marks = [s.potentialGrowthYoy >= 2.65, s.invRate >= 19.5,
-                 s.reformStock >= 55, g.headline() >= 9092].filter(Boolean).length;
+                 s.reformStock >= 55, g.headline() >= g.baseline()].filter(Boolean).length;
   const reformed = marks >= 3;
   const solvent = s.debtGdp < g.debtCeiling;
   const v = elec ? elec.verdict : null;

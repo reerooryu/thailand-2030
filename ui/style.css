@@ -326,3 +326,10 @@ details.whip td{padding:2px 0;vertical-align:baseline}
 /* Seat count beside each party in the politics panel, with the change against
    February 2026 — otherwise a mid-term defection is invisible until the count. */
 .p-seats{font-size:11px;color:var(--ink-3);margin-left:6px;font-variant-numeric:tabular-nums}
+
+/* sovereign ratings strip, inside the debt tile */
+.ratings{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;font-size:11px}
+.ratings .rt{border:1px solid var(--line);border-radius:4px;padding:2px 6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ratings .rt-a{color:var(--ink-3)}
+.ratings .rt.low{border-color:var(--critical)}
+.ratings .rt.high{border-color:var(--good)}

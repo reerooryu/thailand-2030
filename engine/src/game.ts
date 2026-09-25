@@ -16,6 +16,7 @@ import {
   type GameEvent, type EventOption, type Scheduled,
 } from './events.js';
 import { step, reformEffort } from './engine.js';
+import { initialAgencies, targetNotch, review, ratingPremium, type Agency } from './ratings.js';
 import { BASE } from './params.js';
 import { applyGains } from './playability.js';
 import { loadPanel, col } from './panel.js';
@@ -41,6 +42,10 @@ export interface LogEntry { quarter: number; kind: 'card' | 'event' | 'blocked' 
 const BASELINE_ALIGN = 1.0385;
 
 export class Game {
+  /** S&P, Fitch, Moody's. See ratings.ts. */
+  agencies: Agency[] = initialAgencies();
+  /** Set when an event option dissolves the House. */
+  snap = false;
   cfg: CoalitionCfg; cat: PolicyCatalogue; events: GameEvent[];
   ps: PoliticalState;
   opinion: Record<string, number>;
@@ -148,6 +153,8 @@ export class Game {
   private syncStateFlags() {
     if (this.approval > 50) this.flags.add('approval_over_50');
     else this.flags.delete('approval_over_50');
+    if (this.approval >= 55) this.flags.add('approval_over_55');
+    else this.flags.delete('approval_over_55');
     if ((this.opinion["People's"] ?? 0) > 60) this.flags.add('peoples_opinion_over_60');
     else this.flags.delete('peoples_opinion_over_60');
   }
@@ -264,6 +271,7 @@ export class Game {
         this.ps.seats[party] = Math.max(0, this.ps.seats[party] + d);
       }
     }
+    if (opt.snapElection) this.snap = true;
     const coalitionChange = opt.coalitionChange;
     if (coalitionChange) {
       const leaving = new Set(coalitionChange.leave ?? []);
@@ -353,6 +361,7 @@ export class Game {
       humanCapital: (this.stance.humanCapital ?? 0) * ramp,
       formalisation: (this.stance.formalisation ?? 0) * ramp,
       savingsRate: (this.stance.savingsRate ?? 0) * ramp,
+      ratingPremium: ratingPremium(this.agencies),
     };
     const params: Params = { ...this.params,
       // Disbursement is a RATE, not a multiplier: 1.0 means every baht of the
@@ -371,6 +380,13 @@ export class Game {
     this.quarter++;
     this.approvalDrift();
     this.actionsThisTurn = 0;
+    const hs = this.history, st = hs[hs.length - 1], y = hs[hs.length - 5] ?? hs[0];
+    const r = review(this.agencies, targetNotch({
+      debtGdp: st.debtGdp, ceiling: this.debtCeiling, primaryBalance: st.primaryBalance,
+      realGrowthYoy: (st.rgdp / y.rgdp - 1) * 100, reformStock: st.reformStock,
+      approval: this.approval }));
+    this.agencies = r.agencies;
+    for (const text of r.actions) this.log.push({ quarter: this.quarter - 1, kind: 'note', text });
     return this.state;
   }
 

@@ -8,6 +8,7 @@ import { step, nextPeriod, reformEffort } from './engine.js';
 import { runElection } from './election.js';
 import { evaluate as evaluateAchievements } from './achievements.js';
 import { classify } from './ideology.js';
+import { initialAgencies, targetNotch, review, ratingPremium, type Agency } from './ratings.js';
 import { BASE } from './params.js';
 import { formCoalition, band, type CoalitionCfg, type PoliticalState } from './politics.js';
 import {
@@ -104,6 +105,13 @@ export class BrowserGame {
    *  the end screen silently rebases itself. */
   seats2026: Record<string, number>;
 
+  /** S&P, Fitch, Moody's. Reviewed every quarter; see ratings.ts. */
+  agencies: Agency[] = initialAgencies();
+
+  /** Set when the PM dissolves the House mid-term. The quarter still runs; the
+   *  count happens at its end and the run ends there, like a collapse does. */
+  snap = false;
+
   constructor(coalitionId: string, seed = 20260201) {
     this.ps = formCoalition(cfg, coalitionId);
     this.seats2026 = { ...this.ps.seats };
@@ -186,6 +194,8 @@ export class BrowserGame {
   private syncStateFlags() {
     if (this.approval > 50) this.flags.add('approval_over_50');
     else this.flags.delete('approval_over_50');
+    if (this.approval >= 55) this.flags.add('approval_over_55');
+    else this.flags.delete('approval_over_55');
     if ((this.opinion["People's"] ?? 0) > 60) this.flags.add('peoples_opinion_over_60');
     else this.flags.delete('peoples_opinion_over_60');
   }
@@ -268,6 +278,7 @@ export class BrowserGame {
         this.opinion[party] = Math.max(0, Math.min(100, Math.round(this.opinion[party] + delta)));
       }
     }
+    this.syncStateFlags();   // approval moved: re-grade any approval-gated option on screen
     this.log.push({ quarter: this.quarter, kind: 'card',
       text: `${card.name} — ${opt.label}` + (discounted ? ` [×${opt.dependsOn!.withoutFactor}]` : '') });
     return { ok: true, msg: r.executive ? 'Executive action' : `Passed by ${r.result!.margin}`,
@@ -301,6 +312,7 @@ export class BrowserGame {
         .map(([p, d]) => `${p} ${d}`).join(', ');
       if (lost) this.log.push({ quarter: this.quarter, kind: 'note', text: `Seats change hands — ${lost}` });
     }
+    if ((opt as any).snapElection) this.snap = true;
     const coalitionChange = opt.coalitionChange;
     if (coalitionChange) {
       const leaving = new Set(coalitionChange.leave ?? []);
@@ -362,7 +374,7 @@ export class BrowserGame {
         Math.max(0, Math.min(100, this.opinion.Others + e.institutionalSupport)));
   }
 
-  endTurn(): { ok: boolean; msg?: string; fallen?: boolean; walked?: string[] } {
+  endTurn(): { ok: boolean; msg?: string; fallen?: boolean; walked?: string[]; snap?: boolean } {
     if (this.pending.length) return { ok: false, msg: 'Resolve the news first' };
     this.censusProposals();
     this.syncStateFlags();
@@ -383,6 +395,7 @@ export class BrowserGame {
       humanCapital: (this.stance.humanCapital ?? 0) * ramp,
       formalisation: (this.stance.formalisation ?? 0) * ramp,
       savingsRate: (this.stance.savingsRate ?? 0) * ramp,
+      ratingPremium: ratingPremium(this.agencies),
     };
     const exog: Exog = { worldDemandGrowth: 3.0, globalActivity: 10.0,
                          energyInflation: 1.5 + (this.rng() - 0.5) * 3, shock: 0 };
@@ -414,9 +427,36 @@ export class BrowserGame {
     this.setHistory.push(this.set);
     this.quarter++;
     this.actionsThisTurn = 0;
+    this.reviewRatings();
+    // A dissolution pre-empts a collapse: the House is gone before anyone can walk.
+    if (this.snap) return { ok: true, snap: true };
     const gov = this.government();
     if (gov.fallen) return { ok: true, fallen: true, walked: gov.walked };
     return { ok: true };
+  }
+
+  private reviewRatings() {
+    const h = this.history, s = h[h.length - 1], y = h[h.length - 5] ?? h[0];
+    const target = targetNotch({
+      debtGdp: s.debtGdp, ceiling: this.debtCeiling, primaryBalance: s.primaryBalance,
+      realGrowthYoy: (s.rgdp / y.rgdp - 1) * 100, reformStock: s.reformStock,
+      approval: this.approval,
+    });
+    const r = review(this.agencies, target);
+    this.agencies = r.agencies;
+    for (const text of r.actions) this.log.push({ quarter: this.quarter - 1, kind: 'rating', text });
+    this.lastRatingActions = r.actions;
+  }
+  lastRatingActions: string[] = [];
+
+  /** The IMF path for GDP per head, by game quarter. 9,092 at the 2030 count;
+   *  a term that ends early is measured against where the Fund expected
+   *  Thailand to be at that date, not in 2030. */
+  baseline(q = this.quarter): number {
+    const path = [8105.07, 8169.81, 8392.11, 8730.33, 9092.48];   // 2026..2030
+    const t = Math.max(0, Math.min(16, q)) / 4;
+    const i = Math.min(3, Math.floor(t));
+    return Math.round(path[i] + (path[i + 1] - path[i]) * (t - i));
   }
 
   headline(): number {
@@ -479,7 +519,7 @@ export class BrowserGame {
       opinion: this.opinion,
       approval: this.approval,
       headline: this.headline(),
-      baseline: 9092,
+      baseline: this.baseline(),
       realGrowth,
       potentialGrowth: this.state.potentialGrowthYoy,
       setChange: (this.set / 1621.62 - 1) * 100,

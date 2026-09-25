@@ -146,6 +146,7 @@ function play(coalition: string, moves: Move[], events: EventChoices, obj: Objec
   const st = g.history[3];
   s.realGrowth = (Math.pow(g.state.rgdp / st.rgdp, 1 / (QUARTERS / 4)) - 1) * 100;
   s.flags = g.flags;
+  s.ratings = g.agencies.map(a => `${a.name} ${['BBB-','BBB','BBB+','A-'][a.notch]}${a.outlook < 0 ? '(-)' : a.outlook > 0 ? '(+)' : ''}`).join('  ');
   // The SET index lives in the browser host, not here. Its fundamental is a
   // nominal-GDP anchor with a beta above one, and the sentiment term decays at
   // 0.72 a quarter, so by 2030Q1 the fundamental is almost the whole number.
@@ -277,6 +278,7 @@ for (const c of coalitions) {
   console.log(`  headline ${best.headline.toFixed(0)}  legacy ${best.legacy.toFixed(2)}%  ` +
               `debt ${best.debtGdp.toFixed(1)}% / ceiling ${best.ceiling}  ` +
               `inv ${best.invRate.toFixed(1)}%  approval ${best.approval}`);
+  console.log(`  ratings  ${(best as any).ratings}`);
   console.log('  the term, in order:');
   let lastQ = -1;
   for (const d of best.trace) {

@@ -38,6 +38,9 @@ export interface EventOption {
   seatShift?: Record<string, number>;
   /** A crisis can change the governing coalition without changing the House. */
   coalitionChange?: { join?: string[]; leave?: string[] };
+  /** Dissolve the House: the count happens at the end of this quarter and the
+   *  run ends there. */
+  snapElection?: boolean;
   /** Shown for colour, never selectable. Some choices are not choices. */
   unavailable?: boolean;
   opinion?: Record<string, number>;
