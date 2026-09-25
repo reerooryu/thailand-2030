@@ -447,9 +447,10 @@ function renderConstitution() {
       const backers = t ? t.backers.map(b => partyPill(b)).join('') : '<span class="muted">current text</span>';
       const isProp = p.proposal && p.proposal.index === i;
       const verdict = t ? `<span class="cs-v ${t.passes ? 'up' : 'down'}" title="${t.house} MPs + ${t.senate} senators. Needs 351, with at least 67 senators.">${t.passes ? '✓' : '✗'} ${t.house}+${t.senate}</span>` : '';
-      return `<button class="cs-opt${sel ? ' sel' : ''}${pos.score < 0 ? ' regress' : ''}" data-part="${p.id}" data-i="${i}"
+      return `<button class="cs-opt${sel ? ' sel' : ''}${pos.sgLite ? ' sg' : ''}" data-part="${p.id}" data-i="${i}"
           ${v.editing ? '' : 'disabled'} title="${pos.text}">
           <div class="cs-ol">${pos.label}${isProp ? ' ' + partyPill(p.proposal.party, ' prop') + '<span class="cs-prop">proposal</span>' : ''} ${verdict}</div>
+          ${pos.sgLite ? `<div class="cs-sg">Singapore-lite${pos.halfStrength ? ' · <span class="down">half strength without civil service reform and anti-corruption enforcement</span>' : ''}</div>` : ''}
           <div class="cs-ot">${pos.text}</div>
           <div class="cs-pills">${backers}</div>
         </button>`;
@@ -462,6 +463,7 @@ function renderConstitution() {
   const prCls = pr >= bb.revolt ? 'critical' : pr >= bb.warning ? 'warning' : 'good';
   const meters = `<div class="cs-meters">
       <span>Reform score <b>${v.score}</b></span>
+      ${v.sg ? `<span>Singapore-lite <b class="sg-t">${v.sg}</b><span class="muted"> / 3</span></span>` : ''}
       <span>Bhumjaithai tolerance <b class="${prCls === 'good' ? '' : 'down'}">${pr}</b><span class="muted"> / warning ${bb.warning}, revolt ${bb.revolt}</span></span>
       ${v.stage === 'ratified' || v.stage === 'failed' ? '' :
         `<span>Referendum projection <b class="${v.referendum >= 50 ? 'up' : 'down'}">${v.referendum}%</b></span>`}
@@ -1022,7 +1024,12 @@ function verdictSections(g, s, realCagr, setChg, gov) {
       ? { tag: 'untouched', t: `Sixty per cent voted for a new constitution in February 2026. This cabinet never tabled the amendment to start it.` }
       : { tag: 'unfinished', t: `The rewrite was still ${cv.stage === 'drafting' ? 'in drafting' : cv.stage === 'final' ? 'waiting for its final referendum' : 'at the principles stage'} when the term ended. It passes to the next parliament.` };
 
-  if (cv.stage === 'ratified' && g.flags.has('constitution_paternal'))
+  if (cv.stage === 'ratified' && g.flags.has('constitution_sg'))
+    constitution.t += g.flags.has('constitution_sg_competent')
+      ? ' Its Singapore-lite provisions sit on a civil service that was cut and an anti-corruption agency with teeth, so the stronger state has something to deliver with.'
+      : ' Its Singapore-lite provisions sit on the old civil service and the old networks. The state got the control. The competence did not come with it.';
+  if (cv.stage === 'ratified' && g.flags.has('constitution_sg')) constitution.tag = 'singapore-lite';
+  else if (cv.stage === 'ratified' && g.flags.has('constitution_paternal'))
     constitution.t += ' It also traded rights for order: the new chapter gives the state more room over assembly and speech than the one it replaced.';
 
   return [

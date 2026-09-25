@@ -10,7 +10,7 @@ import { evaluate as evaluateAchievements } from './achievements.js';
 import { classify } from './ideology.js';
 import {
   initialConstitution, tally, tallyClause, keepIndex, reformScore, backbenchPressure,
-  referendumYes, listSeats, type ConstitutionCfg, type ConstitutionState, type Whip,
+  referendumYes, listSeats, sgCount, blockVote, type ConstitutionCfg, type ConstitutionState, type Whip,
 } from './constitution.js';
 import { initialAgencies, targetNotch, review, ratingPremium, type Agency } from './ratings.js';
 import { BASE } from './params.js';
@@ -473,11 +473,13 @@ export class BrowserGame {
         proposal: p.proposal && pt(p.proposal.party)
           ? { party: p.proposal.party, index: p.positions.findIndex(x => x.id === p.proposal!.position) } : null,
         positions: p.positions.map((pos, i) => ({
-          id: pos.id, label: pos.label, text: pos.text, score: pos.score,
+          id: pos.id, label: pos.label, text: pos.text, score: pos.score, sgLite: !!pos.sgLite,
+          halfStrength: !!pos.competentIf && !pos.competentIf.every(f => this.flags.has(f)),
           tally: i === keepIndex(p) ? null : tallyClause(p, i, w),
         })),
       })),
       score: reformScore(conCfg, pkg),
+      sg: sgCount(conCfg, pkg),
       pressure: backbenchPressure(conCfg, pkg),
       backbench: conCfg.backbench,
       referendum: referendumYes(conCfg, pkg, this.approval),
@@ -571,16 +573,23 @@ export class BrowserGame {
       say(`Final referendum rejects the new constitution, ${yes}% yes.`);
       return { ok: false, msg: `Referendum lost, ${yes}% yes` };
     }
+    const competent = (fs?: string[]) => (fs ?? []).every(f => this.flags.has(f));
     for (const p of conCfg.parts) {
       const pos = p.positions[pkg[p.id]];
-      if (pos.effects) this.apply(pos.effects as PolicyEffects);
+      const fx = pos.competentIf && !competent(pos.competentIf) ? pos.withoutEffects : pos.effects;
+      if (fx) this.apply(fx as PolicyEffects);
       this.bumpOpinion(pos.opinion);
       for (const f of pos.sets ?? []) this.flags.add(f);
     }
     const score = reformScore(conCfg, pkg);
     this.flags.add('constitution_ratified');
     if (score >= 6) this.flags.add('constitution_reformist');
-    if (score <= 2) this.flags.add('constitution_cosmetic');
+    const sg = sgCount(conCfg, pkg);
+    if (score <= 2 && sg === 0) this.flags.add('constitution_cosmetic');
+    if (sg >= 2) this.flags.add('constitution_sg');
+    if (sg >= 3) this.flags.add('constitution_sg_all');
+    if (sg >= 2 && competent(['civil_service_shrinking', 'anticorruption_enforcement']))
+      this.flags.add('constitution_sg_competent');
     this.con = { ...cur, stage: 'ratified', finalYes: yes, ratifiedQuarter: this.quarter };
     say(`The new constitution is ratified, ${yes}% yes.`);
     return { ok: true, msg: `Ratified, ${yes}% yes` };
@@ -673,6 +682,8 @@ export class BrowserGame {
       baseline: this.baseline(),
       listSeats: this.con.stage === 'ratified' && (this.con.ratifiedQuarter ?? 99) <= conCfg.electoralDeadlineQuarter
         ? listSeats(conCfg, this.con.adopted!) : 100,
+      blockVote: this.con.stage === 'ratified' && (this.con.ratifiedQuarter ?? 99) <= conCfg.electoralDeadlineQuarter
+        && blockVote(conCfg, this.con.adopted!),
       realGrowth,
       potentialGrowth: this.state.potentialGrowthYoy,
       setChange: (this.set / 1621.62 - 1) * 100,

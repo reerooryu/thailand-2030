@@ -307,7 +307,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'paper_tiger',
     name: 'Paper Tiger',
-    requirement: 'Ratify a new constitution with a reform score of 2 or less.',
+    requirement: 'Ratify a new constitution with a reform score of 2 or less and no Singapore-lite positions.',
     flavour: 'Sixty per cent voted for a new constitution. They got a new cover on the old one.',
     rarity: 'common',
     test: c => has(c, 'constitution_cosmetic'),
@@ -315,10 +315,18 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'asian_values',
     name: 'Asian Values',
-    requirement: 'Ratify a new constitution with the paternalist rights chapter.',
+    requirement: 'Ratify a constitution with all three Singapore-lite positions: multi-member constituencies, a delivery unit and the paternalist rights chapter.',
     flavour: 'Order, harmony, responsible expression. Singapore took fifty years and a single party to make it work.',
+    rarity: 'rare',
+    test: c => has(c, 'constitution_sg_all'),
+  },
+  {
+    id: 'singapore_lite',
+    name: 'Singapore-Lite',
+    requirement: 'Ratify at least two Singapore-lite positions with the civil service cut and anti-corruption enforcement in place.',
+    flavour: 'A state that delivers, and a public that is asked to trust it. The trust was earned first, which is the part other governments skip.',
     rarity: 'uncommon',
-    test: c => has(c, 'constitution_paternal') && has(c, 'constitution_ratified'),
+    test: c => has(c, 'constitution_sg_competent'),
   },
 ];
 

@@ -21,6 +21,14 @@ export interface Position {
   opinion?: Record<string, number>;
   sets?: string[];
   listSeats?: number;
+  /** Singapore-lite: strengthens the state rather than opening it. */
+  sgLite?: boolean;
+  /** Multi-member, winner-takes-all slates at the next election. */
+  blockVote?: boolean;
+  /** Flags that must all be set for `effects` to apply in full. */
+  competentIf?: string[];
+  /** Applied instead of `effects` when `competentIf` is not met. */
+  withoutEffects?: Record<string, number>;
 }
 export interface Part {
   id: string; name: string; bjtWeight: number;
@@ -127,10 +135,12 @@ export function backbenchPressure(cfg: ConstitutionCfg, pkg: Record<string, numb
  *  a package too timid to be worth the trouble loses reformist voters. */
 export function referendumYes(cfg: ConstitutionCfg, pkg: Record<string, number>, approval: number): number {
   const s = reformScore(cfg, pkg);
-  const paternal = cfg.parts.some(p => p.positions[pkg[p.id]].id === 'paternal');
+  const sg = sgCount(cfg, pkg);
   let yes = 52 + (approval - 50) * 0.3 + Math.min(Math.max(s, 0), 6) * 1.5;
-  if (s < 2) yes -= 5;
-  if (paternal) yes -= 4;
+  // Too timid to be worth the trouble. A Singapore-lite package is not timid,
+  // just pointed the other way, and pays its own price below.
+  if (s < 2 && sg === 0) yes -= 5;
+  yes -= 2 * sg;
   return Math.round(Math.max(20, Math.min(80, yes)) * 10) / 10;
 }
 
@@ -138,4 +148,14 @@ export function referendumYes(cfg: ConstitutionCfg, pkg: Record<string, number>,
 export function listSeats(cfg: ConstitutionCfg, pkg: Record<string, number>): number {
   const p = cfg.parts.find(x => x.id === 'electoral');
   return (p && p.positions[pkg[p.id]].listSeats) || 100;
+}
+
+/** How many Singapore-lite positions the package takes. */
+export function sgCount(cfg: ConstitutionCfg, pkg: Record<string, number>): number {
+  return cfg.parts.filter(p => p.positions[pkg[p.id]].sgLite).length;
+}
+
+/** True if the package moves to multi-member, winner-takes-all constituencies. */
+export function blockVote(cfg: ConstitutionCfg, pkg: Record<string, number>): boolean {
+  return cfg.parts.some(p => p.positions[pkg[p.id]].blockVote);
 }
