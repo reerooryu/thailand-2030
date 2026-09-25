@@ -62,6 +62,8 @@ export const PROVENANCE: Record<keyof Params, ParamSource> = {
   tfpTrendGrowth: 'estimated',
   labourGrowth: 'estimated',
   infraGestation: 'literature',
+  infraStagedShare: 'prior',
+  infraStagedLag: 'prior',
   infraTfpBonus: 'prior',
   infraBaselineShare: 'estimated',
   debtCeiling: 'literature',
@@ -183,6 +185,11 @@ export const BASE: Params = {
   tfpTrendGrowth: 0.52,     // ~2.1%/yr, the 2022-26 residual average
   labourGrowth: -0.09,      // ~-0.35%/yr, working-age population decline
   infraGestation: 20,       // 5 years, midpoint of the 3-7 year range
+  // Long projects open in sections: the first stretch of line, the first
+  // terminal, the first reactor site works. A share of above-baseline capex
+  // reaches the capital stock after two years rather than five.
+  infraStagedShare: 0.35,
+  infraStagedLag: 8,
   infraTfpBonus: 0.010,
   infraBaselineShare: 6.1,
   debtCeiling: 70,

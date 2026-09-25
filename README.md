@@ -33,6 +33,8 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 - **Order matters.** Civil service reform without digital government first loses its execution gain. Super Licence half-works. Negative income tax is locked until VAT moves.
 - **The establishment bites back.** Anger it, and budget execution falls. Money you appropriated doesn't arrive.
 - **The bond market charges.** The risk premium hits the next government and every firm borrowing alongside it.
+- **Megaprojects open in stages.** 35% of public capital spending above the baseline programme reaches the capital stock after two years; the rest takes the full four. Build early and some of it counts before 2030.
+- **OECD accession locks reform in.** While accession is accelerating, each matching domestic law (Super Licence, Digital Government, civil service reform, anti-corruption enforcement, justice reform, the Revenue package) closes a chapter. Each closed chapter raises reform capacity by 0.02 and adds to the FDI signal.
 - **The agencies are watching.** S&P, Fitch and Moody's start at BBB+ / BBB+ / Baa1 and can move between A- and BBB-. Breaking or raising the debt ceiling, deep deficits and weak growth push them down; a downgrade adds to the risk premium.
 - **You can dissolve the House.** If your own members start leaving and approval is at 55% or more, you can call a snap election instead of waiting for the government to fall. The term ends at that count.
 
@@ -48,6 +50,7 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/politics.ts` | Coalition formation, whip counts, crossbench defection. |
 | `engine/src/election.ts` | The March 2030 count and coalition talks. |
 | `engine/src/achievements.ts` | 26 end-of-term achievements. None feed back. |
+| `engine/src/oecd.ts` | OECD accession chapters and what closing them does. |
 | `engine/src/ratings.ts` | Sovereign credit ratings: S&P, Fitch, Moody's. |
 | `engine/src/constitution.ts` | The new constitution: four steps, clause votes, referendums. |
 | `engine/src/ideology.ts` | Reads your economic position off the budget. |
