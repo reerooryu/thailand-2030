@@ -64,9 +64,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'thailand_number_one',
     name: 'Thailand Number One!',
     requirement: 'Real growth above 3%, potential growth above 3%, private investment above 20% and the SET above 2,500.',
-    flavour: 'Every dial pointing the right way at once, which has not happened to this economy since the ' +
-             'nineties. The cycle and the supply side improving together is the combination Thai policy has ' +
-             'been chasing, unsuccessfully, for a quarter of a century.',
+    flavour: 'Every dial pointing up at once, for the first time since the nineties. Thai policy has chased this for a quarter of a century.',
     rarity: 'legendary',
     test: c => atLeast(c.realGrowth, 3) && atLeast(c.potentialGrowth, 3) &&
                atLeast(c.invRate, 20, 1) && atLeast(c.set, 2500, 0),
@@ -75,10 +73,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'five_figures',
     name: 'Into Five Figures',
     requirement: 'Finish the term above USD 10,000 of GDP per capita.',
-    flavour: 'Ten thousand dollars a head. Thailand reached upper-middle income in 2011 and has climbed the ' +
-             'same slope ever since; this pulls several years of it forward. It takes an economy run hot and a ' +
-             'balance sheet spent to the limit, so read the output gap before celebrating — some of this is ' +
-             'borrowed from a decade that has not arrived.',
+    flavour: 'Ten thousand dollars a head, years ahead of the trend since 2011. Check the output gap: some of it is borrowed from the next decade.',
     rarity: 'legendary',
     // Verified reachable, and only just: the optimiser's best lines are 10,034
     // (Pheu Thai) and 10,027 (Democrat), against 9,701 for the conservative
@@ -90,11 +85,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'sufficiency_economy',
     name: 'Sufficiency Economy',
-    requirement: 'Complete the term without raising the debt ceiling — and finish inside it.',
-    flavour: 'Seventy per cent was the line, and the government finished under it without once asking ' +
-             'parliament to move it. The philosophy it is named after is about moderation and resilience ' +
-             'rather than restraint for its own sake — whether this term honoured that or simply underspent ' +
-             'depends on what was built with the room.',
+    requirement: 'Complete the term without raising the debt ceiling, and finish inside it.',
+    flavour: 'Seventy per cent was the line, and it held without a vote to move it. Moderation, or underspending? Depends what was built.',
     rarity: 'uncommon',
     // Declining to raise the ceiling is not the same as respecting it. A term
     // that left the limit at 70 and finished at 79 did not practise restraint,
@@ -105,13 +97,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'said_and_done',
     name: 'Said and Done!',
-    requirement: 'Face down the southern provinces and force the Land Bridge through, fund U-Tapao to ' +
-                 'specification, accelerate the Northeast high-speed line, keep the Three-Airport Link ' +
-                 'alive, order both reactors, launch the semiconductor programme — and win the 2030 ' +
-                 'election.',
-    flavour: 'Everything announced, everything built, everything defended at the ballot box. The rarest ' +
-             'thing in Thai infrastructure is not the funding or the engineering, it is a government that ' +
-             'is still there when the ribbon is cut.',
+    requirement: 'Force the Land Bridge through the southern protests, fund U-Tapao to specification, accelerate the Northeast high-speed line, keep the Three-Airport Link alive, order both reactors, launch the semiconductor programme, and win the 2030 election.',
+    flavour: 'Announced, built, and defended at the ballot box. Thai governments rarely last until the ribbon is cut. This one did.',
     rarity: 'legendary',
     // `land_bridge_forced` rather than merely `land_bridge_committed`: announcing
     // the project in the last quarter of the term sets the commitment flag but
@@ -125,14 +112,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'horse_before_cart',
     name: 'Horse before the Cart',
-    requirement: 'Complete the full civil service programme and the full justice reform with real ' +
-                 'anti-corruption enforcement, then finish inside your debt ceiling with a risk premium ' +
-                 'under 0.25pp, a primary deficit no worse than 5% of GDP, and a reform stock above 60.',
-    flavour: 'Institutions before concrete, and paid for rather than borrowed against. An early-retirement ' +
-             'programme nobody photographs, a prosecution service that can act without a police referral, ' +
-             'investigation separated from arrest, and a balance sheet handed over with the line still meaning ' +
-             'what it says. Thailand has never lacked the money to build things. It has lacked a state capable ' +
-             'of building them well.',
+    requirement: 'Complete civil service and justice reform in full, with anti-corruption enforcement; finish inside your debt ceiling with risk premium under 0.25pp, primary deficit no worse than 5% of GDP, reform stock above 60.',
+    flavour: 'Institutions first, concrete second, paid for. Thailand never lacked money to build things. It lacked a state that could build them well.',
     rarity: 'legendary',
     // Deliberately does NOT forbid megaprojects. The point is sequencing, not
     // abstinence — build whatever you can afford once the machinery works. The
@@ -148,10 +129,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'unlikely_reconciliation',
     name: 'Unlikely Reconciliation',
-    requirement: "Bring the People's Party into your coalition after the 2030 election.",
-    flavour: 'Four years ago they would not have taken the phone call. A working arrangement with the party ' +
-             'whose entire programme is that governments like this one should not exist is not a negotiation ' +
-             'outcome. It is an admission, by both sides, that the arithmetic changed.',
+    requirement: 'Bring the People\'s Party into your coalition after the 2030 election.',
+    flavour: 'Four years ago they would not take the call. Both sides can count.',
     rarity: 'legendary',
     test: c => !!c.coalitionAfter?.includes("People's"),
   },
@@ -159,8 +138,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'vicious_cycle',
     name: 'Vicious Cycle',
     requirement: 'Call a coalition partner\'s bluff and lose the government.',
-    flavour: 'They were not bluffing. Thai governments almost never fall on policy and almost always fall on ' +
-             'arithmetic, and the arithmetic had been visible for quarters.',
+    flavour: 'They were not bluffing. Thai governments fall on arithmetic, and the arithmetic was visible for quarters.',
     rarity: 'uncommon',
     test: c => has(c, 'called_the_bluff') && c.fell,
   },
@@ -168,20 +146,15 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'bhumjai_rak_thai',
     name: 'Bhumjai — Rak Thai',
     requirement: 'Win more than 300 seats in the 2030 election.',
-    flavour: 'The last party to do this was Thai Rak Thai in 2005, and it did it on a national vote share ' +
-             'Bhumjaithai has never come close to. A provincial machine converting at this rate is a ' +
-             'realignment, and realignments are usually named after the party that ends them.',
+    flavour: 'Thai Rak Thai did it in 2005, on a vote share Bhumjaithai never came near. This is a realignment.',
     rarity: 'rare',
     test: c => c.playerSeats > 300,
   },
   {
     id: 'th_ai_land',
     name: 'TH-AI-land',
-    requirement: 'Chart a sovereign AI course, redirect the TH-AI Passport to domestic capacity, ' +
-                 'and fund the semiconductor programme.',
-    flavour: 'A national compute programme, a domestic talent pipeline and a chip industry, assembled by ' +
-             'a country that cannot buy the accelerators. Magnificent, coherent, and entirely dependent on ' +
-             'somebody eventually selling you the one input you decided not to ask for.',
+    requirement: 'Chart a sovereign AI course, redirect the TH-AI Passport to domestic capacity, and fund the semiconductor programme.',
+    flavour: 'Compute, talent and chips, built by a country that cannot buy the accelerators. Magnificent, until someone stops selling.',
     rarity: 'rare',
     test: c => has(c, 'sovereign_ai') && has(c, 'domestic_ai_capacity') && has(c, 'semiconductor_programme'),
   },
@@ -192,9 +165,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'to_the_moon',
     name: 'To the Moon',
     requirement: 'Finish with the SET above 2,700.',
-    flavour: 'Thai equities spent a decade as the cheapest way to express doubt about Thai growth. Foreign ' +
-             'institutional money came back, and came back on a story about capacity rather than a quarter of ' +
-             'earnings. Whether it stays is a question for a government that has not been elected yet.',
+    flavour: 'For a decade Thai equities were the cheapest bet against Thai growth. Foreign money is back. Whether it stays is the next government\'s problem.',
     rarity: 'rare',
     test: c => atLeast(c.set, 2700, 0),
   },
@@ -202,8 +173,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'the_quiet_part',
     name: 'The Quiet Part',
     requirement: 'Finish with potential growth above 3% and approval below 45%.',
-    flavour: 'You fixed the supply side and nobody thanked you for it. This is what structural reform ' +
-             'actually looks like from the inside, and it is why so little of it gets done.',
+    flavour: 'You fixed the supply side and nobody thanked you. That is why so little of it gets done.',
     rarity: 'rare',
     test: c => atLeast(c.potentialGrowth, 3) && c.approval < 45 && !c.fell,
   },
@@ -211,9 +181,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'revenue_state',
     name: 'A Revenue State at Last',
     requirement: 'Raise VAT and pass the full Revenue Mobilisation Package in the same term.',
-    flavour: 'Thailand has collected a smaller share of GDP than every peer it likes to be compared to, for ' +
-             'decades, and every government has known it. Two tax rises in one parliament is not a feat of ' +
-             'policy. It is a feat of politics.',
+    flavour: 'Thailand collects less of GDP than any peer it likes to be compared to. Two tax rises in one parliament. A feat of politics.',
     rarity: 'uncommon',
     test: c => has(c, 'vat_raised') && has(c, 'revenue_package_done'),
   },
@@ -221,9 +189,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'grey_capital',
     name: 'Dissolving Grey Capital',
     requirement: 'Pass the Zero Corruption Act, justice system reform and land titling in one term.',
-    flavour: 'Enforcement with teeth, investigation separated from arrest, and twenty-two million rai ' +
-             'converted from possession into property. The three reforms that attack the informal economy ' +
-             'at its root, passed by a government that needed the establishment to keep functioning.',
+    flavour: 'Enforcement with teeth, investigation split from arrest, and twenty-two million rai turned from possession into property. The informal economy felt that.',
     rarity: 'rare',
     test: c => has(c, 'zero_corruption_act') && has(c, 'justice_reform_done') && has(c, 'land_titled'),
   },
@@ -231,20 +197,15 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'concrete_and_nothing_else',
     name: 'Concrete and Nothing Else',
     requirement: 'Finish with a primary deficit worse than 3% of GDP and a reform stock below 40.',
-    flavour: 'Four years, a great deal of money, and a country that is exactly as capable of growing as ' +
-             'it was in 2026. Every ribbon was cut. Nothing underneath them changed.',
+    flavour: 'Four years, a lot of money, and a country no more able to grow than in 2026. Every ribbon cut. Nothing underneath changed.',
     rarity: 'common',
     test: c => atMost(c.primaryBalance, -3) && atMost(c.reformStock, 40, 1),
   },
   {
     id: 'people_pleaser',
     name: 'People Pleaser',
-    requirement: 'Enact every bill your coalition partners bring to the desk, at full scope, and let none ' +
-                 'of them lapse.',
-    flavour: 'Not one partner manifesto declined, deferred, piloted or left to expire. Junior coalition ' +
-             'parties in Thailand do not usually get their bills passed; they get them acknowledged, costed, ' +
-             'sent to committee and forgotten, which is why being ignored costs a party more than being ' +
-             'outvoted. This cabinet said yes to all of it, and the deficit shows where the yes came from.',
+    requirement: 'Enact every bill your coalition partners bring to the desk at full scope, and let none lapse.',
+    flavour: 'Junior partners usually get their bills costed, sent to committee and forgotten. This cabinet said yes to everything. Check the deficit.',
     rarity: 'rare',
     // Deliberately demands the FULL option, not merely passage. A partner bill
     // taken as a pilot is the classic Thai coalition compromise — the ally can
@@ -257,25 +218,16 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'i_am_the_senate',
     name: 'I am the Senate',
-    requirement: 'Enact at least twelve bills and never once take a pilot, a phase-in or a partial ' +
-                 'option — every card played at its maximum.',
-    flavour: 'Twelve bills and not a single hedge. No study phase, no attrition route, no excise-only ' +
-             'compromise, no targeted version of a universal programme. The middle setting is where ' +
-             'governments go to survive a coalition, and a term without one is either total command of the ' +
-             'House or a whip operation running on borrowed goodwill. The two look identical until they do ' +
-             'not.',
+    requirement: 'Enact at least twelve bills, every one at its maximum: never a pilot, phase-in or partial option.',
+    flavour: 'No study phase, no compromise, no targeted version. Total command of the House, or a whip running on borrowed goodwill.',
     rarity: 'legendary',
     test: c => c.maximalPlays >= 12 && c.hedgedPlays === 0 && !c.fell,
   },
   {
     id: 'task_failed_successfully',
     name: 'Task Failed Successfully',
-    requirement: 'Finish above 80% approval with a sovereign risk premium above 1pp — which takes a debt ' +
-                 'ratio north of 81% of GDP however high you legislated the ceiling.',
-    flavour: 'Adored, and insolvent. Every baht went somewhere the electorate could see, and the bond market ' +
-             'charged the next government for it. The uncomfortable part is that this is not a failure of ' +
-             'politics — it is politics working exactly as designed, on a four-year horizon, against a balance ' +
-             'sheet that runs on a thirty-year one.',
+    requirement: 'Finish above 80% approval with a sovereign risk premium above 1pp. That takes debt above 81% of GDP, whatever ceiling you legislated.',
+    flavour: 'Adored, and insolvent. Every baht went where voters could see it, and the bond market billed the next government.',
     rarity: 'rare',
     // Priced off the premium rather than off the ceiling, because the ceiling is
     // a number the player legislates and the premium is one the market charges.
@@ -286,12 +238,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'short_of_the_number',
     name: 'Nine Thousand and Change',
-    requirement: "Finish ahead of the IMF's 9,092 baseline — and short of the 15,000 you promised.",
-    flavour: 'Beating the Fund\'s projection for Thailand is a real result, and one most governments of the ' +
-             'last decade did not manage. Reaching fifteen thousand was never possible, because fifteen ' +
-             'thousand was not a forecast — it was a campaign. Nobody costed it. The gap between the two ' +
-             'numbers is the distance between what a government can do in four years and what it has to say to ' +
-             'be given them.',
+    requirement: 'Finish ahead of the IMF\'s 9,092 baseline, and short of the 15,000 you promised.',
+    flavour: 'Beating the IMF\'s projection is a real result. Fifteen thousand was never a forecast. It was a campaign.',
     rarity: 'common',
     // The promise cannot be met — the ceiling on this model is somewhere under
     // 10,000 — so the earned condition is really the baseline. That is
@@ -303,11 +251,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'room_to_cut',
     name: 'Room to Cut',
     requirement: 'Finish with household debt below 80% of GDP.',
-    flavour: 'Thai household debt is why a rate cut here does less than a rate cut anywhere else: bank lending ' +
-             'is the dominant channel of transmission, and at 87.5% of GDP the banks tighten against bad loans ' +
-             'instead of passing the cut on. Below eighty, most of it comes back — a central bank with working ' +
-             'ammunition, for a crisis that has not happened yet, under a government that has not been ' +
-             'elected. There is no constituency for it and no headline in it.',
+    flavour: 'At 87.5% of GDP, banks tighten against bad loans instead of passing rate cuts on. Below eighty, monetary policy works again. No votes in it.',
     rarity: 'uncommon',
     test: c => atMost(c.hhDebt, 80, 1) && !c.fell,
   },
@@ -315,7 +259,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'patriot',
     name: 'Patriot',
     requirement: 'Pass the Zero Corruption Act with real enforcement, separate investigation from arrest ' +
-                 'nationwide — and then refuse the networks when they come for the files.',
+                 'nationwide — and then refuse the networks when they come for the files, whatever it costs your party.',
     flavour: 'Stand up to them.',
     rarity: 'legendary',
     test: c => has(c, 'patriot') && !c.fell,
@@ -323,14 +267,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'ecological_revolution',
     name: 'Ecological Revolution',
-    requirement: 'Take the renewables pathway in the Power Development Plan, fund the 14th Plan energy ' +
-                 'transition in full, and order both reactors with a regulator behind them.',
-    flavour: 'The only supply pathway that reaches net zero without betting on carbon capture, the grid ' +
-             'rebuild that variable generation actually requires, and two reactors for the baseload wind and ' +
-             'solar cannot carry. It is a coalition of people who do not like each other: the renewables lobby ' +
-             'has spent twenty years arguing nuclear is unnecessary, and the nuclear engineers twenty years ' +
-             'arguing renewables are unserious. None of it generates a kilowatt before 2037. All of it had to ' +
-             'be decided now.',
+    requirement: 'Take the renewables pathway in the Power Development Plan, fund the 14th Plan energy transition in full, and order both reactors with a regulator behind them.',
+    flavour: 'Net zero without betting on carbon capture, a rebuilt grid, and reactors for baseload. Not a kilowatt before 2037. All decided now.',
     rarity: 'uncommon',
     // `energy_transition_funded` is strictly implied by ordering the reactors,
     // since the SMR card only enters the deck once the 14th Plan is funded in
@@ -344,10 +282,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'winter_is_coming',
     name: 'Winter Is Coming',
     requirement: 'Complete the term without touching the ageing agenda at all.',
-    flavour: 'Thailand became an aged society in 2024 and is super-aged by 2033 — 18.4 million people over ' +
-             'sixty, outnumbering every child in the country. That date does not move, does not negotiate and ' +
-             'does not care which coalition is sitting. Nobody was ever going to force the issue: a ' +
-             'demographic transition has no protest, no bond spread and no by-election.',
+    flavour: 'Super-aged by 2033: 18.4 million over sixty, more than every child in the country. Demographics hold no protests and call no by-elections.',
     rarity: 'common',
     // Only the first card is tested: the other two require it, so a term that
     // never opened the chain never had the option of finishing it.
@@ -357,9 +292,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'bond_vigilantes',
     name: 'The Bond Market Votes Too',
     requirement: 'Finish more than 5 points above your debt ceiling.',
-    flavour: 'The risk premium is not a punishment. It is the price at which people who have read the budget ' +
-             'will still lend, and every point of it is charged to the next government and to every firm ' +
-             'borrowing alongside it.',
+    flavour: 'The risk premium is the price lenders charge after reading the budget. The next government pays it, and so does every firm borrowing alongside.',
     rarity: 'common',
     test: c => atLeast(c.debtGdp, c.ceiling + 5, 1),
   },

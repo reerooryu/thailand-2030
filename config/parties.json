@@ -39,7 +39,7 @@
     "business_regulatory_reform": 1,
     "institutional_reform": -1
    },
-   "notes": "Player's party. Largest bloc but 60 short of a majority alone."
+   "notes": "Player's party. Largest bloc, 60 short of a majority alone."
   },
   "People’s": {
    "seats": 120,
@@ -55,7 +55,7 @@
     "business_regulatory_reform": 2,
     "institutional_reform": 2
    },
-   "notes": "Largest opposition party. Most reform-aligned on structural/institutional dimensions; most distant on others."
+   "notes": "Largest opposition party. Most reform-aligned on structural and institutional issues; furthest away on the rest."
   },
   "Pheu Thai": {
    "seats": 74,
@@ -71,7 +71,7 @@
     "business_regulatory_reform": 0,
     "institutional_reform": 1
    },
-   "notes": "Populist fiscal expansion; strong transfer/handout orientation."
+   "notes": "Populist fiscal expansion; strong on transfers and handouts."
   },
   "Kla Tham": {
    "seats": 58,
@@ -394,7 +394,7 @@
     ],
     "total": 265,
     "surplus": 14,
-    "character": "Thin. Pheu Thai can credibly threaten collapse at any time. Expensive in transfer/handout policy."
+    "character": "Thin. Pheu Thai can threaten collapse at any time. Expensive in transfers and handouts."
    },
    {
     "partners": [
@@ -402,7 +402,7 @@
     ],
     "total": 311,
     "surplus": 60,
-    "character": "Comfortable arithmetic, hardest ideological fit. The only combination with a mandate large enough for structural reform."
+    "character": "Comfortable numbers, worst ideological fit. The only combination with a mandate big enough for structural reform."
    },
    {
     "partners": [
@@ -420,7 +420,7 @@
     ],
     "total": 251,
     "surplus": 0,
-    "character": "BJT+Kla Tham is 249 — exactly two short. Micro-parties become extortionately expensive per seat."
+    "character": "BJT+Kla Tham is 249, two short. Micro-parties become extortionate per seat."
    }
   ],
   "threat": {
