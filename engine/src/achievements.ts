@@ -300,7 +300,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'new_social_contract',
     name: 'New Social Contract',
     requirement: 'Ratify a new constitution with a reform score of 6 or more.',
-    flavour: 'Not a revolution. A Senate that cannot veto, a Court that needs two-thirds, governors some provinces chose. It will outlast the people who wrote it.',
+    flavour: 'Not a revolution. New rules, passed by consent through two referendums. They will outlast the people who wrote them.',
     rarity: 'rare',
     test: c => has(c, 'constitution_reformist'),
   },

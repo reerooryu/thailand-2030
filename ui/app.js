@@ -817,8 +817,10 @@ function verdictSections(g, s, realCagr, setChg, gov) {
       `Potential growth up to ${fmt(s.potentialGrowthYoy, 2)}% from 2.1%, on a reform stock of ${rs}. The ` +
       `supply side stopped improving around 2013; you moved it. Your successor collects the credit.` },
     { min: 2.5, tag: 'lifted', t:
-      `Potential growth reached ${fmt(s.potentialGrowthYoy, 2)}%, a real but modest gain on 2.1%. A reform ` +
-      `stock of ${rs} says the effort came late or thin, and only part of it paid off before the term ended.` },
+      `Potential growth reached ${fmt(s.potentialGrowthYoy, 2)}%, a real but modest gain on 2.1%. ` +
+      (s.reformStock >= 50
+        ? `A reform stock of ${rs} is real effort; most of it had not reached capacity by the count.`
+        : `A reform stock of ${rs} says the effort came late or thin, and only part of it paid off before the term ended.`) },
     { min: 2.25, tag: 'concrete only', t:
       `Potential growth reached ${fmt(s.potentialGrowthYoy, 2)}%, but a reform stock of ${rs} says capital ` +
       `spending bought most of it. Concrete stops lifting growth when the money stops. The bureaucracy you ` +
@@ -954,7 +956,8 @@ function verdictSections(g, s, realCagr, setChg, gov) {
       `anything a partner opposed. It did not stretch to the hard bill in year three.` },
     { min: 44, tag: 'held', t:
       `${g.approval}% approval and ${gov.seats} seats. Six parties and a mid-term revenue package, and the ` +
-      `coalition held. But nothing more ambitious than the first eighteen months ever passed.` },
+      `coalition held.` + (g.con.stage === 'ratified' ? ' It carried a new constitution through two referendums on the way.'
+        : ' But nothing more ambitious than the first eighteen months ever passed.') },
     { min: 36, tag: 'strained', t:
       `${g.approval}% approval against ${gov.seats} seats: the votes, not the standing. Partners priced a ` +
       `weak prime minister at once, and the record thins out with the polling.` },
@@ -1018,6 +1021,9 @@ function verdictSections(g, s, realCagr, setChg, gov) {
     : cv.stage === 'idle'
       ? { tag: 'untouched', t: `Sixty per cent voted for a new constitution in February 2026. This cabinet never tabled the amendment to start it.` }
       : { tag: 'unfinished', t: `The rewrite was still ${cv.stage === 'drafting' ? 'in drafting' : cv.stage === 'final' ? 'waiting for its final referendum' : 'at the principles stage'} when the term ended. It passes to the next parliament.` };
+
+  if (cv.stage === 'ratified' && g.flags.has('constitution_paternal'))
+    constitution.t += ' It also traded rights for order: the new chapter gives the state more room over assembly and speech than the one it replaced.';
 
   return [
     { h: 'Headline', tag: growth.tag, t: growth.t },
