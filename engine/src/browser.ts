@@ -646,6 +646,7 @@ export class BrowserGame {
       debtEnd: s.debtGdp,
       primaryBalance: s.primaryBalance,
       invRate: s.invRate,
+      singaporeLite: this.flags.has('constitution_sg'),
     });
   }
 

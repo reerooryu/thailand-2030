@@ -409,6 +409,38 @@ function partyPill(p, extra = '') {
 const STAGES = [
   ['idle', 'Section 256'], ['principles', 'Principles'], ['drafting', 'Drafting'], ['final', 'Final referendum'],
 ];
+/* Direction of a position: current text, reform (adjust / tilt) or Singapore-lite. */
+function posClass(p, i) {
+  const pos = p.positions[i];
+  if (pos.sgLite) return 'pk-sg';
+  if (i === p.keep) return 'pk-keep';
+  return pos.score >= 2 ? 'pk-tilt' : 'pk-adjust';
+}
+
+/* The constitution in force at the end of the term. */
+function renderConstitutionFinal() {
+  const v = g.constitutionView();
+  const stageNote = {
+    ratified: `Ratified with ${v.finalYes}% yes.`,
+    failed: 'The rewrite failed. The 2017 constitution stays in force.',
+    idle: 'Never started. The 2017 constitution stays in force.',
+  }[v.stage] || 'Unfinished at the count. The 2017 constitution stays in force.';
+  const inForce = v.stage === 'ratified';
+  const rows = v.parts.map(p => {
+    const i = inForce ? p.selected : p.keep;
+    const pos = p.positions[i];
+    return `<tr><td class="cf-part">${p.name}</td>
+      <td><span class="cf-pos ${posClass(p, i)}">${pos.label}</span></td>
+      <td class="cf-text">${pos.text}</td></tr>`;
+  }).join('');
+  return `<div class="verdict cf">
+    <div class="verdict-h">The Constitution in 2030</div>
+    <p class="cf-note">${stageNote}${inForce ? ` Reform score ${v.score}${v.sg ? `, Singapore-lite ${v.sg}/3` : ''}.` : ''}</p>
+    <table class="cf-table">${rows}</table>
+    <div class="cf-key"><span class="cf-pos pk-keep">Current text</span><span class="cf-pos pk-adjust">Adjust</span><span class="cf-pos pk-tilt">Tilt</span><span class="cf-pos pk-sg">Singapore-lite</span></div>
+  </div>`;
+}
+
 function renderConstitution() {
   const box = $('#constitution');
   if (!box) return;
@@ -447,7 +479,7 @@ function renderConstitution() {
       const backers = t ? t.backers.map(b => partyPill(b)).join('') : '<span class="muted">current text</span>';
       const isProp = p.proposal && p.proposal.index === i;
       const verdict = t ? `<span class="cs-v ${t.passes ? 'up' : 'down'}" title="${t.house} MPs + ${t.senate} senators. Needs 351, with at least 67 senators.">${t.passes ? '✓' : '✗'} ${t.house}+${t.senate}</span>` : '';
-      return `<button class="cs-opt${sel ? ' sel' : ''}${pos.sgLite ? ' sg' : ''}" data-part="${p.id}" data-i="${i}"
+      return `<button class="cs-opt ${posClass(p, i)}${sel ? ' sel' : ''}${pos.sgLite ? ' sg' : ''}" data-part="${p.id}" data-i="${i}"
           ${v.editing ? '' : 'disabled'} title="${pos.text}">
           <div class="cs-ol">${pos.label}${isProp ? ' ' + partyPill(p.proposal.party, ' prop') + '<span class="cs-prop">proposal</span>' : ''} ${verdict}</div>
           ${pos.sgLite ? `<div class="cs-sg">Singapore-lite${pos.halfStrength ? ' · <span class="down">half strength without civil service reform and anti-corruption enforcement</span>' : ''}</div>` : ''}
@@ -724,7 +756,8 @@ function showEnd(walked, snap = false) {
           ${row('Coalition', gov.seats + ' seats', '251 needed', gov.fallen ? 'critical' : 'good')}
           ${(() => { const cv = g.constitutionView();
             const word = { idle: 'Not started', principles: 'Principles stage', drafting: 'In drafting', final: 'Awaiting referendum', ratified: 'Ratified', failed: 'Failed' }[cv.stage];
-            return row('Constitution', word, cv.stage === 'ratified' ? `reform score ${cv.score}` : '',
+            return row('Constitution', word, cv.stage === 'ratified'
+                ? `reform score ${cv.score}${cv.sg ? ` · Singapore-lite ${cv.sg}/3` : ''}` : '',
                        cv.stage === 'ratified' ? 'good' : cv.stage === 'failed' ? 'critical' : ''); })()}
           ${Object.entries(g.opinion).filter(([k]) => k !== 'Bhumjaithai').map(([k, v]) =>
             row(k, String(v), g.bandOf(k).label,
@@ -743,6 +776,7 @@ function showEnd(walked, snap = false) {
         </div>`).join('')}
       <div class="vclose">${verdictClose(g, s, gov, elec)}</div>
     </div>
+    ${renderConstitutionFinal()}
     ${renderAchievements(g.achievements(elec))}
     ${fell ? '<p class="sub">Scored on what you managed before it ended.</p>' : ''}
     <div class="logbox">${g.log.map(l => `<div class="logline"><span class="muted">Q${l.quarter + 1}</span> ${l.text}</div>`).join('')}</div>
@@ -947,9 +981,10 @@ function verdictSections(g, s, realCagr, setChg, gov) {
     `and this arithmetic was visible for quarters.` }
     : pick([
     { min: 70, tag: 'adored', t:
-      `${g.approval}% approval at the close, ${gov.seats} seats behind it. Numbers like this usually follow ` +
-      `a spending spree, and the bill follows them. If earned by delivery, it is the strongest position of ` +
-      `any Thai cabinet since 2005, and you left some unspent.` },
+      `${g.approval}% approval at the close, ${gov.seats} seats behind it. ` +
+      (g.flags.has('revenue_package_done') || g.flags.has('vat_raised')
+        ? `Earned while raising taxes, which almost never happens. The strongest position of any Thai cabinet since 2005.`
+        : `Numbers like this usually follow a spending spree, and the bill follows them. If earned by delivery, it is the strongest position of any Thai cabinet since 2005.`) },
     { min: 62, tag: 'commanding', t:
       `${g.approval}% approval and ${gov.seats} seats intact: more popular at the end than the start, rare in ` +
       `Thai politics. You could have spent more of it on legislation.` },
