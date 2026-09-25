@@ -16,6 +16,8 @@ export interface State {
   potentialGrowthYoy: number; // y/y % — THE Legacy score (DESIGN §3.2)
   reformStock: number;     // accumulated, depreciating reform effort
   infraPipeline: number[]; // public capex awaiting gestation, oldest first
+  /** The staged share of above-baseline capex, awaiting its first sections. */
+  infraStaged?: number[];
   exportsR: number;        // real exports, mn baht
   importsR: number;        // real imports, mn baht
   invPrivR: number;        // real private GFCF, mn baht
@@ -201,6 +203,10 @@ export interface Params {
    *  important lag in the game: it is why correct decisions lose inside the
    *  window (DESIGN §2, pillar 2). */
   infraGestation: number;      // quarters
+  /** Share of ABOVE-baseline public capex that opens in stages, before the
+   *  whole project is finished, and the lag until those sections open. */
+  infraStagedShare: number;
+  infraStagedLag: number;      // quarters
   infraTfpBonus: number;       // extra TFP growth per pp of GDP of infra ABOVE baseline
   infraBaselineShare: number;  // the 2026 public capex share, 6.1% of GDP
 

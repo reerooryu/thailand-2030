@@ -16,6 +16,7 @@ import {
   type GameEvent, type EventOption, type Scheduled,
 } from './events.js';
 import { step, reformEffort } from './engine.js';
+import { closedChapters, CAPACITY_PER_CHAPTER, FDI_PER_CHAPTER } from './oecd.js';
 import { initialAgencies, targetNotch, review, ratingPremium, type Agency } from './ratings.js';
 import { BASE } from './params.js';
 import { applyGains } from './playability.js';
@@ -46,6 +47,8 @@ export class Game {
   agencies: Agency[] = initialAgencies();
   /** Set when an event option dissolves the House. */
   snap = false;
+  /** OECD chapters already reported closed. */
+  oecdClosed = new Set<string>();
   cfg: CoalitionCfg; cat: PolicyCatalogue; events: GameEvent[];
   ps: PoliticalState;
   opinion: Record<string, number>;
@@ -350,14 +353,19 @@ export class Game {
     const ramp = Math.min(1, (this.quarter + 1) / 6);
     const cap = this.ps.effects.megaprojectCap ?? 9.0;
     const stimCap = this.ps.effects.stimulusCap ?? 2.0;
+    const chapters = closedChapters(this.flags);
+    for (const c of chapters) if (!this.oecdClosed.has(c)) {
+      this.oecdClosed.add(c);
+      this.log.push({ quarter: this.quarter, kind: 'note', text: `OECD accession: the ${c} chapter closes` });
+    }
     const policy: Policy = {
       policyRate: 1.0, reer: s.reer,
       capitalSpend: Math.min(cap, BASELINE.capitalSpend + this.stance.capitalSpend * ramp),
       govConsumption: BASELINE.govConsumption + (this.stance.govConsumption ?? 0) * ramp,
       transfers: Math.min(stimCap, this.stance.transfers * ramp),
       taxRate: BASELINE.taxRate + this.stance.taxRate * ramp,
-      reformIndex: reformEffort(this.stance.reformIndex) * (this.ps.effects.reformCapacity ?? 0.7),
-      fdiSignal: (this.stance.fdiSignal ?? 0) * ramp,
+      reformIndex: reformEffort(this.stance.reformIndex) * ((this.ps.effects.reformCapacity ?? 0.7) + CAPACITY_PER_CHAPTER * chapters.length),
+      fdiSignal: (this.stance.fdiSignal ?? 0) * ramp + FDI_PER_CHAPTER * chapters.length,
       humanCapital: (this.stance.humanCapital ?? 0) * ramp,
       formalisation: (this.stance.formalisation ?? 0) * ramp,
       savingsRate: (this.stance.savingsRate ?? 0) * ramp,

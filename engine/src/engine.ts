@@ -62,13 +62,21 @@ export function step(input: StepInput): State {
 
   // private investment converts to capital immediately; public capex queues
   const privInvest = (s.invRate / 100) * s.rgdp;
-  const newPublic  = (policy.capitalSpend / 100) * s.rgdp;
+  // Only spending ABOVE the baseline programme is staged, so the passive path
+  // (and the 9,092 calibration) is unchanged.
+  const aboveBase = Math.max(0, policy.capitalSpend - p.infraBaselineShare) / 100 * s.rgdp;
+  const staged = aboveBase * (p.infraStagedShare ?? 0);
+  const newPublic  = (policy.capitalSpend / 100) * s.rgdp - staged;
 
   const pipeline = [...s.infraPipeline, newPublic];
   let delivered = 0;
   if (pipeline.length > p.infraGestation) delivered = pipeline.shift()!;
 
-  const capital = (1 - p.depreciation) * s.capital + privInvest + delivered;
+  const stagedPipe = [...(s.infraStaged ?? []), staged];
+  let stagedDelivered = 0;
+  if (stagedPipe.length > (p.infraStagedLag ?? 8)) stagedDelivered = stagedPipe.shift()!;
+
+  const capital = (1 - p.depreciation) * s.capital + privInvest + delivered + stagedDelivered;
 
   // labour from demographics — exogenous and declining, and no five-year policy
   // can reverse it (DESIGN §5.5)
@@ -79,7 +87,8 @@ export function step(input: StepInput): State {
   // only infrastructure ABOVE the baseline programme earns a TFP bonus —
   // otherwise every strategy inherits the same free productivity boost
   const infraShare = Math.max(0,
-    delivered / Math.max(s.rgdp, 1) * 100 - p.infraBaselineShare);
+    delivered / Math.max(s.rgdp, 1) * 100 - p.infraBaselineShare)
+    + stagedDelivered / Math.max(s.rgdp, 1) * 100;
   const tfp = s.tfp * (1 +
     (p.tfpTrendGrowth + p.infraTfpBonus * infraShare + p.reformToTfp * s.reformStock
      + p.humanCapitalToTfp * (policy.humanCapital ?? 0)) / 100);
@@ -187,7 +196,7 @@ export function step(input: StepInput): State {
     period: nextPeriod(s.period),
     primaryBalance, riskPremium, 
     gap, rgdp, potential,
-    capital, labour, tfp, potentialGrowthYoy, infraPipeline: pipeline, reformStock,
+    capital, labour, tfp, potentialGrowthYoy, infraPipeline: pipeline, infraStaged: stagedPipe, reformStock,
     exportsR, importsR, invPrivR, invPubR, consR, invRate,
     cpi, cpiCore, cpiYoy, cpiCoreYoy: coreYoy,
     policyRate: policy.policyRate,
