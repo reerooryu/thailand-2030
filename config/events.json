@@ -1655,6 +1655,33 @@
             ]
           },
           "flavour": "The enemy of my enemy is my friend."
+        },
+        {
+          "id": "snap",
+          "label": "Dissolve the House.",
+          "body": "Snap election at the end of this quarter. The term ends at the count.",
+          "requiresFlags": [
+            "approval_over_55"
+          ],
+          "lockedNote": "Requires approval of 55% or more. Below that, a snap election finishes the job for them.",
+          "seatShift": {
+            "Bhumjaithai": -12,
+            "Kla Tham": 8,
+            "Others": 4
+          },
+          "effects": {
+            "approvalBoost": -2
+          },
+          "sets": [
+            "snap_election"
+          ],
+          "snapElection": true,
+          "flavour": "Let the country decide who they belong to.",
+          "opinion": {
+            "Kla Tham": -4,
+            "Others": -4,
+            "People's": 2
+          }
         }
       ]
     },
@@ -1697,6 +1724,33 @@
             ]
           },
           "flavour": "The organisation takes its name off the door and the furniture with it."
+        },
+        {
+          "id": "snap",
+          "label": "Dissolve the House.",
+          "body": "Snap election at the end of this quarter, before the rest of the organisation follows. The term ends at the count.",
+          "requiresFlags": [
+            "approval_over_55"
+          ],
+          "lockedNote": "Requires approval of 55% or more. Below that, a snap election finishes the job for them.",
+          "seatShift": {
+            "Bhumjaithai": -35,
+            "Kla Tham": 20,
+            "Others": 15
+          },
+          "effects": {
+            "approvalBoost": -1
+          },
+          "sets": [
+            "snap_election"
+          ],
+          "snapElection": true,
+          "flavour": "They can stand for someone else now. So can the voters.",
+          "opinion": {
+            "Kla Tham": -4,
+            "Others": -4,
+            "People's": 2
+          }
         }
       ]
     },

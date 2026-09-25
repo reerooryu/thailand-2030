@@ -93,6 +93,9 @@ export interface Policy {
   savingsRate?: number;      // domestic saving available to fund investment
 
   publicInvestmentGrowth?: number;
+
+  /** Added to the sovereign risk premium by the credit ratings (ratings.ts). */
+  ratingPremium?: number;
 }
 
 /** Behavioural parameters. `source` records where each came from — this

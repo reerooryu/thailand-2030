@@ -33,6 +33,8 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 - **Order matters.** Civil service reform without digital government first loses its execution gain. Super Licence half-works. Negative income tax is locked until VAT moves.
 - **The establishment bites back.** Anger it, and budget execution falls. Money you appropriated doesn't arrive.
 - **The bond market charges.** The risk premium hits the next government and every firm borrowing alongside it.
+- **The agencies are watching.** S&P, Fitch and Moody's start at BBB+ / BBB+ / Baa1 and can move between A- and BBB-. Breaking or raising the debt ceiling, deep deficits and weak growth push them down; a downgrade adds to the risk premium.
+- **You can dissolve the House.** If your own members start leaving and approval is at 55% or more, you can call a snap election instead of waiting for the government to fall. The term ends at that count.
 
 ---
 
@@ -46,10 +48,11 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/politics.ts` | Coalition formation, whip counts, crossbench defection. |
 | `engine/src/election.ts` | The March 2030 count and coalition talks. |
 | `engine/src/achievements.ts` | 23 end-of-term achievements. None feed back. |
+| `engine/src/ratings.ts` | Sovereign credit ratings: S&P, Fitch, Moody's. |
 | `engine/src/ideology.ts` | Reads your economic position off the budget. |
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoilers. |
 | `config/policies.json` | 36 cards, 99 options. |
-| `config/events.json` | 32 news events, 67 options. |
+| `config/events.json` | 32 news events, 69 options. |
 | `config/coalitions.json` | The four coalitions and their effects. |
 | `ui/` | Front end. `app.js` is the whole client. |
 | `scripts/` | Data builders (Python) and analysis tools (TypeScript). |
@@ -68,7 +71,7 @@ A small semi-structural quarterly model:
 - **Trade**, driven by US real imports and the Dallas Fed global activity index
 - **Investment** with partial adjustment to the gap, risk premium and FDI
 - **Supply**: `Y_pot = TFP · K^0.45 · L^0.55`, with TFP driven by reform stock, infrastructure and human capital
-- **Sovereign risk premium**: `0.011 · max(0, debt − 68)^1.75`
+- **Sovereign risk premium**: `0.011 · max(0, debt − 68)^1.75`, plus a credit-rating premium (0 at BBB+, +0.25 at BBB, +0.60 at BBB-, −0.15 at A-)
 - **Execution wedge**: appropriated budget is not delivered budget
 
 Data: NESDC quarterly national accounts 1993Q1–2026Q2, TPSO CPI (487 months), BIS household debt, BOT MPC decisions (190 meetings), IMF WEO. The panel validates the model and does not calibrate it. `MODEL.md §1` explains why.
