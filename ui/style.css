@@ -351,7 +351,9 @@ details.whip td{padding:2px 0;vertical-align:baseline}
   color:var(--ink);cursor:pointer;font:inherit}
 .cs-opt:disabled{cursor:default;opacity:.55}
 .cs-opt.sel{border-color:var(--series-1);opacity:1;box-shadow:inset 0 0 0 1px var(--series-1)}
-.cs-opt.regress .cs-ol{color:var(--serious)}
+.cs-opt.sg{border-style:dashed}
+.cs-opt.sg .cs-ol,.cs-sg,.sg-t{color:#1fb5a6}
+.cs-sg{font-size:10.5px;margin-top:3px}
 .cs-ol{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .cs-ot{font-size:12px;color:var(--ink-2);margin:4px 0 6px}
 .cs-v{font-size:11px;font-weight:500;margin-left:auto}

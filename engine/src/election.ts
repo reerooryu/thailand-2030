@@ -72,6 +72,8 @@ export interface ElectionInput {
   partySystemReformed?: boolean;
   /** Party-list seats under the constitution in force: 100, or 110/125 after reform. */
   listSeats?: number;
+  /** Multi-member, winner-takes-all constituencies: machines win slates. */
+  blockVote?: boolean;
 }
 
 export interface PartyResult {
@@ -363,6 +365,27 @@ export function runElection(e: ElectionInput): ElectionResult {
     gs.forEach(([p, f], i) => {
       const r = results.find(x => x.party === p); if (!r) return;
       const n = i === gs.length - 1 ? taken - given : Math.round(taken * f);
+      r.after += n; given += n;
+    });
+    results.forEach(r => { r.change = r.after - r.origin; });
+  }
+
+  // Block voting: slates of three, winner takes all. The machine parties sweep
+  // whole districts; list-strong urban parties lose the seats they won narrowly.
+  if (e.blockVote) {
+    const take: [string, number][] = [["People's", 0.6], ['Democrat', 0.25], ['Pheu Thai', 0.15]];
+    const give: [string, number][] = [['Bhumjaithai', 0.65], ['Kla Tham', 0.35]];
+    const MOVE = 20;
+    let taken = 0;
+    for (const [p, f] of take) {
+      const r = results.find(x => x.party === p); if (!r) continue;
+      const n = Math.min(Math.round(MOVE * f), Math.max(0, r.after - 5));
+      r.after -= n; taken += n;
+    }
+    let given = 0;
+    give.forEach(([p, f], i) => {
+      const r = results.find(x => x.party === p); if (!r) return;
+      const n = i === give.length - 1 ? taken - given : Math.round(taken * f);
       r.after += n; given += n;
     });
     results.forEach(r => { r.change = r.after - r.origin; });
