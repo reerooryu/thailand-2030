@@ -70,6 +70,8 @@ export interface ElectionInput {
    *  audited, constituency spending is capped. Shifts conversion away from
    *  parties that are a name attached to a few dozen families. */
   partySystemReformed?: boolean;
+  /** Party-list seats under the constitution in force: 100, or 110/125 after reform. */
+  listSeats?: number;
 }
 
 export interface PartyResult {
@@ -341,6 +343,28 @@ export function runElection(e: ElectionInput): ElectionResult {
       const give = Math.min(pool - handed, cap - r.after);
       r.after += give; handed += give;
     }
+    results.forEach(r => { r.change = r.after - r.origin; });
+  }
+
+  // A new constitution moving constituencies to the list. Constituency seats
+  // are where machines win; list seats follow the national vote.
+  const moved = Math.max(0, (e.listSeats ?? 100) - 100);
+  if (moved) {
+    const take: Record<string, number> = { Bhumjaithai: 0.5, 'Kla Tham': 0.3, Others: 0.2 };
+    const give: Record<string, number> = { "People's": 0.55, 'Pheu Thai': 0.3, Democrat: 0.15 };
+    let taken = 0;
+    for (const [p, f] of Object.entries(take)) {
+      const r = results.find(x => x.party === p); if (!r) continue;
+      const n = Math.min(Math.round(moved * f), Math.max(0, r.after - 5));
+      r.after -= n; taken += n;
+    }
+    let given = 0;
+    const gs = Object.entries(give);
+    gs.forEach(([p, f], i) => {
+      const r = results.find(x => x.party === p); if (!r) return;
+      const n = i === gs.length - 1 ? taken - given : Math.round(taken * f);
+      r.after += n; given += n;
+    });
     results.forEach(r => { r.change = r.after - r.origin; });
   }
 

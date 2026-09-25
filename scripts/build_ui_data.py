@@ -23,6 +23,7 @@ out = {
   'events': load('events.json'),
   'playability': load('playability.json'),
   'set': load('set_history.json'),
+  'constitution': load('constitution.json'),
 }
 os.makedirs('engine/src/gen', exist_ok=True)
 with open('engine/src/gen/data.ts', 'w') as f:

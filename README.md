@@ -24,7 +24,7 @@ Four scores, all in tension:
 - **Investment**
 - **Debt ratio**: measured against a ceiling you can raise by law and then have to live with
 
-Then the count, coalition talks, an analyst's verdict, your revealed ideology and 23 achievements.
+Then the count, coalition talks, an analyst's verdict, your revealed ideology and 26 achievements.
 
 ### Before your first term
 
@@ -47,13 +47,15 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/browser.ts` | Game host: turns, cards, votes, flags, scoring. |
 | `engine/src/politics.ts` | Coalition formation, whip counts, crossbench defection. |
 | `engine/src/election.ts` | The March 2030 count and coalition talks. |
-| `engine/src/achievements.ts` | 23 end-of-term achievements. None feed back. |
+| `engine/src/achievements.ts` | 26 end-of-term achievements. None feed back. |
 | `engine/src/ratings.ts` | Sovereign credit ratings: S&P, Fitch, Moody's. |
+| `engine/src/constitution.ts` | The new constitution: four steps, clause votes, referendums. |
 | `engine/src/ideology.ts` | Reads your economic position off the budget. |
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoilers. |
 | `config/policies.json` | 36 cards, 99 options. |
-| `config/events.json` | 32 news events, 69 options. |
+| `config/events.json` | 34 news events, 71 options. |
 | `config/coalitions.json` | The four coalitions and their effects. |
+| `config/constitution.json` | Five parts of the constitution, their positions and party stances. |
 | `ui/` | Front end. `app.js` is the whole client. |
 | `scripts/` | Data builders (Python) and analysis tools (TypeScript). |
 | `data/` | Raw source files, kept for provenance. |
