@@ -212,12 +212,12 @@ export function runElection(e: ElectionInput): ElectionResult {
     if (r.party === PLAYER) { r.willJoin = true; r.reason = 'your party'; continue; }
     if (r.party === "People's") {
       r.willJoin = op >= 75;
-      r.reason = op >= 75 ? 'would consider it — extraordinary, given where this started'
-                          : 'will not sit with you under any arithmetic';
+      r.reason = op >= 75 ? 'would consider it'
+                          : 'will never sit with you';
       continue;
     }
     if (op >= 55) { r.willJoin = true; r.reason = 'signs without conditions'; }
-    else if (op >= 41) { r.willJoin = true; r.reason = 'signs, at a price in portfolios'; }
+    else if (op >= 41) { r.willJoin = true; r.reason = 'signs, for ministries'; }
     else if (op >= 31) { r.willJoin = false; r.reason = 'talks, but will not commit'; }
     else { r.willJoin = false; r.reason = 'refuses outright'; }
   }
@@ -368,41 +368,34 @@ export function runElection(e: ElectionInput): ElectionResult {
   const headline =
     historic ? 'A supermajority, and a realignment'
     : soloMajority ? 'Returned with a single-party majority'
-    : verdict === 'landslide' ? 'Returned with a working majority and room to spare'
+    : verdict === 'landslide' ? 'Returned with room to spare'
     : verdict === 'returned' ? 'Returned to office'
     : verdict === 'hung' ? 'Largest party, no government'
     : 'Out';
 
   const detail =
     historic
-      ? `Bhumjaithai takes ${playerSeats} seats, ${fmtSigned(swingSeats)} on 2026 and the largest mandate any ` +
-        `Thai party has won since Thai Rak Thai in 2005. Potential growth above trend, an index that ran for ` +
-        `four years, investment turning for the first time since the crisis, and a government popular enough ` +
-        `that the borrowing was read as ambition rather than recklessness. Provincial networks do not usually ` +
-        `produce results like this, because provincial networks do not usually govern like this.`
+      ? `Bhumjaithai takes ${playerSeats} seats, ${fmtSigned(swingSeats)} on 2026 — the biggest mandate since ` +
+        `Thai Rak Thai in 2005. Growth above trend, four years of market gains, investment up for the first ` +
+        `time since the crisis. The borrowing read as ambition.`
     : soloMajority
-      ? `Bhumjaithai takes ${playerSeats} seats, ${fmtSigned(swingSeats)} on 2026 — the first single-party ` +
-        `majority since Thai Rak Thai in 2005, and it belongs to the machine rather than to the list vote. ` +
-        `The coalition is now a courtesy. The December 2030 promise falls inside the new term, which means ` +
-        `it will be answered by the government that made it.`
+      ? `Bhumjaithai takes ${playerSeats} seats, ${fmtSigned(swingSeats)} on 2026. The first single-party ` +
+        `majority since Thai Rak Thai in 2005, won by the machine, not the list vote. The coalition is now ` +
+        `optional. The December 2030 promise falls inside your new term.`
     : verdict === 'landslide'
-      ? `Bhumjaithai takes ${playerSeats} seats, ${fmtSigned(swingSeats)} on 2026, and the coalition ` +
-        `commands ${total}. A second term begins with more authority than the first — and with the ` +
-        `December 2030 promise now falling inside it.`
+      ? `Bhumjaithai takes ${playerSeats} seats, ${fmtSigned(swingSeats)} on 2026; the coalition ` +
+        `holds ${total}. A stronger second term, with the December 2030 promise now inside it.`
     : verdict === 'returned' && swingSeats < -10
-      ? `Bhumjaithai loses ${-swingSeats} seats, down to ${playerSeats}, and returns to office only because ` +
-        `${bloc.slice(1).join(' and ')} will still sign — ${total} between them. A government returned on its ` +
-        `partners' seats rather than its own is a government that governs on their terms.`
+      ? `Bhumjaithai loses ${-swingSeats} seats, down to ${playerSeats}. ` +
+        `${bloc.slice(1).join(' and ')} still sign — ${total} between them. You govern on their terms now.`
     : verdict === 'returned'
-      ? `Bhumjaithai returns with ${playerSeats} seats (${fmtSigned(swingSeats)}) and assembles ${total} ` +
-        `with ${bloc.slice(1).join(' and ')}. Workable, and it means the government that made the 2030 ` +
-        `promise is the government that has to answer for it.`
+      ? `Bhumjaithai returns with ${playerSeats} seats (${fmtSigned(swingSeats)}) and builds ${total} ` +
+        `with ${bloc.slice(1).join(' and ')}. Workable. You answer for the 2030 promise yourself.`
     : verdict === 'hung'
-      ? `Bhumjaithai is still the largest party at ${playerSeats} seats, and cannot form a government: ` +
-        `every party with the numbers to complete a majority spent this term being ignored, and says so ` +
-        `now. Somebody else assembles the House.`
-      : `Bhumjaithai falls to ${playerSeats} seats, ${fmtSigned(swingSeats)} on 2026. The term is over and ` +
-        `the promise made in February 2026 will be answered by whoever inherits it.`;
+      ? `Bhumjaithai is the largest party at ${playerSeats} seats and cannot form a government. ` +
+        `Every party that could complete a majority was ignored this term. Somebody else forms the House.`
+      : `Bhumjaithai falls to ${playerSeats} seats, ${fmtSigned(swingSeats)} on 2026. The term is over. ` +
+        `Whoever comes next answers for the February 2026 promise.`;
 
   return { results, swing: totalSwing, playerSeats, bestCoalition: formed ? bloc : null,
            bestSeats: total, majority: MAJORITY, verdict, headline, detail };

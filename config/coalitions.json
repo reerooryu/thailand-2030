@@ -66,35 +66,35 @@
    "opinion": 100,
    "player": true,
    "cohesion": 0.9,
-   "description": "Your party. Provincial machine politics built on the Northeast and rural constituencies, pragmatic rather than ideological, and the largest bloc in the House by a distance — sixty seats short of being able to ignore everyone else.",
+   "description": "Your party. Provincial machine politics built on the Northeast and rural seats. Pragmatic, not ideological, and the largest bloc in the House — sixty seats short of ignoring everyone else.",
    "short": "Your party · provincial, pragmatic"
   },
   "People's": {
    "seats": 120,
    "opinion": 14,
    "cohesion": 0.9,
-   "description": "The largest opposition party and the one with the clearest programme: institutional reform, decentralisation, competition policy, an end to the arrangements that produced this parliament. Urban, young, and the only bloc large enough to give you a reforming majority — which is why it will never give you one.",
+   "description": "The largest opposition party, with the clearest programme: institutional reform, decentralisation, competition policy. Urban and young. The only bloc big enough to give you a reforming majority, and it never will.",
    "short": "Opposition · urban reformist"
   },
   "Pheu Thai": {
    "seats": 74,
    "opinion": 42,
    "cohesion": 0.78,
-   "description": "The North and Northeast, and three decades of populist fiscal expansion. Wants transfers, megaprojects and visible spending, and is comfortable financing all three. A generous partner and an expensive one.",
+   "description": "The North and Northeast, and three decades of populist fiscal expansion. Wants transfers, megaprojects and visible spending, and will borrow for all of it. Generous and expensive.",
    "short": "Populist fiscal expansion"
   },
   "Kla Tham": {
    "seats": 58,
    "opinion": 47,
    "cohesion": 0.68,
-   "description": "Provincial conservative networks. Agricultural support, no institutional reform, and a deep suspicion of anything that reduces the discretion of the people who currently hold it. Fifty-eight seats that make almost every arithmetic work — or not.",
+   "description": "Provincial conservative networks. Agricultural support, no institutional reform, deep suspicion of anything that cuts the discretion of those who hold it. Fifty-eight seats that make almost every majority work — or not.",
    "short": "Provincial conservative"
   },
   "Democrat": {
    "seats": 21,
    "opinion": 44,
    "cohesion": 0.62,
-   "description": "The South and the urban middle class. The most fiscally conservative party of any size: supports the VAT rise, supports the Super Licence, audits everything, and has spent two decades losing seats for it.",
+   "description": "The South and the urban middle class. The most fiscally conservative party of any size: backs the VAT rise and the Super Licence, audits everything, and has lost seats for it for two decades.",
    "short": "Fiscally conservative, Southern"
   },
   "Others": {
@@ -103,7 +103,7 @@
    "institutional": true,
    "note": "Merged minor parties. Doubles as institutional/establishment support.",
    "cohesion": 0.34,
-   "description": "Seventeen minor parties merged into one bloc — provincial one- and two-seat operations, single-issue vehicles, and the remnants of older coalitions. Individually purchasable, collectively decisive, and their mood doubles as the establishment's: the bureaucracy, the provincial governors, the people who actually implement what you pass.",
+   "description": "Seventeen minor parties in one bloc: one- and two-seat provincial outfits and single-issue vehicles. Buyable one by one, decisive together. Their mood doubles as the establishment's — the bureaucracy and governors who implement what you pass.",
    "short": "17 minor parties · the establishment"
   }
  },
@@ -113,7 +113,7 @@
    "name": "Bhumjaithai + Kla Tham + Others",
    "seats": 284,
    "available": true,
-   "flavour": "The comfortable one. Provincial networks, conservative instincts, nobody asking difficult questions about the budget.",
+   "flavour": "The comfortable one. Provincial networks, conservative instincts, no awkward questions about the budget.",
    "opinion_delta": {
     "People's": -6,
     "Democrat": -8,
@@ -129,14 +129,14 @@
     "stimulusCap": 1.0,
     "executionBonus": 0.0
    },
-   "describe": "Small boost to agriculture, drag on everything else. Reform is close to impossible - this coalition exists to keep things as they are."
+   "describe": "Small boost to agriculture, drag on everything else. Reform is close to impossible - this coalition keeps things as they are."
   },
   {
    "id": "pheuthai",
    "name": "Bhumjaithai + Pheu Thai + Others",
    "seats": 300,
    "available": true,
-   "flavour": "The big-tent option. Money to spend and partners who want to spend it.",
+   "flavour": "The big tent. Money to spend, and partners who want to spend it.",
    "opinion_delta": {
     "People's": -8,
     "Kla Tham": -12,
@@ -152,7 +152,7 @@
     "stimulusCap": 2.5,
     "executionBonus": 0.0
    },
-   "describe": "Moderate boosts to education, megaprojects and stimulus. The widest fiscal latitude, and the fastest route into the debt ceiling."
+   "describe": "Moderate boosts to education, megaprojects and stimulus. The most fiscal room, and the fastest route to the debt ceiling."
   },
   {
    "id": "democrat",
@@ -175,7 +175,7 @@
     "stimulusCap": 1.8,
     "executionBonus": 0.14
    },
-   "describe": "Minor boosts to education, megaprojects and stimulus, plus a real anti-corruption dividend - budget execution rises from 0.50 to 0.64, which raises every baht of capital spending you disburse. The Democrats complicate everything else."
+   "describe": "Minor boosts to education, megaprojects and stimulus. Anti-corruption dividend: budget execution rises from 0.50 to 0.64, so every baht of capital spending goes further. The Democrats complicate everything else."
   },
   {
    "id": "peoples",
@@ -185,7 +185,7 @@
    "flavour": "Why would they ally with us again?",
    "opinion_delta": {},
    "effects": {},
-   "describe": "Unavailable. The arithmetic works and nothing else does."
+   "describe": "Unavailable. The arithmetic works; nothing else does."
   }
  ],
  "crossbench": {

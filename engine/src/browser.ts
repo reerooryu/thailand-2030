@@ -231,8 +231,8 @@ export class BrowserGame {
         this.opinion[party] = Math.max(0, Math.min(100, Math.round(this.opinion[party] + delta)));
       }
       this.log.push({ quarter: this.quarter, kind: 'note',
-        text: `${c.proposal!.party} withdraws ${c.name} — it sat on the desk for ` +
-              `${c.proposal!.expiresAfter} quarters` });
+        text: `${c.proposal!.party} withdraws ${c.name} after ` +
+              `${c.proposal!.expiresAfter} quarters ignored` });
     }
     return this.pending;
   }
