@@ -296,6 +296,30 @@ export const ACHIEVEMENTS: Achievement[] = [
     rarity: 'common',
     test: c => atLeast(c.debtGdp, c.ceiling + 5, 1),
   },
+  {
+    id: 'new_social_contract',
+    name: 'New Social Contract',
+    requirement: 'Ratify a new constitution with a reform score of 6 or more.',
+    flavour: 'Not a revolution. A Senate that cannot veto, a Court that needs two-thirds, governors some provinces chose. It will outlast the people who wrote it.',
+    rarity: 'rare',
+    test: c => has(c, 'constitution_reformist'),
+  },
+  {
+    id: 'paper_tiger',
+    name: 'Paper Tiger',
+    requirement: 'Ratify a new constitution with a reform score of 2 or less.',
+    flavour: 'Sixty per cent voted for a new constitution. They got a new cover on the old one.',
+    rarity: 'common',
+    test: c => has(c, 'constitution_cosmetic'),
+  },
+  {
+    id: 'asian_values',
+    name: 'Asian Values',
+    requirement: 'Ratify a new constitution with the paternalist rights chapter.',
+    flavour: 'Order, harmony, responsible expression. Singapore took fifty years and a single party to make it work.',
+    rarity: 'uncommon',
+    test: c => has(c, 'constitution_paternal') && has(c, 'constitution_ratified'),
+  },
 ];
 
 export function evaluate(c: AchievementContext) {

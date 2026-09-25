@@ -210,6 +210,7 @@ function render() {
 
   renderNews();
   renderDeck();
+  renderConstitution();
   renderParliament();
   $('#end-turn').disabled = g.pending.length > 0 || g.quarter >= 16;
   $('#end-turn').textContent = g.quarter >= 16 ? 'Term complete' :
@@ -395,6 +396,92 @@ function renderDeltas(o) {
   const parts = Object.entries(o).filter(([, v]) => v !== 0)
     .map(([k, v]) => `<span class="${v > 0 ? 'up' : 'down'}">${k} ${v > 0 ? '+' : ''}${v}</span>`);
   return parts.length ? `<div class="o-deltas">${parts.join('')}</div>` : '';
+}
+
+
+/* ---------- the constitution ---------- */
+const PARTY_SHORT = { Bhumjaithai: 'BJT', "People's": 'PP', 'Pheu Thai': 'PT', 'Kla Tham': 'KT',
+                      Democrat: 'DEM', Others: 'OTH', Senate: 'SEN' };
+function partyPill(p, extra = '') {
+  const c = (COALITIONS.seatColours || {})[p] || '#6b6b66';
+  return `<span class="ppill${extra}" style="--pc:${c}" title="${p}">${PARTY_SHORT[p] || p}</span>`;
+}
+const STAGES = [
+  ['idle', 'Section 256'], ['principles', 'Principles'], ['drafting', 'Drafting'], ['final', 'Final referendum'],
+];
+function renderConstitution() {
+  const box = $('#constitution');
+  if (!box) return;
+  const v = g.constitutionView();
+  const at = STAGES.findIndex(x => x[0] === v.stage);
+  const done = v.stage === 'ratified' ? 4 : at;
+  const steps = STAGES.map(([id, name], i) =>
+    `<div class="cs-step${i < done ? ' done' : ''}${i === at ? ' now' : ''}">${i + 1}. ${name}</div>`).join('');
+  const noActions = g.actionsThisTurn >= g.actionCap;
+
+  let status = '', action = '';
+  if (v.stage === 'idle') {
+    const t = v.s256;
+    status = `The February referendum approved a rewrite, 60.16% yes. First, amend Section 256 to set up the drafting assembly.
+      <span class="chip ${t.passes ? 'pass' : 'fail'}">${t.passes ? 'passes' : 'fails'} · ${t.house} MPs, ${t.senate} senators</span>`;
+    action = 'Table the Section 256 amendment';
+  } else if (v.stage === 'principles') {
+    status = `Choose a position on each part. Changed clauses go to a joint sitting (351 of 700, and 67 senators). Clauses that fail keep the current text. Then the package goes to the second referendum.`;
+    action = 'Put the principles to parliament and the country';
+  } else if (v.stage === 'drafting') {
+    status = `The drafting assembly is writing the text. It delivers in ${g.labelAt ? g.labelAt(v.draftingUntil) : 'Q' + (v.draftingUntil + 1)}. Principles approved with ${v.principlesYes}% yes.`;
+  } else if (v.stage === 'final') {
+    status = `The draft is ready. Call the final referendum.` +
+      (g.quarter > v.electoralDeadline ? ' <span class="down">Too late for the electoral change to apply in 2030.</span>' : '');
+    action = 'Call the final referendum';
+  } else if (v.stage === 'ratified') {
+    status = `Ratified with ${v.finalYes}% yes.`;
+  } else {
+    status = `The rewrite failed${v.finalYes != null ? ` at the final referendum, ${v.finalYes}% yes` : v.principlesYes != null ? ` at the second referendum, ${v.principlesYes}% yes` : ''}. It passes to the next parliament.`;
+  }
+
+  const rows = v.parts.map(p => {
+    const opts = p.positions.map((pos, i) => {
+      const sel = i === p.selected;
+      const t = pos.tally;
+      const backers = t ? t.backers.map(b => partyPill(b)).join('') : '<span class="muted">current text</span>';
+      const isProp = p.proposal && p.proposal.index === i;
+      const verdict = t ? `<span class="cs-v ${t.passes ? 'up' : 'down'}" title="${t.house} MPs + ${t.senate} senators. Needs 351, with at least 67 senators.">${t.passes ? '✓' : '✗'} ${t.house}+${t.senate}</span>` : '';
+      return `<button class="cs-opt${sel ? ' sel' : ''}${pos.score < 0 ? ' regress' : ''}" data-part="${p.id}" data-i="${i}"
+          ${v.editing ? '' : 'disabled'} title="${pos.text}">
+          <div class="cs-ol">${pos.label}${isProp ? ' ' + partyPill(p.proposal.party, ' prop') + '<span class="cs-prop">proposal</span>' : ''} ${verdict}</div>
+          <div class="cs-ot">${pos.text}</div>
+          <div class="cs-pills">${backers}</div>
+        </button>`;
+    }).join('');
+    return `<div class="cs-part${p.struck ? ' struck' : ''}"><div class="cs-pn">${p.name}${p.struck ? ' <span class="down">struck</span>' : ''}</div>
+      <div class="cs-opts" style="--n:${p.positions.length}">${opts}</div></div>`;
+  }).join('');
+
+  const pr = v.pressure, bb = v.backbench;
+  const prCls = pr >= bb.revolt ? 'critical' : pr >= bb.warning ? 'warning' : 'good';
+  const meters = `<div class="cs-meters">
+      <span>Reform score <b>${v.score}</b></span>
+      <span>Bhumjaithai tolerance <b class="${prCls === 'good' ? '' : 'down'}">${pr}</b><span class="muted"> / warning ${bb.warning}, revolt ${bb.revolt}</span></span>
+      ${v.stage === 'ratified' || v.stage === 'failed' ? '' :
+        `<span>Referendum projection <b class="${v.referendum >= 50 ? 'up' : 'down'}">${v.referendum}%</b></span>`}
+    </div>`;
+
+  box.innerHTML = `<div class="cs-steps">${steps}</div>
+    <div class="cs-status">${status}</div>
+    ${meters}
+    <div class="cs-parts">${rows}</div>
+    ${action ? `<button class="primary cs-act" ${noActions || g.con.lastActQuarter === g.quarter ? 'disabled' : ''}>${action} <span class="cs-cost">· 1 action</span></button>` : ''}`;
+
+  box.querySelectorAll('.cs-opt').forEach(b => b.onclick = () => {
+    g.setDraft(b.dataset.part, +b.dataset.i); renderConstitution();
+  });
+  const act = box.querySelector('.cs-act');
+  if (act) act.onclick = () => {
+    const r = g.constitutionAct();
+    toast(r.msg, r.ok ? 'good' : 'critical');
+    render();
+  };
 }
 
 function renderDeck() {
@@ -633,6 +720,10 @@ function showEnd(walked, snap = false) {
         <table class="stats">
           ${row('Approval', g.approval + '%', '', g.approval >= 45 ? 'good' : g.approval >= 30 ? 'warning' : 'critical')}
           ${row('Coalition', gov.seats + ' seats', '251 needed', gov.fallen ? 'critical' : 'good')}
+          ${(() => { const cv = g.constitutionView();
+            const word = { idle: 'Not started', principles: 'Principles stage', drafting: 'In drafting', final: 'Awaiting referendum', ratified: 'Ratified', failed: 'Failed' }[cv.stage];
+            return row('Constitution', word, cv.stage === 'ratified' ? `reform score ${cv.score}` : '',
+                       cv.stage === 'ratified' ? 'good' : cv.stage === 'failed' ? 'critical' : ''); })()}
           ${Object.entries(g.opinion).filter(([k]) => k !== 'Bhumjaithai').map(([k, v]) =>
             row(k, String(v), g.bandOf(k).label,
                 v >= 61 ? 'good' : v >= 41 ? '' : v >= 21 ? 'warning' : 'critical')).join('')}
@@ -912,6 +1003,22 @@ function verdictSections(g, s, realCagr, setChg, gov) {
       `policy risk had risen. That is a verdict on the government, and investors act on it.` },
   ], setChg);
 
+  // ---- the constitution
+  const cv = g.constitutionView();
+  const conDone = cv.parts.filter(p => p.selected !== p.keep).map(p => `${p.name.toLowerCase()} (${p.positions[p.selected].label.toLowerCase()})`);
+  const constitution =
+    cv.stage === 'ratified'
+      ? (g.flags.has('constitution_reformist')
+        ? { tag: 'rewritten', t: `A new constitution, ratified with ${cv.finalYes}% yes and a reform score of ${cv.score}: ${conDone.join(', ')}. Moderate by any outside standard, and the largest change to Thailand's rules since 1997.` }
+        : g.flags.has('constitution_cosmetic')
+        ? { tag: 'cosmetic', t: `A new constitution, ratified with ${cv.finalYes}% yes. Reform score ${cv.score}${conDone.length ? `: ${conDone.join(', ')}` : ''}. The country voted for a rewrite and got an edit.` }
+        : { tag: 'amended', t: `A new constitution, ratified with ${cv.finalYes}% yes and a reform score of ${cv.score}: ${conDone.join(', ')}. Real changes, carefully limited to what the party would carry.` })
+    : cv.stage === 'failed'
+      ? { tag: 'failed', t: `The rewrite failed at the ${cv.finalYes != null ? 'final' : 'second'} referendum, ${cv.finalYes ?? cv.principlesYes}% yes. The 2017 text stays in force, and the next parliament starts again.` }
+    : cv.stage === 'idle'
+      ? { tag: 'untouched', t: `Sixty per cent voted for a new constitution in February 2026. This cabinet never tabled the amendment to start it.` }
+      : { tag: 'unfinished', t: `The rewrite was still ${cv.stage === 'drafting' ? 'in drafting' : cv.stage === 'final' ? 'waiting for its final referendum' : 'at the principles stage'} when the term ended. It passes to the next parliament.` };
+
   return [
     { h: 'Headline', tag: growth.tag, t: growth.t },
     { h: 'Legacy', tag: legacy.tag, t: legacy.t },
@@ -920,6 +1027,7 @@ function verdictSections(g, s, realCagr, setChg, gov) {
     { h: 'Households', tag: households.tag, t: households.t },
     { h: 'Politics', tag: politics.tag, t: politics.t },
     { h: 'Markets', tag: markets.tag, t: markets.t },
+    { h: 'Constitution', tag: constitution.tag, t: constitution.t },
   ];
 }
 

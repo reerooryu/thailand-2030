@@ -8,6 +8,10 @@ import { step, nextPeriod, reformEffort } from './engine.js';
 import { runElection } from './election.js';
 import { evaluate as evaluateAchievements } from './achievements.js';
 import { classify } from './ideology.js';
+import {
+  initialConstitution, tally, tallyClause, keepIndex, reformScore, backbenchPressure,
+  referendumYes, listSeats, type ConstitutionCfg, type ConstitutionState, type Whip,
+} from './constitution.js';
 import { initialAgencies, targetNotch, review, ratingPremium, type Agency } from './ratings.js';
 import { BASE } from './params.js';
 import { formCoalition, band, type CoalitionCfg, type PoliticalState } from './politics.js';
@@ -24,6 +28,7 @@ import type { Params, State, Exog, Policy } from './types.js';
 const cfg = DATA.coalitions as unknown as CoalitionCfg;
 const cat = DATA.policies as unknown as PolicyCatalogue;
 const events = DATA.events.events as unknown as GameEvent[];
+const conCfg = DATA.constitution as unknown as ConstitutionCfg;
 const pl = DATA.playability as unknown as
   { gains: Record<string, number>; gestation: { infraQuarters: number } };
 
@@ -55,6 +60,7 @@ export interface LogEntry { quarter: number; kind: string; text: string; }
  *  baseline means what the end screen says it means. It scales every outcome
  *  equally and changes no ranking. */
 const BASELINE_ALIGN = 1.0385;
+const SEN_NEED = 67;
 
 export class BrowserGame {
   cfg = cfg; cat = cat; events = events;
@@ -112,6 +118,10 @@ export class BrowserGame {
    *  count happens at its end and the run ends there, like a collapse does. */
   snap = false;
 
+  /** The new constitution. See constitution.ts. */
+  con: ConstitutionState = initialConstitution(conCfg);
+  conCfg = conCfg;
+
   constructor(coalitionId: string, seed = 20260201) {
     this.ps = formCoalition(cfg, coalitionId);
     this.seats2026 = { ...this.ps.seats };
@@ -150,6 +160,9 @@ export class BrowserGame {
   get label(): string {
     const y = 2026 + Math.floor((this.quarter + 1) / 4);
     return `${y} Q${((this.quarter + 1) % 4) + 1}`;
+  }
+  labelAt(q: number): string {
+    return `${2026 + Math.floor((q + 1) / 4)} Q${((q + 1) % 4) + 1}`;
   }
   get turnsLeft(): number { return 16 - this.quarter; }
   bandOf(p: string) { return band(cfg.bands, this.opinion[p]); }
@@ -233,6 +246,11 @@ export class BrowserGame {
 
     this.censusProposals();
     this.syncStateFlags();
+    if (this.con.stage === 'drafting' && this.quarter >= (this.con.draftingUntil ?? 0)) {
+      this.con = { ...this.con, stage: 'final' };
+      this.log.push({ quarter: this.quarter, kind: 'note',
+        text: 'The drafting assembly delivers the new constitution. It needs a final referendum.' });
+    }
 
     // A partner's bill left to die on the desk. They notice, and they say so.
     for (const c of lapsedProposals(cat, this.quarter, this.flags, this.ps.coalition, this.playedCards)) {
@@ -435,6 +453,139 @@ export class BrowserGame {
     return { ok: true };
   }
 
+  // ---- the constitution ---------------------------------------------------
+  private whip(): Whip {
+    return { seats: this.ps.seats, coalition: this.ps.coalition, othersOpinion: this.opinion.Others ?? 50 };
+  }
+
+  /** Everything the Constitution panel needs, computed fresh. */
+  constitutionView() {
+    const c = this.con, w = this.whip();
+    const editing = c.stage === 'idle' || c.stage === 'principles';
+    const pkg = editing ? c.draft : (c.adopted ?? c.draft);
+    const pt = (party: string) => this.ps.coalition.includes(party);
+    return {
+      stage: c.stage,
+      editing,
+      parts: conCfg.parts.map(p => ({
+        id: p.id, name: p.name, selected: pkg[p.id], keep: keepIndex(p),
+        struck: (c.struck ?? []).includes(p.id),
+        proposal: p.proposal && pt(p.proposal.party)
+          ? { party: p.proposal.party, index: p.positions.findIndex(x => x.id === p.proposal!.position) } : null,
+        positions: p.positions.map((pos, i) => ({
+          id: pos.id, label: pos.label, text: pos.text, score: pos.score,
+          tally: i === keepIndex(p) ? null : tallyClause(p, i, w),
+        })),
+      })),
+      score: reformScore(conCfg, pkg),
+      pressure: backbenchPressure(conCfg, pkg),
+      backbench: conCfg.backbench,
+      referendum: referendumYes(conCfg, pkg, this.approval),
+      s256: tally(conCfg.s256.stances, w),
+      draftingUntil: c.draftingUntil,
+      principlesYes: c.principlesYes, finalYes: c.finalYes,
+      ratifiedQuarter: c.ratifiedQuarter,
+      electoralDeadline: conCfg.electoralDeadlineQuarter,
+    };
+  }
+
+  setDraft(partId: string, index: number) {
+    if (this.con.stage !== 'idle' && this.con.stage !== 'principles') return;
+    this.con = { ...this.con, draft: { ...this.con.draft, [partId]: index } };
+  }
+
+  private bumpOpinion(o: Record<string, number> | undefined) {
+    for (const [party, d] of Object.entries(o ?? {})) {
+      if (this.opinion[party] == null) continue;
+      this.opinion[party] = Math.max(0, Math.min(100, Math.round(this.opinion[party] + d)));
+    }
+  }
+
+  /** Take the next step on the constitution. Costs one action. */
+  constitutionAct(): { ok: boolean; msg: string } {
+    const c = this.con;
+    if (!['idle', 'principles', 'final'].includes(c.stage)) return { ok: false, msg: 'Nothing to do this quarter' };
+    if (this.actionsThisTurn >= this.actionCap) return { ok: false, msg: 'No actions left this quarter' };
+    if (c.lastActQuarter === this.quarter) return { ok: false, msg: 'One constitutional step per quarter' };
+    this.actionsThisTurn++;
+    this.con = { ...this.con, lastActQuarter: this.quarter };
+    const cur = this.con;
+    const w = this.whip();
+    const say = (text: string) => this.log.push({ quarter: this.quarter, kind: 'note', text });
+
+    if (c.stage === 'idle') {
+      const t = tally(conCfg.s256.stances, w);
+      if (!t.passes) {
+        say(`Section 256 amendment FAILS (${t.house} MPs, ${t.senate} senators)`);
+        return { ok: false, msg: `Defeated: ${t.senate} senators, ${SEN_NEED} needed` };
+      }
+      this.con = { ...cur, stage: 'principles' };
+      say(`Section 256 amendment passes (${t.house} MPs, ${t.senate} senators). The drafting assembly is set up.`);
+      return { ok: true, msg: 'Section 256 amended' };
+    }
+
+    if (c.stage === 'principles') {
+      const adopted: Record<string, number> = {};
+      const struck: string[] = [];
+      for (const p of conCfg.parts) {
+        const i = c.draft[p.id];
+        if (i === keepIndex(p)) { adopted[p.id] = i; continue; }
+        const t = tallyClause(p, i, w);
+        if (t.passes) adopted[p.id] = i;
+        else { adopted[p.id] = keepIndex(p); struck.push(p.id); }
+      }
+      if (struck.length) say(`Joint sitting strikes: ${struck.map(id => conCfg.parts.find(p => p.id === id)!.name).join(', ')}`);
+      // Pheu Thai's positions, when they are in government to table them.
+      for (const p of conCfg.parts) {
+        if (!p.proposal || !this.ps.coalition.includes(p.proposal.party)) continue;
+        const key = `const_${p.id}`;
+        this.proposalsSeen.add(key);
+        const want = p.positions.findIndex(x => x.id === p.proposal!.position);
+        if (adopted[p.id] === want) { this.bumpOpinion({ [p.proposal.party]: 4 }); this.proposalsFull.add(key); }
+        else this.bumpOpinion({ [p.proposal.party]: -4 });
+      }
+      // Bhumjaithai's own limit.
+      const pressure = backbenchPressure(conCfg, adopted);
+      if (pressure >= conCfg.backbench.revolt) this.flags.add('const_backbench_revolt');
+      else if (pressure >= conCfg.backbench.warning) this.flags.add('const_backbench_warning');
+      const yes = referendumYes(conCfg, adopted, this.approval);
+      if (yes < 50) {
+        this.con = { ...cur, stage: 'failed', adopted, struck, principlesYes: yes };
+        this.apply({ approvalBoost: -3 } as PolicyEffects);
+        say(`Second referendum rejects the principles, ${yes}% yes. The rewrite is dead for this parliament.`);
+        return { ok: false, msg: `Referendum lost, ${yes}% yes` };
+      }
+      this.con = { ...cur, stage: 'drafting', adopted, struck, principlesYes: yes,
+                   draftingUntil: this.quarter + conCfg.draftingQuarters };
+      this.flags.add('constitution_principles');
+      say(`Second referendum approves the principles, ${yes}% yes. Drafting begins.`);
+      return { ok: true, msg: `Principles approved, ${yes}% yes` };
+    }
+
+    // final referendum
+    const pkg = c.adopted!;
+    const yes = referendumYes(conCfg, pkg, this.approval);
+    if (yes < 50) {
+      this.con = { ...cur, stage: 'failed', finalYes: yes };
+      this.apply({ approvalBoost: -4 } as PolicyEffects);
+      say(`Final referendum rejects the new constitution, ${yes}% yes.`);
+      return { ok: false, msg: `Referendum lost, ${yes}% yes` };
+    }
+    for (const p of conCfg.parts) {
+      const pos = p.positions[pkg[p.id]];
+      if (pos.effects) this.apply(pos.effects as PolicyEffects);
+      this.bumpOpinion(pos.opinion);
+      for (const f of pos.sets ?? []) this.flags.add(f);
+    }
+    const score = reformScore(conCfg, pkg);
+    this.flags.add('constitution_ratified');
+    if (score >= 6) this.flags.add('constitution_reformist');
+    if (score <= 2) this.flags.add('constitution_cosmetic');
+    this.con = { ...cur, stage: 'ratified', finalYes: yes, ratifiedQuarter: this.quarter };
+    say(`The new constitution is ratified, ${yes}% yes.`);
+    return { ok: true, msg: `Ratified, ${yes}% yes` };
+  }
+
   private reviewRatings() {
     const h = this.history, s = h[h.length - 1], y = h[h.length - 5] ?? h[0];
     const target = targetNotch({
@@ -520,6 +671,8 @@ export class BrowserGame {
       approval: this.approval,
       headline: this.headline(),
       baseline: this.baseline(),
+      listSeats: this.con.stage === 'ratified' && (this.con.ratifiedQuarter ?? 99) <= conCfg.electoralDeadlineQuarter
+        ? listSeats(conCfg, this.con.adopted!) : 100,
       realGrowth,
       potentialGrowth: this.state.potentialGrowthYoy,
       setChange: (this.set / 1621.62 - 1) * 100,

@@ -1,0 +1,118 @@
+{
+  "_meta": {
+    "purpose": "The new constitution, as a four-step track. The 8 February 2026 referendum approved drafting one (60.16% yes, 69.65% turnout). Chapters 1 and 2 are not on the table. Bhumjaithai tables nothing radical: the furthest any part goes is a moderate reformist tilt.",
+    "stances": "Party and Senate stance on each position, -2 (opposes) to +2 (supports). Positions are ordered from least to most reformist; `score` is the reform score.",
+    "vote": "Each changed clause goes to a joint sitting: yes >= 351 of 700 and at least 67 of 200 senators. A clause that fails reverts to the current text."
+  },
+  "parts": [
+    {
+      "id": "senate",
+      "name": "Senate",
+      "bjtWeight": 2,
+      "positions": [
+        { "id": "keep", "score": 0, "label": "Keep", "text": "The 2024 self-selection system and every current power." },
+        { "id": "adjust", "score": 1, "label": "Adjust", "text": "Selection kept, but the candidate groups are opened up and block voting is banned.",
+          "effects": { "institutionalSupport": -1 } },
+        { "id": "tilt", "score": 2, "label": "Tilt", "text": "Selection kept. The Senate loses its one-third veto over constitutional amendments.",
+          "effects": { "institutionalSupport": -4, "approvalBoost": 1 }, "opinion": { "People's": 3 } }
+      ],
+      "stances": {
+        "People's":  [-1, 1, 2],
+        "Pheu Thai": [0, 1, 1],
+        "Kla Tham":  [2, 0, -2],
+        "Democrat":  [0, 1, 1],
+        "Others":    [2, 0, -1],
+        "Senate":    [2, 0, -2]
+      },
+      "proposal": { "party": "Pheu Thai", "position": "adjust" }
+    },
+    {
+      "id": "electoral",
+      "name": "Electoral system",
+      "bjtWeight": 1,
+      "positions": [
+        { "id": "keep", "score": 0, "label": "400 / 100", "text": "400 constituency seats and 100 party-list seats, two ballots." },
+        { "id": "adjust", "score": 1, "label": "390 / 110", "text": "Ten constituencies become list seats. Applies at the next general election.", "listSeats": 110 },
+        { "id": "tilt", "score": 2, "label": "375 / 125", "text": "Twenty-five constituencies become list seats. Still parallel, not MMP. Applies at the next general election.", "listSeats": 125 }
+      ],
+      "stances": {
+        "People's":  [-1, 1, 2],
+        "Pheu Thai": [1, 1, 0],
+        "Kla Tham":  [2, 0, -1],
+        "Democrat":  [0, 1, 2],
+        "Others":    [1, 0, -1],
+        "Senate":    [1, 1, 0]
+      }
+    },
+    {
+      "id": "court",
+      "name": "Constitutional Court",
+      "bjtWeight": 2,
+      "positions": [
+        { "id": "keep", "score": 0, "label": "Keep", "text": "The Court and its power to dissolve parties, unchanged." },
+        { "id": "adjust", "score": 1, "label": "Adjust", "text": "The panel that selects judges is widened, with one member nominated by the opposition.",
+          "effects": { "institutionalSupport": -1 } },
+        { "id": "tilt", "score": 2, "label": "Tilt", "text": "Dissolving a party needs a two-thirds vote of the Court.",
+          "effects": { "institutionalSupport": -3 }, "opinion": { "People's": 3 }, "sets": ["court_dissolution_limited"] }
+      ],
+      "stances": {
+        "People's":  [-1, 1, 2],
+        "Pheu Thai": [0, 1, 1],
+        "Kla Tham":  [2, 0, -1],
+        "Democrat":  [1, 1, 1],
+        "Others":    [2, 1, -1],
+        "Senate":    [2, 0, -1]
+      }
+    },
+    {
+      "id": "decentral",
+      "name": "Decentralisation",
+      "bjtWeight": 1,
+      "positions": [
+        { "id": "keep", "score": 0, "label": "Keep", "text": "Governors appointed by the Interior Ministry." },
+        { "id": "adjust", "score": 1, "label": "Adjust", "text": "Elected-governor pilot in Chiang Mai, Phuket and Khon Kaen.",
+          "effects": { "executionBonus": 0.01, "reformIndex": 8 } },
+        { "id": "tilt", "score": 2, "label": "Tilt", "text": "Pilot in ten provinces, and a modestly larger local share of revenue.",
+          "effects": { "executionBonus": 0.02, "reformIndex": 15, "institutionalSupport": -3 }, "opinion": { "People's": 2 } }
+      ],
+      "stances": {
+        "People's":  [-1, 1, 2],
+        "Pheu Thai": [0, 1, 1],
+        "Kla Tham":  [1, 0, -1],
+        "Democrat":  [0, 1, 1],
+        "Others":    [1, 0, -1],
+        "Senate":    [1, 0, -1]
+      },
+      "proposal": { "party": "Pheu Thai", "position": "adjust" }
+    },
+    {
+      "id": "rights",
+      "name": "Rights",
+      "bjtWeight": 1,
+      "positions": [
+        { "id": "paternal", "score": -1, "label": "Paternalist", "text": "The Singapore model. Duties sit beside rights: public order, social harmony, responsible expression. The state gains wider powers over assembly and online content.",
+          "effects": { "institutionalSupport": 4, "executionBonus": 0.01, "approvalBoost": -1 }, "opinion": { "People's": -10, "Democrat": -4 }, "sets": ["constitution_paternal"] },
+        { "id": "keep", "score": 0, "label": "Keep", "text": "The current rights chapter." },
+        { "id": "adjust", "score": 1, "label": "Adjust", "text": "Community rights over land and the environment.",
+          "effects": { "approvalBoost": 2 }, "opinion": { "People's": 3 } },
+        { "id": "tilt", "score": 2, "label": "Tilt", "text": "Community rights, and a constitutional right to government information.",
+          "effects": { "approvalBoost": 3, "institutionalSupport": -2 }, "opinion": { "People's": 5 } }
+      ],
+      "keepIndex": 1,
+      "stances": {
+        "People's":  [-2, -1, 1, 2],
+        "Pheu Thai": [-1, 0, 1, 1],
+        "Kla Tham":  [2, 1, 0, -1],
+        "Democrat":  [-1, 0, 1, 1],
+        "Others":    [2, 1, 0, -1],
+        "Senate":    [2, 1, 0, -1]
+      }
+    }
+  ],
+  "s256": {
+    "stances": { "People's": 2, "Pheu Thai": 1, "Kla Tham": -1, "Democrat": 1, "Others": -1, "Senate": 0 }
+  },
+  "backbench": { "warning": 9, "revolt": 11 },
+  "draftingQuarters": 5,
+  "electoralDeadlineQuarter": 13
+}

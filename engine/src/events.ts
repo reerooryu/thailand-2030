@@ -15,7 +15,7 @@ import type { PolicyEffects } from './policies.js';
  *  that only exists because of an earlier decision. The debt ceiling is the
  *  case: headroom falls below the line twice, and the second time is only
  *  reachable by a government that legislated the first raise. */
-type TriggerGate = { requiresFlag?: string };
+type TriggerGate = { requiresFlag?: string; blockedByFlag?: string };
 
 export type Trigger = TriggerGate & (
   | { type: 'afterOption'; card: string; option: string; inQuarters: number }
@@ -104,13 +104,14 @@ export function due(
   for (const s of scheduled) {
     if (s.dueQuarter <= quarter) {
       const e = events.find(x => x.id === s.eventId);
-      if (e && !alreadyFired.has(e.id)) fired.push(e);
+      if (e && !alreadyFired.has(e.id) && !(e.trigger?.blockedByFlag && flags.has(e.trigger.blockedByFlag))) fired.push(e);
     } else remaining.push(s);
   }
 
   for (const e of events) {
     if (alreadyFired.has(e.id) || fired.includes(e)) continue;
     if (e.trigger?.requiresFlag && !flags.has(e.trigger.requiresFlag)) continue;
+    if (e.trigger?.blockedByFlag && flags.has(e.trigger.blockedByFlag)) continue;
     if (e.scriptedQuarter != null) { if (e.scriptedQuarter === quarter) fired.push(e); continue; }
     const t = e.trigger;
     if (t.type === 'threshold') {

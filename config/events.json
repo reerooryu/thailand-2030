@@ -1761,7 +1761,8 @@
         "type": "afterOption",
         "card": "network_confrontation",
         "option": "stand",
-        "inQuarters": 4
+        "inQuarters": 4,
+        "blockedByFlag": "court_dissolution_limited"
       },
       "blocking": true,
       "body": "A petition reaches the Constitutional Court: dissolve Bhumjaithai and ban its executive committee for ten years, over a 2023 donation declared, audited and signed off at the time.\n\nThe petitioner is a nobody. Everyone knows who pays the lawyers.\n\nThis is how Thai parties die.",
@@ -1815,6 +1816,62 @@
             "reformIndex": 3
           },
           "flavour": "People vote for the party for what it did, not for who asked them to."
+        }
+      ]
+    },
+    {
+      "id": "const_backbench",
+      "headline": "The backbench wants a word",
+      "trigger": {
+        "type": "flag",
+        "flag": "const_backbench_warning"
+      },
+      "blocking": true,
+      "body": "Forty Bhumjaithai members sign a letter to the party leader. They back the new constitution. They would like it to stop there.",
+      "options": [
+        {
+          "id": "ack",
+          "label": "Reassure them",
+          "body": "Promise no further changes this parliament.",
+          "effects": {
+            "approvalBoost": -1,
+            "institutionalSupport": -2
+          },
+          "flavour": "They sign the next vote. They will remember the letter.",
+          "opinion": {
+            "Kla Tham": 1,
+            "Others": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "const_backbench_revolt",
+      "headline": "Eight walk",
+      "trigger": {
+        "type": "flag",
+        "flag": "const_backbench_revolt"
+      },
+      "blocking": true,
+      "body": "Eight Bhumjaithai members resign the whip over the new constitution. The Senate clause and the Court clause, they say, were written against their own party.",
+      "options": [
+        {
+          "id": "ack",
+          "label": "Let them go",
+          "seatShift": {
+            "Bhumjaithai": -8,
+            "Kla Tham": 5,
+            "Others": 3
+          },
+          "opinion": {
+            "Kla Tham": 2,
+            "Others": 2
+          },
+          "effects": {
+            "approvalBoost": -2,
+            "institutionalSupport": -3
+          },
+          "flavour": "The party that wrote the draft is smaller than the party that tabled it."
         }
       ]
     }
