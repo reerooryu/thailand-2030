@@ -25,6 +25,8 @@ export interface IdeologyInput {
   debtEnd: number;
   primaryBalance: number;
   invRate: number;
+  /** A ratified constitution with two or more Singapore-lite positions. */
+  singaporeLite?: boolean;
 }
 
 export interface Ideology {
@@ -46,6 +48,15 @@ export function classify(i: IdeologyInput): Ideology {
   const REFORMS = reform > 55, DELEVERAGED = debtRise < 6, BORROWED = debtRise > 12;
 
   // --- the pure types, checked most specific first
+  // A strong state built on top of a clean one: the constitution says so,
+  // and the reform record and the capital budget back it up.
+  if (i.singaporeLite && REFORMS && BUILDS) return {
+    name: 'Guided Developmentalism',
+    tradition: "Singapore's PAP state and Korea under Park: a strong executive, a clean bureaucracy, and a plan",
+    tag: 'cleaned the state, then gave it more power',
+    body: 'The civil service cut and policed first, then a constitution that lets the executive plan and deliver with fewer checks. Industrial strategy, managed labour, means-tested welfare. It works while the bureaucracy stays clean, and nothing in the new rules guarantees that it will.',
+  };
+
   if (BUILDS && REFORMS && COLLECTS && DELEVERAGED) return {
     name: 'Developmental Statism',
     tradition: 'the East Asian developmental state: Park, Lee, Sarit with better arithmetic',

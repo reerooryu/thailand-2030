@@ -352,7 +352,7 @@ details.whip td{padding:2px 0;vertical-align:baseline}
 .cs-opt:disabled{cursor:default;opacity:.55}
 .cs-opt.sel{border-color:var(--series-1);opacity:1;box-shadow:inset 0 0 0 1px var(--series-1)}
 .cs-opt.sg{border-style:dashed}
-.cs-opt.sg .cs-ol,.cs-sg,.sg-t{color:#1fb5a6}
+.cs-sg,.sg-t{color:#1fb5a6}
 .cs-sg{font-size:10.5px;margin-top:3px}
 .cs-ol{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .cs-ot{font-size:12px;color:var(--ink-2);margin:4px 0 6px}
@@ -364,3 +364,17 @@ details.whip td{padding:2px 0;vertical-align:baseline}
 .cs-act{margin-top:10px}
 .cs-pills .muted{font-size:11px}
 .cs-cost{opacity:.7;font-weight:400}
+
+/* constitution direction colours */
+.pk-keep{--pk:var(--ink-2)} .pk-adjust{--pk:#7fb2ff} .pk-tilt{--pk:#3f7dff} .pk-sg{--pk:#1fb5a6}
+.cs-opt .cs-ol{color:var(--pk, var(--ink))}
+.cs-opt.pk-keep .cs-ol{color:var(--ink-2)}
+.cf .cf-note{color:var(--ink-2);font-size:13.5px;margin:4px 0 10px}
+.cf-table{width:100%;border-collapse:collapse;font-size:13px}
+.cf-table td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:top}
+.cf-part{color:var(--ink-3);text-transform:uppercase;font-size:11.5px;letter-spacing:.05em;white-space:nowrap}
+.cf-text{color:var(--ink-2)}
+.cf-pos{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap;
+  color:var(--pk);border:1px solid var(--pk)}
+.cf-key{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+@media(max-width:600px){.cf-text{display:none}}
