@@ -370,7 +370,11 @@ export class Game {
       this.log.push({ quarter: this.quarter, kind: 'note', text: `OECD accession: the ${c} chapter closes` });
     }
     const policy: Policy = {
-      policyRate: 1.0, reer: s.reer,
+      // The Bank of Thailand: holds at 1.0% until the economy runs hot, then
+      // leans against it. Without this, inflation lowered the real rate and fed
+      // the boom it came from.
+      policyRate: 1.0 + 1.5 * Math.max(0, s.cpiYoy - 2.0) + 0.25 * Math.max(0, s.gap - 2),
+      reer: s.reer,
       capitalSpend: Math.min(cap, BASELINE.capitalSpend + this.stance.capitalSpend * ramp),
       govConsumption: BASELINE.govConsumption + (this.stance.govConsumption ?? 0) * ramp,
       transfers: Math.min(stimCap, this.stance.transfers * ramp),
@@ -424,7 +428,8 @@ export class Game {
 
   score() {
     const end = this.state, start = this.history[3];
-    const headline = 8056.57 * BASELINE_ALIGN * (end.rgdp / start.rgdp) * (end.cpi / start.cpi)
+    const priceFactor = Math.min(end.cpi / start.cpi, Math.pow(1.012, this.quarter / 4));
+    const headline = 8056.57 * BASELINE_ALIGN * (end.rgdp / start.rgdp) * priceFactor
                    * (71.62 / 71.215) * (32.88 / 34.6);
     return {
       headline, legacy: end.potentialGrowthYoy, debtGdp: end.debtGdp,

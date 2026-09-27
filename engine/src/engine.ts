@@ -109,6 +109,7 @@ export function step(input: StepInput): State {
     p.coreConst +
     p.corePersistence * s.cpiCoreYoy +
     p.coreGap * s.gap +
+    (p.hotGapCore ?? 0) * Math.max(0, s.gap - (p.hotGapThreshold ?? 2)) +
     p.coreFx * dReer4 +
     p.coreEnergy * exog.energyInflation;
 
@@ -116,6 +117,7 @@ export function step(input: StepInput): State {
     p.headlineConst +
     p.headlinePersistence * s.cpiYoy +
     p.headlineGap * s.gap +
+    (p.hotGapHeadline ?? 0) * Math.max(0, s.gap - (p.hotGapThreshold ?? 2)) +
     p.headlineFx * dReer4 +
     p.headlineEnergy * exog.energyInflation;
 

@@ -63,6 +63,9 @@ export const PROVENANCE: Record<keyof Params, ParamSource> = {
   labourGrowth: 'estimated',
   infraGestation: 'literature',
   infraStagedShare: 'prior',
+  hotGapThreshold: 'prior',
+  hotGapCore: 'prior',
+  hotGapHeadline: 'prior',
   ftaDemand: 'prior',
   ftaTfp: 'prior',
   ftaTfpCap: 'prior',
@@ -198,6 +201,10 @@ export const BASE: Params = {
   // EU FTA, conservative against the cited +1.28% GDP / +2.8% exports:
   // about +0.25pp on the output gap and +0.12pp a year on potential growth
   // once fully phased in.
+  // About +1pp on headline inflation at a +7% gap; nothing below +2%.
+  hotGapThreshold: 2,
+  hotGapCore: 0.02,
+  hotGapHeadline: 0.10,
   ftaDemand: 0.12,
   ftaTfp: 0.03,
   ftaTfpCap: 1.0,          // stop at ~1%: the study's +1.28% GDP, less the demand share

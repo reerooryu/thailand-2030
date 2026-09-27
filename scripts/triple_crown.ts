@@ -88,9 +88,10 @@ function evaluate(coalition: string, g0: Genome, energy?: number[]) {
 
   for (let q = 0; q < Q; q++) {
     for (const e of g.openTurn().slice()) {
-      const legal = e.options.filter((o: any) => !o.unavailable);
+      const legal = e.options.filter((o: any) => !o.unavailable && (o.requiresFlags ?? []).every((f: string) => g.flags.has(f)));
       const want = legal.find((o: any) => o.id === g0.events[e.id]);
-      g.resolveEvent(e.id, (want ?? legal[0]).id);
+      const tryOrder = [want, ...legal].filter(Boolean);
+      for (const o of tryOrder) { try { g.resolveEvent(e.id, o.id); break; } catch { /* locked */ } }
     }
     for (const m of plan.filter(m => m.q === q)) g.playCard(m.card, m.option);
     const gapBefore = g.state.gap;

@@ -426,7 +426,11 @@ export class BrowserGame {
       this.log.push({ quarter: this.quarter, kind: 'note', text: `OECD accession: the ${c} chapter closes` });
     }
     const policy: Policy = {
-      policyRate: 1.0, reer: s.reer,
+      // The Bank of Thailand: holds at 1.0% until the economy runs hot, then
+      // leans against it. Without this, inflation lowered the real rate and fed
+      // the boom it came from.
+      policyRate: 1.0 + 1.5 * Math.max(0, s.cpiYoy - 2.0) + 0.25 * Math.max(0, s.gap - 2),
+      reer: s.reer,
       capitalSpend: Math.min(cap, BASELINE.capitalSpend + this.stance.capitalSpend * ramp),
       govConsumption: BASELINE.govConsumption + this.stance.govConsumption * ramp,
       transfers: Math.min(stimCap, this.stance.transfers * ramp),
@@ -646,7 +650,11 @@ export class BrowserGame {
 
   headline(): number {
     const end = this.state, start = this.history[3];
-    return 8056.57 * BASELINE_ALIGN * (end.rgdp / start.rgdp) * (end.cpi / start.cpi)
+    // Inflation above the IMF's projected path (about 1.2% a year) does not
+    // raise dollar GDP: the baht depreciates to offset it (relative PPP).
+    // Otherwise overheating would buy headline.
+    const priceFactor = Math.min(end.cpi / start.cpi, Math.pow(1.012, this.quarter / 4));
+    return 8056.57 * BASELINE_ALIGN * (end.rgdp / start.rgdp) * priceFactor
          * (71.62 / 71.215) * (32.88 / 34.6);
   }
   /** Not what they called themselves — what the budget composition says they were. */
