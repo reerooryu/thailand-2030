@@ -64,6 +64,13 @@ export function classify(i: IdeologyInput): Ideology {
     body: 'Public capital at scale, institutions rebuilt underneath, all funded from revenue rather than issuance. A maximally activist state that stays solvent, and a government willing to be disliked in year two for results in year eight.',
   };
 
+  if (BUILDS && REFORMS && BORROWED) return {
+    name: 'Big Push Developmentalism',
+    tradition: "Mahathir's Malaysia and the 1980s Asian tigers: build ahead of demand, reform underneath, borrow the difference",
+    tag: 'built and reformed at once, and borrowed to do both',
+    body: 'Capital spending at scale and institutions rebuilt at the same time, with the gap financed by issuance rather than revenue. The fastest way to move a country up a level, and the one that leaves the largest bill. Whether it was a big push or a big bet depends on the next government collecting the taxes this one did not.',
+  };
+
   if (BUILDS && BORROWED && !REFORMS) return {
     name: 'Concrete Keynesianism',
     tradition: 'post-war infrastructure Keynesianism, and every Thai government since 2014',
