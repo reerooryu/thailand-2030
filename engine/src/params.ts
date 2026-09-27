@@ -65,6 +65,9 @@ export const PROVENANCE: Record<keyof Params, ParamSource> = {
   infraStagedShare: 'prior',
   ftaDemand: 'prior',
   ftaTfp: 'prior',
+  ftaTfpCap: 'prior',
+  ftaExports: 'literature',
+  ftaExportPass: 'prior',
   infraStagedLag: 'prior',
   infraTfpBonus: 'prior',
   infraBaselineShare: 'estimated',
@@ -197,6 +200,9 @@ export const BASE: Params = {
   // once fully phased in.
   ftaDemand: 0.12,
   ftaTfp: 0.03,
+  ftaTfpCap: 1.0,          // stop at ~1%: the study's +1.28% GDP, less the demand share
+  ftaExports: 2.8,         // the study's export gain, reached as access phases in
+  ftaExportPass: 0.35,     // export share of GDP (~0.65) x domestic value added (~0.55)
   infraTfpBonus: 0.010,
   infraBaselineShare: 6.1,
   debtCeiling: 70,

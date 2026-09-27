@@ -438,6 +438,7 @@ export class BrowserGame {
       savingsRate: (this.stance.savingsRate ?? 0) * ramp,
       ratingPremium: ratingPremium(this.agencies),
       tradeAccess: tradeAccess(this.fta, this.quarter),
+      tradeAccessLag4: tradeAccess(this.fta, this.quarter - 4),
     };
     const exog: Exog = { worldDemandGrowth: 3.0, globalActivity: 10.0,
                          energyInflation: 1.5 + (this.rng() - 0.5) * 3, shock: 0 };

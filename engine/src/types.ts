@@ -18,6 +18,8 @@ export interface State {
   infraPipeline: number[]; // public capex awaiting gestation, oldest first
   /** The staged share of above-baseline capex, awaiting its first sections. */
   infraStaged?: number[];
+  /** Cumulative TFP gain from the EU FTA so far, %. */
+  ftaTfpCum?: number;
   exportsR: number;        // real exports, mn baht
   importsR: number;        // real imports, mn baht
   invPrivR: number;        // real private GFCF, mn baht
@@ -101,6 +103,8 @@ export interface Policy {
 
   /** EU FTA market access, 0 to 1 as it phases in (eufta.ts). */
   tradeAccess?: number;
+  /** The same, four quarters earlier: export growth is year on year. */
+  tradeAccessLag4?: number;
 }
 
 /** Behavioural parameters. `source` records where each came from — this
@@ -214,6 +218,13 @@ export interface Params {
    *  and to TFP growth, %/quarter. */
   ftaDemand: number;
   ftaTfp: number;
+  /** Cumulative cap on the FTA's TFP gain, % of the TFP level: a one-off level
+   *  gain, as trade studies estimate, not a permanent growth-rate increase. */
+  ftaTfpCap: number;
+  /** Export LEVEL gain at full phase-in, %, and the share of an export impulse
+   *  that reaches the output gap after imported content. */
+  ftaExports: number;
+  ftaExportPass: number;
   infraTfpBonus: number;       // extra TFP growth per pp of GDP of infra ABOVE baseline
   infraBaselineShare: number;  // the 2026 public capex share, 6.1% of GDP
 

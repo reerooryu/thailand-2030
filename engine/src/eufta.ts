@@ -83,5 +83,5 @@ export function stepFta(s0: FtaState, quarter: number, flags: Set<string>, maxim
 /** 0 before entry into force, rising to 1 over the phase-in. */
 export function tradeAccess(s: FtaState, quarter: number): number {
   if (s.stage !== 'in_force' || s.inForceQuarter == null) return 0;
-  return Math.min(1, (quarter - s.inForceQuarter + 1) / FTA_PHASE_IN);
+  return Math.max(0, Math.min(1, (quarter - s.inForceQuarter + 1) / FTA_PHASE_IN));
 }
