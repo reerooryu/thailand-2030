@@ -50,6 +50,7 @@ export function step(input: StepInput): State {
     fiscalImpulse +
     p.isWorldDemand * exog.worldDemandGrowth +
     p.isGlobalActivity * exog.globalActivity +
+    (p.ftaDemand ?? 0) * (policy.tradeAccess ?? 0) +
     exog.shock;
 
   // ---- SUPPLY SIDE. Y_pot = TFP · K^alpha · L^(1-alpha).
@@ -91,7 +92,8 @@ export function step(input: StepInput): State {
     + stagedDelivered / Math.max(s.rgdp, 1) * 100;
   const tfp = s.tfp * (1 +
     (p.tfpTrendGrowth + p.infraTfpBonus * infraShare + p.reformToTfp * s.reformStock
-     + p.humanCapitalToTfp * (policy.humanCapital ?? 0)) / 100);
+     + p.humanCapitalToTfp * (policy.humanCapital ?? 0)
+     + (p.ftaTfp ?? 0) * (policy.tradeAccess ?? 0)) / 100);
 
   const potential = tfp * Math.pow(capital, p.alpha) * Math.pow(labour, 1 - p.alpha);
   const potentialGrowthYoy = (potential / lag4.potential - 1) * 100;

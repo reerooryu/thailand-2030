@@ -17,6 +17,7 @@ import {
 } from './events.js';
 import { step, reformEffort } from './engine.js';
 import { closedChapters, CAPACITY_PER_CHAPTER, FDI_PER_CHAPTER } from './oecd.js';
+import { initialFta, stepFta, tradeAccess, type FtaState } from './eufta.js';
 import { initialAgencies, targetNotch, review, ratingPremium, type Agency } from './ratings.js';
 import { BASE } from './params.js';
 import { applyGains } from './playability.js';
@@ -49,6 +50,9 @@ export class Game {
   snap = false;
   /** OECD chapters already reported closed. */
   oecdClosed = new Set<string>();
+  /** The EU FTA track. See eufta.ts. */
+  fta: FtaState = initialFta();
+  maximalPlays = new Set<string>();
   cfg: CoalitionCfg; cat: PolicyCatalogue; events: GameEvent[];
   ps: PoliticalState;
   opinion: Record<string, number>;
@@ -221,6 +225,7 @@ export class Game {
       return false;
     }
     const opt = r.option;
+    if ((opt as any).maximal) this.maximalPlays.add(cardId); else this.maximalPlays.delete(cardId);
     // deferral: the card comes back rather than being consumed
     if (opt.returnsInQuarters) {
       this.deferred.push({ cardId, returnsAtQuarter: this.quarter + opt.returnsInQuarters });
@@ -353,6 +358,12 @@ export class Game {
     const ramp = Math.min(1, (this.quarter + 1) / 6);
     const cap = this.ps.effects.megaprojectCap ?? 9.0;
     const stimCap = this.ps.effects.stimulusCap ?? 2.0;
+    {
+      const r = stepFta(this.fta, this.quarter, this.flags, this.maximalPlays);
+      if (r.fta.stage === 'in_force' && this.fta.stage !== 'in_force') this.flags.add('eu_fta_in_force');
+      this.fta = r.fta;
+      for (const text of r.notes) this.log.push({ quarter: this.quarter, kind: 'note', text });
+    }
     const chapters = closedChapters(this.flags);
     for (const c of chapters) if (!this.oecdClosed.has(c)) {
       this.oecdClosed.add(c);
@@ -370,6 +381,7 @@ export class Game {
       formalisation: (this.stance.formalisation ?? 0) * ramp,
       savingsRate: (this.stance.savingsRate ?? 0) * ramp,
       ratingPremium: ratingPremium(this.agencies),
+      tradeAccess: tradeAccess(this.fta, this.quarter),
     };
     const params: Params = { ...this.params,
       // Disbursement is a RATE, not a multiplier: 1.0 means every baht of the

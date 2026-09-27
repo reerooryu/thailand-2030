@@ -30,12 +30,19 @@ export interface AchievementContext {
   flags: Set<string>;
   opinion: Record<string, number>;
   fell: boolean;
+  /** IMF baseline at the end of the run (lower if it ended early). */
+  baseline?: number;
   playerSeats: number;
   coalitionAfter: string[] | null;
   verdict: string;
   maximalPlays: number;      // cards enacted at full scope
   hedgedPlays: number;       // cards enacted on a pilot, a phase-in or a half
   proposalsFull: number;     // partner bills enacted at full scope
+  /** Agencies at BBB- (the last investment grade). */
+  ratingsAtFloor?: number;
+  /** News events that offered a do-nothing option, and how many times it was taken. */
+  passiveSeen?: number;
+  passiveTaken?: number;
   proposalsSeen: number;     // partner bills that reached the desk at all
 }
 
@@ -202,10 +209,10 @@ export const ACHIEVEMENTS: Achievement[] = [
     test: c => atMost(c.primaryBalance, -3) && atMost(c.reformStock, 40, 1),
   },
   {
-    id: 'people_pleaser',
-    name: 'People Pleaser',
+    id: 'kreng_jai',
+    name: 'Kreng Jai',
     requirement: 'Enact every bill your coalition partners bring to the desk at full scope, and let none lapse.',
-    flavour: 'Junior partners usually get their bills costed, sent to committee and forgotten. This cabinet said yes to everything. Check the deficit.',
+    flavour: 'Too considerate to refuse a partner anything. Junior parties usually get their bills costed and forgotten. This cabinet said yes to all of them, and the deficit shows it.',
     rarity: 'rare',
     // Deliberately demands the FULL option, not merely passage. A partner bill
     // taken as a pilot is the classic Thai coalition compromise — the ally can
@@ -327,6 +334,22 @@ export const ACHIEVEMENTS: Achievement[] = [
     flavour: 'A state that delivers, and a public that is asked to trust it. The trust was earned first, which is the part other governments skip.',
     rarity: 'uncommon',
     test: c => has(c, 'constitution_sg_competent'),
+  },
+  {
+    id: 'tom_yum_kung',
+    name: 'Tom Yum Kung',
+    requirement: 'Finish with at least two agencies at BBB-, one notch above junk, and GDP per head below the IMF baseline.',
+    flavour: 'The region named the 1997 crisis after a Thai soup. The rating agencies have started reaching for the menu again.',
+    rarity: 'rare',
+    test: c => (c.ratingsAtFloor ?? 0) >= 2 && c.headline < (c.baseline ?? 9092),
+  },
+  {
+    id: 'mai_pen_rai',
+    name: 'Mai Pen Rai',
+    requirement: 'Answer every news event with its do-nothing option, whenever it has one.',
+    flavour: 'The Strait closed, the baht moved, the protesters marched, the ceiling broke. Never mind.',
+    rarity: 'common',
+    test: c => (c.passiveSeen ?? 0) >= 5 && c.passiveTaken === c.passiveSeen && !c.fell,
   },
 ];
 

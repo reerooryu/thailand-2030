@@ -24,7 +24,7 @@ Four scores, all in tension:
 - **Investment**
 - **Debt ratio**: measured against a ceiling you can raise by law and then have to live with
 
-Then the count, coalition talks, an analyst's verdict, your revealed ideology and 26 achievements.
+Then the count, coalition talks, an analyst's verdict, your revealed ideology and 29 achievements.
 
 ### Before your first term
 
@@ -35,6 +35,7 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 - **The bond market charges.** The risk premium hits the next government and every firm borrowing alongside it.
 - **Megaprojects open in stages.** 35% of public capital spending above the baseline programme reaches the capital stock after two years; the rest takes the full four. Build early and some of it counts before 2030.
 - **OECD accession locks reform in.** While accession is accelerating, each matching domestic law (Super Licence, Digital Government, civil service reform, anti-corruption enforcement, justice reform, the Revenue package) closes a chapter. Each closed chapter raises reform capacity by 0.02 and adds to the FDI signal.
+- **The EU trade deal is a race.** Talks start at 63% (15 of 24 chapters, June 2026) and move 3 points a quarter. Reforms that answer open chapters speed it up; the paternalist rights chapter, migrant raids and forcing the Land Bridge slow it. After ratification it phases in over two years: more export demand and a small permanent lift to productivity growth.
 - **The agencies are watching.** S&P, Fitch and Moody's start at BBB+ / BBB+ / Baa1 and can move between A- and BBB-. Breaking or raising the debt ceiling, deep deficits and weak growth push them down; a downgrade adds to the risk premium.
 - **You can dissolve the House.** If your own members start leaving and approval is at 55% or more, you can call a snap election instead of waiting for the government to fall. The term ends at that count.
 
@@ -49,14 +50,15 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/browser.ts` | Game host: turns, cards, votes, flags, scoring. |
 | `engine/src/politics.ts` | Coalition formation, whip counts, crossbench defection. |
 | `engine/src/election.ts` | The March 2030 count and coalition talks. |
-| `engine/src/achievements.ts` | 26 end-of-term achievements. None feed back. |
+| `engine/src/achievements.ts` | 29 end-of-term achievements. None feed back. |
+| `engine/src/eufta.ts` | The EU–Thailand FTA: progress, ratification, entry into force. |
 | `engine/src/oecd.ts` | OECD accession chapters and what closing them does. |
 | `engine/src/ratings.ts` | Sovereign credit ratings: S&P, Fitch, Moody's. |
 | `engine/src/constitution.ts` | The new constitution: four steps, clause votes, referendums. |
 | `engine/src/ideology.ts` | Reads your economic position off the budget. |
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoilers. |
 | `config/policies.json` | 36 cards, 99 options. |
-| `config/events.json` | 34 news events, 71 options. |
+| `config/events.json` | 35 news events, 72 options. |
 | `config/coalitions.json` | The four coalitions and their effects. |
 | `config/constitution.json` | Five parts of the constitution, their positions and party stances. |
 | `ui/` | Front end. `app.js` is the whole client. |
