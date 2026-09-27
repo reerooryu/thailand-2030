@@ -1001,7 +1001,12 @@ function verdictSections(g, s, realCagr, setChg, gov) {
       `Thai politics. You could have spent more of it on legislation.` },
     { min: 52, tag: 'comfortable', t:
       `${g.approval}% approval and ${gov.seats} seats. Enough to pass what was agreed, not enough to force ` +
-      `anything a partner opposed. It did not stretch to the hard bill in year three.` },
+      `anything a partner opposed. ` + (() => {
+        const hard = [g.con.stage === 'ratified' && 'a new constitution', g.flags.has('vat_raised') && 'a VAT rise',
+          g.flags.has('civil_service_shrinking') && 'the civil service cut'].filter(Boolean);
+        return hard.length ? `It still carried ${hard.length > 1 ? hard.slice(0, -1).join(', ') + ' and ' + hard[hard.length - 1] : hard[0]}.`
+                           : 'It did not stretch to the hard bill in year three.';
+      })() },
     { min: 44, tag: 'held', t:
       `${g.approval}% approval and ${gov.seats} seats. Six parties and a mid-term revenue package, and the ` +
       `coalition held.` + (g.con.stage === 'ratified' ? ' It carried a new constitution through two referendums on the way.'
