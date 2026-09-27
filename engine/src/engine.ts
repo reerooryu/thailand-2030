@@ -51,6 +51,8 @@ export function step(input: StepInput): State {
     p.isWorldDemand * exog.worldDemandGrowth +
     p.isGlobalActivity * exog.globalActivity +
     (p.ftaDemand ?? 0) * (policy.tradeAccess ?? 0) +
+    (p.ftaExportPass ?? 0) * (p.ftaExports ?? 0) *
+      ((policy.tradeAccess ?? 0) - (policy.tradeAccessLag4 ?? 0)) +
     exog.shock;
 
   // ---- SUPPLY SIDE. Y_pot = TFP · K^alpha · L^(1-alpha).
@@ -90,10 +92,13 @@ export function step(input: StepInput): State {
   const infraShare = Math.max(0,
     delivered / Math.max(s.rgdp, 1) * 100 - p.infraBaselineShare)
     + stagedDelivered / Math.max(s.rgdp, 1) * 100;
+  // A one-off level gain: the FTA's TFP boost stops once the cap is reached.
+  const ftaTfpStep = Math.min((p.ftaTfp ?? 0) * (policy.tradeAccess ?? 0),
+    Math.max(0, (p.ftaTfpCap ?? 1) - (s.ftaTfpCum ?? 0)));
   const tfp = s.tfp * (1 +
     (p.tfpTrendGrowth + p.infraTfpBonus * infraShare + p.reformToTfp * s.reformStock
      + p.humanCapitalToTfp * (policy.humanCapital ?? 0)
-     + (p.ftaTfp ?? 0) * (policy.tradeAccess ?? 0)) / 100);
+     + ftaTfpStep) / 100);
 
   const potential = tfp * Math.pow(capital, p.alpha) * Math.pow(labour, 1 - p.alpha);
   const potentialGrowthYoy = (potential / lag4.potential - 1) * 100;
@@ -118,7 +123,11 @@ export function step(input: StepInput): State {
   const cpiCore = lag4.cpiCore * (1 + coreYoy / 100);
 
   // ---- trade. World demand dominates; the REER term is small and provisional.
-  const expGrowth =
+  // EU FTA: the export LEVEL rises by ftaExports as access phases in. Export
+  // growth is year on year, so the impulse is the change in access over a year.
+  const ftaExpImpulse = (p.ftaExports ?? 0) *
+    ((policy.tradeAccess ?? 0) - (policy.tradeAccessLag4 ?? 0));
+  const expGrowth = ftaExpImpulse +
     p.expConst +
     p.expWorldDemand * exog.worldDemandGrowth +
     p.expGlobalActivity * exog.globalActivity +
@@ -198,7 +207,7 @@ export function step(input: StepInput): State {
     period: nextPeriod(s.period),
     primaryBalance, riskPremium, 
     gap, rgdp, potential,
-    capital, labour, tfp, potentialGrowthYoy, infraPipeline: pipeline, infraStaged: stagedPipe, reformStock,
+    capital, labour, tfp, potentialGrowthYoy, infraPipeline: pipeline, infraStaged: stagedPipe, ftaTfpCum: (s.ftaTfpCum ?? 0) + ftaTfpStep, reformStock,
     exportsR, importsR, invPrivR, invPubR, consR, invRate,
     cpi, cpiCore, cpiYoy, cpiCoreYoy: coreYoy,
     policyRate: policy.policyRate,

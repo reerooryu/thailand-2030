@@ -382,6 +382,7 @@ export class Game {
       savingsRate: (this.stance.savingsRate ?? 0) * ramp,
       ratingPremium: ratingPremium(this.agencies),
       tradeAccess: tradeAccess(this.fta, this.quarter),
+      tradeAccessLag4: tradeAccess(this.fta, this.quarter - 4),
     };
     const params: Params = { ...this.params,
       // Disbursement is a RATE, not a multiplier: 1.0 means every baht of the
