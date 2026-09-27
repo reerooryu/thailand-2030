@@ -6,10 +6,11 @@
  * reforms that answer an open chapter speed it up. At 100% the talks
  * conclude; ratification follows; then it enters into force and phases in.
  *
- * Effects once in force (conservative, per the Commerce Ministry's cited
- * study of +1.28% GDP, +2.8% exports in the long run): a demand lift from
- * exports and a small permanent rise in TFP growth, both phasing in over
- * eight quarters.
+ * Effects once in force, per the Commerce Ministry's cited study (+1.28% GDP,
+ * +2.8% exports, a permanent LEVEL gain): potential output rises by about
+ * 1.28% over a five-year phase-in (a capped TFP gain, amplified by the capital
+ * that follows it), exports rise 2.8%, and exporters ramping up give a small,
+ * temporary lift to demand while access phases in.
  */
 
 export interface FtaState {
@@ -23,7 +24,7 @@ export interface FtaState {
 export const FTA_START = 63;
 export const FTA_BASE_PACE = 3;
 export const FTA_RATIFY_QUARTERS = 6;
-export const FTA_PHASE_IN = 8;
+export const FTA_PHASE_IN = 20;          // five years, like a real tariff schedule
 
 /** Reforms that close open chapters (+) or harden EU objections (−). */
 export const FTA_MOVES: { key: string; points: number; chapter: string;
