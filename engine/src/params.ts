@@ -198,18 +198,19 @@ export const BASE: Params = {
   // reaches the capital stock after two years rather than five.
   infraStagedShare: 0.35,
   infraStagedLag: 8,
-  // EU FTA, conservative against the cited +1.28% GDP / +2.8% exports:
-  // about +0.25pp on the output gap and +0.12pp a year on potential growth
-  // once fully phased in.
   // About +1pp on headline inflation at a +7% gap; nothing below +2%.
   hotGapThreshold: 2,
   hotGapCore: 0.02,
   hotGapHeadline: 0.10,
-  ftaDemand: 0.12,
-  ftaTfp: 0.03,
-  ftaTfpCap: 1.0,          // stop at ~1%: the study's +1.28% GDP, less the demand share
+  // EU FTA: a permanent LEVEL gain in capacity, not a standing demand boost.
+  // TFP rises 0.06%/quarter at full access until the cumulative gain reaches
+  // 0.7%; with the capital that follows, potential output ends ~1.28% higher,
+  // the study's figure. Exporters ramping up add a brief demand lift only.
+  ftaDemand: 0,
+  ftaTfp: 0.06,
+  ftaTfpCap: 0.7,
   ftaExports: 2.8,         // the study's export gain, reached as access phases in
-  ftaExportPass: 0.35,     // export share of GDP (~0.65) x domestic value added (~0.55)
+  ftaExportPass: 0.15,     // brief ramp only; the lasting GDP effect is in the TFP term
   infraTfpBonus: 0.010,
   infraBaselineShare: 6.1,
   debtCeiling: 70,
