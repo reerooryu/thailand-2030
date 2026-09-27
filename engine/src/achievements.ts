@@ -171,10 +171,10 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'to_the_moon',
     name: 'To the Moon',
-    requirement: 'Finish with the SET above 2,700.',
+    requirement: 'Finish with the SET above 2,800.',
     flavour: 'For a decade Thai equities were the cheapest bet against Thai growth. Foreign money is back. Whether it stays is the next government\'s problem.',
     rarity: 'rare',
-    test: c => atLeast(c.set, 2700, 0),
+    test: c => atLeast(c.set, 2800, 0),
   },
   {
     id: 'the_quiet_part',

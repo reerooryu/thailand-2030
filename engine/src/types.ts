@@ -216,6 +216,12 @@ export interface Params {
   infraStagedLag: number;      // quarters
   /** EU FTA at full phase-in: added to the gap each quarter (export demand)
    *  and to TFP growth, %/quarter. */
+  /** Convex Phillips curve: extra inflation per point of output gap above the
+   *  threshold. The estimated slope is flat because Thailand has rarely run
+   *  hot; an economy far above capacity should still show it in prices. */
+  hotGapThreshold: number;
+  hotGapCore: number;
+  hotGapHeadline: number;
   ftaDemand: number;
   ftaTfp: number;
   /** Cumulative cap on the FTA's TFP gain, % of the TFP level: a one-off level

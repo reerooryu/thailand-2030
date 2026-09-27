@@ -55,3 +55,6 @@ _stale/
 _to_delete/
 .tsbuildinfo
 *.tsbuildinfo
+
+# Strategy guides: kept locally, not published
+guides/
