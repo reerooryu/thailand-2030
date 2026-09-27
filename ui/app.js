@@ -130,6 +130,14 @@ function render() {
   const pctToTarget = Math.max(0, Math.min(100, (headline / target) * 100));
 
   $('#turn-label').textContent = g.label;
+  {
+    const f = g.fta;
+    const word = f.stage === 'in_force' ? 'in force' : f.stage === 'ratifying' ? 'ratifying' : `${Math.round(f.progress)}%`;
+    const pct = f.stage === 'negotiating' ? f.progress : 100;
+    $('#fta').innerHTML = `<span class="fta-l" title="EU–Thailand free trade agreement. Negotiations started at 63% (15 of 24 chapters closed, June 2026). Reforms that answer open chapters speed it up.">EU FTA</span>
+      <span class="fta-bar"><span class="fta-fill ${f.stage}" style="width:${pct}%"></span></span>
+      <span class="fta-w">${word}</span>`;
+  }
   $('#turns-left').textContent = `${g.turnsLeft} quarter${g.turnsLeft === 1 ? '' : 's'} remaining`;
   const left = g.actionCap - g.actionsThisTurn;
   $('#actions').innerHTML = `<span class="act-label">Actions</span>` +
@@ -726,6 +734,9 @@ function showEnd(walked, snap = false) {
                 `${setChg >= 0 ? '+' : ''}${fmt(setChg)}% from 1,622`, setChg >= 0 ? 'good' : 'critical')}
           ${row('Capital stock', fmt(s.capital / start.capital * 100 - 100, 1) + '%', 'growth over the term')}
           ${row('Reform stock', fmt(s.reformStock, 1), 'accumulated structural effort')}
+          ${row('EU FTA', g.fta.stage === 'in_force' ? 'In force' : g.fta.stage === 'ratifying' ? 'Ratifying' : Math.round(g.fta.progress) + '%',
+                g.fta.stage === 'negotiating' ? 'negotiated, from 63%' : g.fta.stage === 'ratifying' ? 'talks concluded' : 'since ' + g.labelAt(g.fta.inForceQuarter),
+                g.fta.stage === 'in_force' ? 'good' : '')}
           ${row('Household debt', fmt(s.hhDebt) + '%', 'of GDP, from 87.5%',
                 s.hhDebt <= 82 ? 'good' : s.hhDebt >= 90 ? 'warning' : '')}
         </table>

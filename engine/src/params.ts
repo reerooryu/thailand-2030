@@ -63,6 +63,8 @@ export const PROVENANCE: Record<keyof Params, ParamSource> = {
   labourGrowth: 'estimated',
   infraGestation: 'literature',
   infraStagedShare: 'prior',
+  ftaDemand: 'prior',
+  ftaTfp: 'prior',
   infraStagedLag: 'prior',
   infraTfpBonus: 'prior',
   infraBaselineShare: 'estimated',
@@ -190,6 +192,11 @@ export const BASE: Params = {
   // reaches the capital stock after two years rather than five.
   infraStagedShare: 0.35,
   infraStagedLag: 8,
+  // EU FTA, conservative against the cited +1.28% GDP / +2.8% exports:
+  // about +0.25pp on the output gap and +0.12pp a year on potential growth
+  // once fully phased in.
+  ftaDemand: 0.12,
+  ftaTfp: 0.03,
   infraTfpBonus: 0.010,
   infraBaselineShare: 6.1,
   debtCeiling: 70,

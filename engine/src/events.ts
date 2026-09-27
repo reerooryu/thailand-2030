@@ -41,6 +41,8 @@ export interface EventOption {
   /** Dissolve the House: the count happens at the end of this quarter and the
    *  run ends there. */
   snapElection?: boolean;
+  /** The do-nothing answer, for the Mai Pen Rai achievement. */
+  passive?: boolean;
   /** Shown for colour, never selectable. Some choices are not choices. */
   unavailable?: boolean;
   opinion?: Record<string, number>;

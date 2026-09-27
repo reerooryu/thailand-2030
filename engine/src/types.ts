@@ -98,6 +98,9 @@ export interface Policy {
 
   /** Added to the sovereign risk premium by the credit ratings (ratings.ts). */
   ratingPremium?: number;
+
+  /** EU FTA market access, 0 to 1 as it phases in (eufta.ts). */
+  tradeAccess?: number;
 }
 
 /** Behavioural parameters. `source` records where each came from — this
@@ -207,6 +210,10 @@ export interface Params {
    *  whole project is finished, and the lag until those sections open. */
   infraStagedShare: number;
   infraStagedLag: number;      // quarters
+  /** EU FTA at full phase-in: added to the gap each quarter (export demand)
+   *  and to TFP growth, %/quarter. */
+  ftaDemand: number;
+  ftaTfp: number;
   infraTfpBonus: number;       // extra TFP growth per pp of GDP of infra ABOVE baseline
   infraBaselineShare: number;  // the 2026 public capex share, 6.1% of GDP
 

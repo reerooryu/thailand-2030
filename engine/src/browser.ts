@@ -13,6 +13,7 @@ import {
   referendumYes, listSeats, sgCount, blockVote, type ConstitutionCfg, type ConstitutionState, type Whip,
 } from './constitution.js';
 import { closedChapters, CAPACITY_PER_CHAPTER, FDI_PER_CHAPTER } from './oecd.js';
+import { initialFta, stepFta, tradeAccess, type FtaState } from './eufta.js';
 import { initialAgencies, targetNotch, review, ratingPremium, type Agency } from './ratings.js';
 import { BASE } from './params.js';
 import { formCoalition, band, type CoalitionCfg, type PoliticalState } from './politics.js';
@@ -120,6 +121,10 @@ export class BrowserGame {
   snap = false;
   /** OECD chapters already reported closed. */
   oecdClosed = new Set<string>();
+  /** The EU FTA track. See eufta.ts. */
+  fta: FtaState = initialFta();
+  passiveSeen = 0;
+  passiveTaken = 0;
 
   /** The new constitution. See constitution.ts. */
   con: ConstitutionState = initialConstitution(conCfg);
@@ -333,6 +338,10 @@ export class BrowserGame {
         .map(([p, d]) => `${p} ${d}`).join(', ');
       if (lost) this.log.push({ quarter: this.quarter, kind: 'note', text: `Seats change hands — ${lost}` });
     }
+    if (e.options.some(o => (o as any).passive)) {
+      this.passiveSeen++;
+      if ((opt as any).passive) this.passiveTaken++;
+    }
     if ((opt as any).snapElection) this.snap = true;
     const coalitionChange = opt.coalitionChange;
     if (coalitionChange) {
@@ -405,6 +414,12 @@ export class BrowserGame {
     const ramp = Math.min(1, (this.quarter + 1) / 6);
     const cap = this.ps.effects.megaprojectCap ?? 9.0;
     const stimCap = this.ps.effects.stimulusCap ?? 2.0;
+    {
+      const r = stepFta(this.fta, this.quarter, this.flags, this.maximalPlays);
+      if (r.fta.stage === 'in_force' && this.fta.stage !== 'in_force') this.flags.add('eu_fta_in_force');
+      this.fta = r.fta;
+      for (const text of r.notes) this.log.push({ quarter: this.quarter, kind: 'note', text });
+    }
     const chapters = closedChapters(this.flags);
     for (const c of chapters) if (!this.oecdClosed.has(c)) {
       this.oecdClosed.add(c);
@@ -422,6 +437,7 @@ export class BrowserGame {
       formalisation: (this.stance.formalisation ?? 0) * ramp,
       savingsRate: (this.stance.savingsRate ?? 0) * ramp,
       ratingPremium: ratingPremium(this.agencies),
+      tradeAccess: tradeAccess(this.fta, this.quarter),
     };
     const exog: Exog = { worldDemandGrowth: 3.0, globalActivity: 10.0,
                          energyInflation: 1.5 + (this.rng() - 0.5) * 3, shock: 0 };
@@ -670,6 +686,9 @@ export class BrowserGame {
       verdict: elec ? elec.verdict : 'none',
       maximalPlays: this.maximalPlays.size, hedgedPlays: this.hedgedPlays.size,
       proposalsFull: this.proposalsFull.size, proposalsSeen: this.proposalsSeen.size,
+      ratingsAtFloor: this.agencies.filter(a => a.notch === 0).length,
+      passiveSeen: this.passiveSeen, passiveTaken: this.passiveTaken,
+      baseline: this.baseline(),
     });
   }
 

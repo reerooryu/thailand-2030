@@ -164,7 +164,8 @@
           "effects": {
             "approvalBoost": -10
           },
-          "flavour": "The revenue is real and so is the anger."
+          "flavour": "The revenue is real and so is the anger.",
+          "passive": true
         },
         {
           "id": "compensate",
@@ -296,7 +297,8 @@
           "effects": {
             "approvalBoost": -8
           },
-          "flavour": "Correct, cheap, and how governments lose by-elections."
+          "flavour": "Correct, cheap, and how governments lose by-elections.",
+          "passive": true
         }
       ]
     },
@@ -356,7 +358,8 @@
           "effects": {
             "fdiSignal": -0.15
           },
-          "flavour": "Nothing happens yet."
+          "flavour": "Nothing happens yet.",
+          "passive": true
         }
       ]
     },
@@ -421,7 +424,8 @@
           "effects": {
             "approvalBoost": -11
           },
-          "flavour": "Correct. Every headline will say you did nothing."
+          "flavour": "Correct. Every headline will say you did nothing.",
+          "passive": true
         }
       ]
     },
@@ -485,7 +489,8 @@
           "effects": {
             "fdiSignal": -0.15
           },
-          "flavour": "Every investment decision is provisional for two quarters."
+          "flavour": "Every investment decision is provisional for two quarters.",
+          "passive": true
         }
       ]
     },
@@ -548,7 +553,8 @@
             "approvalBoost": -4,
             "fdiSignal": 0.15
           },
-          "flavour": "Institutionally correct. The Andaman hotel association has your Transport Minister's number."
+          "flavour": "Institutionally correct. The Andaman hotel association has your Transport Minister's number.",
+          "passive": true
         }
       ]
     },
@@ -997,7 +1003,8 @@
           "sets": [
             "ai_nonaligned"
           ],
-          "flavour": "It has worked for two centuries. Nobody builds a fab in a country that has not chosen."
+          "flavour": "It has worked for two centuries. Nobody builds a fab in a country that has not chosen.",
+          "passive": true
         },
         {
           "id": "sovereign",
@@ -1134,7 +1141,8 @@
           "sets": [
             "semiconductor_board_seen"
           ],
-          "flavour": "A roadmap, a launch event and targets nobody owns. It costs nothing, which is why it always happens."
+          "flavour": "A roadmap, a launch event and targets nobody owns. It costs nothing, which is why it always happens.",
+          "passive": true
         }
       ]
     },
@@ -1192,7 +1200,8 @@
           "sets": [
             "datacentre_queue"
           ],
-          "flavour": "Households should not subsidise the world's largest companies. Johor and Batam already built theirs, and site decisions expire in about eighteen months."
+          "flavour": "Households should not subsidise the world's largest companies. Johor and Batam already built theirs, and site decisions expire in about eighteen months.",
+          "passive": true
         }
       ]
     },
@@ -1248,7 +1257,8 @@
           "sets": [
             "utapao_reduced"
           ],
-          "flavour": "Three million passengers is what the routes support, and the concessionaire carries the risk. The Eastern Aviation City stays a rendering."
+          "flavour": "Three million passengers is what the routes support, and the concessionaire carries the risk. The Eastern Aviation City stays a rendering.",
+          "passive": true
         }
       ]
     },
@@ -1324,7 +1334,8 @@
             "pdp2026_adopted",
             "pdp_base_gas"
           ],
-          "flavour": "Cheapest tariff, fewest fights. It keeps 35% fossil to 2050 and assumes uncosted carbon capture covers it."
+          "flavour": "Cheapest tariff, fewest fights. It keeps 35% fossil to 2050 and assumes uncosted carbon capture covers it.",
+          "passive": true
         },
         {
           "id": "base_ccs",
@@ -1550,7 +1561,8 @@
             "institutionalSupport": -9,
             "approvalBoost": -3
           },
-          "flavour": "The worst option and the easiest. Lenders learn the ceiling was never real."
+          "flavour": "The worst option and the easiest. Lenders learn the ceiling was never real.",
+          "passive": true
         }
       ]
     },
@@ -1872,6 +1884,33 @@
             "institutionalSupport": -3
           },
           "flavour": "The party that wrote the draft is smaller than the party that tabled it."
+        }
+      ]
+    },
+    {
+      "id": "eu_fta_in_force",
+      "headline": "The EU agreement enters into force",
+      "trigger": {
+        "type": "flag",
+        "flag": "eu_fta_in_force"
+      },
+      "blocking": true,
+      "body": "Tariffs on Thai goods into the world's largest single market start falling today. Exporters in Chonburi and Rayong are hiring ahead of the orders. For the first time in a decade, the question abroad is not whether Thailand will reform, but how fast.",
+      "options": [
+        {
+          "id": "ack",
+          "label": "Welcome it",
+          "body": "Ten years of talks, one ceremony.",
+          "opinion": {
+            "Democrat": 3,
+            "People's": 2
+          },
+          "effects": {
+            "approvalBoost": 4,
+            "fdiSignal": 0.15,
+            "setSupport": 0.5
+          },
+          "flavour": "Nobody remembers who started the talks. Everybody will remember who finished them."
         }
       ]
     }
