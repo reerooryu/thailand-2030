@@ -85,7 +85,7 @@ export function step(input: StepInput): State {
   // can reverse it (DESIGN §5.5)
   // Held 1941 provinces add to effective labour input, slowly (war.ts).
   const terrStep = (policy.territoryGain ?? 0) > 0
-    ? Math.min(p.territoryLabour ?? 0, Math.max(0, (p.territoryLabourCap ?? 0) - (s.territoryCum ?? 0))) : 0;
+    ? Math.min((p.territoryLabour ?? 0) * (policy.territoryGain ?? 0), Math.max(0, (p.territoryLabourCap ?? 0) - (s.territoryCum ?? 0))) : 0;
   const labour = s.labour * (1 + p.labourGrowth / 100) * (1 + terrStep / 100);
 
   // TFP grows at trend, with a bonus from the infrastructure capital that has

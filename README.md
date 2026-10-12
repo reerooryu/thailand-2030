@@ -61,7 +61,7 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoilers. |
 | `config/policies.json` | 36 cards, 99 options. |
 | `config/provinces.json` | Province outlines and a one-line description of each of the 77 provinces, for the map. Outlines from Natural Earth (public domain). |
-| `config/events.json` | 41 news events, 86 options. |
+| `config/events.json` | 43 news events, 89 options. |
 | `config/coalitions.json` | The four coalitions and their effects. |
 | `config/constitution.json` | Five parts of the constitution, their positions and party stances. |
 | `ui/` | Front end. `app.js` is the whole client. |
@@ -112,6 +112,7 @@ Needs Node 20+ and Python 3.10+. The engine has one dev dependency.
 - **Reconstruction:** aid (costly, dissent barely grows and falls fast after the war), martial law, or crackdown (dissent drops 10 points now, and resentment makes it grow faster afterwards). Dissent above 50% in a province slows the advance there.
 - **Costs** run through the existing channels as temporary levels: defence and aid spending in government consumption, small hits to FDI and market sentiment, the EU FTA suspended during full offensive (no progress, no tariff access), restored only once annexation is done with aid throughout and dissent below 5% everywhere. A non-benevolent annexation suspends it too. Approval rallies by 12 at the start and fades each quarter of fighting.
 - **Ending:** the war ends when all three provinces are fully held; the formal annexation bill unlocks once dissent is below 10% in all three. Held provinces add up to 0.8% to effective labour input, phased in at 0.05% a quarter, mostly after 2030.
+- **Integration.** A quarter after annexation, the integration plan: hasten it (roads, ordinary local government, bilingual signs, Khmer New Year; +0.3% of GDP capital spending) and the labour gain from the provinces arrives twice as fast, or keep the original timeline.
 - **Migrant labour.** Regularising migrant labour before the war ends slows dissent growth (0.5 a quarter during the war, 2 after), pays a dividend when the war ends (formalisation, FDI, approval), and adds approval and investor confidence to the annexation bill.
 - The end screen shows the map, with a toggle to lay the Thai flag over the whole Kingdom, annexed provinces included.
 - Achievements: *1941 Avenged* (rare: annexation) and *Pax Rattanakosin* (legendary: annexation with aid throughout and dissent never at 40%). Any occupation at the end classifies the term as **Irredentist Nationalism**.

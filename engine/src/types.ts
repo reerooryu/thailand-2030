@@ -106,7 +106,7 @@ export interface Policy {
   tradeAccess?: number;
   /** The same, four quarters earlier: export growth is year on year. */
   tradeAccessLag4?: number;
-  /** 1 once the 1941 provinces are held. See war.ts. */
+  /** 1 once the 1941 provinces are held, 2 with hastened integration. See war.ts. */
   territoryGain?: number;
 }
 

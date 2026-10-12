@@ -2261,6 +2261,50 @@
           "flavour": "Recognition never comes. Trade does."
         }
       ]
+    },
+    {
+      "id": "integration_plan",
+      "headline": "The Interior Ministry presents the integration plan for the new provinces",
+      "trigger": {
+        "type": "afterOption",
+        "card": "annexation_bill",
+        "option": "annex",
+        "inQuarters": 1
+      },
+      "blocking": true,
+      "body": "The provinces are Thai in law. The question is how fast they become Thai in practice. The ministry offers two timetables: the cautious one already budgeted, or an accelerated one with new roads, ordinary provincial and local government on the same footing as everywhere else, and a few symbolic gestures to Khmer identity.",
+      "options": [
+        {
+          "id": "hasten",
+          "label": "Hasten integration",
+          "body": "Highways and rural roads to Battambang, Sisophon and Preah Vihear; provincial administration and elected local councils identical to the rest of the Kingdom; bilingual signs and Khmer New Year as a regional holiday. No separate Khmer government.",
+          "opinion": {
+            "People's": 4,
+            "Democrat": 3,
+            "Kla Tham": -2,
+            "Others": -2
+          },
+          "effects": {
+            "capitalSpend": 0.3,
+            "approvalBoost": 1,
+            "fdiSignal": 0.05
+          },
+          "sets": [
+            "integration_hastened"
+          ],
+          "flavour": "Roads first, then ballots. The provinces vote like any other in 2030, and the gains arrive twice as fast."
+        },
+        {
+          "id": "keep",
+          "label": "Keep the original timeline",
+          "body": "The budgeted programme, at the budgeted pace.",
+          "opinion": {
+            "Others": 2
+          },
+          "effects": {},
+          "flavour": "Cheaper and slower. The provinces stay a special case for longer."
+        }
+      ]
     }
   ]
 }

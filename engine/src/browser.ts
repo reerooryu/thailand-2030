@@ -538,7 +538,7 @@ export class BrowserGame {
       ratingPremium: ratingPremium(this.agencies),
       tradeAccess: tradeAccess(this.fta, this.quarter),
       tradeAccessLag4: tradeAccess(this.fta, this.quarter - 4),
-      territoryGain: this.war.stage === 'won' ? 1 : 0,
+      territoryGain: this.war.stage !== 'won' ? 0 : this.flags.has('integration_hastened') ? 2 : 1,
     };
     const exog: Exog = { worldDemandGrowth: 3.0, globalActivity: 10.0,
                          energyInflation: 1.5 + (this.rng() - 0.5) * 3, shock: 0 };
