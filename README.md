@@ -52,13 +52,14 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/election.ts` | The March 2030 count and coalition talks. |
 | `engine/src/achievements.ts` | 29 end-of-term achievements. None feed back. |
 | `engine/src/eufta.ts` | The EU–Thailand FTA: progress, ratification, entry into force. |
+| `engine/src/alignment.ts` | US and China alignment tallies, fed by the `align` field on card and news options. |
 | `engine/src/oecd.ts` | OECD accession chapters and what closing them does. |
 | `engine/src/ratings.ts` | Sovereign credit ratings: S&P, Fitch, Moody's. |
 | `engine/src/constitution.ts` | The new constitution: four steps, clause votes, referendums. |
 | `engine/src/ideology.ts` | Reads your economic position off the budget. |
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoilers. |
 | `config/policies.json` | 36 cards, 99 options. |
-| `config/events.json` | 35 news events, 72 options. |
+| `config/events.json` | 37 news events, 78 options. |
 | `config/coalitions.json` | The four coalitions and their effects. |
 | `config/constitution.json` | Five parts of the constitution, their positions and party stances. |
 | `ui/` | Front end. `app.js` is the whole client. |
@@ -101,6 +102,8 @@ python3 scripts/build_panel.py          # rebuild the estimation panel
 ```
 
 Needs Node 20+ and Python 3.10+. The engine has one dev dependency.
+
+**US–China alignment.** Any card or news option that leans one way carries `"align": {"us": n}` or `{"cn": n}`. The points add up in a blue–red bar beside the EU FTA bar and an end-screen label (Hedging, Leaning US, Aligned with China, Courted by both). The tallies are a record; the effects sit on the options themselves. Two scripted events test it: US tariffs over transshipment (Q6) and a PLA Navy port call at Sattahip (Q10).
 
 Cards and events are JSON in `config/`. A new policy is a JSON object with a channel vector, not a code change.
 

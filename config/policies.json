@@ -125,7 +125,10 @@
           "maximal": true,
           "sets": [
             "oecd_accelerating"
-          ]
+          ],
+          "align": {
+            "us": 1
+          }
         },
         {
           "id": "steady",
@@ -1011,7 +1014,10 @@
             "withoutFactor": 0.8,
             "note": "Without a revenue measure this is pure borrowing against a ceiling already within five points."
           },
-          "maximal": true
+          "maximal": true,
+          "align": {
+            "cn": 1
+          }
         },
         {
           "id": "postpone",
@@ -1147,7 +1153,10 @@
             "withoutFactor": 0.8,
             "note": "Without a revenue measure this is pure borrowing against a ceiling already within five points."
           },
-          "maximal": true
+          "maximal": true,
+          "align": {
+            "cn": 2
+          }
         },
         {
           "id": "phase1_only",
@@ -1636,7 +1645,10 @@
           "flavour": "Costs almost nothing and polls well. The productivity gain arrives after everyone here has retired.",
           "sets": [
             "ai_talent_imported"
-          ]
+          ],
+          "align": {
+            "us": 1
+          }
         },
         {
           "id": "domestic",

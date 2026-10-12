@@ -14,6 +14,7 @@ import {
 } from './constitution.js';
 import { closedChapters, CAPACITY_PER_CHAPTER, FDI_PER_CHAPTER } from './oecd.js';
 import { initialFta, stepFta, tradeAccess, type FtaState } from './eufta.js';
+import { initialAlign, addAlign, alignLabel, type AlignState } from './alignment.js';
 import { initialAgencies, targetNotch, review, ratingPremium, type Agency } from './ratings.js';
 import { BASE } from './params.js';
 import { formCoalition, band, type CoalitionCfg, type PoliticalState } from './politics.js';
@@ -123,6 +124,9 @@ export class BrowserGame {
   oecdClosed = new Set<string>();
   /** The EU FTA track. See eufta.ts. */
   fta: FtaState = initialFta();
+  /** US and China alignment tallies. See alignment.ts. */
+  align: AlignState = initialAlign();
+  alignLabel() { return alignLabel(this.align); }
   passiveSeen = 0;
   passiveTaken = 0;
 
@@ -293,6 +297,7 @@ export class BrowserGame {
     else { this.hedgedPlays.add(cardId); this.maximalPlays.delete(cardId); }
     if (card.proposal) { if (opt.maximal) this.proposalsFull.add(cardId); else this.proposalsFull.delete(cardId); }
     this.flags = applyFlags(this.flags, opt);
+    this.align = addAlign(this.align, opt.align, this.quarter, `${card.name}: ${opt.label}`);
     this.scheduled = scheduleFrom(this.scheduled, events, cardId, optionId, this.quarter);
     const discounted = opt.dependsOn && !this.flags.has(opt.dependsOn.flag);
     this.apply(effectiveEffects(opt, this.flags));
@@ -321,6 +326,7 @@ export class BrowserGame {
     this.syncStateFlags();
     if (!isEventOptionUnlocked(opt, this.flags)) return;
     const res = resolve(this.opinion, this.flags, opt);
+    this.align = addAlign(this.align, opt.align, this.quarter, `${e.headline}: ${opt.label}`);
     this.opinion = res.opinion; this.flags = res.flags;
     this.apply(res.effects);
     this.syncStateFlags();

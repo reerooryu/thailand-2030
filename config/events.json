@@ -961,7 +961,10 @@
           "sets": [
             "pax_silica"
           ],
-          "flavour": "Hyperscalers can site compute here without an export-licence fight. Chinese EV and electronics investment in the EEC, the largest source of new FDI since 2023, takes note."
+          "flavour": "Hyperscalers can site compute here without an export-licence fight. Chinese EV and electronics investment in the EEC, the largest source of new FDI since 2023, takes note.",
+          "align": {
+            "us": 2
+          }
         },
         {
           "id": "waico",
@@ -983,7 +986,10 @@
           "sets": [
             "waico"
           ],
-          "flavour": "Chinese capital for grid and data centres arrives fast and cheap. The frontier accelerators do not."
+          "flavour": "Chinese capital for grid and data centres arrives fast and cheap. The frontier accelerators do not.",
+          "align": {
+            "cn": 2
+          }
         },
         {
           "id": "neutral",
@@ -1180,7 +1186,10 @@
           "sets": [
             "datacentre_grid_guaranteed"
           ],
-          "flavour": "The investment is real; the jobs are a few hundred. But a poured data centre cannot be relocated."
+          "flavour": "The investment is real; the jobs are a few hundred. But a poured data centre cannot be relocated.",
+          "align": {
+            "us": 1
+          }
         },
         {
           "id": "queue",
@@ -1911,6 +1920,135 @@
             "setSupport": 0.5
           },
           "flavour": "Nobody remembers who started the talks. Everybody will remember who finished them."
+        }
+      ]
+    },
+    {
+      "id": "us_tariffs",
+      "headline": "Washington threatens tariffs on Thai electronics",
+      "trigger": {
+        "type": "afterOption",
+        "card": "__start__",
+        "option": "__start__",
+        "inQuarters": 5
+      },
+      "scriptedQuarter": 5,
+      "blocking": true,
+      "body": "The US Trade Representative opens an investigation into Chinese components routed through Thai factories to dodge American duties. Electronics are Thailand's largest export to the US, its biggest single market. The letter asks what Bangkok intends to do about it.",
+      "options": [
+        {
+          "id": "concede",
+          "label": "Tighten rules of origin and buy American",
+          "body": "Stricter origin checks at customs, plus purchases of US LNG and aircraft.",
+          "align": {
+            "us": 2
+          },
+          "opinion": {
+            "Democrat": 3,
+            "Others": 1,
+            "Kla Tham": -2,
+            "Pheu Thai": -1
+          },
+          "effects": {
+            "fdiSignal": 0.1,
+            "setSupport": 0.3,
+            "approvalBoost": -2
+          },
+          "flavour": "The tariff goes away. So do some Chinese-owned factories in Rayong."
+        },
+        {
+          "id": "negotiate",
+          "label": "Negotiate quietly, concede on transshipment only",
+          "body": "Enforce origin rules on the worst cases and leave the rest alone.",
+          "align": {
+            "us": 1
+          },
+          "opinion": {
+            "Others": 2
+          },
+          "effects": {},
+          "flavour": "Nobody is satisfied, and nobody is punished. Thai diplomacy at its most Thai."
+        },
+        {
+          "id": "retaliate",
+          "label": "Refuse, and redirect exports toward China",
+          "body": "Reject the findings and send a trade mission to Beijing.",
+          "align": {
+            "cn": 2
+          },
+          "opinion": {
+            "Pheu Thai": 2,
+            "Kla Tham": 2,
+            "Democrat": -4,
+            "People's": -2
+          },
+          "effects": {
+            "approvalBoost": 4,
+            "fdiSignal": -0.3,
+            "setSupport": -0.6
+          },
+          "flavour": "A good week at home. The electronics orders take longer to come back than the applause lasted."
+        }
+      ]
+    },
+    {
+      "id": "chinese_naval_visit",
+      "headline": "The PLA Navy asks to call at Sattahip",
+      "trigger": {
+        "type": "afterOption",
+        "card": "__start__",
+        "option": "__start__",
+        "inQuarters": 9
+      },
+      "scriptedQuarter": 9,
+      "blocking": true,
+      "body": "A Chinese task group returning from Cambodia's Ream naval base requests a port call at Sattahip, the Royal Thai Navy's home and a US logistics hub since the Vietnam War. Beijing suggests adding a joint exercise. Washington has noticed the request.",
+      "options": [
+        {
+          "id": "host",
+          "label": "Host the port call and a joint exercise",
+          "align": {
+            "cn": 2
+          },
+          "opinion": {
+            "Others": 2,
+            "Kla Tham": 1,
+            "Democrat": -3,
+            "People's": -3
+          },
+          "effects": {
+            "approvalBoost": 1,
+            "fdiSignal": -0.05
+          },
+          "flavour": "Photographs of Chinese sailors at Sattahip run in every newspaper in Washington."
+        },
+        {
+          "id": "courtesy",
+          "label": "A routine courtesy call, no exercise",
+          "align": {
+            "cn": 1
+          },
+          "opinion": {
+            "Others": 1
+          },
+          "effects": {},
+          "flavour": "Wreaths, a reception, and a communiqué about friendship. Both capitals call it a snub."
+        },
+        {
+          "id": "decline",
+          "label": "Cite scheduling and decline",
+          "align": {
+            "us": 1
+          },
+          "opinion": {
+            "Democrat": 2,
+            "Others": -2,
+            "Kla Tham": -1
+          },
+          "effects": {
+            "approvalBoost": -1
+          },
+          "flavour": "The berth is unavailable for the next four years. Beijing understands exactly what that means."
         }
       ]
     }

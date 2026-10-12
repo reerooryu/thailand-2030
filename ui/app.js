@@ -138,6 +138,13 @@ function render() {
       <span class="fta-bar"><span class="fta-fill ${f.stage}" style="width:${pct}%"></span></span>
       <span class="fta-w">${word}</span>`;
   }
+  {
+    const a = g.align, tot = a.us + a.cn;
+    const usPct = tot ? a.us / tot * 100 : 50;
+    $('#align').innerHTML = `<span class="fta-l" title="Points toward the United States (blue) or China (red), from every card and news choice that leans one way.">US</span>
+      <span class="al-bar${tot ? '' : ' none'}"><span class="al-us" style="width:${usPct}%"></span><span class="al-cn" style="width:${100 - usPct}%"></span></span>
+      <span class="fta-l">China</span><span class="fta-w"><b class="al-usn">${a.us}</b> · <b class="al-cnn">${a.cn}</b></span>`;
+  }
   $('#turns-left').textContent = `${g.turnsLeft} quarter${g.turnsLeft === 1 ? '' : 's'} remaining`;
   const left = g.actionCap - g.actionsThisTurn;
   $('#actions').innerHTML = `<span class="act-label">Actions</span>` +
@@ -736,6 +743,7 @@ function showEnd(walked, snap = false) {
                 `${setChg >= 0 ? '+' : ''}${fmt(setChg)}% from 1,622`, setChg >= 0 ? 'good' : 'critical')}
           ${row('Capital stock', fmt(s.capital / start.capital * 100 - 100, 1) + '%', 'growth over the term')}
           ${row('Reform stock', fmt(s.reformStock, 1), 'accumulated structural effort')}
+          ${row('Alignment', g.alignLabel(), `US ${g.align.us} · China ${g.align.cn}`)}
           ${row('EU FTA', g.fta.stage === 'in_force' ? 'In force' : g.fta.stage === 'ratifying' ? 'Ratifying' : Math.round(g.fta.progress) + '%',
                 g.fta.stage === 'negotiating' ? 'negotiated, from 63%' : g.fta.stage === 'ratifying' ? 'talks concluded' : 'since ' + g.labelAt(g.fta.inForceQuarter),
                 g.fta.stage === 'in_force' ? 'good' : '')}

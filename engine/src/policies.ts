@@ -25,6 +25,8 @@ export interface PolicyEffects {
   institutionalSupport?: number;
 }
 export interface PolicyOption {
+  /** Points toward the US or China. See alignment.ts. */
+  align?: { us?: number; cn?: number };
   id: string; label: string;
   requiresLegislation?: boolean;
   /** Flags this option sets or clears. Cancelling a megaproject prunes its

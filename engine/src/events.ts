@@ -24,6 +24,8 @@ export type Trigger = TriggerGate & (
   | { type: 'hazard'; probabilityPerQuarter: number });
 
 export interface EventOption {
+  /** Points toward the US or China. See alignment.ts. */
+  align?: { us?: number; cn?: number };
   id: string; label: string; body?: string;
   requiresLegislation?: boolean;
   /** Dynamic gates use the same flag vocabulary as policy options. */
