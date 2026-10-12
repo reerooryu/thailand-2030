@@ -1257,7 +1257,7 @@ const ENDING_THEMES = {
 
   let userPaused = false, playing = false, started = false;
   const paint = () => {
-    btn.textContent = playing ? '❙❙' : '▶';
+    btn.textContent = muted ? '🔇' : playing ? '❙❙' : '▶';
     box.classList.toggle('paused', !playing);
   };
 
@@ -1268,6 +1268,7 @@ const ENDING_THEMES = {
     // currentTime cannot be set before the browser knows how long the track is.
     const seekIn = () => { try { el.currentTime = ANTHEM_IN; } catch { /* not seekable yet */ } };
     window.playAnthem = () => {
+      warmYT();
       if (started || userPaused) return;
       started = true;
       if (el.readyState >= 1) { seekIn(); play(); }
@@ -1348,7 +1349,40 @@ const ENDING_THEMES = {
   };
 
   /* Ending themes, one per revealed ideology. Streamed from YouTube in every
-     build (there is no local copy), so a file:// page keeps the campaign song. */
+     build (there is no local copy), so a file:// page keeps the campaign song.
+
+     Browsers only allow sound that starts inside a click. The end screen opens
+     from the End-turn click, but creating a YouTube player then is too slow:
+     it finishes after the click has expired. So the mp3 build creates a silent
+     player at the coalition choice, and the ending reuses it at once. If the
+     browser still refuses, the theme starts muted and the play button unmutes. */
+  let pendingEnding = null, muted = false;
+  const warmYT = () => {
+    if (ytShared || warmYT.busy || !window.location.protocol.startsWith('http')) return;
+    warmYT.busy = true;
+    loadApi(() => {
+      const p = new window.YT.Player('yt-frame', {
+        videoId: Object.values(ENDING_THEMES)[0].id, host: 'https://www.youtube-nocookie.com',
+        playerVars: { autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, playsinline: 1, rel: 0 },
+        events: {
+          onReady: () => { ytShared = { player: p, ready: true }; if (pendingEnding) startEnding(p, pendingEnding); },
+          onStateChange: e => onState(p, e),
+        },
+      });
+    }, () => {});
+  };
+  const startEnding = (p, track) => {
+    pendingEnding = null;
+    p.setVolume(45);
+    p.loadVideoById({ videoId: track.id, startSeconds: track.start });
+    if (userPaused) { p.pauseVideo(); return; }
+    // Blocked: play muted rather than not at all, and let the button unmute.
+    setTimeout(() => {
+      if (playing || userPaused) return;
+      muted = true; p.mute(); p.playVideo();
+      btn.textContent = '🔇'; btn.title = 'Unmute';
+    }, 1500);
+  };
   window.playEnding = track => {
     if (!track || !window.location.protocol.startsWith('http')) return;
     const local = document.getElementById('anthem');
@@ -1358,27 +1392,17 @@ const ENDING_THEMES = {
     const t = box.querySelector('.mus-title'), sub = box.querySelector('.mus-sub');
     if (t) t.textContent = track.title;
     if (sub) sub.textContent = track.sub || '';
-    const start = p => {
-      p.setVolume(45);
-      p.loadVideoById({ videoId: track.id, startSeconds: track.start });
-      if (userPaused) p.pauseVideo();
-      btn.onclick = () => {
-        if (playing) { userPaused = true; p.pauseVideo(); }
-        else { userPaused = false; p.playVideo(); }
-      };
+    // The button controls the ending from now on, even before the player is ready.
+    btn.onclick = () => {
+      const p = ytShared && ytShared.player;
+      if (!p) { userPaused = false; return; }
+      if (muted) { muted = false; btn.title = ''; p.unMute(); p.setVolume(45); p.playVideo(); paint(); return; }
+      if (playing) { userPaused = true; p.pauseVideo(); }
+      else { userPaused = false; p.playVideo(); }
     };
-    if (ytShared && ytShared.ready) return start(ytShared.player);
-    // Local-mp3 builds have no YouTube player yet: make one for the ending.
-    loadApi(() => {
-      const p = new window.YT.Player('yt-frame', {
-        videoId: track.id, host: 'https://www.youtube-nocookie.com',
-        playerVars: { autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, playsinline: 1, rel: 0 },
-        events: {
-          onReady: () => { ytShared = { player: p, ready: true }; start(p); },
-          onStateChange: e => onState(p, e),
-        },
-      });
-    }, () => {});
+    if (ytShared && ytShared.ready) return startEnding(ytShared.player, track);
+    pendingEnding = track;
+    warmYT();
   };
 
   const el = document.getElementById('anthem');
