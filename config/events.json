@@ -2316,26 +2316,26 @@
         "inQuarters": 4
       },
       "blocking": true,
-      "body": "A month without a bombing in Pattani, Yala or Narathiwat, the longest pause since 2004. Malaysia offers to host a signing that would make it permanent and set up a joint monitoring team. The army is against anything with the word 'joint' in it.",
+      "body": "A month without a bombing in Pattani, Yala or Narathiwat, the longest pause since 2004. The BRN negotiators still call the Rumi curriculum a Malaysian alphabet imposed by Bangkok, but they kept the truce. Malaysia offers to host a signing that would make it permanent and set up a joint monitoring team. The army is against anything with the word 'joint' in it.",
       "options": [
         {
           "id": "formalise",
           "label": "Formalise it, with joint monitoring",
           "opinion": {
-            "People's": 6,
+            "People's": 4,
             "Democrat": 4,
             "Pheu Thai": 2,
             "Others": -5
           },
           "effects": {
-            "approvalBoost": 6,
-            "fdiSignal": 0.1,
-            "setSupport": 0.3
+            "approvalBoost": 4,
+            "fdiSignal": 0.06,
+            "setSupport": 0.2
           },
           "sets": [
             "deep_south_peace"
           ],
-          "flavour": "A signing in Kuala Lumpur and a monitoring team in Pattani. Nothing structural changes. Everything else does."
+          "flavour": "A signing in Kuala Lumpur and a monitoring team in Pattani. Nothing structural changes, and the language question stays open."
         },
         {
           "id": "informal",
@@ -2345,8 +2345,8 @@
             "Democrat": 1
           },
           "effects": {
-            "approvalBoost": 3,
-            "fdiSignal": 0.05
+            "approvalBoost": 2,
+            "fdiSignal": 0.03
           },
           "flavour": "A pause, not a peace. It holds as long as nobody tests it."
         }

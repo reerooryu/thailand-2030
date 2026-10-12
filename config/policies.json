@@ -2724,13 +2724,13 @@
             "deep_south_dialogue"
           ],
           "fit": {
-            "People's": 0.6,
+            "People's": 0.4,
             "Democrat": 0.4,
             "Pheu Thai": 0.2,
             "Kla Tham": -0.2,
             "Others": -0.5
           },
-          "flavour": "Rumi, not Jawi: the same language in the alphabet every Thai school already teaches. The army calls it a concession anyway."
+          "flavour": "Bangkok insists on Rumi, not Jawi. Kuala Lumpur is pleased. The BRN reads it as Malay without Islam and says so; the army calls it a concession anyway."
         },
         {
           "id": "development",
