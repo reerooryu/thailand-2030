@@ -19,6 +19,9 @@ export interface FtaState {
   ratifyUntil?: number;                   // quarter
   inForceQuarter?: number;
   applied: string[];                      // boosts already counted
+  /** Suspended by Brussels over the Cambodian war (see browser.ts). Nothing
+   *  moves and tariff access stops until it is restored. */
+  suspended?: boolean;
 }
 
 export const FTA_START = 63;
@@ -40,7 +43,6 @@ export const FTA_MOVES: { key: string; points: number; chapter: string;
   { key: 'paternal', points: -8, chapter: 'human rights clause', test: f => f.has('constitution_paternal') },
   { key: 'crackdown', points: -4, chapter: 'labour standards', test: f => f.has('migrant_crackdown') },
   { key: 'land_bridge', points: -3, chapter: 'sustainability', test: f => f.has('land_bridge_forced') },
-  { key: 'annexation', points: -12, chapter: 'annexation of Cambodian territory', test: f => f.has('territory_annexed') },
 ];
 
 export function initialFta(): FtaState {
@@ -49,7 +51,7 @@ export function initialFta(): FtaState {
 
 /** One quarter. Returns the new state and any log lines. Sets 'eu_fta_in_force'
  *  on the quarter it enters into force (the host passes the flag set). */
-export function stepFta(s0: FtaState, quarter: number, flags: Set<string>, maximal: Set<string>, paused = false):
+export function stepFta(s0: FtaState, quarter: number, flags: Set<string>, maximal: Set<string>):
     { fta: FtaState; notes: string[] } {
   const s: FtaState = { ...s0, applied: [...s0.applied] };
   const notes: string[] = [];
@@ -68,8 +70,8 @@ export function stepFta(s0: FtaState, quarter: number, flags: Set<string>, maxim
       notes.push(`EU FTA: the European Parliament delays its consent vote over the ${m.chapter}`);
     }
   }
-  if (paused) {
-    // Brussels does not negotiate with a government on the offensive.
+  if (s.suspended) {
+    // Suspended: talks frozen, the ratification clock stopped.
     if (s.stage === 'ratifying') s.ratifyUntil = (s.ratifyUntil ?? quarter) + 1;
   } else if (s.stage === 'negotiating') {
     s.progress = Math.min(100, s.progress + FTA_BASE_PACE);
@@ -87,6 +89,6 @@ export function stepFta(s0: FtaState, quarter: number, flags: Set<string>, maxim
 
 /** 0 before entry into force, rising to 1 over the phase-in. */
 export function tradeAccess(s: FtaState, quarter: number): number {
-  if (s.stage !== 'in_force' || s.inForceQuarter == null) return 0;
+  if (s.stage !== 'in_force' || s.inForceQuarter == null || s.suspended) return 0;
   return Math.max(0, Math.min(1, (quarter - s.inForceQuarter + 1) / FTA_PHASE_IN));
 }

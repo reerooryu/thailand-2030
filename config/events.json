@@ -2235,6 +2235,32 @@
           "flavour": "The victory parade goes down Ratchadamnoen. The occupation goes on without one."
         }
       ]
+    },
+    {
+      "id": "eu_fta_restored",
+      "headline": "Brussels restores the trade agreement",
+      "trigger": {
+        "type": "flag",
+        "flag": "eu_fta_restored"
+      },
+      "blocking": true,
+      "body": "Thai ID cards issued to every resident who applied, new schools and district hospitals open in Battambang and Sisophon, and dissent in all three provinces is below 5%. The European Commission still does not recognise the annexation, but it lifts the suspension: the agreement's human-rights clause is about how people are treated, and the record is hard to argue with.",
+      "options": [
+        {
+          "id": "ack",
+          "label": "Welcome it",
+          "opinion": {
+            "Democrat": 4,
+            "People's": 2
+          },
+          "effects": {
+            "approvalBoost": 3,
+            "fdiSignal": 0.15,
+            "setSupport": 0.4
+          },
+          "flavour": "Recognition never comes. Trade does."
+        }
+      ]
     }
   ]
 }

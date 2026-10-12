@@ -132,10 +132,10 @@ function render() {
   $('#turn-label').textContent = g.label;
   {
     const f = g.fta;
-    const word = f.stage === 'in_force' ? 'in force' : f.stage === 'ratifying' ? 'ratifying' : `${Math.round(f.progress)}%`;
+    const word = f.suspended ? 'suspended' : f.stage === 'in_force' ? 'in force' : f.stage === 'ratifying' ? 'ratifying' : `${Math.round(f.progress)}%`;
     const pct = f.stage === 'negotiating' ? f.progress : 100;
     $('#fta').innerHTML = `<span class="fta-l" title="EU–Thailand free trade agreement. Negotiations started at 63% (15 of 24 chapters closed, June 2026). Reforms that answer open chapters speed it up.">EU FTA</span>
-      <span class="fta-bar"><span class="fta-fill ${f.stage}" style="width:${pct}%"></span></span>
+      <span class="fta-bar"><span class="fta-fill ${f.suspended ? 'suspended' : f.stage}" style="width:${pct}%"></span></span>
       <span class="fta-w">${word}</span>`;
   }
   {
@@ -845,7 +845,7 @@ function showEnd(walked, snap = false) {
           ${row('Alignment', g.alignLabel(), `US ${g.align.us} · China ${g.align.cn}`)}
           ${g.war.stage !== 'none' ? row('Cambodian war', g.flags.has('territory_annexed') ? 'Annexed' : g.war.stage === 'won' ? 'Occupied' : 'Unfinished',
                 `${Math.round(g.war.thaiCasualties).toLocaleString()} Thai and ${Math.round(g.war.khmerCasualties).toLocaleString()} Cambodian killed and wounded`) : ''}
-          ${row('EU FTA', g.fta.stage === 'in_force' ? 'In force' : g.fta.stage === 'ratifying' ? 'Ratifying' : Math.round(g.fta.progress) + '%',
+          ${row('EU FTA', g.fta.suspended ? 'Suspended' : g.fta.stage === 'in_force' ? 'In force' : g.fta.stage === 'ratifying' ? 'Ratifying' : Math.round(g.fta.progress) + '%',
                 g.fta.stage === 'negotiating' ? 'negotiated, from 63%' : g.fta.stage === 'ratifying' ? 'talks concluded' : 'since ' + g.labelAt(g.fta.inForceQuarter),
                 g.fta.stage === 'in_force' ? 'good' : '')}
           ${row('Household debt', fmt(s.hhDebt) + '%', 'of GDP, from 87.5%',

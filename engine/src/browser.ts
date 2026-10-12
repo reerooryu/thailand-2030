@@ -484,9 +484,21 @@ export class BrowserGame {
       this.syncWar();
     }
     {
-      const warPause = this.war.stage === 'war' && this.war.stance === 'full'
-        || this.war.stage !== 'none' && this.war.recon === 'crackdown';
-      const r = stepFta(this.fta, this.quarter, this.flags, this.maximalPlays, warPause);
+      // Brussels suspends the agreement over a full offensive, or over an
+      // annexation that was not benevolent. It restores it only once the
+      // annexation is done, aid was the policy throughout, and dissent is
+      // below 5% in every province.
+      const annexed = this.flags.has('territory_annexed');
+      const benevolent = annexed && this.war.onlyAid && WAR_PROVINCES.every(p => this.war.fronts[p].dissent < 5);
+      const offensive = this.war.stage === 'war' && this.war.stance === 'full';
+      if (!this.fta.suspended && (offensive || (annexed && !benevolent && !this.flags.has('eu_fta_restored')))) {
+        this.fta = { ...this.fta, suspended: true };
+        this.log.push({ quarter: this.quarter, kind: 'note', text: 'EU FTA: Brussels suspends the agreement over the war in Cambodia' });
+      } else if (this.fta.suspended && benevolent) {
+        this.fta = { ...this.fta, suspended: false };
+        this.flags.add('eu_fta_restored');
+      }
+      const r = stepFta(this.fta, this.quarter, this.flags, this.maximalPlays);
       if (r.fta.stage === 'in_force' && this.fta.stage !== 'in_force') this.flags.add('eu_fta_in_force');
       this.fta = r.fta;
       for (const text of r.notes) this.log.push({ quarter: this.quarter, kind: 'note', text });

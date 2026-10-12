@@ -451,3 +451,4 @@ details.whip td{padding:2px 0;vertical-align:baseline}
 .wb-full.on{background:rgba(165,25,49,.35)}
 .war-note{margin-top:10px;font-size:12px;color:var(--ink-2)}
 .war-head span{text-shadow:0 1px 4px rgba(0,0,0,.8)}
+.fta-fill.suspended{background:var(--critical)}
