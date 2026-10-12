@@ -59,7 +59,7 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/ideology.ts` | Reads your economic position off the budget. |
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoilers. |
 | `config/policies.json` | 36 cards, 99 options. |
-| `config/provinces.json` | Province outlines and a one-line description of each of the 77 provinces, for the map. Outlines from [@svg-maps/thailand](https://github.com/VictorCazanave/svg-maps), CC BY 4.0. |
+| `config/provinces.json` | Province outlines and a one-line description of each of the 77 provinces, for the map. Outlines from Natural Earth (public domain). |
 | `config/events.json` | 37 news events, 78 options. |
 | `config/coalitions.json` | The four coalitions and their effects. |
 | `config/constitution.json` | Five parts of the constitution, their positions and party stances. |

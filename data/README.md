@@ -54,9 +54,9 @@ Primary terms, which supersede anything written here:
 
 ## Map
 
-`config/provinces.json` uses the province outlines from **@svg-maps/thailand 2.0.0** by Victor Cazanave (<https://github.com/VictorCazanave/svg-maps>), licensed **CC BY 4.0** (<https://creativecommons.org/licenses/by/4.0/>). Changes: coordinates rounded to one decimal, two province names shortened (Ayutthaya, Chonburi), and a one-line description added to each province. The descriptions are this project's own.
+`config/provinces.json` draws every province from **Natural Earth 1:10m admin-1 states and provinces** (public domain, <https://www.naturalearthdata.com>), projected to Mercator and simplified with shared borders kept, so neighbouring provinces meet exactly. The one-line descriptions are this project's own.
 
-The three Cambodian provinces of 1941–46 (Phra Tabong, Phibunsongkhram, and the Cambodian part of Nakhon Champassak) are built from **Natural Earth admin-1** boundaries (public domain, <https://www.naturalearthdata.com>). Modern provinces were merged and cut along 13.5°N, 104.53°E and 105.95°E to approximate the 1941 lines, then projected onto the map with a Mercator fit to the Thai province centroids. They are approximations, not surveyed boundaries.
+The three Cambodian provinces of 1941–46 (Phra Tabong, Phibunsongkhram, and the Cambodian part of Nakhon Champassak) come from the same layer: modern Cambodian provinces merged and cut along 13.5°N, 104.53°E and the Mekong (Natural Earth river centrelines) to approximate the 1941 lines. They are approximations, not surveyed boundaries.
 
 ## Not in this repository
 
