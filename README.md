@@ -114,6 +114,8 @@ The recording isn't ours to redistribute. The player tries, in order:
 
 The simulation is the same in all three cases.
 
+**Ending themes.** Four revealed ideologies (Big Push, Developmental Statism, Chinese and Authoritarian Developmentalism) have their own song on the end screen, streamed from YouTube from a set timestamp and looped. It needs `http(s)`. The mp3 build creates a silent YouTube player at the coalition choice so the ending can start inside the End-turn click; if the browser still blocks sound, the theme starts muted and the play button unmutes it.
+
 ---
 
 ## Licence and data
