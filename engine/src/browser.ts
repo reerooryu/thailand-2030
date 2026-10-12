@@ -672,6 +672,9 @@ export class BrowserGame {
       primaryBalance: s.primaryBalance,
       invRate: s.invRate,
       singaporeLite: this.flags.has('constitution_sg'),
+      cleanState: this.flags.has('civil_service_shrinking') && this.flags.has('anticorruption_enforcement'),
+      industrialPolicy: this.flags.has('semiconductor_programme') || this.flags.has('semiconductor_champion'),
+      marketOpening: this.flags.has('oecd_accelerating') || this.flags.has('super_licence_done'),
     });
   }
 

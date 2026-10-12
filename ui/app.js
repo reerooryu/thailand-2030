@@ -673,6 +673,8 @@ function showEnd(walked, snap = false) {
      through it: a government returned to office gets to answer for its own
      December 2030 promise, and one that is not, does not. */
   const elec = fell ? null : g.election();
+  const endIdeology = g.ideology();
+  if (window.playEnding) window.playEnding(ENDING_THEMES[endIdeology.name]);
   // Did anyone change party mid-term? Decides whether the seat table needs a
   // dissolution column. Must come AFTER `elec` exists.
   const moved = !!elec && elec.results.some(r => r.before !== r.origin);
@@ -779,7 +781,7 @@ function showEnd(walked, snap = false) {
 
     <div class="verdict">
       <div class="verdict-h">Assessment · Second Anutin Cabinet (2026–${g.label.slice(0, 4)})</div>
-      ${renderIdeology(g.ideology())}
+      ${renderIdeology(endIdeology)}
       ${verdictSections(g, s, realCagr, setChg, gov).map(v => `
         <div class="vsec">
           <div class="vsec-h">${v.h}${v.tag ? ` <span class="vtag">${v.tag}</span>` : ''}</div>
@@ -1239,6 +1241,14 @@ renderPrologue();
    transport is a genuine play/pause from then on; once it has been paused
    deliberately, nothing starts it again behind the player's back. */
 const ANTHEM_IN = 3;   // seconds to skip — the intro is instrumental
+
+/* Ending themes by revealed ideology. YouTube id and start time in seconds. */
+const ENDING_THEMES = {
+  'Big Push Developmentalism':      { id: 'pdfk9O3zZ7E', start: 139, title: 'โนพลอมแพลม', sub: 'Big Push Developmentalism' },
+  'Developmental Statism':          { id: 'xKjr8QlDoDY', start: 0,   title: 'เมียรายเดือน', sub: 'Developmental Statism' },
+  'Chinese Developmentalism':       { id: 'Kk8YzHeE7Sg', start: 137, title: 'Blazing Red Tassel', sub: 'Chinese Developmentalism' },
+  'Authoritarian Developmentalism': { id: 'qPZE24ybIpo', start: 104, title: 'เพียงแค่ใจเรารักกัน', sub: 'Authoritarian Developmentalism' },
+};
 (function music() {
   const btn = document.getElementById('mus-toggle');
   const box = document.getElementById('player');
@@ -1271,6 +1281,24 @@ const ANTHEM_IN = 3;   // seconds to skip — the intro is instrumental
     paint();
   };
 
+  // The ending theme (set by playEnding) loops itself rather than falling back
+  // to the campaign song when the video ends.
+  let ending = null;
+  const onState = (p, e) => {
+    playing = e.data === window.YT.PlayerState.PLAYING; paint();
+    if (ending && e.data === window.YT.PlayerState.ENDED) { p.seekTo(ending.start, true); p.playVideo(); }
+  };
+  let ytShared = null;              // { player, ready } once any YouTube player exists
+  const loadApi = (boot, fail) => {
+    if (window.YT && window.YT.Player) return boot();
+    const prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => { if (prev) prev(); boot(); };
+    const s = document.createElement('script');
+    s.src = 'https://www.youtube.com/iframe_api';
+    s.onerror = fail;
+    document.head.appendChild(s);
+  };
+
   const youtube = id => {
     const frame = document.getElementById('yt-frame');
     if (!frame || !window.location.protocol.startsWith('http')) return hide();
@@ -1290,14 +1318,15 @@ const ANTHEM_IN = 3;   // seconds to skip — the intro is instrumental
         events: {
           onReady: e => {
             ready = true; clearTimeout(giveUp);
+            ytShared = { player, ready: true };
             e.target.setVolume(45);
             // The coalition may well have been chosen while the embed was still
             // loading; honour the request rather than dropping it.
             if (wanted && !userPaused) go();
             paint();
           },
-          onStateChange: e => { playing = e.data === window.YT.PlayerState.PLAYING; paint(); },
-          onError: () => { clearTimeout(giveUp); hide(); },
+          onStateChange: e => onState(player, e),
+          onError: () => { clearTimeout(giveUp); if (!ending) hide(); },
         },
       });
     };
@@ -1314,14 +1343,42 @@ const ANTHEM_IN = 3;   // seconds to skip — the intro is instrumental
       else { userPaused = false; wanted = true; go(); }
     };
 
-    if (window.YT && window.YT.Player) return boot();
-    const prev = window.onYouTubeIframeAPIReady;
-    window.onYouTubeIframeAPIReady = () => { if (prev) prev(); boot(); };
-    const s = document.createElement('script');
-    s.src = 'https://www.youtube.com/iframe_api';
-    s.onerror = () => { clearTimeout(giveUp); hide(); };
-    document.head.appendChild(s);
+    loadApi(boot, () => { clearTimeout(giveUp); hide(); });
     paint();
+  };
+
+  /* Ending themes, one per revealed ideology. Streamed from YouTube in every
+     build (there is no local copy), so a file:// page keeps the campaign song. */
+  window.playEnding = track => {
+    if (!track || !window.location.protocol.startsWith('http')) return;
+    const local = document.getElementById('anthem');
+    if (local) local.pause();
+    ending = track;
+    box.style.display = '';
+    const t = box.querySelector('.mus-title'), sub = box.querySelector('.mus-sub');
+    if (t) t.textContent = track.title;
+    if (sub) sub.textContent = track.sub || '';
+    const start = p => {
+      p.setVolume(45);
+      p.loadVideoById({ videoId: track.id, startSeconds: track.start });
+      if (userPaused) p.pauseVideo();
+      btn.onclick = () => {
+        if (playing) { userPaused = true; p.pauseVideo(); }
+        else { userPaused = false; p.playVideo(); }
+      };
+    };
+    if (ytShared && ytShared.ready) return start(ytShared.player);
+    // Local-mp3 builds have no YouTube player yet: make one for the ending.
+    loadApi(() => {
+      const p = new window.YT.Player('yt-frame', {
+        videoId: track.id, host: 'https://www.youtube-nocookie.com',
+        playerVars: { autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, playsinline: 1, rel: 0 },
+        events: {
+          onReady: () => { ytShared = { player: p, ready: true }; start(p); },
+          onStateChange: e => onState(p, e),
+        },
+      });
+    }, () => {});
   };
 
   const el = document.getElementById('anthem');

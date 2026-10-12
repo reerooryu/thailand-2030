@@ -27,6 +27,12 @@ export interface IdeologyInput {
   invRate: number;
   /** A ratified constitution with two or more Singapore-lite positions. */
   singaporeLite?: boolean;
+  /** The civil service cut and anti-corruption enforcement in place. */
+  cleanState?: boolean;
+  /** A national industrial programme (the semiconductor package or a champion). */
+  industrialPolicy?: boolean;
+  /** Opened to outside rules: OECD accession accelerated or the Super Licence passed. */
+  marketOpening?: boolean;
 }
 
 export interface Ideology {
@@ -48,13 +54,28 @@ export function classify(i: IdeologyInput): Ideology {
   const REFORMS = reform > 55, DELEVERAGED = debtRise < 6, BORROWED = debtRise > 12;
 
   // --- the pure types, checked most specific first
-  // A strong state built on top of a clean one: the constitution says so,
-  // and the reform record and the capital budget back it up.
-  if (i.singaporeLite && REFORMS && BUILDS) return {
-    name: 'Guided Developmentalism',
+  // A strong state: the constitution says so, and the reform record and the
+  // capital budget back it up. Whether the state was cleaned first decides
+  // which version of the tradition this is.
+  if (i.singaporeLite && REFORMS && BUILDS) return i.cleanState ? {
+    name: 'Authoritarian Developmentalism',
     tradition: "Singapore's PAP state and Korea under Park: a strong executive, a clean bureaucracy, and a plan",
     tag: 'cleaned the state, then gave it more power',
     body: 'The civil service cut and policed first, then a constitution that lets the executive plan and deliver with fewer checks. Industrial strategy, managed labour, means-tested welfare. It works while the bureaucracy stays clean, and nothing in the new rules guarantees that it will.',
+  } : {
+    name: 'Authoritarian Developmentalism',
+    tradition: 'Suharto\'s New Order and Marcos\'s Philippines: a strong executive and a plan, without the clean bureaucracy',
+    tag: 'gave the state more power before cleaning it',
+    body: 'A constitution that lets the executive plan and deliver with fewer checks, handed to a civil service and a patronage system that were never reformed. Growth can be real. So is the risk that the new powers serve the networks rather than the plan.',
+  };
+
+  // State capitalism: build and steer industry from the top, without opening
+  // up to outside rules.
+  if (BUILDS && i.industrialPolicy && !i.marketOpening) return {
+    name: 'Chinese Developmentalism',
+    tradition: 'reform-era China: state banks, local-government investment and industrial policy from the top',
+    tag: 'built and picked winners, on the state\'s terms',
+    body: 'Capital spending at scale and a national industrial programme, steered by ministries and state firms rather than by opening to outside standards. Fast where the state chooses well. Without competition or outside discipline, nobody finds out when it chooses badly until the debt does.',
   };
 
   if (BUILDS && REFORMS && COLLECTS && DELEVERAGED) return {
@@ -66,7 +87,7 @@ export function classify(i: IdeologyInput): Ideology {
 
   if (BUILDS && REFORMS && BORROWED) return {
     name: 'Big Push Developmentalism',
-    tradition: "Mahathir's Malaysia and the 1980s Asian tigers: build ahead of demand, reform underneath, borrow the difference",
+    tradition: "Rosenstein-Rodan's big push, and Mahathir's Malaysia: build ahead of demand, reform underneath, borrow the difference",
     tag: 'built and reformed at once, and borrowed to do both',
     body: 'Capital spending at scale and institutions rebuilt at the same time, with the gap financed by issuance rather than revenue. The fastest way to move a country up a level, and the one that leaves the largest bill. Whether it was a big push or a big bet depends on the next government collecting the taxes this one did not.',
   };
@@ -82,7 +103,7 @@ export function classify(i: IdeologyInput): Ideology {
     name: 'Deficit Populism',
     tradition: 'Latin American structuralism, and the rice-pledging years',
     tag: 'transfers now, revenue never, arithmetic left to a successor',
-    body: 'Household incomes supported directly with no matching revenue, so borrowing closes the gap. Redistributive and popular. But a permanent claim on the budget, funded by a temporary willingness to lend, ends in one place.',
+    body: 'Household incomes supported directly with no matching revenue, so borrowing closes the gap. Redistributive and popular. But a permanent claim on the budget, funded by a temporary willingness to lend, only ends one way.',
   };
 
   if (SPENDS && COLLECTS) return {
@@ -96,21 +117,14 @@ export function classify(i: IdeologyInput): Ideology {
     name: 'Institutional Liberalism',
     tradition: 'the Washington-consensus supply side, minus the austerity',
     tag: 'changed the rules rather than the spending',
-    body: 'Deregulation, permitting, competition policy, digitisation and legal capacity: the state reorganised, not enlarged. The bet is that transaction costs, not capital, held Thai investment back. The investment rate is the test. Cheap, slow, hard to campaign on.',
+    body: 'Deregulation, permitting, competition policy, digitisation and legal capacity: the state reorganised, not enlarged. The bet is that transaction costs, not capital, held Thai investment back, and the investment rate is the test. Cheap, slow and hard to campaign on.',
   };
 
   if (COLLECTS && DELEVERAGED && !BUILDS && !SPENDS) return {
     name: 'Fiscal Orthodoxy',
     tradition: 'the German-Dutch school, and the IMF letter every government resents',
     tag: 'fixed the balance sheet and left the rest alone',
-    body: 'Revenue raised, spending disciplined, the debt ratio defended. After thirty years of undercollection, a defensible and unglamorous priority. Orthodoxy\'s open question: what was the restored capacity for, and who waited while it was restored?',
-  };
-
-  if (BUILDS && REFORMS && BORROWED) return {
-    name: 'Big-Push Developmentalism',
-    tradition: 'Rosenstein-Rodan, and the Korea of the 1970s',
-    tag: 'bet the balance sheet that everything had to happen at once',
-    body: 'Infrastructure, institutions and industrial policy at once, financed by borrowing, on the theory that only a coordinated push escapes the trap. It ends in a transformed economy or a debt crisis. Someone else usually decides which.',
+    body: 'Revenue raised, spending disciplined, the debt ratio defended. After thirty years of undercollection, a defensible and unglamorous priority. The open question is what the restored capacity was for, and who waited while it was restored.',
   };
 
   if (BUILDS && !REFORMS && !BORROWED) return {
@@ -124,7 +138,7 @@ export function classify(i: IdeologyInput): Ideology {
     name: 'Managerial Statism',
     tradition: 'the mid-century administrative state',
     tag: 'grew the apparatus without changing what it does',
-    body: 'Government consumption expanded, with more programmes, staff and delivery, and the institutions untouched. The state does more of what it already did. Worth it only if it was good at it. Nobody checked.',
+    body: 'Government consumption expanded, with more programmes, staff and delivery, and the institutions untouched. The state does more of what it already did. That is worth it only if it was good at it, and nobody checked.',
   };
 
   if (reform < 30 && build < 0.4 && give < 0.5) return {
@@ -138,6 +152,6 @@ export function classify(i: IdeologyInput): Ideology {
     name: 'Pragmatic Centrism',
     tradition: 'the mainstream of every finance ministry in the region',
     tag: 'a bit of everything, committed to nothing',
-    body: 'Some capital, some transfers, some reform, nothing pushed far enough to define the term. Most governments behave this way; a six-party coalition produces compromises. The record will be read through the numbers.',
+    body: 'Some capital, some transfers, some reform, nothing pushed far enough to define the term. Most governments behave this way, and a multi-party coalition produces compromises. The record will be read through the numbers.',
   };
 }
