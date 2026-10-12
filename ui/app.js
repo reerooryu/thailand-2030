@@ -226,6 +226,7 @@ function render() {
   renderNews();
   renderDeck();
   renderConstitution();
+  renderWar();
   renderParliament();
   renderMap();
   $('#end-turn').disabled = g.pending.length > 0 || g.quarter >= 16;
@@ -273,7 +274,8 @@ function renderMap() {
   const pilots = new Set(g.pilotGovernors());
   const terr = g.territory || {};
   const TERR = { disputed: 'Disputed', occupied: 'Under Thai occupation', annexed: 'Annexed as a province of Thailand' };
-  const status = p => p.historic ? `${TERR[terr[p.id]]} · today ${p.modern}`
+  const front = id => g.war && g.war.fronts[id];
+  const status = p => p.historic ? `${TERR[terr[p.id]]}${front(p.id) && front(p.id).entered ? ` · held ${Math.round(front(p.id).occ)}% · dissent ${Math.round(front(p.id).dissent)}%` : ''} · today ${p.modern}`
     : p.id === 'bkk' ? 'Special administrative area, elected governor'
     : pilots.has(p.id) ? 'Elected governor (pilot, new constitution)' : '';
   const cls = p => p.water ? 'pv-water'
@@ -281,7 +283,7 @@ function renderMap() {
     : (p.id === 'bkk' || pilots.has(p.id)) ? 'pv pv-special' : 'pv';
   const shown = [...PROVINCES.provinces,
     ...(PROVINCES.historic || []).filter(h => terr[h.id]).map(h => ({ ...h, historic: true }))];
-  const key = [...pilots].join(',') + '|' + JSON.stringify(terr);
+  const key = [...pilots].join(',') + '|' + JSON.stringify(terr) + '|' + JSON.stringify(g.war ? g.war.fronts : {});
   if (box.dataset.key === key && box.firstChild) return;
   box.dataset.key = key;
   const nT = Object.keys(terr).length;
@@ -500,6 +502,57 @@ function renderConstitutionFinal() {
     <table class="cf-table">${rows}</table>
     <div class="cf-key"><span class="cf-pos pk-keep">Current text</span><span class="cf-pos pk-adjust">Adjust</span><span class="cf-pos pk-tilt">Tilt</span><span class="cf-pos pk-sg">Singapore-lite</span></div>
   </div>`;
+}
+
+/* The Cambodian war. Shown once operations begin (war.ts). The posture and
+   the reconstruction stance are free to change at any point in the turn. */
+const WAR_STANCES = [
+  ['ceasefire', 'Ceasefire', 'Freeze the line. Little cost, no progress.'],
+  ['hold', 'Hold', 'Dig in where you are.'],
+  ['limited', 'Limited offensive', 'Advance steadily at a bearable cost.'],
+  ['full', 'Full offensive', 'All as One!'],
+];
+const RECON = [
+  ['aid', 'Aid', 'Rebuild and feed. Costly; dissent grows slowly, then falls fast.'],
+  ['martial', 'Martial law', 'Hold order. Cheap; dissent creeps up.'],
+  ['crackdown', 'Crack down', 'Dissent falls now and grows faster for the rest of the term.'],
+];
+const WAR_NAMES = { phra_tabong: 'Phra Tabong', phibunsongkhram: 'Phibunsongkhram', nakhon_champassak: 'Nakhon Champassak' };
+function renderWar() {
+  const wrap = $('#war-wrap'), box = $('#war');
+  if (!wrap || !box) return;
+  const w = g.warView();
+  wrap.hidden = w.stage === 'none';
+  if (w.stage === 'none') return;
+  const n = x => Math.round(x).toLocaleString();
+  const status = w.annexed ? 'Annexed' : w.stage === 'won' ? `Occupation · war ended ${g.labelAt(w.wonQuarter)}`
+    : `At war since ${g.labelAt(w.startQuarter)}`;
+  const china = w.chinaArming ? '<span class="down">Beijing is arming Phnom Penh: slower advances, heavier losses</span>'
+    : '<span class="muted">Beijing is staying out of it</span>';
+  const fronts = Object.entries(w.fronts).map(([id, f]) => `<div class="wf-row">
+      <div class="wf-name">${WAR_NAMES[id]}</div>
+      <div class="wf-bars"><span class="wf-l">Held</span><span class="wf-bar"><span class="wf-occ" style="width:${f.occ}%"></span></span><b>${n(f.occ)}%</b>
+      <span class="wf-l">Dissent</span><span class="wf-bar"><span class="wf-dis" style="width:${f.dissent}%"></span></span><b>${f.entered ? n(f.dissent) + '%' : '–'}</b></div></div>`).join('');
+  const btns = (list, cur, kind) => list.map(([id, label, d]) =>
+    `<button class="wb${cur === id ? ' on' : ''} wb-${id}" data-kind="${kind}" data-id="${id}"><b>${label}</b><span>${d}</span></button>`).join('');
+  const full = w.stage === 'war' && w.stance === 'full';
+  box.className = full ? 'war-full' : '';
+  box.innerHTML = `${full ? '<div class="war-flag"></div><div class="war-banner"><b>Full Offensive</b><span>All as One!</span></div>' : ''}
+    <div class="war-head"><b>${status}</b>${china}</div>
+    <div class="war-stats">
+      <div><span class="ws-n">${n(w.thaiCasualties)}</span><span class="ws-l">Thai military killed and wounded</span></div>
+      <div><span class="ws-n">${n(w.khmerCasualties)}</span><span class="ws-l">Cambodian killed and wounded</span></div>
+      <div><span class="ws-n">${n(w.displaced)}</span><span class="ws-l">civilians displaced</span></div>
+      <div><span class="ws-n">${n(w.avgDissent)}%</span><span class="ws-l">average dissent</span></div>
+    </div>
+    <div class="war-fronts">${fronts}</div>
+    ${w.stage === 'war' ? `<div class="war-sub">Posture</div><div class="war-btns">${btns(WAR_STANCES, w.stance, 'war')}</div>` : ''}
+    <div class="war-sub">Reconstruction</div><div class="war-btns">${btns(RECON, w.recon, 'recon')}</div>
+    ${w.stage === 'won' && !w.annexed ? `<div class="war-note">${w.avgDissent < 10 ? 'Dissent is below 10% everywhere: the annexation bill is on your desk.' : 'The annexation bill unlocks when dissent is below 10% in all three provinces.'}</div>` : ''}`;
+  box.querySelectorAll('.wb').forEach(b => b.onclick = () => {
+    if (b.dataset.kind === 'war') g.setWarStance(b.dataset.id); else g.setRecon(b.dataset.id);
+    render();
+  });
 }
 
 function renderConstitution() {
@@ -790,6 +843,8 @@ function showEnd(walked, snap = false) {
           ${row('Capital stock', fmt(s.capital / start.capital * 100 - 100, 1) + '%', 'growth over the term')}
           ${row('Reform stock', fmt(s.reformStock, 1), 'accumulated structural effort')}
           ${row('Alignment', g.alignLabel(), `US ${g.align.us} · China ${g.align.cn}`)}
+          ${g.war.stage !== 'none' ? row('Cambodian war', g.flags.has('territory_annexed') ? 'Annexed' : g.war.stage === 'won' ? 'Occupied' : 'Unfinished',
+                `${Math.round(g.war.thaiCasualties).toLocaleString()} Thai and ${Math.round(g.war.khmerCasualties).toLocaleString()} Cambodian killed and wounded`) : ''}
           ${row('EU FTA', g.fta.stage === 'in_force' ? 'In force' : g.fta.stage === 'ratifying' ? 'Ratifying' : Math.round(g.fta.progress) + '%',
                 g.fta.stage === 'negotiating' ? 'negotiated, from 63%' : g.fta.stage === 'ratifying' ? 'talks concluded' : 'since ' + g.labelAt(g.fta.inForceQuarter),
                 g.fta.stage === 'in_force' ? 'good' : '')}

@@ -24,7 +24,7 @@ Four scores, all in tension:
 - **Investment**
 - **Debt ratio**: measured against a ceiling you can raise by law and then have to live with
 
-Then the count, coalition talks, an analyst's verdict, your revealed ideology and 29 achievements.
+Then the count, coalition talks, an analyst's verdict, your revealed ideology and 31 achievements.
 
 ### Before your first term
 
@@ -50,8 +50,9 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/browser.ts` | Game host: turns, cards, votes, flags, scoring. |
 | `engine/src/politics.ts` | Coalition formation, whip counts, crossbench defection. |
 | `engine/src/election.ts` | The March 2030 count and coalition talks. |
-| `engine/src/achievements.ts` | 29 end-of-term achievements. None feed back. |
+| `engine/src/achievements.ts` | 31 end-of-term achievements. None feed back. |
 | `engine/src/eufta.ts` | The EU–Thailand FTA: progress, ratification, entry into force. |
+| `engine/src/war.ts` | The Cambodian war and occupation: fronts, casualties, dissent, reconstruction. |
 | `engine/src/alignment.ts` | US and China alignment tallies, fed by the `align` field on card and news options. |
 | `engine/src/oecd.ts` | OECD accession chapters and what closing them does. |
 | `engine/src/ratings.ts` | Sovereign credit ratings: S&P, Fitch, Moody's. |
@@ -60,7 +61,7 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoilers. |
 | `config/policies.json` | 36 cards, 99 options. |
 | `config/provinces.json` | Province outlines and a one-line description of each of the 77 provinces, for the map. Outlines from Natural Earth (public domain). |
-| `config/events.json` | 37 news events, 78 options. |
+| `config/events.json` | 41 news events, 86 options. |
 | `config/coalitions.json` | The four coalitions and their effects. |
 | `config/constitution.json` | Five parts of the constitution, their positions and party stances. |
 | `ui/` | Front end. `app.js` is the whole client. |
@@ -105,6 +106,13 @@ python3 scripts/build_panel.py          # rebuild the estimation panel
 Needs Node 20+ and Python 3.10+. The engine has one dev dependency.
 
 **The province map.** Beside the House, every province in plain grey with a one-line description on hover. Colour marks status only: Bangkok in cyan as a special administrative area, joined by the elected-governor pilot provinces once a constitution with that clause is ratified (Chiang Mai, Phuket and Khon Kaen for *adjust*; Chonburi, Rayong, Chiang Mai, Phuket, Nakhon Ratchasima, Khon Kaen, Ayutthaya, Surat Thani, Songkhla and Ubon Ratchathani for *tilt*). The three Cambodian provinces of 1941–46 are in the map data but hidden; any card or news option can set `"territory": {"phra_tabong": "disputed" | "occupied" | "annexed"}`. Open the game with `#mapdemo` to preview all three states.
+
+**The Cambodian war.** Deterministic, and only reachable on purpose. The MOU 2544 event has a revanchist option ("say what the 1941 line means"); a border clash and a rocket strike follow, and at each step the cabinet can stand down. Crossing opens a war panel:
+- **Posture** (war only): ceasefire, hold, limited offensive, full offensive. Each province advances at its own speed (Phra Tabong fastest, Nakhon Champassak slowest), halved if Beijing is arming Cambodia, which it does when your US alignment points exceed China's.
+- **Reconstruction:** aid (costly, dissent barely grows and falls fast after the war), martial law, or crackdown (dissent drops 10 points now, and resentment makes it grow faster afterwards). Dissent above 50% in a province slows the advance there.
+- **Costs** run through the existing channels as temporary levels: defence and aid spending in government consumption, small hits to FDI and market sentiment, a pause on the EU FTA during full offensive or crackdown. Approval rallies by 12 at the start and fades each quarter of fighting.
+- **Ending:** the war ends when all three provinces are fully held; the formal annexation bill unlocks once dissent is below 10% in all three. Held provinces add up to 0.8% to effective labour input, phased in at 0.05% a quarter, mostly after 2030.
+- Achievements: *Rattanakosin Reborn* (annexation) and *Hearts and Minds* (annexation with aid throughout and dissent never at 40%). Any occupation at the end classifies the term as **Irredentist Nationalism**.
 
 **US–China alignment.** Any card or news option that leans one way carries `"align": {"us": n}` or `{"cn": n}`. The points add up in a blue–red bar beside the EU FTA bar and an end-screen label (Hedging, Leaning US, Aligned with China, Courted by both). The tallies are a record; the effects sit on the options themselves. Two scripted events test it: US tariffs over transshipment (Q6) and a PLA Navy port call at Sattahip (Q10).
 

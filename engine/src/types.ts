@@ -20,6 +20,7 @@ export interface State {
   infraStaged?: number[];
   /** Cumulative TFP gain from the EU FTA so far, %. */
   ftaTfpCum?: number;
+  territoryCum?: number;
   exportsR: number;        // real exports, mn baht
   importsR: number;        // real imports, mn baht
   invPrivR: number;        // real private GFCF, mn baht
@@ -105,6 +106,8 @@ export interface Policy {
   tradeAccess?: number;
   /** The same, four quarters earlier: export growth is year on year. */
   tradeAccessLag4?: number;
+  /** 1 once the 1941 provinces are held. See war.ts. */
+  territoryGain?: number;
 }
 
 /** Behavioural parameters. `source` records where each came from — this
@@ -227,6 +230,8 @@ export interface Params {
   /** Cumulative cap on the FTA's TFP gain, % of the TFP level: a one-off level
    *  gain, as trade studies estimate, not a permanent growth-rate increase. */
   ftaTfpCap: number;
+  territoryLabour?: number;
+  territoryLabourCap?: number;
   /** Export LEVEL gain at full phase-in, %, and the share of an export impulse
    *  that reaches the output gap after imported content. */
   ftaExports: number;

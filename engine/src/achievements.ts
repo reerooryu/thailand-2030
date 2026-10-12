@@ -90,6 +90,22 @@ export const ACHIEVEMENTS: Achievement[] = [
     test: c => atLeast(c.headline, 10000, 0),
   },
   {
+    id: 'rattanakosin_reborn',
+    name: 'Rattanakosin Reborn',
+    requirement: 'Pass the formal annexation of the three 1941 provinces.',
+    flavour: 'The 1941 map is back on the wall of every school. Every atlas outside Thailand still shows the old one.',
+    rarity: 'rare',
+    test: c => has(c, 'territory_annexed'),
+  },
+  {
+    id: 'hearts_and_minds',
+    name: 'Hearts and Minds',
+    requirement: 'Annex the 1941 provinces with aid as the only reconstruction stance and dissent never reaching 40%.',
+    flavour: 'Rice before rifles. It cost more, and it worked.',
+    rarity: 'rare',
+    test: c => has(c, 'territory_annexed') && !has(c, 'war_not_aid_only') && !has(c, 'war_dissent_40'),
+  },
+  {
     id: 'sufficiency_economy',
     name: 'Sufficiency Economy',
     requirement: 'Complete the term without raising the debt ceiling, and finish inside it.',

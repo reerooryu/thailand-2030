@@ -36,6 +36,14 @@ export interface IdeologyInput {
   /** China alignment points, and US points, from alignment.ts. */
   alignCn?: number;
   alignUs?: number;
+  /** The Cambodian war (war.ts): any 1941 province occupied at the end, whether
+   *  all three are held, whether annexation passed, average dissent, and
+   *  whether the guns are still firing. */
+  warOccupied?: boolean;
+  warWon?: boolean;
+  warAnnexed?: boolean;
+  warDissent?: number;
+  warCeasefire?: boolean;
 }
 
 export interface Ideology {
@@ -57,6 +65,25 @@ export function classify(i: IdeologyInput): Ideology {
   const REFORMS = reform > 55, DELEVERAGED = debtRise < 6, BORROWED = debtRise > 12;
 
   // --- the pure types, checked most specific first
+  // A war over the 1941 map defines the term before anything in the budget.
+  if (i.warOccupied) {
+    const T = "Phibunsongkhram's Pan-Thai nationalism, 1938-44: the cultural mandates and the 1941 war with French Indochina, whose map you redrew";
+    if (i.warAnnexed && (i.warDissent ?? 100) < 20) return {
+      name: 'Irredentist Nationalism', tradition: T,
+      tag: 'redrew the map, and made it stick',
+      body: "Phibun's 1941 line, restored by war and kept through reconstruction. The region and the courts will never accept it. The provinces themselves are quieter than anyone predicted, which is the part that will be argued over longest.",
+    };
+    if (i.warCeasefire && !i.warWon) return {
+      name: 'Irredentist Nationalism', tradition: T,
+      tag: 'started a war and froze it halfway',
+      body: 'A ceasefire line through occupied provinces that both sides call temporary. Recent history is full of these frozen conflicts, and almost none of them have ended.',
+    };
+    return {
+      name: 'Irredentist Nationalism', tradition: T,
+      tag: 'took the land, but not the people',
+      body: 'A garrison holding provinces that do not want it. Every quarter costs money, soldiers and standing abroad, and there is no way out that does not look like defeat.',
+    };
+  }
   // A strong state: the constitution says so, and the reform record and the
   // capital budget back it up.
   if (i.singaporeLite && REFORMS && BUILDS) {

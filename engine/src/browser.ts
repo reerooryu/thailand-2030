@@ -15,6 +15,7 @@ import {
 import { closedChapters, CAPACITY_PER_CHAPTER, FDI_PER_CHAPTER } from './oecd.js';
 import { initialFta, stepFta, tradeAccess, type FtaState } from './eufta.js';
 import { initialAlign, addAlign, alignLabel, type AlignState } from './alignment.js';
+import { initialWar, startWar, stepWar, warLevels, warApproval, chinaArming, avgDissent, PROVINCES as WAR_PROVINCES, type WarState, type WarStance, type ReconStance } from './war.js';
 import { initialAgencies, targetNotch, review, ratingPremium, type Agency } from './ratings.js';
 import { BASE } from './params.js';
 import { formCoalition, band, type CoalitionCfg, type PoliticalState } from './politics.js';
@@ -132,6 +133,37 @@ export class BrowserGame {
    *  province of Thailand. Any card or news option can set it with a
    *  `territory` field, e.g. { "phra_tabong": "occupied" }. */
   territory: Record<string, 'disputed' | 'occupied' | 'annexed'> = {};
+  /** The Cambodian war and occupation. See war.ts. */
+  war: WarState = initialWar();
+  private warApplied: Record<string, number> = {};
+  warView() {
+    const w = this.war;
+    return { ...w, avgDissent: avgDissent(w), chinaArming: chinaArming(this.align.us, this.align.cn),
+      annexed: this.flags.has('territory_annexed') };
+  }
+  /** Change the war posture. Free, and allowed any time during the turn. */
+  setWarStance(s: WarStance) { if (this.war.stage === 'war') { this.war = { ...this.war, stance: s }; this.syncWar(); } }
+  setRecon(r: ReconStance) { if (this.war.stage !== 'none') { this.war = { ...this.war, recon: r }; this.syncWar(); } }
+  /** Keep the stance vector, flags and map in line with the war state. */
+  private syncWar() {
+    const w = this.war;
+    if (w.stage === 'none') return;
+    const lv = warLevels(w);
+    const delta: Record<string, number> = {};
+    for (const k of new Set([...Object.keys(lv), ...Object.keys(this.warApplied)]))
+      delta[k] = (lv[k] ?? 0) - (this.warApplied[k] ?? 0);
+    for (const [k, v] of Object.entries(delta)) this.stance[k] = (this.stance[k] ?? 0) + v;
+    this.warApplied = lv;
+    const t: Record<string, 'disputed' | 'occupied' | 'annexed'> = {};
+    for (const p of WAR_PROVINCES)
+      t[p] = this.flags.has('territory_annexed') ? 'annexed' : w.fronts[p].occ > 0 ? 'occupied' : 'disputed';
+    this.territory = t;
+    if (w.stage === 'won') this.flags.add('war_won');
+    if (w.stage === 'won' && WAR_PROVINCES.every(p => w.fronts[p].dissent < 10)) this.flags.add('occupation_dissent_low');
+    else this.flags.delete('occupation_dissent_low');
+    if (!w.onlyAid) this.flags.add('war_not_aid_only');
+    if (w.maxDissent >= 40) this.flags.add('war_dissent_40');
+  }
   private applyTerritory(t: Record<string, string> | undefined) {
     if (t) this.territory = { ...this.territory, ...(t as any) };
   }
@@ -315,6 +347,7 @@ export class BrowserGame {
     this.flags = applyFlags(this.flags, opt);
     this.align = addAlign(this.align, opt.align, this.quarter, `${card.name}: ${opt.label}`);
     this.applyTerritory((opt as any).territory);
+    this.syncWar();
     this.scheduled = scheduleFrom(this.scheduled, events, cardId, optionId, this.quarter);
     const discounted = opt.dependsOn && !this.flags.has(opt.dependsOn.flag);
     this.apply(effectiveEffects(opt, this.flags));
@@ -346,6 +379,11 @@ export class BrowserGame {
     this.align = addAlign(this.align, opt.align, this.quarter, `${e.headline}: ${opt.label}`);
     this.applyTerritory((opt as any).territory);
     this.opinion = res.opinion; this.flags = res.flags;
+    if (this.flags.has('war_begins') && this.war.stage === 'none') {
+      this.war = startWar(this.war, this.quarter);
+      this.approval = Math.min(100, this.approval + 12);   // the rally
+      this.syncWar();
+    }
     this.apply(res.effects);
     this.syncStateFlags();
     this.syncCeiling();
@@ -438,8 +476,17 @@ export class BrowserGame {
     const ramp = Math.min(1, (this.quarter + 1) / 6);
     const cap = this.ps.effects.megaprojectCap ?? 9.0;
     const stimCap = this.ps.effects.stimulusCap ?? 2.0;
+    if (this.war.stage !== 'none') {
+      const r = stepWar(this.war, this.quarter, chinaArming(this.align.us, this.align.cn));
+      this.war = r.war;
+      this.approval = Math.max(0, Math.min(100, this.approval + warApproval(this.war)));
+      for (const text of r.notes) this.log.push({ quarter: this.quarter, kind: 'note', text });
+      this.syncWar();
+    }
     {
-      const r = stepFta(this.fta, this.quarter, this.flags, this.maximalPlays);
+      const warPause = this.war.stage === 'war' && this.war.stance === 'full'
+        || this.war.stage !== 'none' && this.war.recon === 'crackdown';
+      const r = stepFta(this.fta, this.quarter, this.flags, this.maximalPlays, warPause);
       if (r.fta.stage === 'in_force' && this.fta.stage !== 'in_force') this.flags.add('eu_fta_in_force');
       this.fta = r.fta;
       for (const text of r.notes) this.log.push({ quarter: this.quarter, kind: 'note', text });
@@ -467,6 +514,7 @@ export class BrowserGame {
       ratingPremium: ratingPremium(this.agencies),
       tradeAccess: tradeAccess(this.fta, this.quarter),
       tradeAccessLag4: tradeAccess(this.fta, this.quarter - 4),
+      territoryGain: this.war.stage === 'won' ? 1 : 0,
     };
     const exog: Exog = { worldDemandGrowth: 3.0, globalActivity: 10.0,
                          energyInflation: 1.5 + (this.rng() - 0.5) * 3, shock: 0 };
@@ -700,6 +748,11 @@ export class BrowserGame {
       industrialPolicy: this.flags.has('semiconductor_programme') || this.flags.has('semiconductor_champion'),
       marketOpening: this.flags.has('oecd_accelerating') || this.flags.has('super_licence_done'),
       alignCn: this.align.cn, alignUs: this.align.us,
+      warOccupied: WAR_PROVINCES.some(p => this.war.fronts[p].occ > 0),
+      warWon: this.war.stage === 'won',
+      warAnnexed: this.flags.has('territory_annexed'),
+      warDissent: avgDissent(this.war),
+      warCeasefire: this.war.stage === 'war' && this.war.stance === 'ceasefire',
     });
   }
 

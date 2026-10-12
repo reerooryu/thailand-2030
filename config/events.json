@@ -718,6 +718,28 @@
           "flavour": "Popular and sovereign. It kills the only framework that could have got the gas out."
         },
         {
+          "id": "reclaim",
+          "label": "Terminate it, and say what the 1941 line means",
+          "body": "Instrument signed, and a speech about Phra Tabong, Phibunsongkhram and Nakhon Champassak, the provinces Thailand held from 1941 to 1946.",
+          "opinion": {
+            "Kla Tham": 9,
+            "Others": 10,
+            "Pheu Thai": -2,
+            "Democrat": -5,
+            "People's": -8
+          },
+          "effects": {
+            "approvalBoost": 11,
+            "institutionalSupport": 8,
+            "fdiSignal": -0.18
+          },
+          "sets": [
+            "mou44_scrapped",
+            "revanchist"
+          ],
+          "flavour": "The crowd outside Government House cheers the map. Phnom Penh recalls its ambassador before the speech ends."
+        },
+        {
           "id": "keep",
           "label": "Retain the memorandum",
           "unavailable": true,
@@ -2049,6 +2071,168 @@
             "approvalBoost": -1
           },
           "flavour": "The berth is unavailable for the next four years. Beijing understands exactly what that means."
+        }
+      ]
+    },
+    {
+      "id": "border_clash",
+      "headline": "Shots at Chong Bok: a patrol clash leaves soldiers dead on both sides",
+      "trigger": {
+        "type": "flag",
+        "flag": "revanchist",
+        "blockedByFlag": "revanchist_stood_down"
+      },
+      "blocking": true,
+      "body": "A Thai patrol and a Cambodian outpost exchanged fire near the Emerald Triangle before dawn. Each side says the other crossed first. After last quarter's speech, nobody in Phnom Penh believes it was an accident, and nobody in Bangkok is trying very hard to persuade them.",
+      "options": [
+        {
+          "id": "retaliate",
+          "label": "Retaliate with artillery and close the border",
+          "opinion": {
+            "Kla Tham": 4,
+            "Others": 5,
+            "Democrat": -3,
+            "People's": -5
+          },
+          "effects": {
+            "approvalBoost": 5,
+            "fdiSignal": -0.08
+          },
+          "sets": [
+            "border_escalation"
+          ],
+          "flavour": "The guns answer within the hour. So do Cambodia's."
+        },
+        {
+          "id": "stand_down",
+          "label": "Accept Malaysian mediation and stand down",
+          "opinion": {
+            "Democrat": 4,
+            "People's": 4,
+            "Kla Tham": -5,
+            "Others": -6
+          },
+          "effects": {
+            "approvalBoost": -6,
+            "fdiSignal": 0.08
+          },
+          "sets": [
+            "revanchist_stood_down"
+          ],
+          "flavour": "The map goes back in the drawer. The people who cheered it remember who put it there."
+        }
+      ]
+    },
+    {
+      "id": "border_escalation",
+      "headline": "Cambodian rockets hit Si Sa Ket. The army asks for authority to cross",
+      "trigger": {
+        "type": "flag",
+        "flag": "border_escalation",
+        "blockedByFlag": "revanchist_stood_down"
+      },
+      "blocking": true,
+      "body": "BM-21 rockets landed near a market in Kantharalak overnight. Each side's account of who started it contradicts the other's, and the misreadings are now faster than the hotlines. The Second Army Area has a plan to push to the 1941 line and needs a cabinet decision.",
+      "options": [
+        {
+          "id": "cross",
+          "label": "Authorise operations to the 1941 line",
+          "opinion": {
+            "Kla Tham": 6,
+            "Others": 8,
+            "Pheu Thai": -3,
+            "Democrat": -6,
+            "People's": -10
+          },
+          "effects": {
+            "institutionalSupport": 6
+          },
+          "sets": [
+            "war_begins"
+          ],
+          "flavour": "The war panel opens. From here the cabinet sets the pace, and the costs."
+        },
+        {
+          "id": "hold_line",
+          "label": "Hold the border and do not cross",
+          "opinion": {
+            "Democrat": 3,
+            "People's": 3,
+            "Kla Tham": -4,
+            "Others": -5
+          },
+          "effects": {
+            "approvalBoost": -5
+          },
+          "sets": [
+            "revanchist_stood_down"
+          ],
+          "flavour": "The shelling stops after a week. The speech is quietly taken off the Government House website."
+        }
+      ]
+    },
+    {
+      "id": "asean_war_summit",
+      "headline": "ASEAN calls an emergency summit in Kuala Lumpur",
+      "trigger": {
+        "type": "flag",
+        "flag": "war_begins"
+      },
+      "blocking": true,
+      "body": "Malaysia, holding the chair, wants both sides at the table within a week. Washington and Brussels are issuing statements. Beijing is watching which way Bangkok leans before it says anything at all.",
+      "options": [
+        {
+          "id": "attend",
+          "label": "Attend, and promise restraint",
+          "opinion": {
+            "Democrat": 3,
+            "Others": -2
+          },
+          "effects": {
+            "approvalBoost": -1,
+            "fdiSignal": 0.05
+          },
+          "flavour": "Promises cost nothing in Kuala Lumpur. The war panel decides whether they were kept."
+        },
+        {
+          "id": "deputy",
+          "label": "Send a deputy minister and keep fighting",
+          "opinion": {
+            "Kla Tham": 3,
+            "Others": 3,
+            "Democrat": -4,
+            "People's": -3
+          },
+          "effects": {
+            "approvalBoost": 2,
+            "fdiSignal": -0.06
+          },
+          "flavour": "The empty chair is the photograph every paper runs."
+        }
+      ]
+    },
+    {
+      "id": "war_line_reached",
+      "headline": "The army reaches the 1941 line",
+      "trigger": {
+        "type": "flag",
+        "flag": "war_won"
+      },
+      "blocking": true,
+      "body": "Battambang, Sisophon and the Dangrek escarpment are under Thai control. The fighting has stopped. What happens to the people living there is now the government's problem, and the formal annexation bill needs dissent in all three provinces below 10%.",
+      "options": [
+        {
+          "id": "ack",
+          "label": "Declare the operation complete",
+          "opinion": {
+            "Kla Tham": 5,
+            "Others": 6
+          },
+          "effects": {
+            "approvalBoost": 6,
+            "setSupport": 0.4
+          },
+          "flavour": "The victory parade goes down Ratchadamnoen. The occupation goes on without one."
         }
       ]
     }

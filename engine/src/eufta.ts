@@ -40,6 +40,7 @@ export const FTA_MOVES: { key: string; points: number; chapter: string;
   { key: 'paternal', points: -8, chapter: 'human rights clause', test: f => f.has('constitution_paternal') },
   { key: 'crackdown', points: -4, chapter: 'labour standards', test: f => f.has('migrant_crackdown') },
   { key: 'land_bridge', points: -3, chapter: 'sustainability', test: f => f.has('land_bridge_forced') },
+  { key: 'annexation', points: -12, chapter: 'annexation of Cambodian territory', test: f => f.has('territory_annexed') },
 ];
 
 export function initialFta(): FtaState {
@@ -48,7 +49,7 @@ export function initialFta(): FtaState {
 
 /** One quarter. Returns the new state and any log lines. Sets 'eu_fta_in_force'
  *  on the quarter it enters into force (the host passes the flag set). */
-export function stepFta(s0: FtaState, quarter: number, flags: Set<string>, maximal: Set<string>):
+export function stepFta(s0: FtaState, quarter: number, flags: Set<string>, maximal: Set<string>, paused = false):
     { fta: FtaState; notes: string[] } {
   const s: FtaState = { ...s0, applied: [...s0.applied] };
   const notes: string[] = [];
@@ -67,7 +68,10 @@ export function stepFta(s0: FtaState, quarter: number, flags: Set<string>, maxim
       notes.push(`EU FTA: the European Parliament delays its consent vote over the ${m.chapter}`);
     }
   }
-  if (s.stage === 'negotiating') {
+  if (paused) {
+    // Brussels does not negotiate with a government on the offensive.
+    if (s.stage === 'ratifying') s.ratifyUntil = (s.ratifyUntil ?? quarter) + 1;
+  } else if (s.stage === 'negotiating') {
     s.progress = Math.min(100, s.progress + FTA_BASE_PACE);
     if (s.progress >= 100) {
       s.stage = 'ratifying';

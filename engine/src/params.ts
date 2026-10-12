@@ -69,6 +69,8 @@ export const PROVENANCE: Record<keyof Params, ParamSource> = {
   ftaDemand: 'prior',
   ftaTfp: 'prior',
   ftaTfpCap: 'prior',
+  territoryLabour: 'prior',
+  territoryLabourCap: 'prior',
   ftaExports: 'literature',
   ftaExportPass: 'prior',
   infraStagedLag: 'prior',
@@ -209,6 +211,11 @@ export const BASE: Params = {
   ftaDemand: 0,
   ftaTfp: 0.06,
   ftaTfpCap: 0.7,
+  // Held 1941 provinces: about 3m people at a quarter of Thai output per head,
+  // so roughly +0.8% to effective labour input, phased in from the end of the
+  // war at 0.05%/quarter. Almost all of it lands after 2030.
+  territoryLabour: 0.05,
+  territoryLabourCap: 0.8,
   ftaExports: 2.8,         // the study's export gain, reached as access phases in
   ftaExportPass: 0.15,     // brief ramp only; the lasting GDP effect is in the TFP term
   infraTfpBonus: 0.010,

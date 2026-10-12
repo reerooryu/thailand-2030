@@ -2652,6 +2652,56 @@
           "flavour": "The money keeps going to the five provinces that were always going to be full."
         }
       ]
+    },
+    {
+      "id": "annexation_bill",
+      "name": "Formal Annexation of the 1941 Provinces",
+      "ministry": "pm office",
+      "type": "institutional",
+      "requires": [
+        "war_won",
+        "occupation_dissent_low"
+      ],
+      "briefing": "A bill making Phra Tabong, Phibunsongkhram and Nakhon Champassak provinces of the Kingdom again, with governors, seats in the next House and Thai citizenship for residents who apply. It unlocks only once dissent is below 10% in all three. No other government recognises it, and the EU puts the trade agreement on hold.",
+      "options": [
+        {
+          "id": "annex",
+          "label": "Pass the annexation bill",
+          "requiresLegislation": true,
+          "maximal": true,
+          "effects": {
+            "approvalBoost": 10,
+            "institutionalSupport": 12,
+            "fdiSignal": -0.15,
+            "setSupport": 0.6
+          },
+          "sets": [
+            "territory_annexed"
+          ],
+          "fit": {
+            "Kla Tham": 0.8,
+            "Others": 0.8,
+            "Pheu Thai": 0.1,
+            "Democrat": -0.5,
+            "People's": -0.9
+          },
+          "flavour": "Fireworks over Sanam Luang, a new line on every school map, and a European Parliament resolution by the end of the week."
+        },
+        {
+          "id": "defer",
+          "label": "Keep the occupation administration, defer the bill",
+          "effects": {
+            "institutionalSupport": -4
+          },
+          "fit": {
+            "Democrat": 0.2,
+            "People's": 0.3,
+            "Kla Tham": -0.3,
+            "Others": -0.4
+          },
+          "flavour": "The provinces stay in legal limbo. So do the people in them."
+        }
+      ]
     }
   ]
 }

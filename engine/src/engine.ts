@@ -83,7 +83,10 @@ export function step(input: StepInput): State {
 
   // labour from demographics — exogenous and declining, and no five-year policy
   // can reverse it (DESIGN §5.5)
-  const labour = s.labour * (1 + p.labourGrowth / 100);
+  // Held 1941 provinces add to effective labour input, slowly (war.ts).
+  const terrStep = (policy.territoryGain ?? 0) > 0
+    ? Math.min(p.territoryLabour ?? 0, Math.max(0, (p.territoryLabourCap ?? 0) - (s.territoryCum ?? 0))) : 0;
+  const labour = s.labour * (1 + p.labourGrowth / 100) * (1 + terrStep / 100);
 
   // TFP grows at trend, with a bonus from the infrastructure capital that has
   // actually landed rather than from what was merely budgeted
@@ -209,7 +212,7 @@ export function step(input: StepInput): State {
     period: nextPeriod(s.period),
     primaryBalance, riskPremium, 
     gap, rgdp, potential,
-    capital, labour, tfp, potentialGrowthYoy, infraPipeline: pipeline, infraStaged: stagedPipe, ftaTfpCum: (s.ftaTfpCum ?? 0) + ftaTfpStep, reformStock,
+    capital, labour, tfp, potentialGrowthYoy, infraPipeline: pipeline, infraStaged: stagedPipe, ftaTfpCum: (s.ftaTfpCum ?? 0) + ftaTfpStep, territoryCum: (s.territoryCum ?? 0) + terrStep, reformStock,
     exportsR, importsR, invPrivR, invPubR, consR, invRate,
     cpi, cpiCore, cpiYoy, cpiCoreYoy: coreYoy,
     policyRate: policy.policyRate,
