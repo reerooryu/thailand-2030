@@ -104,7 +104,7 @@ python3 scripts/build_panel.py          # rebuild the estimation panel
 
 Needs Node 20+ and Python 3.10+. The engine has one dev dependency.
 
-**The province map.** Beside the House, every province in plain grey with a one-line description on hover. Colour marks status only: Bangkok in cyan as a special administrative area, joined by the elected-governor pilot provinces once a constitution with that clause is ratified (Chiang Mai, Phuket and Khon Kaen for *adjust*; Chonburi, Rayong, Chiang Mai, Phuket, Nakhon Ratchasima, Khon Kaen, Ayutthaya, Surat Thani, Songkhla and Ubon Ratchathani for *tilt*).
+**The province map.** Beside the House, every province in plain grey with a one-line description on hover. Colour marks status only: Bangkok in cyan as a special administrative area, joined by the elected-governor pilot provinces once a constitution with that clause is ratified (Chiang Mai, Phuket and Khon Kaen for *adjust*; Chonburi, Rayong, Chiang Mai, Phuket, Nakhon Ratchasima, Khon Kaen, Ayutthaya, Surat Thani, Songkhla and Ubon Ratchathani for *tilt*). The three Cambodian provinces of 1941–46 are in the map data but hidden; any card or news option can set `"territory": {"phra_tabong": "disputed" | "occupied" | "annexed"}`. Open the game with `#mapdemo` to preview all three states.
 
 **US–China alignment.** Any card or news option that leans one way carries `"align": {"us": n}` or `{"cn": n}`. The points add up in a blue–red bar beside the EU FTA bar and an end-screen label (Hedging, Leaning US, Aligned with China, Courted by both). The tallies are a record; the effects sit on the options themselves. Two scripted events test it: US tariffs over transshipment (Q6) and a PLA Navy port call at Sattahip (Q10).
 

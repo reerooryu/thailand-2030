@@ -127,6 +127,14 @@ export class BrowserGame {
   /** US and China alignment tallies. See alignment.ts. */
   align: AlignState = initialAlign();
   alignLabel() { return alignLabel(this.align); }
+  /** Status of the 1941 provinces, by id. Empty until the Cambodia track sets
+   *  one: 'disputed' draws an outline, 'occupied' red hatching, 'annexed' a
+   *  province of Thailand. Any card or news option can set it with a
+   *  `territory` field, e.g. { "phra_tabong": "occupied" }. */
+  territory: Record<string, 'disputed' | 'occupied' | 'annexed'> = {};
+  private applyTerritory(t: Record<string, string> | undefined) {
+    if (t) this.territory = { ...this.territory, ...(t as any) };
+  }
   /** Provinces with an elected governor from the ratified constitution's pilot, if any. */
   pilotGovernors(): string[] {
     if (this.con.stage !== 'ratified' || !this.con.adopted) return [];
@@ -306,6 +314,7 @@ export class BrowserGame {
     if (card.proposal) { if (opt.maximal) this.proposalsFull.add(cardId); else this.proposalsFull.delete(cardId); }
     this.flags = applyFlags(this.flags, opt);
     this.align = addAlign(this.align, opt.align, this.quarter, `${card.name}: ${opt.label}`);
+    this.applyTerritory((opt as any).territory);
     this.scheduled = scheduleFrom(this.scheduled, events, cardId, optionId, this.quarter);
     const discounted = opt.dependsOn && !this.flags.has(opt.dependsOn.flag);
     this.apply(effectiveEffects(opt, this.flags));
@@ -335,6 +344,7 @@ export class BrowserGame {
     if (!isEventOptionUnlocked(opt, this.flags)) return;
     const res = resolve(this.opinion, this.flags, opt);
     this.align = addAlign(this.align, opt.align, this.quarter, `${e.headline}: ${opt.label}`);
+    this.applyTerritory((opt as any).territory);
     this.opinion = res.opinion; this.flags = res.flags;
     this.apply(res.effects);
     this.syncStateFlags();
@@ -766,4 +776,5 @@ export const COALITIONS = cfg;
 /** Province outlines and one-line descriptions, for the map. */
 export const PROVINCES = DATA.provinces as unknown as {
   viewBox: string; _meta: { pilotAdjust: string[]; pilotTilt: string[] };
-  provinces: { id: string; name: string; blurb?: string; path: string; water?: boolean }[] };
+  provinces: { id: string; name: string; blurb?: string; path: string; water?: boolean }[];
+  historic: { id: string; name: string; modern: string; blurb: string; path: string }[] };

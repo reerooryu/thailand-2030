@@ -267,30 +267,43 @@ function seatPositions(total, rows, r0, r1) {
 function renderMap() {
   const box = $('#map');
   if (!box || !PROVINCES) return;
+  // Preview of the territory layers for review: open the game with #mapdemo.
+  if (location.hash === '#mapdemo' && !Object.keys(g.territory).length)
+    g.territory = { phra_tabong: 'annexed', phibunsongkhram: 'occupied', nakhon_champassak: 'disputed' };
   const pilots = new Set(g.pilotGovernors());
-  const status = p => p.id === 'bkk' ? 'Special administrative area, elected governor'
+  const terr = g.territory || {};
+  const TERR = { disputed: 'Disputed', occupied: 'Under Thai occupation', annexed: 'Annexed as a province of Thailand' };
+  const status = p => p.historic ? `${TERR[terr[p.id]]} · today ${p.modern}`
+    : p.id === 'bkk' ? 'Special administrative area, elected governor'
     : pilots.has(p.id) ? 'Elected governor (pilot, new constitution)' : '';
-  const cls = p => p.water ? 'pv-water' : (p.id === 'bkk' || pilots.has(p.id)) ? 'pv pv-special' : 'pv';
-  const key = [...pilots].join(',');
-  if (box.dataset.key !== key || !box.firstChild) {
-    box.dataset.key = key;
-    box.innerHTML = `<div class="map-wrap"><svg class="map-svg" viewBox="${PROVINCES.viewBox}" role="img" aria-label="Map of Thailand's provinces">
-      ${PROVINCES.provinces.map(p => `<path class="${cls(p)}" data-id="${p.id}" d="${p.path}"></path>`).join('')}
-      </svg><div class="map-tip" hidden></div></div>
-      <div class="map-legend"><span class="sw sw-special"></span>Special administration${pilots.size ? ` · ${pilots.size + 1} provinces` : ''}</div>`;
-    const tip = box.querySelector('.map-tip');
-    const byId = Object.fromEntries(PROVINCES.provinces.map(p => [p.id, p]));
-    box.querySelectorAll('path.pv').forEach(el => {
-      const show = () => {
-        const p = byId[el.dataset.id], st = status(p);
-        tip.innerHTML = `<b>${p.name}</b>${st ? `<span class="map-st">${st}</span>` : ''}<span>${p.blurb}</span>`;
-        tip.hidden = false;
-      };
-      el.addEventListener('mouseenter', show);
-      el.addEventListener('click', show);
-      el.addEventListener('mouseleave', () => { tip.hidden = true; });
-    });
-  }
+  const cls = p => p.water ? 'pv-water'
+    : p.historic ? `pv pv-${terr[p.id]}`
+    : (p.id === 'bkk' || pilots.has(p.id)) ? 'pv pv-special' : 'pv';
+  const shown = [...PROVINCES.provinces,
+    ...(PROVINCES.historic || []).filter(h => terr[h.id]).map(h => ({ ...h, historic: true }))];
+  const key = [...pilots].join(',') + '|' + JSON.stringify(terr);
+  if (box.dataset.key === key && box.firstChild) return;
+  box.dataset.key = key;
+  const nT = Object.keys(terr).length;
+  box.innerHTML = `<div class="map-wrap"><svg class="map-svg" viewBox="${PROVINCES.viewBox}" role="img" aria-label="Map of Thailand's provinces">
+    <defs><pattern id="pv-hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="4" height="4" fill="#5a5f66"/><rect width="2" height="4" fill="#d8443a"/></pattern></defs>
+    ${shown.map(p => `<path class="${cls(p)}" data-id="${p.id}" d="${p.path}"></path>`).join('')}
+    </svg><div class="map-tip" hidden></div></div>
+    <div class="map-legend"><span class="sw sw-special"></span>Special administration${pilots.size ? ` · ${pilots.size + 1} provinces` : ''}
+      ${nT ? `<span class="sw sw-occupied"></span>Occupied <span class="sw sw-annexed"></span>Annexed` : ''}</div>`;
+  const tip = box.querySelector('.map-tip');
+  const byId = Object.fromEntries(shown.map(p => [p.id, p]));
+  box.querySelectorAll('path.pv').forEach(el => {
+    const show = () => {
+      const p = byId[el.dataset.id], st = status(p);
+      tip.innerHTML = `<b>${p.name}</b>${st ? `<span class="map-st">${st}</span>` : ''}<span>${p.blurb}</span>`;
+      tip.hidden = false;
+    };
+    el.addEventListener('mouseenter', show);
+    el.addEventListener('click', show);
+    el.addEventListener('mouseleave', () => { tip.hidden = true; });
+  });
 }
 
 function renderParliament() {
