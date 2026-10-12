@@ -1245,9 +1245,10 @@ const ANTHEM_IN = 3;   // seconds to skip — the intro is instrumental
 /* Ending themes by revealed ideology. YouTube id and start time in seconds. */
 const ENDING_THEMES = {
   'Big Push Developmentalism':      { id: 'pdfk9O3zZ7E', start: 139, title: 'โนพลอมแพลม', sub: 'Big Push Developmentalism' },
-  'Developmental Statism':          { id: 'xKjr8QlDoDY', start: 0,   title: 'เมียรายเดือน', sub: 'Developmental Statism' },
+  'Developmental Statism':          { id: 'qPZE24ybIpo', start: 104, title: 'เพียงแค่ใจเรารักกัน', sub: 'Developmental Statism' },
   'Chinese Developmentalism':       { id: 'Kk8YzHeE7Sg', start: 137, title: 'Blazing Red Tassel', sub: 'Chinese Developmentalism' },
-  'Authoritarian Developmentalism': { id: 'qPZE24ybIpo', start: 104, title: 'เพียงแค่ใจเรารักกัน', sub: 'Authoritarian Developmentalism' },
+  'Authoritarian Developmentalism': { id: 'xKjr8QlDoDY', start: 0,   title: 'เมียรายเดือน', sub: 'Authoritarian Developmentalism' },
+  'Social Democracy':               { id: '5r4zSObI2F8', start: 0,   title: 'ลาวม่านแก้ว', sub: 'Social Democracy' },
 };
 (function music() {
   const btn = document.getElementById('mus-toggle');
