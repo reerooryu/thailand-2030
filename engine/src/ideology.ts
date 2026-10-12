@@ -33,6 +33,9 @@ export interface IdeologyInput {
   industrialPolicy?: boolean;
   /** Opened to outside rules: OECD accession accelerated or the Super Licence passed. */
   marketOpening?: boolean;
+  /** China alignment points, and US points, from alignment.ts. */
+  alignCn?: number;
+  alignUs?: number;
 }
 
 export interface Ideology {
@@ -73,8 +76,9 @@ export function classify(i: IdeologyInput): Ideology {
   }
 
   // State capitalism: build and steer industry from the top, without opening
-  // up to outside rules.
-  if (BUILDS && i.industrialPolicy && !i.marketOpening) return {
+  // up to outside rules, and lean toward Beijing to do it.
+  const CHINA = (i.alignCn ?? 0) >= 5 && (i.alignCn ?? 0) > (i.alignUs ?? 0);
+  if (BUILDS && i.industrialPolicy && !i.marketOpening && CHINA) return {
     name: 'Chinese Developmentalism',
     tradition: 'reform-era China: state banks, local-government investment and industrial policy from the top',
     tag: 'built and picked winners, on the state\'s terms',

@@ -127,6 +127,14 @@ export class BrowserGame {
   /** US and China alignment tallies. See alignment.ts. */
   align: AlignState = initialAlign();
   alignLabel() { return alignLabel(this.align); }
+  /** Provinces with an elected governor from the ratified constitution's pilot, if any. */
+  pilotGovernors(): string[] {
+    if (this.con.stage !== 'ratified' || !this.con.adopted) return [];
+    const part = conCfg.parts.find(p => p.id === 'decentral');
+    const pos = part && part.positions[this.con.adopted[part.id]];
+    const meta = (DATA.provinces as any)._meta;
+    return pos?.id === 'adjust' ? meta.pilotAdjust : pos?.id === 'tilt' ? meta.pilotTilt : [];
+  }
   passiveSeen = 0;
   passiveTaken = 0;
 
@@ -681,6 +689,7 @@ export class BrowserGame {
       cleanState: this.flags.has('civil_service_shrinking') && this.flags.has('anticorruption_enforcement'),
       industrialPolicy: this.flags.has('semiconductor_programme') || this.flags.has('semiconductor_champion'),
       marketOpening: this.flags.has('oecd_accelerating') || this.flags.has('super_licence_done'),
+      alignCn: this.align.cn, alignUs: this.align.us,
     });
   }
 
@@ -754,3 +763,7 @@ export class BrowserGame {
 
 export { band, effectiveEffects, isUnlocked, nextPeriod };
 export const COALITIONS = cfg;
+/** Province outlines and one-line descriptions, for the map. */
+export const PROVINCES = DATA.provinces as unknown as {
+  viewBox: string; _meta: { pilotAdjust: string[]; pilotTilt: string[] };
+  provinces: { id: string; name: string; blurb?: string; path: string; water?: boolean }[] };

@@ -52,6 +52,10 @@ Primary terms, which supersede anything written here:
 - SET — <https://www.set.or.th>
 - ECT — <https://www.ect.go.th>
 
+## Map
+
+`config/provinces.json` uses the province outlines from **@svg-maps/thailand 2.0.0** by Victor Cazanave (<https://github.com/VictorCazanave/svg-maps>), licensed **CC BY 4.0** (<https://creativecommons.org/licenses/by/4.0/>). Changes: coordinates rounded to one decimal, two province names shortened (Ayutthaya, Chonburi), and a one-line description added to each province. The descriptions are this project's own.
+
 ## Not in this repository
 
 The 2023 Bhumjaithai campaign song, which the build inlines as the soundtrack if

@@ -59,6 +59,7 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/ideology.ts` | Reads your economic position off the budget. |
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoilers. |
 | `config/policies.json` | 36 cards, 99 options. |
+| `config/provinces.json` | Province outlines and a one-line description of each of the 77 provinces, for the map. Outlines from [@svg-maps/thailand](https://github.com/VictorCazanave/svg-maps), CC BY 4.0. |
 | `config/events.json` | 37 news events, 78 options. |
 | `config/coalitions.json` | The four coalitions and their effects. |
 | `config/constitution.json` | Five parts of the constitution, their positions and party stances. |
@@ -102,6 +103,8 @@ python3 scripts/build_panel.py          # rebuild the estimation panel
 ```
 
 Needs Node 20+ and Python 3.10+. The engine has one dev dependency.
+
+**The province map.** Beside the House, every province in plain grey with a one-line description on hover. Colour marks status only: Bangkok in cyan as a special administrative area, joined by the elected-governor pilot provinces once a constitution with that clause is ratified (Chiang Mai, Phuket and Khon Kaen for *adjust*; Chonburi, Rayong, Chiang Mai, Phuket, Nakhon Ratchasima, Khon Kaen, Ayutthaya, Surat Thani, Songkhla and Ubon Ratchathani for *tilt*).
 
 **US–China alignment.** Any card or news option that leans one way carries `"align": {"us": n}` or `{"cn": n}`. The points add up in a blue–red bar beside the EU FTA bar and an end-screen label (Hedging, Leaning US, Aligned with China, Courted by both). The tallies are a record; the effects sit on the options themselves. Two scripted events test it: US tariffs over transshipment (Q6) and a PLA Navy port call at Sattahip (Q10).
 

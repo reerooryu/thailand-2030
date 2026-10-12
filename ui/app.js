@@ -1,4 +1,4 @@
-const { BrowserGame, COALITIONS, isUnlocked } = ENGINE;
+const { BrowserGame, COALITIONS, PROVINCES, isUnlocked } = ENGINE;
 
 let g = null;
 const $ = s => document.querySelector(s);
@@ -227,6 +227,7 @@ function render() {
   renderDeck();
   renderConstitution();
   renderParliament();
+  renderMap();
   $('#end-turn').disabled = g.pending.length > 0 || g.quarter >= 16;
   $('#end-turn').textContent = g.quarter >= 16 ? 'Term complete' :
     g.pending.length ? `Resolve ${g.pending.length} item${g.pending.length > 1 ? 's' : ''} first` : 'End quarter →';
@@ -258,6 +259,38 @@ function seatPositions(total, rows, r0, r1) {
   // order by angle so parties occupy contiguous wedges
   pts.sort((a, b) => b.ang - a.ang);
   return pts;
+}
+
+/* The provinces. Plain grey; colour only marks a status that differs from the
+   default. Bangkok is a special administrative area from the start; provinces
+   join it when the constitution's elected-governor pilot is ratified. */
+function renderMap() {
+  const box = $('#map');
+  if (!box || !PROVINCES) return;
+  const pilots = new Set(g.pilotGovernors());
+  const status = p => p.id === 'bkk' ? 'Special administrative area, elected governor'
+    : pilots.has(p.id) ? 'Elected governor (pilot, new constitution)' : '';
+  const cls = p => p.water ? 'pv-water' : (p.id === 'bkk' || pilots.has(p.id)) ? 'pv pv-special' : 'pv';
+  const key = [...pilots].join(',');
+  if (box.dataset.key !== key || !box.firstChild) {
+    box.dataset.key = key;
+    box.innerHTML = `<div class="map-wrap"><svg class="map-svg" viewBox="${PROVINCES.viewBox}" role="img" aria-label="Map of Thailand's provinces">
+      ${PROVINCES.provinces.map(p => `<path class="${cls(p)}" data-id="${p.id}" d="${p.path}"></path>`).join('')}
+      </svg><div class="map-tip" hidden></div></div>
+      <div class="map-legend"><span class="sw sw-special"></span>Special administration${pilots.size ? ` · ${pilots.size + 1} provinces` : ''}</div>`;
+    const tip = box.querySelector('.map-tip');
+    const byId = Object.fromEntries(PROVINCES.provinces.map(p => [p.id, p]));
+    box.querySelectorAll('path.pv').forEach(el => {
+      const show = () => {
+        const p = byId[el.dataset.id], st = status(p);
+        tip.innerHTML = `<b>${p.name}</b>${st ? `<span class="map-st">${st}</span>` : ''}<span>${p.blurb}</span>`;
+        tip.hidden = false;
+      };
+      el.addEventListener('mouseenter', show);
+      el.addEventListener('click', show);
+      el.addEventListener('mouseleave', () => { tip.hidden = true; });
+    });
+  }
 }
 
 function renderParliament() {
