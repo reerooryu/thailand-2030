@@ -2282,7 +2282,7 @@
             "People's": 4,
             "Democrat": 3,
             "Kla Tham": -2,
-            "Others": -2
+            "Others": -6
           },
           "effects": {
             "capitalSpend": 0.3,
@@ -2303,6 +2303,80 @@
           },
           "effects": {},
           "flavour": "Cheaper and slower. The provinces stay a special case for longer."
+        }
+      ]
+    },
+    {
+      "id": "brn_ceasefire",
+      "headline": "The BRN observes a Ramadan ceasefire, and holds it",
+      "trigger": {
+        "type": "afterOption",
+        "card": "deep_south",
+        "option": "dialogue",
+        "inQuarters": 4
+      },
+      "blocking": true,
+      "body": "A month without a bombing in Pattani, Yala or Narathiwat, the longest pause since 2004. Malaysia offers to host a signing that would make it permanent and set up a joint monitoring team. The army is against anything with the word 'joint' in it.",
+      "options": [
+        {
+          "id": "formalise",
+          "label": "Formalise it, with joint monitoring",
+          "opinion": {
+            "People's": 6,
+            "Democrat": 4,
+            "Pheu Thai": 2,
+            "Others": -5
+          },
+          "effects": {
+            "approvalBoost": 6,
+            "fdiSignal": 0.1,
+            "setSupport": 0.3
+          },
+          "sets": [
+            "deep_south_peace"
+          ],
+          "flavour": "A signing in Kuala Lumpur and a monitoring team in Pattani. Nothing structural changes. Everything else does."
+        },
+        {
+          "id": "informal",
+          "label": "Welcome it, but keep it informal",
+          "opinion": {
+            "People's": 2,
+            "Democrat": 1
+          },
+          "effects": {
+            "approvalBoost": 3,
+            "fdiSignal": 0.05
+          },
+          "flavour": "A pause, not a peace. It holds as long as nobody tests it."
+        }
+      ]
+    },
+    {
+      "id": "yala_bombing",
+      "headline": "Coordinated bombings in Yala and Narathiwat",
+      "trigger": {
+        "type": "afterOption",
+        "card": "deep_south",
+        "option": "security",
+        "inQuarters": 4
+      },
+      "blocking": true,
+      "body": "Eleven bombs in two provinces within an hour, aimed at checkpoints and a market. The new battalions were in place. The decree was renewed on schedule.",
+      "options": [
+        {
+          "id": "ack",
+          "label": "Order a review of the deployment",
+          "opinion": {
+            "Others": 2,
+            "People's": -3
+          },
+          "effects": {
+            "approvalBoost": -4,
+            "setSupport": -0.3,
+            "fdiSignal": -0.05
+          },
+          "flavour": "The twenty-second year begins like the twenty-first."
         }
       ]
     }

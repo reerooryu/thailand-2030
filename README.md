@@ -24,7 +24,7 @@ Four scores, all in tension:
 - **Investment**
 - **Debt ratio**: measured against a ceiling you can raise by law and then have to live with
 
-Then the count, coalition talks, an analyst's verdict, your revealed ideology and 31 achievements.
+Then the count, coalition talks, an analyst's verdict, your revealed ideology and 32 achievements.
 
 ### Before your first term
 
@@ -50,7 +50,7 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/browser.ts` | Game host: turns, cards, votes, flags, scoring. |
 | `engine/src/politics.ts` | Coalition formation, whip counts, crossbench defection. |
 | `engine/src/election.ts` | The March 2030 count and coalition talks. |
-| `engine/src/achievements.ts` | 31 end-of-term achievements. None feed back. |
+| `engine/src/achievements.ts` | 32 end-of-term achievements. None feed back. |
 | `engine/src/eufta.ts` | The EU–Thailand FTA: progress, ratification, entry into force. |
 | `engine/src/war.ts` | The Cambodian war and occupation: fronts, casualties, dissent, reconstruction. |
 | `engine/src/alignment.ts` | US and China alignment tallies, fed by the `align` field on card and news options. |
@@ -61,7 +61,7 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoilers. |
 | `config/policies.json` | 36 cards, 99 options. |
 | `config/provinces.json` | Province outlines and a one-line description of each of the 77 provinces, for the map. Outlines from Natural Earth (public domain). |
-| `config/events.json` | 43 news events, 89 options. |
+| `config/events.json` | 45 news events, 92 options. |
 | `config/coalitions.json` | The four coalitions and their effects. |
 | `config/constitution.json` | Five parts of the constitution, their positions and party stances. |
 | `ui/` | Front end. `app.js` is the whole client. |
@@ -115,7 +115,9 @@ Needs Node 20+ and Python 3.10+. The engine has one dev dependency.
 - **Integration.** A quarter after annexation, the integration plan: hasten it (roads, ordinary local government, bilingual signs, Khmer New Year; +0.3% of GDP capital spending) and the labour gain from the provinces arrives twice as fast, or keep the original timeline.
 - **Migrant labour.** Regularising migrant labour before the war ends slows dissent growth (0.5 a quarter during the war, 2 after), pays a dividend when the war ends (formalisation, FDI, approval), and adds approval and investor confidence to the annexation bill.
 - The end screen shows the map, with a toggle to lay the Thai flag over the whole Kingdom, annexed provinces included.
-- Achievements: *1941 Avenged* (rare: annexation) and *Pax Rattanakosin* (legendary: annexation with aid throughout and dissent never at 40%). Any occupation at the end classifies the term as **Irredentist Nationalism**.
+- Achievements: *1941 Avenged* (rare: annexation) and *Pax Rattanakosin* (legendary: annexation with aid throughout, dissent never at 40%, and dialogue opened in the Deep South). Any occupation at the end classifies the term as **Irredentist Nationalism**.
+
+**The Deep South.** One card, three options, nothing structural: *dialogue and dignity* (resume the BRN talks, lift the decree in calm districts, bilingual Thai and Patani Malay schooling in Rumi, a Tak Bai compensation fund), *development only*, or *security first*. Dialogue brings a Ramadan ceasefire four quarters later, which can be formalised (*Peace in the South*); security first brings coordinated bombings; development alone brings nothing. Dialogue, the ceasefire and hastened integration of the 1941 provinces all cost Others (the security establishment) opinion.
 
 **US–China alignment.** Any card or news option that leans one way carries `"align": {"us": n}` or `{"cn": n}`. The points add up in a blue–red bar beside the EU FTA bar and an end-screen label (Hedging, Leaning US, Aligned with China, Courted by both). The tallies are a record; the effects sit on the options themselves. Two scripted events test it: US tariffs over transshipment (Q6) and a PLA Navy port call at Sattahip (Q10).
 

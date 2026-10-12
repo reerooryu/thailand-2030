@@ -2702,6 +2702,74 @@
           "flavour": "The provinces stay in legal limbo. So do the people in them."
         }
       ]
+    },
+    {
+      "id": "deep_south",
+      "name": "Deep South Reappraisal",
+      "ministry": "pm office",
+      "type": "institutional",
+      "briefing": "Pattani, Yala and Narathiwat: an insurgency since 2004, more than 7,000 dead, an emergency decree renewed every three months for two decades, and peace talks with the BRN that stall at every change of government. Nothing structural is on the table: no regional government, no separate legal system. The question is which small steps the government is willing to take.",
+      "options": [
+        {
+          "id": "dialogue",
+          "label": "Dialogue and dignity",
+          "maximal": true,
+          "body": "Resume the Malaysia-facilitated talks with the BRN, lift the emergency decree district by district where it is calm, expand bilingual Thai and Patani Malay schooling in Rumi (Latin script), and set up an apology and compensation fund for Tak Bai.",
+          "effects": {
+            "approvalBoost": -2,
+            "fdiSignal": 0.05,
+            "institutionalSupport": -4
+          },
+          "sets": [
+            "deep_south_dialogue"
+          ],
+          "fit": {
+            "People's": 0.6,
+            "Democrat": 0.4,
+            "Pheu Thai": 0.2,
+            "Kla Tham": -0.2,
+            "Others": -0.5
+          },
+          "flavour": "Rumi, not Jawi: the same language in the alphabet every Thai school already teaches. The army calls it a concession anyway."
+        },
+        {
+          "id": "development",
+          "label": "Development only",
+          "body": "A halal industrial zone, Hat Yai–Pattani road and rail links, and more money through the Southern Border Provinces Administrative Centre.",
+          "effects": {
+            "capitalSpend": 0.15,
+            "approvalBoost": 2
+          },
+          "sets": [
+            "deep_south_development"
+          ],
+          "fit": {
+            "Kla Tham": 0.2,
+            "Others": 0.1,
+            "Pheu Thai": 0.1
+          },
+          "flavour": "Roads and factories, which help. Nobody has ever been talked out of an insurgency by an industrial estate."
+        },
+        {
+          "id": "security",
+          "label": "Security first",
+          "body": "Renew the decree everywhere and add two battalions.",
+          "effects": {
+            "govConsumption": 0.1,
+            "institutionalSupport": 4
+          },
+          "sets": [
+            "deep_south_security"
+          ],
+          "fit": {
+            "Others": 0.4,
+            "Kla Tham": 0.2,
+            "People's": -0.4,
+            "Democrat": -0.2
+          },
+          "flavour": "The twenty-first year of the same policy."
+        }
+      ]
     }
   ]
 }

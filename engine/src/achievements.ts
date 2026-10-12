@@ -100,10 +100,18 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'pax_rattanakosin',
     name: 'Pax Rattanakosin',
-    requirement: 'Annex the 1941 provinces with aid as the only reconstruction stance and dissent never reaching 40%.',
+    requirement: 'Annex the 1941 provinces with aid as the only reconstruction stance and dissent never reaching 40%, and open dialogue in the Deep South.',
     flavour: 'ID cards, schools and hospitals before anything else. It cost more, and it worked.',
     rarity: 'legendary',
-    test: c => has(c, 'territory_annexed') && !has(c, 'war_not_aid_only') && !has(c, 'war_dissent_40'),
+    test: c => has(c, 'territory_annexed') && !has(c, 'war_not_aid_only') && !has(c, 'war_dissent_40') && has(c, 'deep_south_dialogue'),
+  },
+  {
+    id: 'peace_in_the_south',
+    name: 'Peace in the South',
+    requirement: 'Open dialogue in the Deep South and formalise the ceasefire that follows.',
+    flavour: 'Every government since 2004 promised it. Nothing structural was conceded, and it held anyway.',
+    rarity: 'rare',
+    test: c => has(c, 'deep_south_peace'),
   },
   {
     id: 'sufficiency_economy',
