@@ -71,7 +71,10 @@ export function avgDissent(w: WarState): number {
 }
 
 /** One quarter. Returns the new state and log lines. */
-export function stepWar(w0: WarState, quarter: number, arming: boolean): { war: WarState; notes: string[] } {
+/** `regularised`: Cambodian workers in Thailand were given legal status before
+ *  the war ended (Migrant Labour Regularisation). Their families across the
+ *  border have a stake in Thai rule working, so dissent grows more slowly. */
+export function stepWar(w0: WarState, quarter: number, arming: boolean, regularised = false): { war: WarState; notes: string[] } {
   if (w0.stage === 'none') return { war: w0, notes: [] };
   const w: WarState = { ...w0, fronts: { ...w0.fronts } };
   const notes: string[] = [];
@@ -101,7 +104,7 @@ export function stepWar(w0: WarState, quarter: number, arming: boolean): { war: 
   if (r !== 'aid' && PROVINCES.some(p => w.fronts[p].entered)) w.onlyAid = false;
   const base = atWar ? { aid: 0.5, martial: 3, crackdown: 3 }[r] : { aid: -7, martial: -3, crackdown: -3 }[r];
   const pressure = atWar && w.stance !== 'ceasefire' ? 0.25 * Math.min(w.quartersAtWar, 6) : 0;
-  const hit = r === 'crackdown' ? -10 : 0;
+  const hit = (r === 'crackdown' ? -10 : 0) + (regularised ? (atWar ? -0.5 : -2) : 0);
   for (const p of PROVINCES) {
     const f = { ...w.fronts[p] };
     if (!f.entered) continue;

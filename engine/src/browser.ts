@@ -347,6 +347,10 @@ export class BrowserGame {
     this.flags = applyFlags(this.flags, opt);
     this.align = addAlign(this.align, opt.align, this.quarter, `${card.name}: ${opt.label}`);
     this.applyTerritory((opt as any).territory);
+    if (cardId === 'annexation_bill' && optionId === 'annex' && this.flags.has('migrant_dividend')) {
+      this.apply({ approvalBoost: 4, institutionalSupport: 3, fdiSignal: 0.1, setSupport: 0.3 } as any);
+      this.log.push({ quarter: this.quarter, kind: 'note', text: 'Annexation: with migrant workers already legal, citizenship for the new provinces passes without a labour shock.' });
+    }
     this.syncWar();
     this.scheduled = scheduleFrom(this.scheduled, events, cardId, optionId, this.quarter);
     const discounted = opt.dependsOn && !this.flags.has(opt.dependsOn.flag);
@@ -477,8 +481,16 @@ export class BrowserGame {
     const cap = this.ps.effects.megaprojectCap ?? 9.0;
     const stimCap = this.ps.effects.stimulusCap ?? 2.0;
     if (this.war.stage !== 'none') {
-      const r = stepWar(this.war, this.quarter, chinaArming(this.align.us, this.align.cn));
+      const wasWon = this.war.stage === 'won';
+      const r = stepWar(this.war, this.quarter, chinaArming(this.align.us, this.align.cn), this.flags.has('migrants_regularised'));
       this.war = r.war;
+      // Regularised before the war ended: Cambodian workers stayed, factories
+      // kept running, and the provinces have family on the Thai side.
+      if (!wasWon && this.war.stage === 'won' && this.flags.has('migrants_regularised')) {
+        this.flags.add('migrant_dividend');
+        this.apply({ formalisation: 0.15, fdiSignal: 0.08, approvalBoost: 3 } as any);
+        this.log.push({ quarter: this.quarter, kind: 'note', text: 'Regularised Cambodian workers stayed through the war. Factories kept running, and the new provinces have family on the Thai side.' });
+      }
       this.approval = Math.max(0, Math.min(100, this.approval + warApproval(this.war)));
       for (const text of r.notes) this.log.push({ quarter: this.quarter, kind: 'note', text });
       this.syncWar();
