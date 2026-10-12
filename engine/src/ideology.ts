@@ -55,19 +55,22 @@ export function classify(i: IdeologyInput): Ideology {
 
   // --- the pure types, checked most specific first
   // A strong state: the constitution says so, and the reform record and the
-  // capital budget back it up. Whether the state was cleaned first decides
-  // which version of the tradition this is.
-  if (i.singaporeLite && REFORMS && BUILDS) return i.cleanState ? {
-    name: 'Authoritarian Developmentalism',
-    tradition: "Singapore's PAP state and Korea under Park: a strong executive, a clean bureaucracy, and a plan",
-    tag: 'cleaned the state, then gave it more power',
-    body: 'The civil service cut and policed first, then a constitution that lets the executive plan and deliver with fewer checks. Industrial strategy, managed labour, means-tested welfare. It works while the bureaucracy stays clean, and nothing in the new rules guarantees that it will.',
-  } : {
-    name: 'Authoritarian Developmentalism',
-    tradition: 'Suharto\'s New Order and Marcos\'s Philippines: a strong executive and a plan, without the clean bureaucracy',
-    tag: 'gave the state more power before cleaning it',
-    body: 'A constitution that lets the executive plan and deliver with fewer checks, handed to a civil service and a patronage system that were never reformed. Growth can be real. So is the risk that the new powers serve the networks rather than the plan.',
-  };
+  // capital budget back it up.
+  if (i.singaporeLite && REFORMS && BUILDS) {
+    // One type, two versions: the same constitution reads very differently
+    // depending on whether the bureaucracy it empowers was cleaned first.
+    const clean = !!i.cleanState;
+    return {
+      name: 'Authoritarian Developmentalism',
+      tradition: clean
+        ? "Singapore's PAP state and Korea under Park: a strong executive, a clean bureaucracy, and a plan"
+        : "Suharto's New Order and Marcos's Philippines: a strong executive and a plan, without the clean bureaucracy",
+      tag: clean ? 'cleaned the state, then gave it more power' : 'gave the state more power before cleaning it',
+      body: clean
+        ? 'The civil service cut and policed first, then a constitution that lets the executive plan and deliver with fewer checks. Industrial strategy, managed labour, means-tested welfare. It works while the bureaucracy stays clean, and nothing in the new rules guarantees that it will.'
+        : 'A constitution that lets the executive plan and deliver with fewer checks, handed to a civil service and a patronage system that were never reformed. Growth can be real. So is the risk that the new powers serve the networks rather than the plan.',
+    };
+  }
 
   // State capitalism: build and steer industry from the top, without opening
   // up to outside rules.
