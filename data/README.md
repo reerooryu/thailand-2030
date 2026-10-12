@@ -56,7 +56,7 @@ Primary terms, which supersede anything written here:
 
 `config/provinces.json` draws every province from **Natural Earth 1:10m admin-1 states and provinces** (public domain, <https://www.naturalearthdata.com>), projected to Mercator and simplified with shared borders kept, so neighbouring provinces meet exactly. The one-line descriptions are this project's own.
 
-The three Cambodian provinces of 1941–46 (Phra Tabong, Phibunsongkhram, and the Cambodian part of Nakhon Champassak) come from the same layer: modern Cambodian provinces merged and cut along 13.5°N, 104.53°E and the Mekong (Natural Earth river centrelines) to approximate the 1941 lines. They are approximations, not surveyed boundaries.
+The three Cambodian provinces of 1941–46 (Phra Tabong, Phibunsongkhram, and the Cambodian part of Nakhon Champassak) were traced from a 1945 reference map of Siam. The reference was registered to Natural Earth with a polynomial fitted to its coastline, Tonle Sap and Thai–Cambodian border, and checked against the Mekong. The 1941 southern line and the two lines between the provinces were traced by hand from it; the Thai border and the Mekong come from Natural Earth. Accurate to a few kilometres at best.
 
 ## Not in this repository
 
