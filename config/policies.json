@@ -2708,13 +2708,13 @@
       "name": "Deep South Reappraisal",
       "ministry": "pm office",
       "type": "institutional",
-      "briefing": "Pattani, Yala and Narathiwat: an insurgency since 2004, more than 7,000 dead, an emergency decree renewed every three months for two decades, and peace talks with the BRN that stall at every change of government. Nothing structural is on the table: no regional government, no separate legal system. The question is which small steps the government is willing to take.",
+      "briefing": "Pattani, Yala and Narathiwat: an insurgency since 2004, more than 7,000 dead, an emergency decree renewed every three months for two decades, and peace talks with the BRN that stall at every change of government. Bhumjaithai's base is not here, and it is not chasing a settlement. The question is which small, reversible steps are worth taking. Nothing structural is on the table.",
       "options": [
         {
           "id": "dialogue",
-          "label": "Dialogue and dignity",
+          "label": "Small steps: talks and a few concessions",
           "maximal": true,
-          "body": "Resume the Malaysia-facilitated talks with the BRN, lift the emergency decree district by district where it is calm, expand bilingual Thai and Patani Malay schooling in Rumi (Latin script), and set up an apology and compensation fund for Tak Bai.",
+          "body": "Resume the Malaysia-facilitated talks with the BRN, lift the emergency decree in a handful of calm districts, pilot bilingual Thai and Patani Malay schooling in Rumi, and set up a Tak Bai compensation fund.",
           "effects": {
             "approvalBoost": -2,
             "fdiSignal": 0.05,

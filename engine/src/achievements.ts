@@ -107,10 +107,10 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'peace_in_the_south',
-    name: 'Peace in the South',
-    requirement: 'Open dialogue in the Deep South and formalise the ceasefire that follows.',
-    flavour: 'Every government since 2004 promised it. Nothing structural was conceded, and it held anyway.',
-    rarity: 'rare',
+    name: 'Step by Step',
+    requirement: 'Open talks in the Deep South and extend the ceasefire that follows.',
+    flavour: 'No settlement, no grand bargain, nothing structural. A longer ceasefire and the next round of talks, which is more than most governments since 2004 managed.',
+    rarity: 'uncommon',
     test: c => has(c, 'deep_south_peace'),
   },
   {
