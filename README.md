@@ -24,7 +24,7 @@ Four scores, all in tension:
 - **Investment**
 - **Debt ratio**: measured against a ceiling you can raise by law and then have to live with
 
-Then the count, coalition talks, an analyst's verdict, your revealed ideology and 32 achievements.
+Then the count, coalition talks, an analyst's verdict, your revealed ideology and 33 achievements.
 
 ### Before your first term
 
@@ -50,7 +50,7 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/browser.ts` | Game host: turns, cards, votes, flags, scoring. |
 | `engine/src/politics.ts` | Coalition formation, whip counts, crossbench defection. |
 | `engine/src/election.ts` | The March 2030 count and coalition talks. |
-| `engine/src/achievements.ts` | 32 end-of-term achievements. None feed back. |
+| `engine/src/achievements.ts` | 33 end-of-term achievements. None feed back. |
 | `engine/src/eufta.ts` | The EU–Thailand FTA: progress, ratification, entry into force. |
 | `engine/src/war.ts` | The Cambodian war and occupation: fronts, casualties, dissent, reconstruction. |
 | `engine/src/alignment.ts` | US and China alignment tallies, fed by the `align` field on card and news options. |
@@ -60,9 +60,9 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/ideology.ts` | Reads your economic position off the budget. |
 | `engine/src/game.ts` | Headless host for scripts: the browser host with the world passed in and leftover news defaulted. |
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoilers. |
-| `config/policies.json` | 36 cards, 99 options. |
+| `config/policies.json` | 39 cards, 107 options. |
 | `config/provinces.json` | Province outlines and a one-line description of each of the 77 provinces, for the map. Outlines from Natural Earth (public domain). |
-| `config/events.json` | 51 news events, 104 options. |
+| `config/events.json` | 52 news events, 107 options. |
 | `config/coalitions.json` | The four coalitions and their effects. |
 | `config/constitution.json` | Five parts of the constitution, their positions and party stances. |
 | `ui/` | Front end. The client is in `ui/src/` (ES modules, bundled into `ui/app.js` by the build); see `ui/README.md`. |
@@ -122,6 +122,8 @@ Needs Node 20+ and Python 3.10+. The engine has one dev dependency.
 - Achievements: *1941 Avenged* (rare: annexation) and *Pax Rattanakosin* (legendary: annexation with aid throughout, dissent never at 40%, and talks opened in the Deep South). Any occupation at the end classifies the term as **Irredentist Nationalism**.
 
 **The Deep South.** Bhumjaithai aims for incremental improvement, not a settlement. One card, three options, nothing structural: *small steps* (resume the BRN talks, lift the decree in a few calm districts, pilot bilingual Thai and Patani Malay schooling in Rumi, a Tak Bai compensation fund), *development only*, or *security first*. Small steps bring a Ramadan ceasefire four quarters later, which can be extended (*Step by Step*); security first brings coordinated bombings; development alone brings nothing. Dialogue, the ceasefire and hastened integration of the 1941 provinces all cost Others (the security establishment) opinion.
+
+**Laos.** One card (PM's Office), aimed at Laos's debt crisis and Chinese leverage. The *phi-nong compact* offers a Thai credit line in exchange for the baht as legal tender, an open border with the right to work, and joined grids at fixed baht power prices (US +1, legislation). *Grid, rail and border trade* is the cautious version, and the third option leaves it to EGAT and the banks. Either active option brings Beijing's pushback two quarters later: *stand behind Vientiane* (US +1), *bring Beijing in* to a three-way framework (China +1), or *quietly scale it back* (China +1). A baht zone held against Beijing earns *Phi Nong* (uncommon). Unification is never on the table. There is no war with Laos and no claim on the Lao part of Nakhon Champassak.
 
 **US–China alignment.** Any card or news option that leans one way carries `"align": {"us": n}` or `{"cn": n}`. The points add up in a blue–red bar in the top bar and an end-screen label (Hedging, Leaning US, Aligned with China, Courted by both). The tallies are a record; the effects sit on the options themselves. Two scripted events test it: US tariffs over transshipment (Q6) and a PLA Navy port call at Sattahip (Q10).
 

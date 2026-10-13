@@ -114,6 +114,14 @@ export const ACHIEVEMENTS: Achievement[] = [
     test: c => has(c, 'deep_south_peace'),
   },
   {
+    id: 'phi_nong',
+    name: 'Phi Nong',
+    requirement: 'Take Laos into a baht zone and stand behind Vientiane when Beijing pushes back.',
+    flavour: 'Elder brother, younger brother. The kip still circulates, the border is open, and in Vientiane the baht is just money.',
+    rarity: 'uncommon',
+    test: c => has(c, 'lao_baht_zone') && has(c, 'lao_held'),
+  },
+  {
     id: 'sufficiency_economy',
     name: 'Sufficiency Economy',
     requirement: 'Complete the term without raising the debt ceiling, and finish inside it.',

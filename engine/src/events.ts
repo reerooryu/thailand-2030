@@ -18,7 +18,7 @@ import type { PolicyEffects } from './policies.js';
 type TriggerGate = { requiresFlag?: string; blockedByFlag?: string };
 
 export type Trigger = TriggerGate & (
-  | { type: 'afterOption'; card: string; option: string; inQuarters: number }
+  | { type: 'afterOption'; card: string; option: string | string[]; inQuarters: number }
   | { type: 'flag'; flag: string; inQuarters?: number }
   | { type: 'threshold'; variable: string; above?: number; below?: number }
   | { type: 'hazard'; probabilityPerQuarter: number });
@@ -84,7 +84,7 @@ export function scheduleFrom(
   const out = [...scheduled];
   for (const e of events) {
     const t = e.trigger;
-    if (t.type === 'afterOption' && t.card === cardId && t.option === optionId) {
+    if (t.type === 'afterOption' && t.card === cardId && ([] as string[]).concat(t.option).includes(optionId)) {
       out.push({ eventId: e.id, dueQuarter: quarter + t.inQuarters,
                  because: `${cardId}/${optionId}` });
     }

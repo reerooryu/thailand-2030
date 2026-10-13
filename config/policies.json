@@ -501,6 +501,77 @@
       ]
     },
     {
+      "id": "laos_partnership",
+      "name": "Laos: the Mekong Partnership",
+      "ministry": "pm office",
+      "type": "institutional",
+      "briefing": "Laos is in a debt crisis. Public debt is above 100% of GDP and about half of it is owed to China. The kip has lost more than half its value since 2022. The national grid's transmission arm is majority-owned by China Southern Power Grid, and the China–Laos railway runs from Kunming to Vientiane. Thailand buys most of Laos's electricity exports and employs hundreds of thousands of Lao workers, and across the Mekong, Isan speaks the same language. Vientiane needs a creditor that is not Beijing. Bangkok could be one, on terms.",
+      "options": [
+        {
+          "id": "baht_zone",
+          "label": "Phi-nong compact: a baht zone and an open border",
+          "body": "A Thai credit line to refinance Laos's most expensive debt, in exchange for the baht as legal tender alongside the kip. Lao citizens get the right to live and work in Thailand. Power is bought at fixed baht prices for 25 years, and the two grids are joined at Nong Khai and Mukdahan. Nobody in either capital uses the word unification.",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.1,
+            "transfers": 0.05,
+            "formalisation": 0.03,
+            "fdiSignal": 0.06,
+            "approvalBoost": 2
+          },
+          "lag": {
+            "capacityQuarters": 8
+          },
+          "fit": {
+            "Pheu Thai": 0.5,
+            "Others": 0.3,
+            "Kla Tham": 0.2,
+            "Democrat": -0.3,
+            "People's": -0.3
+          },
+          "sets": [
+            "lao_ties",
+            "lao_baht_zone"
+          ],
+          "maximal": true,
+          "align": {
+            "us": 1
+          },
+          "flavour": "Isan's cousins get the baht. In Vientiane, the 1941 maps are not mentioned, and everybody remembers them."
+        },
+        {
+          "id": "partnership",
+          "label": "Grid, rail and border trade",
+          "body": "A larger long-term power purchase, special economic zones at Nong Khai and Mukdahan, and the Thai railway joined to the China–Laos line at the border. No money for Laos's debts.",
+          "effects": {
+            "capitalSpend": 0.06,
+            "fdiSignal": 0.04
+          },
+          "lag": {
+            "capacityQuarters": 8
+          },
+          "fit": {
+            "Pheu Thai": 0.3,
+            "Others": 0.2,
+            "Kla Tham": 0.1,
+            "Democrat": 0.1,
+            "People's": 0.1
+          },
+          "sets": [
+            "lao_ties"
+          ],
+          "flavour": "Closer, cheaper, and nothing Beijing can object to in public. It objects in private."
+        },
+        {
+          "id": "commercial",
+          "label": "Leave it to EGAT and the banks",
+          "effects": {},
+          "fit": {},
+          "flavour": "Laos goes on refinancing with Beijing. Thailand goes on buying the power."
+        }
+      ]
+    },
+    {
       "id": "negative_income_tax",
       "name": "Negative Income Tax",
       "ministry": "finance",

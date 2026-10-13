@@ -2075,6 +2075,86 @@
       ]
     },
     {
+      "id": "beijing_lao_pushback",
+      "headline": "Beijing reminds Vientiane who holds the debt",
+      "trigger": {
+        "type": "afterOption",
+        "card": "laos_partnership",
+        "option": [
+          "baht_zone",
+          "partnership"
+        ],
+        "inQuarters": 2
+      },
+      "blocking": true,
+      "body": "Chinese creditors call Laos to restructuring talks with a new schedule attached. Freight on the China–Laos railway slows at Boten for 'inspections'. The Chinese-controlled grid company postpones work on the Thai interconnector. The Chinese ambassador asks to see the Prime Minister.",
+      "options": [
+        {
+          "id": "hold",
+          "label": "Stand behind Vientiane",
+          "body": "Thailand rolls over whatever Laos owes it, says publicly that the agreement stands, and sends EGAT engineers to finish the interconnector from the Thai side.",
+          "align": {
+            "us": 1
+          },
+          "opinion": {
+            "Others": 2,
+            "Pheu Thai": 2,
+            "Kla Tham": -1,
+            "Democrat": -1
+          },
+          "effects": {
+            "approvalBoost": 1,
+            "fdiSignal": -0.03
+          },
+          "sets": [
+            "lao_held"
+          ],
+          "flavour": "Beijing has run out of polite ways to say no. Vientiane has noticed it has a choice."
+        },
+        {
+          "id": "trilateral",
+          "label": "Bring Beijing in: a three-way Mekong framework",
+          "body": "China gets a seat on the grid and rail committees and a say in the debt schedule. The agreement survives with Chinese approval.",
+          "align": {
+            "cn": 1
+          },
+          "opinion": {
+            "Democrat": 1,
+            "People's": 1,
+            "Others": -2
+          },
+          "effects": {
+            "fdiSignal": 0.03
+          },
+          "sets": [
+            "lao_trilateral"
+          ],
+          "flavour": "The partnership survives, run partly from Beijing."
+        },
+        {
+          "id": "retreat",
+          "label": "Quietly scale it back",
+          "align": {
+            "cn": 1
+          },
+          "opinion": {
+            "Others": -3,
+            "Pheu Thai": -2
+          },
+          "effects": {
+            "approvalBoost": -1
+          },
+          "clears": [
+            "lao_baht_zone"
+          ],
+          "flavour": "The credit line is 'under review'. The kip keeps falling, and Vientiane learns who it can count on.",
+          "sets": [
+            "lao_scaled_back"
+          ]
+        }
+      ]
+    },
+    {
       "id": "border_clash",
       "headline": "Shots at Chong Bok: a patrol clash leaves soldiers dead on both sides",
       "trigger": {

@@ -101,6 +101,8 @@ export function showEnd(walked, snap = false) {
           ${row('Alignment', g.alignLabel(), `US ${g.align.us} · China ${g.align.cn}`)}
           ${g.war.stage !== 'none' ? row('Cambodian war', g.flags.has('territory_annexed') ? 'Annexed' : g.war.stage === 'won' ? 'Occupied' : 'Unfinished',
                 `${Math.round(g.war.thaiCasualties).toLocaleString()} Thai and ${Math.round(g.war.khmerCasualties).toLocaleString()} Cambodian killed and wounded`) : ''}
+          ${g.flags.has('lao_ties') ? row('Laos', g.flags.has('lao_scaled_back') ? 'Scaled back' : g.flags.has('lao_baht_zone') ? 'Baht zone' : g.flags.has('lao_trilateral') ? 'Three-way framework' : 'Partnership',
+                g.flags.has('lao_scaled_back') ? 'after Beijing pushed back' : g.flags.has('lao_held') ? 'held against Beijing' : g.flags.has('lao_trilateral') ? 'with China at the table' : 'grid, rail and border trade') : ''}
           ${row('EU FTA', g.fta.suspended ? 'Suspended' : g.fta.stage === 'in_force' ? 'In force' : g.fta.stage === 'ratifying' ? 'Ratifying' : Math.round(g.fta.progress) + '%',
                 g.fta.stage === 'negotiating' ? 'negotiated, from 63%' : g.fta.stage === 'ratifying' ? 'talks concluded' : 'since ' + g.labelAt(g.fta.inForceQuarter),
                 g.fta.stage === 'in_force' ? 'good' : '')}
