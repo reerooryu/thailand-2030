@@ -88,6 +88,8 @@ export class BrowserGame {
   deferred: Deferred[] = [];
   firedEvents = new Set<string>();
   playedCards = new Set<string>();
+  /** Quarter each flag was first set by a card or news option (for revealAfter). */
+  flagSince: Record<string, number> = {};
   /** Enacted cards split by whether the unhedged option was taken. Recorded at
    *  passage, not at selection: a maximal bill defeated on the floor is a
    *  government that tried, and the end screen does not count trying. */
@@ -294,7 +296,7 @@ export class BrowserGame {
   }
 
   deck(): PolicyCard[] {
-    return availableCards(cat, this.flags, this.quarter, this.ps.coalition).filter(c =>
+    return availableCards(cat, this.flags, this.quarter, this.ps.coalition, this.flagSince).filter(c =>
       !this.playedCards.has(c.id) &&
       !this.deferred.some(d => d.cardId === c.id && d.returnsAtQuarter > this.quarter));
   }
@@ -360,6 +362,7 @@ export class BrowserGame {
     else { this.hedgedPlays.add(cardId); this.maximalPlays.delete(cardId); }
     if (card.proposal) { if (opt.maximal) this.proposalsFull.add(cardId); else this.proposalsFull.delete(cardId); }
     this.flags = applyFlags(this.flags, opt);
+    for (const f of opt.sets ?? []) this.flagSince[f] ??= this.quarter;
     this.align = addAlign(this.align, opt.align, this.quarter, `${card.name}: ${opt.label}`);
     this.applyTerritory((opt as any).territory);
     if (cardId === 'annexation_bill' && optionId === 'annex') this.annexedQuarter = this.quarter;
@@ -399,6 +402,7 @@ export class BrowserGame {
     this.align = addAlign(this.align, opt.align, this.quarter, `${e.headline}: ${opt.label}`);
     this.applyTerritory((opt as any).territory);
     this.opinion = res.opinion; this.flags = res.flags;
+    for (const f of opt.sets ?? []) this.flagSince[f] ??= this.quarter;
     const wd = (opt as any).war as string | undefined;
     if (wd && this.war.stage !== 'none') {
       const r = warDecision(this.war, wd, this.quarter);

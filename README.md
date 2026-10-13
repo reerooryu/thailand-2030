@@ -60,7 +60,7 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/ideology.ts` | Reads your economic position off the budget. |
 | `engine/src/game.ts` | Headless host for scripts: the browser host with the world passed in and leftover news defaulted. |
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoilers. |
-| `config/policies.json` | 39 cards, 107 options. |
+| `config/policies.json` | 41 cards, 113 options. |
 | `config/provinces.json` | Province outlines and a one-line description of each of the 77 provinces, for the map. Outlines from Natural Earth (public domain). |
 | `config/events.json` | 52 news events, 107 options. |
 | `config/coalitions.json` | The four coalitions and their effects. |
@@ -124,6 +124,8 @@ Needs Node 20+ and Python 3.10+. The engine has one dev dependency.
 **The Deep South.** Bhumjaithai aims for incremental improvement, not a settlement. One card, three options, nothing structural: *small steps* (resume the BRN talks, lift the decree in a few calm districts, pilot bilingual Thai and Patani Malay schooling in Rumi, a Tak Bai compensation fund), *development only*, or *security first*. Small steps bring a Ramadan ceasefire four quarters later, which can be extended (*Step by Step*); security first brings coordinated bombings; development alone brings nothing. Dialogue, the ceasefire and hastened integration of the 1941 provinces all cost Others (the security establishment) opinion.
 
 **Laos.** One card (PM's Office), aimed at Laos's debt crisis and Chinese leverage. The *phi-nong compact* offers a Thai credit line in exchange for the baht as legal tender, an open border with the right to work, and joined grids at fixed baht power prices (US +1, legislation). *Grid, rail and border trade* is the cautious version, and the third option leaves it to EGAT and the banks. Either active option brings Beijing's pushback two quarters later: *stand behind Vientiane* (US +1), *bring Beijing in* to a three-way framework (China +1), or *quietly scale it back* (China +1). A baht zone held against Beijing earns *Phi Nong* (uncommon). Unification is never on the table. There is no war with Laos and no claim on the Lao part of Nakhon Champassak.
+
+**The economic corridors.** Two re-evaluations under Industry replace the creative-economy and heritage-tourism zoning of the regional corridors. The *Northern Economic Corridor* card appears one quarter after the full semiconductor programme passes, and only then. Its full option turns Lamphun and Chiang Mai into a chip-packaging and precision-optics cluster shipping north on the R3A to Kunming (China +1). The *Central-Western Economic Corridor* card appears in 2028 Q2 with no prerequisites. Its full option brings EV components, industrial automation and smart electronics, with Kanchanaburi as a heavy-freight rail hub to Laem Chabang. Each card also has a half-measure and a keep-the-plan option.
 
 **US–China alignment.** Any card or news option that leans one way carries `"align": {"us": n}` or `{"cn": n}`. The points add up in a blue–red bar in the top bar and an end-screen label (Hedging, Leaning US, Aligned with China, Courted by both). The tallies are a record; the effects sit on the options themselves. Two scripted events test it: US tariffs over transshipment (Q6) and a PLA Navy port call at Sattahip (Q10).
 

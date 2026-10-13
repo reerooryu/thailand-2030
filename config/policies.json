@@ -12,7 +12,8 @@
     ],
     "dependsOn": "An option may declare dependsOn: {flag, withoutFactor, note}. If the flag is not set, the option's effects are scaled by withoutFactor. This is how one reform becomes the precondition for another actually working, rather than merely being described that way in the briefing.",
     "requiresFlags": "An option may declare requiresFlags: [...] — a HARD prerequisite. The option is shown locked until every flag is set. Distinct from dependsOn, which is a soft discount. Together these form the tech tree: Digital Government -> Civil Service Reform; Super Licence -> OECD accession; VAT Reform -> Negative Income Tax.",
-    "actionsPerQuarter": 3
+    "actionsPerQuarter": 3,
+    "revealAfter": "A card may declare revealAfter: {flag, quarters}: it enters the deck only that many quarters after the flag was set. The Northern Economic Corridor re-evaluation follows the full semiconductor programme by one quarter."
   },
   "policies": [
     {
@@ -1736,7 +1737,8 @@
             "note": "Without three years of a funded board there is no secretariat, no curriculum and no pipeline to accelerate — the programme starts from a standing start."
           },
           "sets": [
-            "semiconductor_programme"
+            "semiconductor_programme",
+            "semiconductor_full"
           ],
           "fit": {
             "Democrat": 0.5,
@@ -1802,6 +1804,151 @@
             "People's": -0.1
           },
           "flavour": "Assembly and test, priced against Vietnam, for as long as the wage gap holds."
+        }
+      ]
+    },
+    {
+      "id": "nec_reevaluation",
+      "name": "Northern Economic Corridor Re-evaluation",
+      "ministry": "industry",
+      "type": "structural",
+      "revealAfter": {
+        "flag": "semiconductor_full",
+        "quarters": 1
+      },
+      "briefing": "The Northern Economic Corridor (Chiang Mai, Chiang Rai, Lampang and Lamphun) was zoned for the creative economy: Lanna crafts, wellness, organic farming and heritage tourism. Investment has been thin. With the semiconductor programme funded, the Board of Investment proposes starting over: advanced semiconductor assembly, test and packaging plus precision optics, built out from the Northern Region Industrial Estate at Lamphun. Output would run north on the R3A highway through Laos to Kunming, with the Den Chai–Chiang Khong railway behind it.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Scrap it: a chip-packaging and precision-optics cluster",
+          "body": "The creative-economy zoning goes. BOI incentives at the semiconductor programme's top tier for advanced packaging, test and optics in Lamphun and Chiang Mai, with a bonded logistics hub at Chiang Khong on the R3A and a technical institute at Chiang Mai University.",
+          "requiresLegislation": true,
+          "maximal": true,
+          "effects": {
+            "capitalSpend": 0.12,
+            "fdiSignal": 0.14,
+            "humanCapital": 0.12,
+            "reformIndex": 4,
+            "formalisation": 0.03
+          },
+          "lag": {
+            "capacityQuarters": 10
+          },
+          "fit": {
+            "Pheu Thai": 0.4,
+            "Kla Tham": 0.2,
+            "Others": 0.2,
+            "Democrat": 0.1,
+            "People's": -0.2
+          },
+          "sets": [
+            "nec_semiconductor"
+          ],
+          "align": {
+            "cn": 1
+          },
+          "flavour": "The fabs (or at least the packaging lines) come to Lanna. The road to the market runs north, and Washington is reading the bill of lading."
+        },
+        {
+          "id": "hybrid",
+          "label": "Add an electronics park and keep the creative zoning",
+          "effects": {
+            "capitalSpend": 0.05,
+            "fdiSignal": 0.05,
+            "humanCapital": 0.04
+          },
+          "lag": {
+            "capacityQuarters": 10
+          },
+          "fit": {
+            "Pheu Thai": 0.3,
+            "Democrat": 0.2,
+            "People's": 0.1,
+            "Others": 0.1,
+            "Kla Tham": 0.1
+          },
+          "sets": [
+            "nec_hybrid"
+          ],
+          "flavour": "A components park beside the craft villages. Each brochure mentions the other."
+        },
+        {
+          "id": "keep",
+          "label": "Keep the creative-economy plan",
+          "effects": {},
+          "fit": {
+            "People's": 0.1
+          },
+          "flavour": "Celadon, coffee and wellness retreats. The chips get packaged somewhere else."
+        }
+      ]
+    },
+    {
+      "id": "cwec_reevaluation",
+      "name": "Central-Western Economic Corridor Re-evaluation",
+      "ministry": "industry",
+      "type": "structural",
+      "scriptedQuarter": 8,
+      "briefing": "The Central-Western Economic Corridor (Ayutthaya, Suphan Buri, Nakhon Pathom and Chai Nat) was zoned for heritage and agro-tourism and high-value agriculture. It sits between the Bangkok car-parts belt and the Myanmar border, on land that is flat, cheap and close to the capital. The Board of Investment proposes replacing the plan with next-generation automotive and EV components, industrial automation and smart electronics, with Kanchanaburi rebuilt as a heavy-freight rail hub linking the corridor to the deep-sea ports.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Scrap it: an EV, automation and electronics corridor with a Kanchanaburi freight hub",
+          "body": "The heritage-tourism zoning goes. BOI incentives for EV drivetrain and battery components, industrial robotics and smart electronics. A heavy-freight railway and inland container depot at Kanchanaburi run east to Laem Chabang, with a western spur kept ready for Dawei if Myanmar ever allows it.",
+          "requiresLegislation": true,
+          "maximal": true,
+          "effects": {
+            "capitalSpend": 0.22,
+            "fdiSignal": 0.13,
+            "humanCapital": 0.06,
+            "reformIndex": 4,
+            "formalisation": 0.03
+          },
+          "lag": {
+            "capacityQuarters": 12
+          },
+          "fit": {
+            "Others": 0.4,
+            "Kla Tham": 0.3,
+            "Democrat": 0.2,
+            "Pheu Thai": 0.2,
+            "People's": -0.1
+          },
+          "sets": [
+            "cwec_industrial"
+          ],
+          "flavour": "Container trains past the bridge on the River Kwai. The tourists who came for it can watch."
+        },
+        {
+          "id": "freight_only",
+          "label": "Build the Kanchanaburi freight corridor and keep the zoning",
+          "effects": {
+            "capitalSpend": 0.12,
+            "fdiSignal": 0.05
+          },
+          "lag": {
+            "capacityQuarters": 12
+          },
+          "fit": {
+            "Others": 0.3,
+            "Kla Tham": 0.2,
+            "Democrat": 0.1,
+            "Pheu Thai": 0.1,
+            "People's": 0.0
+          },
+          "sets": [
+            "cwec_freight"
+          ],
+          "flavour": "A railway first. What it carries can be decided later."
+        },
+        {
+          "id": "keep",
+          "label": "Keep the heritage and agro-tourism plan",
+          "effects": {},
+          "fit": {
+            "People's": 0.1
+          },
+          "flavour": "Ayutthaya stays a World Heritage Site and the factories stay in Rayong."
         }
       ]
     },

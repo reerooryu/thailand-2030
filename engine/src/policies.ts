@@ -78,6 +78,10 @@ export interface PolicyCard {
   scriptedQuarter?: number;
   /** Flags that must all be set for this card to be in the deck at all. */
   requires?: string[];
+  /** Appear only `quarters` after `flag` was set (the NEC follows the
+   *  semiconductor programme by a turn). Needs the host's record of when each
+   *  flag was set; without one (agenda tools) the delay is ignored. */
+  revealAfter?: { flag: string; quarters: number };
   briefing: string; options: PolicyOption[];
 }
 export interface PolicyCatalogue {
@@ -88,10 +92,12 @@ export interface PolicyCatalogue {
 /** Cards whose `requires` are satisfied by the current flag set. */
 export function availableCards(
   cat: PolicyCatalogue, flags: Set<string>, quarter = 99,
-  coalition?: string[],
+  coalition?: string[], flagSince?: Record<string, number>,
 ): PolicyCard[] {
   return cat.policies.filter(c =>
     (c.requires ?? []).every(f => flags.has(f)) &&
+    (!c.revealAfter || (flags.has(c.revealAfter.flag) &&
+      quarter >= (flagSince?.[c.revealAfter.flag] ?? -99) + c.revealAfter.quarters)) &&
     (c.scriptedQuarter == null || quarter >= c.scriptedQuarter) &&
     // A partner's bill only reaches your desk if the partner is IN the
     // government. Pheu Thai does not hand its manifesto to a cabinet it is not
