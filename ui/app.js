@@ -289,8 +289,12 @@ function renderMapInto(box, mode = 'provinces') {
     : (p.id === 'bkk' || pilots.has(p.id)) ? 'pv pv-special' : 'pv';
   const fill = p => p.historic && terr[p.id] === 'occupied' && !flag ? ` style="fill:url(#${uid}-hatch)"`
     : p.historic && terr[p.id] === 'occupied' ? ` style="fill:url(#${uid}-hatch)"` : '';
+  // At annexation Phibunsongkhram takes the name of its 1941 capital, Sisophon:
+  // the 1941 map without the 1941 dictator's name on it.
+  const renamed = h => h.id === 'phibunsongkhram' && terr[h.id] === 'annexed'
+    ? { ...h, name: 'Sisophon', blurb: 'Phibunsongkhram in 1941, renamed at annexation after its old capital. ' + h.blurb } : h;
   const shown = [...PROVINCES.provinces,
-    ...(PROVINCES.historic || []).filter(h => terr[h.id]).map(h => ({ ...h, historic: true }))];
+    ...(PROVINCES.historic || []).filter(h => terr[h.id]).map(h => ({ ...renamed(h), historic: true }))];
   const kingdom = shown.filter(p => !p.water && (!p.historic || terr[p.id] === 'annexed'));
   const key = mode + '|' + [...pilots].join(',') + '|' + JSON.stringify(terr) + '|' + JSON.stringify(g.war ? g.war.fronts : {});
   if (box.dataset.key === key && box.firstChild) return;
@@ -547,7 +551,7 @@ function renderWar() {
   const china = w.chinaArming ? '<span class="down">Beijing is arming Phnom Penh: slower advances, heavier losses</span>'
     : '<span class="muted">Beijing is staying out of it</span>';
   const fronts = Object.entries(w.fronts).map(([id, f]) => `<div class="wf-row">
-      <div class="wf-name">${WAR_NAMES[id]}</div>
+      <div class="wf-name">${id === 'phibunsongkhram' && w.annexed ? 'Sisophon' : WAR_NAMES[id]}</div>
       <div class="wf-bars"><span class="wf-l">Held</span><span class="wf-bar"><span class="wf-occ" style="width:${f.occ}%"></span></span><b>${n(f.occ)}%</b>
       <span class="wf-l">Dissent</span><span class="wf-bar"><span class="wf-dis" style="width:${f.dissent}%"></span></span><b>${f.entered ? n(f.dissent) + '%' : '–'}</b></div></div>`).join('');
   const btns = (list, cur, kind) => list.map(([id, label, d]) =>

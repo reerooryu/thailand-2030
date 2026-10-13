@@ -2662,7 +2662,7 @@
         "war_won",
         "occupation_dissent_low"
       ],
-      "briefing": "A bill making Phra Tabong, Phibunsongkhram and Nakhon Champassak provinces of the Kingdom again, with governors, seats in the next House and Thai citizenship for residents who apply. It unlocks only once dissent is below 10% in all three. No other government recognises it, and the EU puts the trade agreement on hold. If migrant labour was regularised before the war ended, it passes with extra approval and investor confidence.",
+      "briefing": "A bill making Phra Tabong, Nakhon Champassak and Sisophon (Phibunsongkhram in 1941, renamed after its old capital) provinces of the Kingdom again, with governors, seats in the next House and Thai citizenship for residents who apply. It unlocks only once dissent is below 10% in all three. No other government recognises it, and the EU puts the trade agreement on hold. If migrant labour was regularised before the war ended, it passes with extra approval and investor confidence.",
       "options": [
         {
           "id": "annex",
