@@ -108,6 +108,8 @@ export interface Policy {
   tradeAccessLag4?: number;
   /** 1 once the 1941 provinces are held, 2 with hastened integration. See war.ts. */
   territoryGain?: number;
+  /** Reservists called up, % of labour input withdrawn (war.ts). */
+  mobilisationDrag?: number;
 }
 
 /** Behavioural parameters. `source` records where each came from — this

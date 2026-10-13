@@ -525,20 +525,14 @@ function renderConstitutionFinal() {
   </div>`;
 }
 
-/* The Cambodian war. Shown once operations begin (war.ts). The posture and
-   the reconstruction stance are free to change at any point in the turn. */
-const WAR_STANCES = [
-  ['ceasefire', 'Ceasefire', 'Freeze the line. Little cost, no progress.'],
-  ['hold', 'Hold', 'Dig in where you are.'],
-  ['limited', 'Limited offensive', 'Advance steadily at a bearable cost.'],
-  ['full', 'Full offensive', 'All as One!'],
-];
-const RECON = [
-  ['aid', 'Aid', 'Rebuild and feed. Costly; dissent grows slowly, then falls fast.'],
-  ['martial', 'Martial law', 'Hold order. Cheap; dissent creeps up.'],
-  ['crackdown', 'Crack down', 'Dissent falls now and grows faster for the rest of the term.'],
-];
+/* The Cambodian war. Shown once operations begin (war.ts). Every order here is
+   free; only the six decision events in the news take an action. */
 const WAR_NAMES = { phra_tabong: 'Phra Tabong', phibunsongkhram: 'Phibunsongkhram', nakhon_champassak: 'Nakhon Champassak' };
+const MOB = [['standing', 'Standing forces', '6 brigades'], ['partial', 'Partial call-up', '9 brigades · reservists leave work'], ['full', 'Full mobilisation', '12 brigades · bigger hit to output']];
+const AIRC = [['military', 'Military targets', 'Slowest, cleanest'], ['interdiction', 'Interdiction', 'Supply lines · faster'], ['strategic', 'Strategic', 'Bridges, power · fastest, civilians pay']];
+const DIPLO = [['none', 'None', ''], ['beijing', 'Beijing back channel', 'China stays out'], ['hanoi', 'Reassure Hanoi', 'Vietnam stays out'], ['asean', 'Engage ASEAN', 'Attention falls']];
+const POSTURES = [['hold', 'Hold'], ['advance', 'Advance'], ['assault', 'Assault']];
+const RECONS = [['aid', 'Aid'], ['martial', 'Martial law'], ['crackdown', 'Crack down']];
 function renderWar() {
   const wrap = $('#war-wrap'), box = $('#war');
   if (!wrap || !box) return;
@@ -546,33 +540,58 @@ function renderWar() {
   wrap.hidden = w.stage === 'none';
   if (w.stage === 'none') return;
   const n = x => Math.round(x).toLocaleString();
+  const fighting = w.stage === 'war';
   const status = w.annexed ? 'Annexed' : w.stage === 'won' ? `Occupation · war ended ${g.labelAt(w.wonQuarter)}`
-    : `At war since ${g.labelAt(w.startQuarter)}`;
-  const china = w.chinaArming ? '<span class="down">Beijing is arming Phnom Penh: slower advances, heavier losses</span>'
-    : '<span class="muted">Beijing is staying out of it</span>';
-  const fronts = Object.entries(w.fronts).map(([id, f]) => `<div class="wf-row">
-      <div class="wf-name">${id === 'phibunsongkhram' && w.annexed ? 'Sisophon' : WAR_NAMES[id]}</div>
-      <div class="wf-bars"><span class="wf-l">Held</span><span class="wf-bar"><span class="wf-occ" style="width:${f.occ}%"></span></span><b>${n(f.occ)}%</b>
-      <span class="wf-l">Dissent</span><span class="wf-bar"><span class="wf-dis" style="width:${f.dissent}%"></span></span><b>${f.entered ? n(f.dissent) + '%' : '–'}</b></div></div>`).join('');
-  const btns = (list, cur, kind) => list.map(([id, label, d]) =>
-    `<button class="wb${cur === id ? ' on' : ''} wb-${id}" data-kind="${kind}" data-id="${id}"><b>${label}</b><span>${d}</span></button>`).join('');
-  const full = w.stage === 'war' && w.stance === 'full';
+    : w.stage === 'frozen' ? 'Ceasefire on the current line' : w.ceasefire ? 'Ceasefire (temporary)' : `At war since ${g.labelAt(w.startQuarter)}`;
+  const powers = [w.chinaArming ? '<span class="down">Beijing is arming Phnom Penh</span>' : '<span class="muted">Beijing is staying out</span>',
+    w.vietnamArming ? '<span class="down">Hanoi is arming Phnom Penh</span>' : '<span class="muted">Hanoi is watching</span>'].join(' · ');
+  const seg = (list, cur, kind, on = true) => `<div class="wseg">${list.map(([id, label, d]) =>
+    `<button class="ws${cur === id ? ' on' : ''}" data-k="${kind}" data-v="${id}"${on ? '' : ' disabled'} title="${d || ''}"><b>${label}</b>${d ? `<span>${d}</span>` : ''}</button>`).join('')}</div>`;
+  const bar = (v, cls) => `<span class="wf-bar"><span class="${cls}" style="width:${Math.max(0, Math.min(100, v))}%"></span></span>`;
+  const fronts = Object.entries(w.fronts).map(([id, f]) => {
+    const name = id === 'phibunsongkhram' && w.annexed ? 'Sisophon' : WAR_NAMES[id];
+    const note = id === 'phra_tabong' && w.battambang !== 'taken' ? (w.battambang === 'siege' ? 'Battambang under siege' : 'Battambang holds out at 60%')
+      : id === 'nakhon_champassak' && w.preahVihear === 'open' ? 'Preah Vihear blocks the way at 40%' : '';
+    return `<div class="wfront">
+      <div class="wfh"><b>${name}</b><span class="muted">${note}</span></div>
+      <div class="wfr"><span class="wf-l">Held</span>${bar(f.occ, 'wf-occ')}<b>${n(f.occ)}%</b></div>
+      <div class="wfr"><span class="wf-l">Cambodian strength</span>${bar(f.enemy, 'wf-en')}<b>${n(f.enemy)}</b></div>
+      <div class="wfr"><span class="wf-l">Dissent</span>${bar(f.dissent, 'wf-dis')}<b>${f.entered ? n(f.dissent) + '%' : '–'}</b></div>
+      ${fighting && f.occ < 100 ? `<div class="wfr wbrig"><span class="wf-l">Brigades</span>
+        <button class="wb-pm" data-p="${id}" data-d="-1"${f.brigades <= 0 ? ' disabled' : ''}>−</button><b>${f.brigades}</b>
+        <button class="wb-pm" data-p="${id}" data-d="1"${w.used >= w.pool ? ' disabled' : ''}>+</button></div>
+        ${seg(POSTURES, f.posture, 'posture:' + id)}` : ''}
+      ${f.entered || fighting ? seg(RECONS, f.recon, 'recon:' + id) : ''}
+    </div>`; }).join('');
+  const full = fighting && !w.ceasefire && w.mobilisation === 'full' && Object.values(w.fronts).some(f => f.posture === 'assault' && f.occ < 100);
   box.className = full ? 'war-full' : '';
   box.innerHTML = `${full ? '<div class="war-flag"></div><div class="war-banner"><b>Full Offensive</b><span>All as One!</span></div>' : ''}
-    <div class="war-head"><b>${status}</b>${china}</div>
+    <div class="war-head"><b>${status}</b><span>${powers}</span></div>
+    <div class="war-att"><span class="wf-l">International attention</span>${bar(w.attention, 'wf-att')}<b>${n(w.attention)}</b>
+      <span class="muted">${w.attention >= 60 ? 'Hanoi arms Cambodia unless reassured' : w.attention >= 40 ? 'Brussels suspends the EU agreement' : 'Statements only'}</span></div>
     <div class="war-stats">
       <div><span class="ws-n">${n(w.thaiCasualties)}</span><span class="ws-l">Thai military killed and wounded</span></div>
       <div><span class="ws-n">${n(w.khmerCasualties)}</span><span class="ws-l">Cambodian killed and wounded</span></div>
       <div><span class="ws-n">${n(w.displaced)}</span><span class="ws-l">civilians displaced</span></div>
-      <div><span class="ws-n">${n(w.avgDissent)}%</span><span class="ws-l">average dissent</span></div>
+      <div><span class="ws-n">${fighting ? `${w.used}/${w.pool}` : n(w.avgDissent) + '%'}</span><span class="ws-l">${fighting ? 'brigades committed' : 'average dissent'}</span></div>
     </div>
-    <div class="war-fronts">${fronts}</div>
-    ${w.stage === 'war' ? `<div class="war-sub">Posture</div><div class="war-btns">${btns(WAR_STANCES, w.stance, 'war')}</div>` : ''}
-    <div class="war-sub">Reconstruction</div><div class="war-btns">${btns(RECON, w.recon, 'recon')}</div>
-    ${w.stage === 'won' && !w.annexed ? `<div class="war-note">${w.avgDissent < 10 ? 'Dissent is below 10% everywhere: the annexation bill is on your desk.' : 'The annexation bill unlocks when dissent is below 10% in all three provinces.'}</div>` : ''}`;
-  box.querySelectorAll('.wb').forEach(b => b.onclick = () => {
-    if (b.dataset.kind === 'war') g.setWarStance(b.dataset.id); else g.setRecon(b.dataset.id);
+    ${fighting ? `<div class="war-sub">Strategy</div>
+      <div class="war-strat">${seg(MOB, w.mobilisation, 'mobilisation')}${seg(AIRC, w.air, 'air')}</div>
+      <div class="war-strat">${seg(DIPLO, w.diplomacy, 'diplomacy')}
+        <button class="ws wcf${w.ceasefire ? ' on' : ''}" data-k="ceasefire"><b>${w.ceasefire ? 'Resume operations' : 'Ceasefire'}</b><span>${w.ceasefire ? 'Fronts move again' : 'Stop all fronts; attention fades'}</span></button></div>`
+      : `<div class="war-sub">Diplomacy</div>${seg(DIPLO, w.diplomacy, 'diplomacy')}`}
+    <div class="war-sub">Fronts</div><div class="war-fronts2">${fronts}</div>
+    ${w.stage === 'won' && !w.annexed ? `<div class="war-note">${w.avgDissent < 10 ? 'Dissent is below 10% everywhere: the annexation bill is on your desk.' : 'The annexation bill unlocks when dissent is below 10% in all three provinces.'}</div>` : ''}
+    <div class="war-note muted">Orders are free. Decisions in the news (Battambang, Preah Vihear, Poipet, refugees, counterattacks, talks) each take an action.</div>`;
+  box.querySelectorAll('button.ws').forEach(b => b.onclick = () => {
+    const [k, p] = b.dataset.k.split(':'), v = b.dataset.v;
+    if (k === 'ceasefire') g.warOrders({ ceasefire: !w.ceasefire });
+    else if (p) g.warOrders({ fronts: { [p]: { [k]: v } } });
+    else g.warOrders({ [k]: v });
     render();
+  });
+  box.querySelectorAll('button.wb-pm').forEach(b => b.onclick = () => {
+    const p = b.dataset.p; g.warOrders({ fronts: { [p]: { brigades: w.fronts[p].brigades + +b.dataset.d } } }); render();
   });
 }
 

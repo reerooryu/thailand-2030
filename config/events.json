@@ -2379,6 +2379,243 @@
           "flavour": "The twenty-second year begins like the twenty-first."
         }
       ]
+    },
+    {
+      "id": "war_battambang",
+      "headline": "The army reaches the outskirts of Battambang",
+      "trigger": {
+        "type": "flag",
+        "flag": "war_battambang"
+      },
+      "blocking": true,
+      "costsAction": true,
+      "body": "Cambodia's second city, 200,000 people, held by a dug-in brigade. Phra Tabong cannot be secured past this point until the city falls. The generals want to go in; the aid agencies want a corridor out. Deciding takes the cabinet's attention this quarter (one action).",
+      "options": [
+        {
+          "id": "besiege",
+          "label": "Besiege it and open a corridor for civilians",
+          "war": "besiege",
+          "opinion": {
+            "Democrat": 2,
+            "People's": 1
+          },
+          "effects": {},
+          "flavour": "Two quarters of encirclement. Slow, and the city is still standing when it falls."
+        },
+        {
+          "id": "storm",
+          "label": "Storm the city",
+          "war": "storm",
+          "opinion": {
+            "Others": 3,
+            "Kla Tham": 2,
+            "Democrat": -4,
+            "People's": -5
+          },
+          "effects": {
+            "approvalBoost": 2
+          },
+          "flavour": "Taken in a week. The footage from the old French quarter will be shown at The Hague for years."
+        }
+      ]
+    },
+    {
+      "id": "war_preah_vihear",
+      "headline": "Preah Vihear temple lies ahead on the Dangrek",
+      "trigger": {
+        "type": "flag",
+        "flag": "war_preah_vihear"
+      },
+      "blocking": true,
+      "costsAction": true,
+      "body": "The temple the International Court twice awarded to Cambodia, in 1962 and 2013, is on the line of advance. Nakhon Champassak cannot be pushed past this point until the cabinet decides (one action).",
+      "options": [
+        {
+          "id": "take",
+          "label": "Take the temple and raise the flag",
+          "war": "take_temple",
+          "opinion": {
+            "Kla Tham": 5,
+            "Others": 5,
+            "Democrat": -4,
+            "People's": -6
+          },
+          "effects": {
+            "approvalBoost": 4
+          },
+          "flavour": "The photograph every Thai nationalist has waited sixty years for. Phnom Penh files at the ICJ the same afternoon."
+        },
+        {
+          "id": "bypass",
+          "label": "Bypass it and leave the temple to UNESCO",
+          "war": "bypass",
+          "opinion": {
+            "Democrat": 3,
+            "Others": -3,
+            "Kla Tham": -2
+          },
+          "effects": {},
+          "flavour": "Slower on the escarpment, and a gesture nobody abroad will thank you for. The ICJ case is weaker for it."
+        }
+      ]
+    },
+    {
+      "id": "war_poipet",
+      "headline": "Poipet's casinos and scam compounds lie behind the front",
+      "trigger": {
+        "type": "flag",
+        "flag": "war_poipet"
+      },
+      "blocking": true,
+      "costsAction": true,
+      "body": "The border town is a strip of casinos and fortified compounds where trafficked workers, many of them Thai and Chinese, run online fraud. The army can raid them now or leave them for later (one action).",
+      "options": [
+        {
+          "id": "raid",
+          "label": "Raid the compounds and free the workers",
+          "war": "raid_poipet",
+          "align": {
+            "cn": 1
+          },
+          "opinion": {
+            "People's": 3,
+            "Democrat": 3,
+            "Others": 2
+          },
+          "effects": {
+            "approvalBoost": 3,
+            "fdiSignal": 0.03
+          },
+          "flavour": "Thousands freed, hundreds arrested, and a thank-you note from Beijing's public security ministry."
+        },
+        {
+          "id": "leave",
+          "label": "Leave them; the war comes first",
+          "opinion": {
+            "People's": -2
+          },
+          "effects": {},
+          "flavour": "The compounds keep running behind Thai lines. Somebody is being paid not to notice."
+        }
+      ]
+    },
+    {
+      "id": "war_refugees",
+      "headline": "150,000 displaced people reach Aranyaprathet",
+      "trigger": {
+        "type": "flag",
+        "flag": "war_refugees"
+      },
+      "blocking": true,
+      "costsAction": true,
+      "body": "Families from the fighting are camped along the border road. The Interior Ministry wants them sent back across the line; the Red Cross wants camps (one action).",
+      "options": [
+        {
+          "id": "camps",
+          "label": "Build camps, with schools and clinics",
+          "war": "camps",
+          "opinion": {
+            "Democrat": 3,
+            "People's": 3
+          },
+          "effects": {
+            "approvalBoost": 1
+          },
+          "flavour": "Expensive, and the camps become the first Thai schools many of these children attend."
+        },
+        {
+          "id": "push_back",
+          "label": "Push them back across the line",
+          "war": "push_back",
+          "opinion": {
+            "Others": 2,
+            "Democrat": -4,
+            "People's": -5
+          },
+          "effects": {},
+          "flavour": "Cheap this quarter. The pictures from the border road are not."
+        }
+      ]
+    },
+    {
+      "id": "war_counterattack",
+      "headline": "A Cambodian counterattack breaks through a thinly held front",
+      "trigger": {
+        "type": "flag",
+        "flag": "war_counterattack"
+      },
+      "blocking": true,
+      "costsAction": true,
+      "body": "A front left with one brigade or none has given ground, and casualties are heavy. The army wants reinforcements committed and the press wants to know who left it exposed (one action).",
+      "options": [
+        {
+          "id": "reinforce",
+          "label": "Commit reserves and retake the ground",
+          "war": "reinforce",
+          "opinion": {
+            "Others": 2
+          },
+          "effects": {
+            "approvalBoost": -1
+          },
+          "flavour": "The line is restored. The question of who thinned it is not answered."
+        },
+        {
+          "id": "dig_in",
+          "label": "Fall back to a defensible line",
+          "opinion": {
+            "Others": -2,
+            "Kla Tham": -2
+          },
+          "effects": {
+            "approvalBoost": -2
+          },
+          "flavour": "Prudent, and it reads as a retreat."
+        }
+      ]
+    },
+    {
+      "id": "war_talks",
+      "headline": "Phnom Penh offers talks",
+      "trigger": {
+        "type": "flag",
+        "flag": "war_talks"
+      },
+      "blocking": true,
+      "costsAction": true,
+      "body": "With half the 1941 line in Thai hands, Cambodia proposes a ceasefire on the current line and talks in Kuala Lumpur, with Malaysia, China and the United States as witnesses. Accepting ends the war where it stands (one action).",
+      "options": [
+        {
+          "id": "accept",
+          "label": "Accept a ceasefire on the current line",
+          "war": "accept_talks",
+          "opinion": {
+            "Democrat": 5,
+            "People's": 4,
+            "Kla Tham": -5,
+            "Others": -6
+          },
+          "effects": {
+            "approvalBoost": -3,
+            "fdiSignal": 0.1
+          },
+          "flavour": "A frozen line through occupied provinces. It will outlive everyone who signed it."
+        },
+        {
+          "id": "press_on",
+          "label": "Press on to the 1941 line",
+          "war": "press_on",
+          "opinion": {
+            "Kla Tham": 3,
+            "Others": 3,
+            "Democrat": -3
+          },
+          "effects": {
+            "approvalBoost": 1
+          },
+          "flavour": "The offer is declined in a sentence. The offensive resumes at dawn."
+        }
+      ]
     }
   ]
 }

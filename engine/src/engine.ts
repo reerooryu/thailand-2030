@@ -103,7 +103,9 @@ export function step(input: StepInput): State {
      + p.humanCapitalToTfp * (policy.humanCapital ?? 0)
      + ftaTfpStep) / 100);
 
-  const potential = tfp * Math.pow(capital, p.alpha) * Math.pow(labour, 1 - p.alpha);
+  // Reservists called up for the war are away from their jobs.
+  const labourAtWork = labour * (1 - (policy.mobilisationDrag ?? 0) / 100);
+  const potential = tfp * Math.pow(capital, p.alpha) * Math.pow(labourAtWork, 1 - p.alpha);
   const potentialGrowthYoy = (potential / lag4.potential - 1) * 100;
   const rgdp = potential * (1 + gap / 100);
 

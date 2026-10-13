@@ -15,7 +15,7 @@ import {
 import { closedChapters, CAPACITY_PER_CHAPTER, FDI_PER_CHAPTER } from './oecd.js';
 import { initialFta, stepFta, tradeAccess, type FtaState } from './eufta.js';
 import { initialAlign, addAlign, alignLabel, type AlignState } from './alignment.js';
-import { initialWar, startWar, stepWar, warLevels, warApproval, chinaArming, avgDissent, PROVINCES as WAR_PROVINCES, type WarState, type WarStance, type ReconStance } from './war.js';
+import { initialWar, startWar, stepWar, warLevels, warApproval, chinaArming, avgDissent, applyOrders, stanceOrders, warDecision, mobilisationDrag, brigadePool, brigadesUsed, PROVINCES as WAR_PROVINCES, type WarState, type WarStance, type ReconStance, type Orders } from './war.js';
 import { initialAgencies, targetNotch, review, ratingPremium, type Agency } from './ratings.js';
 import { BASE } from './params.js';
 import { formCoalition, band, type CoalitionCfg, type PoliticalState } from './politics.js';
@@ -138,12 +138,14 @@ export class BrowserGame {
   private warApplied: Record<string, number> = {};
   warView() {
     const w = this.war;
-    return { ...w, avgDissent: avgDissent(w), chinaArming: chinaArming(this.align.us, this.align.cn),
-      annexed: this.flags.has('territory_annexed') };
+    return { ...w, avgDissent: avgDissent(w), chinaArming: chinaArming(this.align.us, this.align.cn, w),
+      annexed: this.flags.has('territory_annexed'), pool: brigadePool(w), used: brigadesUsed(w) };
   }
-  /** Change the war posture. Free, and allowed any time during the turn. */
-  setWarStance(s: WarStance) { if (this.war.stage === 'war') { this.war = { ...this.war, stance: s }; this.syncWar(); } }
-  setRecon(r: ReconStance) { if (this.war.stage !== 'none') { this.war = { ...this.war, recon: r }; this.syncWar(); } }
+  /** War orders from the panel. Free, and allowed any time during the turn. */
+  warOrders(o: Orders) { if (this.war.stage !== 'none') { this.war = applyOrders(this.war, o); this.syncWar(); } }
+  /** Shortcuts: one posture for every front, one reconstruction stance everywhere. */
+  setWarStance(s: WarStance) { this.warOrders(stanceOrders(s)); }
+  setRecon(r: ReconStance) { this.warOrders({ fronts: Object.fromEntries(WAR_PROVINCES.map(p => [p, { recon: r }])) as any }); }
   /** Keep the stance vector, flags and map in line with the war state. */
   private syncWar() {
     const w = this.war;
@@ -163,6 +165,15 @@ export class BrowserGame {
     else this.flags.delete('occupation_dissent_low');
     if (!w.onlyAid) this.flags.add('war_not_aid_only');
     if (w.maxDissent >= 40) this.flags.add('war_dissent_40');
+    // Triggers for the six war decisions (flag events in events.json).
+    const F = w.fronts;
+    if (w.stage === 'war') {
+      if (F.phra_tabong.occ >= 60 && w.battambang === 'open') this.flags.add('war_battambang');
+      if (F.nakhon_champassak.occ >= 40 && w.preahVihear === 'open') this.flags.add('war_preah_vihear');
+      if (F.phibunsongkhram.entered) this.flags.add('war_poipet');
+      if (w.displaced >= 150000) this.flags.add('war_refugees');
+      if (WAR_PROVINCES.reduce((a, p) => a + F[p].occ, 0) / 3 >= 50) this.flags.add('war_talks');
+    }
   }
   private applyTerritory(t: Record<string, string> | undefined) {
     if (t) this.territory = { ...this.territory, ...(t as any) };
@@ -383,6 +394,14 @@ export class BrowserGame {
     this.align = addAlign(this.align, opt.align, this.quarter, `${e.headline}: ${opt.label}`);
     this.applyTerritory((opt as any).territory);
     this.opinion = res.opinion; this.flags = res.flags;
+    const wd = (opt as any).war as string | undefined;
+    if (wd && this.war.stage !== 'none') {
+      const r = warDecision(this.war, wd, this.quarter);
+      this.war = r.war;
+      if (r.effects) this.apply(r.effects as any);
+      this.syncWar();
+    }
+    if ((e as any).costsAction) this.actionsThisTurn = Math.min(this.actionCap, this.actionsThisTurn + 1);
     if (this.flags.has('war_begins') && this.war.stage === 'none') {
       this.war = startWar(this.war, this.quarter);
       this.approval = Math.min(100, this.approval + 12);   // the rally
@@ -482,8 +501,9 @@ export class BrowserGame {
     const stimCap = this.ps.effects.stimulusCap ?? 2.0;
     if (this.war.stage !== 'none') {
       const wasWon = this.war.stage === 'won';
-      const r = stepWar(this.war, this.quarter, chinaArming(this.align.us, this.align.cn), this.flags.has('migrants_regularised'));
+      const r = stepWar(this.war, this.quarter, chinaArming(this.align.us, this.align.cn, this.war), this.flags.has('migrants_regularised'));
       this.war = r.war;
+      if (r.notes.some(n => n.startsWith('Cambodian counterattack'))) this.flags.add('war_counterattack');
       // Regularised before the war ended: Cambodian workers stayed, factories
       // kept running, and the provinces have family on the Thai side.
       if (!wasWon && this.war.stage === 'won' && this.flags.has('migrants_regularised')) {
@@ -502,7 +522,7 @@ export class BrowserGame {
       // below 5% in every province.
       const annexed = this.flags.has('territory_annexed');
       const benevolent = annexed && this.war.onlyAid && WAR_PROVINCES.every(p => this.war.fronts[p].dissent < 5);
-      const offensive = this.war.stage === 'war' && this.war.stance === 'full';
+      const offensive = this.war.stage === 'war' && this.war.attention >= 40;
       if (!this.fta.suspended && (offensive || (annexed && !benevolent && !this.flags.has('eu_fta_restored')))) {
         this.fta = { ...this.fta, suspended: true };
         this.log.push({ quarter: this.quarter, kind: 'note', text: 'EU FTA: Brussels suspends the agreement over the war in Cambodia' });
@@ -539,6 +559,7 @@ export class BrowserGame {
       tradeAccess: tradeAccess(this.fta, this.quarter),
       tradeAccessLag4: tradeAccess(this.fta, this.quarter - 4),
       territoryGain: this.war.stage !== 'won' ? 0 : this.flags.has('integration_hastened') ? 2 : 1,
+      mobilisationDrag: mobilisationDrag(this.war),
     };
     const exog: Exog = { worldDemandGrowth: 3.0, globalActivity: 10.0,
                          energyInflation: 1.5 + (this.rng() - 0.5) * 3, shock: 0 };
@@ -776,7 +797,7 @@ export class BrowserGame {
       warWon: this.war.stage === 'won',
       warAnnexed: this.flags.has('territory_annexed'),
       warDissent: avgDissent(this.war),
-      warCeasefire: this.war.stage === 'war' && this.war.stance === 'ceasefire',
+      warCeasefire: this.war.stage === 'frozen' || (this.war.stage === 'war' && this.war.ceasefire),
     });
   }
 
