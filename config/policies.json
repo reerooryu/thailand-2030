@@ -1710,7 +1710,7 @@
       "name": "Semiconductor and Advanced Electronics",
       "ministry": "industry",
       "type": "structural",
-      "scriptedQuarter": 11,
+      "scriptedQuarter": 10,
       "requires": [
         "semiconductor_board_seen"
       ],
