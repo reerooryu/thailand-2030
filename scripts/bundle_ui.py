@@ -9,7 +9,8 @@ app  = open(os.path.join(U,'app.js')).read()
 
 # resolve the app's import of ./engine.js by concatenating: strip the import,
 # and expose the engine's exports as locals.
-# engine.js is an IIFE exposing globalThis.ENGINE; app.js already destructures it
+# engine.js is an IIFE exposing globalThis.ENGINE; app.js (bundled from ui/src/)
+# destructures it in ui/src/core.js
 
 html = html.replace('<link rel="stylesheet" href="style.css">', f'<style>\n{css}\n</style>')
 html = html.replace('<script src="engine.js"></script>\n<script type="module" src="app.js"></script>',
@@ -33,7 +34,9 @@ else:
 # to app.js except convention, and a mismatch fails SILENTLY at bundle time and
 # then throws "X is not defined" on load — a completely black page. That is
 # exactly how this shipped once. Check it here, where it is cheap.
-want = re.search(r'^\s*const\s*\{[^}]*\}\s*=\s*([A-Za-z_$][\w$]*)\s*;', app, re.M)
+want = re.search(r'^\s*(?:const|let|var)\s*\{[^}]*\}\s*=\s*([A-Za-z_$][\w$]*)\s*;', app, re.M)
+if not want:
+    raise SystemExit('BUILD ABORTED: no `{ ... } = ENGINE` destructure found in ui/app.js')
 if want:
     name = want.group(1)
     if not re.search(r'\bvar\s+%s\s*=' % re.escape(name), eng):

@@ -494,7 +494,9 @@ export class BrowserGame {
         Math.max(0, Math.min(100, this.opinion.Others + e.institutionalSupport)));
   }
 
-  endTurn(): { ok: boolean; msg?: string; fallen?: boolean; walked?: string[]; snap?: boolean } {
+  /** Advance one quarter. `exogOverride` replaces the default world (scenario
+   *  runs and the optimiser pass their own); the UI calls it with nothing. */
+  endTurn(exogOverride?: Exog): { ok: boolean; msg?: string; fallen?: boolean; walked?: string[]; snap?: boolean } {
     if (this.pending.length) return { ok: false, msg: 'Resolve the news first' };
     this.censusProposals();
     this.syncStateFlags();
@@ -566,8 +568,9 @@ export class BrowserGame {
       territoryGain: this.war.stage !== 'won' ? 0 : this.flags.has('integration_hastened') ? 2 : 1,
       mobilisationDrag: mobilisationDrag(this.war),
     };
-    const exog: Exog = { worldDemandGrowth: 3.0, globalActivity: 10.0,
-                         energyInflation: 1.5 + (this.rng() - 0.5) * 3, shock: 0 };
+    const rngEnergy = 1.5 + (this.rng() - 0.5) * 3;   // drawn either way, so the sequence never shifts
+    const exog: Exog = exogOverride ?? { worldDemandGrowth: 3.0, globalActivity: 10.0,
+                         energyInflation: rngEnergy, shock: 0 };
     const params: Params = { ...this.params,
       // Disbursement is a RATE, not a multiplier: 1.0 means every baht of the
       // capital budget actually gets spent in the year it was voted. Reform can

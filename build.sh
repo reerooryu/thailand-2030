@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build the playable game. Three steps, in order — each depends on the last.
+# Build the playable game. Four steps, in order — each depends on the last.
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -13,7 +13,11 @@ python3 scripts/build_ui_data.py
 npx --prefix engine esbuild engine/src/browser.ts \
     --bundle --format=iife --global-name=ENGINE --outfile=ui/engine.js
 
-# 3. Inline engine + app + css (+ audio, if present) into one distributable file.
+# 3. Bundle the UI modules (ui/src/) into one script.
+npx --prefix engine esbuild ui/src/main.js \
+    --bundle --format=iife --outfile=ui/app.js
+
+# 4. Inline engine + app + css (+ audio, if present) into one distributable file.
 python3 scripts/bundle_ui.py
 
 echo

@@ -8,7 +8,8 @@
     "backtest": "tsx src/backtest.ts",
     "calibrate": "tsx src/calibrate.ts",
     "build": "tsc",
-    "bundle": "esbuild src/browser.ts --bundle --format=iife --global-name=ENGINE --outfile=../ui/engine.js"
+    "bundle": "esbuild src/browser.ts --bundle --format=iife --global-name=ENGINE --outfile=../ui/engine.js",
+    "gen": "cd .. && python3 scripts/build_ui_data.py"
   },
   "devDependencies": {
     "@types/node": "^26.2.0",

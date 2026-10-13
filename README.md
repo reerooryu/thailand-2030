@@ -58,14 +58,16 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/ratings.ts` | Sovereign credit ratings: S&P, Fitch, Moody's. |
 | `engine/src/constitution.ts` | The new constitution: four steps, clause votes, referendums. |
 | `engine/src/ideology.ts` | Reads your economic position off the budget. |
+| `engine/src/game.ts` | Headless host for scripts: the browser host with the world passed in and leftover news defaulted. |
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoilers. |
 | `config/policies.json` | 36 cards, 99 options. |
 | `config/provinces.json` | Province outlines and a one-line description of each of the 77 provinces, for the map. Outlines from Natural Earth (public domain). |
 | `config/events.json` | 51 news events, 104 options. |
 | `config/coalitions.json` | The four coalitions and their effects. |
 | `config/constitution.json` | Five parts of the constitution, their positions and party stances. |
-| `ui/` | Front end. `app.js` is the whole client. |
+| `ui/` | Front end. The client is in `ui/src/` (ES modules, bundled into `ui/app.js` by the build); see `ui/README.md`. |
 | `scripts/` | Data builders (Python) and analysis tools (TypeScript). |
+| `scripts/map/` | The map pipeline: `build_map.py` rebuilds every outline and the war map; `register_reference.py` fits the 1941 reference scan. |
 | `data/` | Raw source files, kept for provenance. |
 
 Start with `DESIGN.md`. `MODEL.md`, `CALIBRATION.md` and `BACKTEST.md` cover estimation and testing; `GAMELOOP.md`, `EVENTS.md`, `POLICIES.md` and `POLITICS.md` cover the game. `AUDIT_IMPACTS.md` is generated.
@@ -101,6 +103,7 @@ A model of a government's choices, not of Thailand. Real cabinets play for the n
 npx --prefix engine tsx engine/src/optimise.ts balanced pheuthai
 npx --prefix engine tsx scripts/audit_impacts.ts > AUDIT_IMPACTS.md
 python3 scripts/build_panel.py          # rebuild the estimation panel
+python3 scripts/map/build_map.py        # rebuild config/provinces.json outlines (needs shapely, numpy, npx)
 ```
 
 Needs Node 20+ and Python 3.10+. The engine has one dev dependency.

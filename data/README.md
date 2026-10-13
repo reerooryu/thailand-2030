@@ -58,6 +58,8 @@ Primary terms, which supersede anything written here:
 
 The three Cambodian provinces of 1941–46 (Phra Tabong, Phibunsongkhram, and the Cambodian part of Nakhon Champassak) were traced from a 1945 reference map of Siam. The reference was registered to Natural Earth with a polynomial fitted to its coastline, Tonle Sap and Thai–Cambodian border, and checked against the Mekong. The 1941 southern line and the two lines between the provinces were traced by hand from it; the Thai border and the Mekong come from Natural Earth. Accurate to a few kilometres at best.
 
+Both steps are in `scripts/map/`. `build_map.py` downloads Natural Earth into `data/map/cache/` (gitignored), cuts the 1941 provinces with the traced lines in `data/map/trace_1941.json`, simplifies everything with mapshaper (pinned to 0.7.83, run through npx), and rebuilds the war-map cells, towns and roads. It merges the result into `config/provinces.json` and keeps the descriptions. `data/map/ne_ids.json` maps Natural Earth names to the game's province ids. `register_reference.py` refits the pixel-to-lon/lat polynomial from a reference scan, which is not redistributed. You only need it to re-trace. A rebuild matches the committed outlines to within 0.15% of area per province. Ring start points and the Voronoi cells of Phibunsongkhram can come out slightly different, because Natural Earth's master branch moves.
+
 ## Not in this repository
 
 The 2023 Bhumjaithai campaign song, which the build inlines as the soundtrack if
