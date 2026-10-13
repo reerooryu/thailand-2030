@@ -383,6 +383,124 @@
       ]
     },
     {
+      "id": "annexation_bill",
+      "name": "Formal Annexation of the 1941 Provinces",
+      "ministry": "pm office",
+      "type": "institutional",
+      "requires": [
+        "war_won",
+        "occupation_dissent_low"
+      ],
+      "briefing": "A bill making Phra Tabong, Nakhon Champassak and Sisophon (Phibunsongkhram in 1941, renamed after its old capital) provinces of the Kingdom again, with governors, seats in the next House and Thai citizenship for residents who apply. It unlocks only once dissent is below 10% in all three. No other government recognises it, and the EU puts the trade agreement on hold. If migrant labour was regularised before the war ended, it passes with extra approval and investor confidence.",
+      "options": [
+        {
+          "id": "annex",
+          "label": "Pass the annexation bill",
+          "requiresLegislation": true,
+          "maximal": true,
+          "effects": {
+            "approvalBoost": 10,
+            "institutionalSupport": 12,
+            "fdiSignal": -0.15,
+            "setSupport": 0.6
+          },
+          "sets": [
+            "territory_annexed"
+          ],
+          "fit": {
+            "Kla Tham": 0.8,
+            "Others": 0.8,
+            "Pheu Thai": 0.1,
+            "Democrat": -0.5,
+            "People's": -0.9
+          },
+          "flavour": "Fireworks over Sanam Luang, a new line on every school map, and a European Parliament resolution by the end of the week."
+        },
+        {
+          "id": "defer",
+          "label": "Keep the occupation administration, defer the bill",
+          "effects": {
+            "institutionalSupport": -4
+          },
+          "fit": {
+            "Democrat": 0.2,
+            "People's": 0.3,
+            "Kla Tham": -0.3,
+            "Others": -0.4
+          },
+          "flavour": "The provinces stay in legal limbo. So do the people in them."
+        }
+      ]
+    },
+    {
+      "id": "deep_south",
+      "name": "Deep South Reappraisal",
+      "ministry": "pm office",
+      "type": "institutional",
+      "briefing": "Pattani, Yala and Narathiwat: an insurgency since 2004, more than 7,000 dead, an emergency decree renewed every three months for two decades, and peace talks with the BRN that stall at every change of government. Bhumjaithai's base is not here, and it is not chasing a settlement. The question is which small, reversible steps are worth taking. Nothing structural is on the table.",
+      "options": [
+        {
+          "id": "dialogue",
+          "label": "Small steps: talks and a few concessions",
+          "maximal": true,
+          "body": "Resume the Malaysia-facilitated talks with the BRN, lift the emergency decree in a handful of calm districts, pilot bilingual Thai and Patani Malay schooling in Rumi, and set up a Tak Bai compensation fund.",
+          "effects": {
+            "approvalBoost": -2,
+            "fdiSignal": 0.05,
+            "institutionalSupport": -4
+          },
+          "sets": [
+            "deep_south_dialogue"
+          ],
+          "fit": {
+            "People's": 0.4,
+            "Democrat": 0.4,
+            "Pheu Thai": 0.2,
+            "Kla Tham": -0.2,
+            "Others": -0.5
+          },
+          "flavour": "Bangkok insists on Rumi, not Jawi. Kuala Lumpur is pleased. The BRN reads it as Malay without Islam and says so; the army calls it a concession anyway."
+        },
+        {
+          "id": "development",
+          "label": "Development only",
+          "body": "A halal industrial zone, Hat Yai–Pattani road and rail links, and more money through the Southern Border Provinces Administrative Centre.",
+          "effects": {
+            "capitalSpend": 0.15,
+            "approvalBoost": 2
+          },
+          "sets": [
+            "deep_south_development"
+          ],
+          "fit": {
+            "Kla Tham": 0.2,
+            "Others": 0.1,
+            "Pheu Thai": 0.1
+          },
+          "flavour": "Roads and factories, which help. Nobody has ever been talked out of an insurgency by an industrial estate."
+        },
+        {
+          "id": "security",
+          "label": "Security first",
+          "body": "Renew the decree everywhere and add two battalions.",
+          "effects": {
+            "govConsumption": 0.1,
+            "institutionalSupport": 4
+          },
+          "sets": [
+            "deep_south_security"
+          ],
+          "fit": {
+            "Others": 0.4,
+            "Kla Tham": 0.2,
+            "People's": -0.4,
+            "Democrat": -0.2
+          },
+          "flavour": "The twenty-first year of the same policy."
+        }
+      ]
+    },
+    {
       "id": "negative_income_tax",
       "name": "Negative Income Tax",
       "ministry": "finance",
@@ -2650,124 +2768,6 @@
             "People's": 0.1
           },
           "flavour": "The money keeps going to the five provinces that were always going to be full."
-        }
-      ]
-    },
-    {
-      "id": "annexation_bill",
-      "name": "Formal Annexation of the 1941 Provinces",
-      "ministry": "pm office",
-      "type": "institutional",
-      "requires": [
-        "war_won",
-        "occupation_dissent_low"
-      ],
-      "briefing": "A bill making Phra Tabong, Nakhon Champassak and Sisophon (Phibunsongkhram in 1941, renamed after its old capital) provinces of the Kingdom again, with governors, seats in the next House and Thai citizenship for residents who apply. It unlocks only once dissent is below 10% in all three. No other government recognises it, and the EU puts the trade agreement on hold. If migrant labour was regularised before the war ended, it passes with extra approval and investor confidence.",
-      "options": [
-        {
-          "id": "annex",
-          "label": "Pass the annexation bill",
-          "requiresLegislation": true,
-          "maximal": true,
-          "effects": {
-            "approvalBoost": 10,
-            "institutionalSupport": 12,
-            "fdiSignal": -0.15,
-            "setSupport": 0.6
-          },
-          "sets": [
-            "territory_annexed"
-          ],
-          "fit": {
-            "Kla Tham": 0.8,
-            "Others": 0.8,
-            "Pheu Thai": 0.1,
-            "Democrat": -0.5,
-            "People's": -0.9
-          },
-          "flavour": "Fireworks over Sanam Luang, a new line on every school map, and a European Parliament resolution by the end of the week."
-        },
-        {
-          "id": "defer",
-          "label": "Keep the occupation administration, defer the bill",
-          "effects": {
-            "institutionalSupport": -4
-          },
-          "fit": {
-            "Democrat": 0.2,
-            "People's": 0.3,
-            "Kla Tham": -0.3,
-            "Others": -0.4
-          },
-          "flavour": "The provinces stay in legal limbo. So do the people in them."
-        }
-      ]
-    },
-    {
-      "id": "deep_south",
-      "name": "Deep South Reappraisal",
-      "ministry": "pm office",
-      "type": "institutional",
-      "briefing": "Pattani, Yala and Narathiwat: an insurgency since 2004, more than 7,000 dead, an emergency decree renewed every three months for two decades, and peace talks with the BRN that stall at every change of government. Bhumjaithai's base is not here, and it is not chasing a settlement. The question is which small, reversible steps are worth taking. Nothing structural is on the table.",
-      "options": [
-        {
-          "id": "dialogue",
-          "label": "Small steps: talks and a few concessions",
-          "maximal": true,
-          "body": "Resume the Malaysia-facilitated talks with the BRN, lift the emergency decree in a handful of calm districts, pilot bilingual Thai and Patani Malay schooling in Rumi, and set up a Tak Bai compensation fund.",
-          "effects": {
-            "approvalBoost": -2,
-            "fdiSignal": 0.05,
-            "institutionalSupport": -4
-          },
-          "sets": [
-            "deep_south_dialogue"
-          ],
-          "fit": {
-            "People's": 0.4,
-            "Democrat": 0.4,
-            "Pheu Thai": 0.2,
-            "Kla Tham": -0.2,
-            "Others": -0.5
-          },
-          "flavour": "Bangkok insists on Rumi, not Jawi. Kuala Lumpur is pleased. The BRN reads it as Malay without Islam and says so; the army calls it a concession anyway."
-        },
-        {
-          "id": "development",
-          "label": "Development only",
-          "body": "A halal industrial zone, Hat Yai–Pattani road and rail links, and more money through the Southern Border Provinces Administrative Centre.",
-          "effects": {
-            "capitalSpend": 0.15,
-            "approvalBoost": 2
-          },
-          "sets": [
-            "deep_south_development"
-          ],
-          "fit": {
-            "Kla Tham": 0.2,
-            "Others": 0.1,
-            "Pheu Thai": 0.1
-          },
-          "flavour": "Roads and factories, which help. Nobody has ever been talked out of an insurgency by an industrial estate."
-        },
-        {
-          "id": "security",
-          "label": "Security first",
-          "body": "Renew the decree everywhere and add two battalions.",
-          "effects": {
-            "govConsumption": 0.1,
-            "institutionalSupport": 4
-          },
-          "sets": [
-            "deep_south_security"
-          ],
-          "fit": {
-            "Others": 0.4,
-            "Kla Tham": 0.2,
-            "People's": -0.4,
-            "Democrat": -0.2
-          },
-          "flavour": "The twenty-first year of the same policy."
         }
       ]
     }

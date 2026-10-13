@@ -875,4 +875,5 @@ export const COALITIONS = cfg;
 export const PROVINCES = DATA.provinces as unknown as {
   viewBox: string; _meta: { pilotAdjust: string[]; pilotTilt: string[] };
   provinces: { id: string; name: string; blurb?: string; path: string; water?: boolean }[];
+  /* _meta also carries warMarkers (map coordinates) and warView (x, y, w, h). */
   historic: { id: string; name: string; modern: string; blurb: string; path: string }[] };

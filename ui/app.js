@@ -134,7 +134,7 @@ function render() {
     const f = g.fta;
     const word = f.suspended ? 'suspended' : f.stage === 'in_force' ? 'in force' : f.stage === 'ratifying' ? 'ratifying' : `${Math.round(f.progress)}%`;
     const pct = f.stage === 'negotiating' ? f.progress : 100;
-    $('#fta').innerHTML = `<span class="fta-l" title="EU–Thailand free trade agreement. Negotiations started at 63% (15 of 24 chapters closed, June 2026). Reforms that answer open chapters speed it up.">EU FTA</span>
+    g._ftaHtml = `<span class="fta-l" title="EU–Thailand free trade agreement. Negotiations started at 63% (15 of 24 chapters closed, June 2026). Reforms that answer open chapters speed it up.">EU FTA</span>
       <span class="fta-bar"><span class="fta-fill ${f.suspended ? 'suspended' : f.stage}" style="width:${pct}%"></span></span>
       <span class="fta-w">${word}</span>`;
   }
@@ -191,6 +191,7 @@ function render() {
           ? `risk premium +${fmt(s.riskPremium, 2)}pp` : 'no risk premium'}</span>
         <span class="muted">90</span></div>
       ${ratingsBox()}
+      <div id="fta" class="fta-under">${g._ftaHtml || ''}</div>
     </div>
     ${tile('Private investment', fmt(s.invRate), '% of GDP', '31.2% in 1996 · never recovered',
            hist.map(h => h.invRate), 'var(--series-3)')}
@@ -440,8 +441,8 @@ function renderNews() {
     return;
   }
   for (const e of g.pending) {
-    const c = el('div', 'newsitem');
-    c.appendChild(el('div', 'n-tag', 'BLOCKING'));
+    const c = el('div', 'newsitem' + (e.costsAction ? ' n-war' : ''));
+    c.appendChild(el('div', 'n-tag', e.costsAction ? 'WAR DECISION · TAKES 1 ACTION' : 'BLOCKING'));
     c.appendChild(el('div', 'n-head', e.headline));
     c.appendChild(el('div', 'n-body', e.body));
     const opts = el('div', 'n-opts');
@@ -533,6 +534,67 @@ const AIRC = [['military', 'Military targets', 'Slowest, cleanest'], ['interdict
 const DIPLO = [['none', 'None', ''], ['beijing', 'Beijing back channel', 'China stays out'], ['hanoi', 'Reassure Hanoi', 'Vietnam stays out'], ['asean', 'Engage ASEAN', 'Attention falls']];
 const POSTURES = [['hold', 'Hold'], ['advance', 'Advance'], ['assault', 'Assault']];
 const RECONS = [['aid', 'Aid'], ['martial', 'Martial law'], ['crackdown', 'Crack down']];
+/* Close-up of the three 1941 provinces: Thai control sweeps in from the Thai
+   side as occupation rises, arrows show each front's posture, counters show
+   brigades, and markers track the three set pieces. */
+const SWEEP = { phra_tabong: 'x', phibunsongkhram: 'y', nakhon_champassak: 'y' };
+function warMapSvg(w) {
+  const meta = PROVINCES._meta || {}, [vx, vy, vw, vh] = meta.warView || [300, 395, 290, 175];
+  const M = meta.warMarkers || {};
+  const hist = Object.fromEntries((PROVINCES.historic || []).map(h => [h.id, h]));
+  const thai = PROVINCES.provinces.filter(p => !p.water).map(p => `<path class="wm-thai" d="${p.path}"/>`).join('');
+  const prov = Object.entries(w.fronts).map(([id, f]) => {
+    const h = hist[id]; if (!h) return '';
+    const fill = w.annexed ? 'wm-annexed' : 'wm-held';
+    return `<clipPath id="wm-c-${id}"><path d="${h.path}"/></clipPath>
+      <path class="wm-prov" d="${h.path}"/>
+      <rect class="${fill}" data-sweep="${id}" data-occ="${f.occ}" clip-path="url(#wm-c-${id})" x="0" y="0" width="0" height="0"/>
+      <path class="wm-edge" d="${h.path}"/>`;
+  }).join('');
+  const marker = (id, label, state) => M[id] ? `<g class="wm-mk ${state}" transform="translate(${M[id][0]},${M[id][1]})">
+      <circle r="${state === 'siege' ? 6 : 3.2}" class="wm-ring"/><circle r="2.2"/><text x="5" y="-4">${label}</text></g>` : '';
+  const btb = w.battambang === 'taken' ? 'taken' : w.battambang === 'siege' ? 'siege' : 'open';
+  const pv = w.preahVihear === 'taken' ? 'taken' : w.preahVihear === 'bypassed' ? 'bypassed' : 'open';
+  const poi = w.fronts.phibunsongkhram.entered ? (g.flags.has('war_poipet_raided') ? 'taken' : 'open') : 'open';
+  return `<svg class="wm" viewBox="${vx} ${vy} ${vw} ${vh}" role="img" aria-label="The front">
+    <g>${thai}</g>${prov}
+    <g class="wm-arrows"></g><g class="wm-units"></g>
+    ${marker('battambang', btb === 'siege' ? 'Battambang · siege' : btb === 'taken' ? 'Battambang' : 'Battambang · holds', btb)}
+    ${marker('preah_vihear', pv === 'taken' ? 'Preah Vihear · taken' : pv === 'bypassed' ? 'Preah Vihear · bypassed' : 'Preah Vihear', pv)}
+    ${marker('poipet', poi === 'taken' ? 'Poipet · raided' : 'Poipet', poi)}
+  </svg>`;
+}
+/* Sweep rects and arrows need real bounding boxes, so they are laid out after
+   the SVG is in the page. */
+function layoutWarMap(box, w) {
+  const svg = box.querySelector('svg.wm'); if (!svg) return;
+  const NS = 'http://www.w3.org/2000/svg';
+  const arrows = svg.querySelector('.wm-arrows'), units = svg.querySelector('.wm-units');
+  svg.querySelectorAll('rect[data-sweep]').forEach(r => {
+    const id = r.dataset.sweep, occ = +r.dataset.occ / 100;
+    const bb = svg.querySelector(`#wm-c-${id} path`).getBBox();
+    if (SWEEP[id] === 'x') { r.setAttribute('x', bb.x); r.setAttribute('y', bb.y); r.setAttribute('width', bb.width * occ); r.setAttribute('height', bb.height); }
+    else { r.setAttribute('x', bb.x); r.setAttribute('y', bb.y); r.setAttribute('width', bb.width); r.setAttribute('height', bb.height * occ); }
+    const f = w.fronts[id];
+    if (w.stage !== 'war' || f.occ >= 100) return;
+    // Arrow at the advancing edge, pointing into Cambodia; counter beside it.
+    const cx = SWEEP[id] === 'x' ? bb.x + bb.width * Math.max(0.12, occ) : bb.x + bb.width / 2;
+    const cy = SWEEP[id] === 'x' ? bb.y + bb.height / 2 : bb.y + bb.height * Math.max(0.15, occ);
+    const rot = SWEEP[id] === 'x' ? 0 : 90;
+    const cls = w.ceasefire ? 'hold' : f.posture;
+    if (cls !== 'hold') {
+      const a = document.createElementNS(NS, 'path');
+      a.setAttribute('d', cls === 'assault' ? 'M-9,-4 L3,-4 L3,-8 L11,0 L3,8 L3,4 L-9,4 Z' : 'M-7,-2.5 L2,-2.5 L2,-5.5 L8,0 L2,5.5 L2,2.5 L-7,2.5 Z');
+      a.setAttribute('transform', `translate(${cx},${cy}) rotate(${rot})`); a.setAttribute('class', 'wm-arrow ' + cls);
+      arrows.appendChild(a);
+    }
+    const u = document.createElementNS(NS, 'g');
+    u.setAttribute('transform', `translate(${cx - 16},${cy - 6})`); u.setAttribute('class', 'wm-unit');
+    u.innerHTML = `<rect width="11" height="8" rx="1"/><text x="5.5" y="6.2">${f.brigades}</text>`;
+    units.appendChild(u);
+  });
+}
+
 function renderWar() {
   const wrap = $('#war-wrap'), box = $('#war');
   if (!wrap || !box) return;
@@ -541,48 +603,72 @@ function renderWar() {
   if (w.stage === 'none') return;
   const n = x => Math.round(x).toLocaleString();
   const fighting = w.stage === 'war';
-  const status = w.annexed ? 'Annexed' : w.stage === 'won' ? `Occupation · war ended ${g.labelAt(w.wonQuarter)}`
+  const peace = w.stage === 'won';
+  const title = $('#war-wrap .panel-title');
+  if (title) title.textContent = peace ? 'The New Provinces' : 'The War';
+  const status = w.annexed ? 'Annexed' : peace ? `Occupation · war ended ${g.labelAt(w.wonQuarter)}`
     : w.stage === 'frozen' ? 'Ceasefire on the current line' : w.ceasefire ? 'Ceasefire (temporary)' : `At war since ${g.labelAt(w.startQuarter)}`;
-  const powers = [w.chinaArming ? '<span class="down">Beijing is arming Phnom Penh</span>' : '<span class="muted">Beijing is staying out</span>',
-    w.vietnamArming ? '<span class="down">Hanoi is arming Phnom Penh</span>' : '<span class="muted">Hanoi is watching</span>'].join(' · ');
-  const seg = (list, cur, kind, on = true) => `<div class="wseg">${list.map(([id, label, d]) =>
-    `<button class="ws${cur === id ? ' on' : ''}" data-k="${kind}" data-v="${id}"${on ? '' : ' disabled'} title="${d || ''}"><b>${label}</b>${d ? `<span>${d}</span>` : ''}</button>`).join('')}</div>`;
-  const bar = (v, cls) => `<span class="wf-bar"><span class="${cls}" style="width:${Math.max(0, Math.min(100, v))}%"></span></span>`;
-  const fronts = Object.entries(w.fronts).map(([id, f]) => {
+  const f = g.fta;
+  const chip = (label, state, cls) => `<span class="wchip ${cls}"><span class="wchip-l">${label}</span>${state}</span>`;
+  const chips = [
+    chip('China', w.chinaArming ? 'arming Cambodia' : 'staying out', w.chinaArming ? 'bad' : 'ok'),
+    chip('Vietnam', w.vietnamArming ? 'arming Cambodia' : w.diplomacy === 'hanoi' ? 'reassured' : 'watching', w.vietnamArming ? 'bad' : w.diplomacy === 'hanoi' ? 'ok' : 'neutral'),
+    chip('ASEAN', w.diplomacy === 'asean' ? 'engaged' : 'sidelined', w.diplomacy === 'asean' ? 'ok' : 'neutral'),
+    chip('EU', f.suspended ? 'FTA suspended' : g.flags.has('eu_fta_restored') ? 'FTA restored' : f.stage === 'in_force' ? 'FTA in force' : 'FTA talks', f.suspended ? 'bad' : 'ok'),
+  ].join('');
+  const seg = (list, cur, kind) => `<div class="wseg">${list.map(([id, label, d]) =>
+    `<button class="ws${cur === id ? ' on' : ''}" data-k="${kind}" data-v="${id}" title="${d || ''}"><b>${label}</b>${d ? `<span>${d}</span>` : ''}</button>`).join('')}</div>`;
+  const bar = (v, cls, marks = []) => `<span class="wf-bar">${marks.map(m => `<i class="wf-mk" style="left:${m}%"></i>`).join('')}<span class="${cls}" style="width:${Math.max(0, Math.min(100, v))}%"></span></span>`;
+  const POP = { phra_tabong: 1.08, phibunsongkhram: 1.6, nakhon_champassak: 0.35 };
+  const fronts = Object.entries(w.fronts).map(([id, fr]) => {
     const name = id === 'phibunsongkhram' && w.annexed ? 'Sisophon' : WAR_NAMES[id];
     const note = id === 'phra_tabong' && w.battambang !== 'taken' ? (w.battambang === 'siege' ? 'Battambang under siege' : 'Battambang holds out at 60%')
       : id === 'nakhon_champassak' && w.preahVihear === 'open' ? 'Preah Vihear blocks the way at 40%' : '';
-    return `<div class="wfront">
+    const aq = fr.aidQ || 0, pop = POP[id];
+    const recon = peace ? `<div class="wrecon">
+        <div><b>${n(Math.min(1, aq / 4) * pop * 1e6)}</b><span>ID cards issued</span></div>
+        <div><b>${n(aq * 35 * pop)}</b><span>schools rebuilt or opened</span></div>
+        <div><b>${n(aq * 8 * pop)}</b><span>clinics</span></div></div>` : '';
+    return `<div class="wfront ${fighting && fr.occ < 100 ? 'p-' + (w.ceasefire ? 'hold' : fr.posture) : ''}">
       <div class="wfh"><b>${name}</b><span class="muted">${note}</span></div>
-      <div class="wfr"><span class="wf-l">Held</span>${bar(f.occ, 'wf-occ')}<b>${n(f.occ)}%</b></div>
-      <div class="wfr"><span class="wf-l">Cambodian strength</span>${bar(f.enemy, 'wf-en')}<b>${n(f.enemy)}</b></div>
-      <div class="wfr"><span class="wf-l">Dissent</span>${bar(f.dissent, 'wf-dis')}<b>${f.entered ? n(f.dissent) + '%' : '–'}</b></div>
-      ${fighting && f.occ < 100 ? `<div class="wfr wbrig"><span class="wf-l">Brigades</span>
-        <button class="wb-pm" data-p="${id}" data-d="-1"${f.brigades <= 0 ? ' disabled' : ''}>−</button><b>${f.brigades}</b>
+      ${peace ? '' : `<div class="wfr"><span class="wf-l">Held</span>${bar(fr.occ, 'wf-occ')}<b>${n(fr.occ)}%</b></div>
+      <div class="wfr"><span class="wf-l">Cambodian strength</span>${bar(fr.enemy, 'wf-en')}<b>${n(fr.enemy)}</b></div>`}
+      <div class="wfr"><span class="wf-l">Dissent</span>${bar(fr.dissent, 'wf-dis', peace && !w.annexed ? [10] : [40])}<b>${fr.entered ? n(fr.dissent) + '%' : '–'}</b></div>
+      ${recon}
+      ${fighting && fr.occ < 100 ? `<div class="wfr wbrig"><span class="wf-l">Brigades</span>
+        <button class="wb-pm" data-p="${id}" data-d="-1"${fr.brigades <= 0 ? ' disabled' : ''}>−</button><b>${fr.brigades}</b>
         <button class="wb-pm" data-p="${id}" data-d="1"${w.used >= w.pool ? ' disabled' : ''}>+</button></div>
-        ${seg(POSTURES, f.posture, 'posture:' + id)}` : ''}
-      ${f.entered || fighting ? seg(RECONS, f.recon, 'recon:' + id) : ''}
+        ${seg(POSTURES, fr.posture, 'posture:' + id)}` : ''}
+      ${fr.entered || fighting ? seg(RECONS, fr.recon, 'recon:' + id) : ''}
     </div>`; }).join('');
-  const full = fighting && !w.ceasefire && w.mobilisation === 'full' && Object.values(w.fronts).some(f => f.posture === 'assault' && f.occ < 100);
+  const integ = g.flags.has('integration_hastened') ? 'Integration hastened' : w.annexed ? 'Integration on the original timeline' : '';
+  const full = fighting && !w.ceasefire && w.mobilisation === 'full' && Object.values(w.fronts).some(fr => fr.posture === 'assault' && fr.occ < 100);
   box.className = full ? 'war-full' : '';
   box.innerHTML = `${full ? '<div class="war-flag"></div><div class="war-banner"><b>Full Offensive</b><span>All as One!</span></div>' : ''}
-    <div class="war-head"><b>${status}</b><span>${powers}</span></div>
-    <div class="war-att"><span class="wf-l">International attention</span>${bar(w.attention, 'wf-att')}<b>${n(w.attention)}</b>
-      <span class="muted">${w.attention >= 60 ? 'Hanoi arms Cambodia unless reassured' : w.attention >= 40 ? 'Brussels suspends the EU agreement' : 'Statements only'}</span></div>
-    <div class="war-stats">
-      <div><span class="ws-n">${n(w.thaiCasualties)}</span><span class="ws-l">Thai military killed and wounded</span></div>
-      <div><span class="ws-n">${n(w.khmerCasualties)}</span><span class="ws-l">Cambodian killed and wounded</span></div>
-      <div><span class="ws-n">${n(w.displaced)}</span><span class="ws-l">civilians displaced</span></div>
-      <div><span class="ws-n">${fighting ? `${w.used}/${w.pool}` : n(w.avgDissent) + '%'}</span><span class="ws-l">${fighting ? 'brigades committed' : 'average dissent'}</span></div>
+    <div class="war-head"><b>${status}</b><span class="wchips">${chips}</span></div>
+    <div class="war-top">
+      <div class="war-mapbox">${warMapSvg(w)}</div>
+      <div class="war-side">
+        <div class="war-att"><span class="wf-l">International attention</span><b>${n(w.attention)}</b></div>
+        <div class="war-attbar">${bar(w.attention, 'wf-att', [40, 60])}<div class="wat-l"><span style="left:40%">EU suspends</span><span style="left:60%">Vietnam arms</span></div></div>
+        <div class="war-stats">
+          <div><span class="ws-n">${n(w.thaiCasualties)}</span><span class="ws-l">Thai military killed and wounded</span></div>
+          <div><span class="ws-n">${n(w.khmerCasualties)}</span><span class="ws-l">Cambodian killed and wounded</span></div>
+          <div><span class="ws-n">${n(w.displaced)}</span><span class="ws-l">civilians displaced</span></div>
+          <div><span class="ws-n">${fighting ? `${w.used}/${w.pool}` : n(w.avgDissent) + '%'}</span><span class="ws-l">${fighting ? 'brigades committed' : 'average dissent'}</span></div>
+        </div>
+      </div>
     </div>
     ${fighting ? `<div class="war-sub">Strategy</div>
       <div class="war-strat">${seg(MOB, w.mobilisation, 'mobilisation')}${seg(AIRC, w.air, 'air')}</div>
       <div class="war-strat">${seg(DIPLO, w.diplomacy, 'diplomacy')}
         <button class="ws wcf${w.ceasefire ? ' on' : ''}" data-k="ceasefire"><b>${w.ceasefire ? 'Resume operations' : 'Ceasefire'}</b><span>${w.ceasefire ? 'Fronts move again' : 'Stop all fronts; attention fades'}</span></button></div>`
       : `<div class="war-sub">Diplomacy</div>${seg(DIPLO, w.diplomacy, 'diplomacy')}`}
-    <div class="war-sub">Fronts</div><div class="war-fronts2">${fronts}</div>
-    ${w.stage === 'won' && !w.annexed ? `<div class="war-note">${w.avgDissent < 10 ? 'Dissent is below 10% everywhere: the annexation bill is on your desk.' : 'The annexation bill unlocks when dissent is below 10% in all three provinces.'}</div>` : ''}
-    <div class="war-note muted">Orders are free. Decisions in the news (Battambang, Preah Vihear, Poipet, refugees, counterattacks, talks) each take an action.</div>`;
+    <div class="war-sub">${peace ? 'Provinces' : 'Fronts'}</div><div class="war-fronts2">${fronts}</div>
+    ${peace && !w.annexed ? `<div class="war-note">${w.avgDissent < 10 && Object.values(w.fronts).every(fr => fr.dissent < 10) ? 'Dissent is below 10% everywhere: the annexation bill is on your desk.' : 'The annexation bill unlocks when dissent is below 10% in all three provinces (the tick on each bar).'}</div>` : ''}
+    ${integ ? `<div class="war-note">${integ}.</div>` : ''}
+    ${fighting ? '<div class="war-note muted">Orders are free. War decisions in the news each take an action.</div>' : ''}`;
+  layoutWarMap(box, w);
   box.querySelectorAll('button.ws').forEach(b => b.onclick = () => {
     const [k, p] = b.dataset.k.split(':'), v = b.dataset.v;
     if (k === 'ceasefire') g.warOrders({ ceasefire: !w.ceasefire });

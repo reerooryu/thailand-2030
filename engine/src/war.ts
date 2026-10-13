@@ -33,6 +33,8 @@ export interface Front {
   brigades: number; posture: Posture; recon: ReconStance;
   /** Cambodian strength on this front, 0-100. */
   enemy: number;
+  /** Quarters of aid since the province was entered (reconstruction counters). */
+  aidQ: number;
 }
 export interface WarState {
   stage: 'none' | 'war' | 'won' | 'frozen';
@@ -73,7 +75,7 @@ export const START_DISSENT = 30;
 export const NAMES: Record<ProvId, string> = { phra_tabong: 'Phra Tabong', phibunsongkhram: 'Phibunsongkhram', nakhon_champassak: 'Nakhon Champassak' };
 
 export function initialWar(): WarState {
-  const f = (p: ProvId): Front => ({ occ: 0, dissent: 0, entered: false, brigades: 0, posture: 'hold', recon: 'martial', enemy: ENEMY0[p] });
+  const f = (p: ProvId): Front => ({ occ: 0, dissent: 0, entered: false, brigades: 0, posture: 'hold', recon: 'martial', enemy: ENEMY0[p], aidQ: 0 });
   return { stage: 'none', mobilisation: 'standing', air: 'military', diplomacy: 'none', ceasefire: false,
     fronts: { phra_tabong: f('phra_tabong'), phibunsongkhram: f('phibunsongkhram'), nakhon_champassak: f('nakhon_champassak') },
     quartersAtWar: 0, attention: 10, resentment: 0, thaiCasualties: 0, khmerCasualties: 0, displaced: 0,
@@ -198,7 +200,7 @@ export function stepWar(w0: WarState, quarter: number, arming: boolean, regulari
   for (const p of PROVINCES) {
     const f = { ...w.fronts[p] };
     if (!f.entered) continue;
-    if (f.recon !== 'aid') w.onlyAid = false;
+    if (f.recon !== 'aid') w.onlyAid = false; else f.aidQ = (f.aidQ ?? 0) + 1;
     const base = fighting ? { aid: 0.5, martial: 3, crackdown: 3 }[f.recon] : { aid: -7, martial: -3, crackdown: -3 }[f.recon];
     const pressure = fighting ? 0.25 * Math.min(w.quartersAtWar, 6) + (w.air === 'strategic' ? 1.5 : 0) : 0;
     const hit = (f.recon === 'crackdown' ? -10 : 0) + (regularised ? (fighting ? -0.5 : -2) : 0);

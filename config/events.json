@@ -2486,7 +2486,10 @@
             "approvalBoost": 3,
             "fdiSignal": 0.03
           },
-          "flavour": "Thousands freed, hundreds arrested, and a thank-you note from Beijing's public security ministry."
+          "flavour": "Thousands freed, hundreds arrested, and a thank-you note from Beijing's public security ministry.",
+          "sets": [
+            "war_poipet_raided"
+          ]
         },
         {
           "id": "leave",
