@@ -151,6 +151,10 @@ export class BrowserGame {
     const w = this.war;
     if (w.stage === 'none') return;
     const lv = warLevels(w);
+    // Integration boom: once annexed, Thai firms and land buyers move in and the
+    // Poipet crossing becomes domestic trade. Larger with hastened integration.
+    if (this.flags.has('territory_annexed'))
+      lv.fdiSignal = (lv.fdiSignal ?? 0) + 0.05 + (this.flags.has('integration_hastened') ? 0.04 : 0);
     const delta: Record<string, number> = {};
     for (const k of new Set([...Object.keys(lv), ...Object.keys(this.warApplied)]))
       delta[k] = (lv[k] ?? 0) - (this.warApplied[k] ?? 0);
@@ -358,6 +362,7 @@ export class BrowserGame {
     this.flags = applyFlags(this.flags, opt);
     this.align = addAlign(this.align, opt.align, this.quarter, `${card.name}: ${opt.label}`);
     this.applyTerritory((opt as any).territory);
+    if (cardId === 'annexation_bill' && optionId === 'annex') this.annexedQuarter = this.quarter;
     if (cardId === 'annexation_bill' && optionId === 'annex' && this.flags.has('migrant_dividend')) {
       this.apply({ approvalBoost: 4, institutionalSupport: 3, fdiSignal: 0.1, setSupport: 0.3 } as any);
       this.log.push({ quarter: this.quarter, kind: 'note', text: 'Annexation: with migrant workers already legal, citizenship for the new provinces passes without a labour shock.' });
@@ -774,6 +779,33 @@ export class BrowserGame {
     return 8056.57 * BASELINE_ALIGN * (end.rgdp / start.rgdp) * priceFactor
          * (71.62 / 71.215) * (32.88 / 34.6);
   }
+  /** Population and fertility. Thai population follows the IMF path the headline
+   *  uses (71.62m in 2026 to 71.215m in 2030). TFR starts at 0.9 and falls about
+   *  0.03 a year; family policy nudges it by hundredths. The 1941 provinces add
+   *  about 3.0 million people at a TFR near 2.3 once annexed. */
+  demography() {
+    const q = this.quarter;
+    const thaiPop = 71.62 + (71.215 - 71.62) * Math.min(1, q / 15);
+    const has = (f: string) => this.flags.has(f), played = (c: string) => this.playedCards.has(c);
+    const thaiTfr = 0.9 - 0.0075 * q
+      + (has('allowances_raised') ? 0.03 : 0) + (has('education_fully_funded') ? 0.02 : 0)
+      + (has('village_nurse') ? 0.01 : 0) + (played('negative_income_tax') ? 0.01 : 0)
+      + (played('thai_chuay_thai') ? 0.01 : 0) + (this.approval > 70 ? 0.01 : 0);
+    const annexed = has('territory_annexed');
+    const held = WAR_PROVINCES.some(p => this.war.fronts[p].occ > 0);
+    const newPop = annexed ? 3.0 : 0;
+    const tfr = annexed ? (thaiTfr * thaiPop + 2.3 * newPop) / (thaiPop + newPop) : thaiTfr;
+    // GDP per head of the enlarged Kingdom: the new provinces start near 2,300
+    // USD a head and converge, faster with hastened integration.
+    let kingdomPc: number | null = null;
+    if (annexed) {
+      const since = Math.max(0, q - (this.annexedQuarter ?? q));
+      const newPc = 2300 * Math.pow(this.flags.has('integration_hastened') ? 1.025 : 1.015, since);
+      kingdomPc = (this.headline() * thaiPop + newPc * newPop) / (thaiPop + newPop);
+    }
+    return { thaiPop, newPop, total: thaiPop + newPop, heldNotAnnexed: held && !annexed, thaiTfr, tfr, kingdomPc };
+  }
+  annexedQuarter?: number;
   /** Not what they called themselves — what the budget composition says they were. */
   ideology() {
     const s: any = this.state;

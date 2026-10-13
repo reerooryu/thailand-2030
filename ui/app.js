@@ -145,6 +145,12 @@ function render() {
       <span class="al-bar${tot ? '' : ' none'}"><span class="al-us" style="width:${usPct}%"></span><span class="al-cn" style="width:${100 - usPct}%"></span></span>
       <span class="fta-l">China</span><span class="fta-w"><b class="al-usn">${a.us}</b> · <b class="al-cnn">${a.cn}</b></span>`;
   }
+  {
+    const d = g.demography();
+    $('#demog').innerHTML = `<span class="dg"><span class="dg-l">Population</span><b>${d.total.toFixed(1)}m</b>${d.newPop ? `<span class="muted">incl. ${d.newPop.toFixed(1)}m in the 1941 provinces</span>` : d.heldNotAnnexed ? '<span class="muted">plus about 3m under Thai administration</span>' : ''}</span>
+      <span class="dg"><span class="dg-l">Fertility rate</span><b class="${d.tfr < 1 ? 'down' : ''}">${d.tfr.toFixed(2)}</b><span class="muted">children per woman · replacement 2.1${d.newPop ? ` · ${d.thaiTfr.toFixed(2)} in pre-war Thailand` : ''}</span></span>
+      ${d.kingdomPc ? `<span class="dg"><span class="dg-l">GDP per head, enlarged Kingdom</span><b>${Math.round(d.kingdomPc).toLocaleString()} USD</b><span class="muted">the headline stays on pre-war borders</span></span>` : ''}`;
+  }
   $('#turns-left').textContent = `${g.turnsLeft} quarter${g.turnsLeft === 1 ? '' : 's'} remaining`;
   const left = g.actionCap - g.actionsThisTurn;
   $('#actions').innerHTML = `<span class="act-label">Actions</span>` +
@@ -988,6 +994,9 @@ function showEnd(walked, snap = false) {
           ${row('EU FTA', g.fta.suspended ? 'Suspended' : g.fta.stage === 'in_force' ? 'In force' : g.fta.stage === 'ratifying' ? 'Ratifying' : Math.round(g.fta.progress) + '%',
                 g.fta.stage === 'negotiating' ? 'negotiated, from 63%' : g.fta.stage === 'ratifying' ? 'talks concluded' : 'since ' + g.labelAt(g.fta.inForceQuarter),
                 g.fta.stage === 'in_force' ? 'good' : '')}
+          ${(() => { const d = g.demography(); return row('Population', d.total.toFixed(1) + 'm', d.newPop ? `incl. ${d.newPop.toFixed(1)}m in the 1941 provinces` : 'from 71.6m in 2026')
+            + row('Fertility rate', d.tfr.toFixed(2), d.newPop ? `children per woman · ${d.thaiTfr.toFixed(2)} in pre-war Thailand, from 0.90` : 'children per woman, from 0.90', d.tfr < 1 ? 'critical' : 'warning')
+            + (d.kingdomPc ? row('GDP per head, enlarged Kingdom', Math.round(d.kingdomPc).toLocaleString() + ' USD', 'the headline is scored on pre-war borders') : ''); })()}
           ${row('Household debt', fmt(s.hhDebt) + '%', 'of GDP, from 87.5%',
                 s.hhDebt <= 82 ? 'good' : s.hhDebt >= 90 ? 'warning' : '')}
         </table>
