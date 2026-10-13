@@ -518,3 +518,10 @@ details.whip td{padding:2px 0;vertical-align:baseline}
 .newsitem.n-war .n-tag{color:#ff8a80}
 .fta-under{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:11.5px;color:var(--ink-3);white-space:nowrap}
 #fta.fta-under{margin-left:0}
+
+.wm-cell{fill:#2f3a33;stroke:#232a25;stroke-width:.35}
+.wm-cont{fill:url(#wm-hatch)}
+.wm-front{fill:#160a08;stroke:#160a08;stroke-width:2.2;stroke-linejoin:round}
+.wm-held{fill:#b33a32}
+.wm-road{fill:none;stroke:#d9d2bf;stroke-width:.55;stroke-dasharray:2.5 1.2;opacity:.55}
+.wm-mk text{font-size:5.6px}

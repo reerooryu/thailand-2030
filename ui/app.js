@@ -534,65 +534,79 @@ const AIRC = [['military', 'Military targets', 'Slowest, cleanest'], ['interdict
 const DIPLO = [['none', 'None', ''], ['beijing', 'Beijing back channel', 'China stays out'], ['hanoi', 'Reassure Hanoi', 'Vietnam stays out'], ['asean', 'Engage ASEAN', 'Attention falls']];
 const POSTURES = [['hold', 'Hold'], ['advance', 'Advance'], ['assault', 'Assault']];
 const RECONS = [['aid', 'Aid'], ['martial', 'Martial law'], ['crackdown', 'Crack down']];
-/* Close-up of the three 1941 provinces: Thai control sweeps in from the Thai
-   side as occupation rises, arrows show each front's posture, counters show
-   brigades, and markers track the three set pieces. */
-const SWEEP = { phra_tabong: 'x', phibunsongkhram: 'y', nakhon_champassak: 'y' };
+/* Close-up of the three 1941 provinces as a campaign map. Each province is cut
+   into cells with a fixed order of capture (config/provinces.json): a front at
+   x% holds every cell ranked at or below x. Cells just beyond the line are
+   contested, more of them while Cambodian strength is high. */
 function warMapSvg(w) {
   const meta = PROVINCES._meta || {}, [vx, vy, vw, vh] = meta.warView || [300, 395, 290, 175];
-  const M = meta.warMarkers || {};
   const hist = Object.fromEntries((PROVINCES.historic || []).map(h => [h.id, h]));
   const thai = PROVINCES.provinces.filter(p => !p.water).map(p => `<path class="wm-thai" d="${p.path}"/>`).join('');
   const prov = Object.entries(w.fronts).map(([id, f]) => {
     const h = hist[id]; if (!h) return '';
-    const fill = w.annexed ? 'wm-annexed' : 'wm-held';
+    const cells = h.cells || [];
+    const occ = f.occ / 100, belt = w.stage === 'war' && !w.ceasefire ? 0.04 + 0.1 * f.enemy / 100 : 0;
+    if (w.annexed) return `<path class="wm-annexed" d="${h.path}"/>`;
+    // The set-piece objectives count as held once they fall, whatever the percentage.
+    const gateDone = id === 'phra_tabong' ? w.battambang === 'taken' : id === 'nakhon_champassak' ? w.preahVihear === 'taken' : false;
+    const isHeld = c => c.r <= occ + 1e-6 || (c.gate && gateDone);
+    const held = cells.filter(isHeld), cont = cells.filter(c => !isHeld(c) && c.r <= occ + belt);
+    const heldD = held.map(c => c.d).join('');
     return `<clipPath id="wm-c-${id}"><path d="${h.path}"/></clipPath>
       <path class="wm-prov" d="${h.path}"/>
-      <rect class="${fill}" data-sweep="${id}" data-occ="${f.occ}" clip-path="url(#wm-c-${id})" x="0" y="0" width="0" height="0"/>
+      <g clip-path="url(#wm-c-${id})">
+        ${cells.map(c => `<path class="wm-cell" d="${c.d}"/>`).join('')}
+        ${cont.map(c => `<path class="wm-cont" d="${c.d}"/>`).join('')}
+        ${heldD ? `<path class="wm-front" d="${heldD}"/><path class="wm-held" d="${heldD}"/>` : ''}
+      </g>
       <path class="wm-edge" d="${h.path}"/>`;
   }).join('');
-  const marker = (id, label, state) => M[id] ? `<g class="wm-mk ${state}" transform="translate(${M[id][0]},${M[id][1]})">
-      <circle r="${state === 'siege' ? 6 : 3.2}" class="wm-ring"/><circle r="2.2"/><text x="5" y="-4">${label}</text></g>` : '';
-  const btb = w.battambang === 'taken' ? 'taken' : w.battambang === 'siege' ? 'siege' : 'open';
-  const pv = w.preahVihear === 'taken' ? 'taken' : w.preahVihear === 'bypassed' ? 'bypassed' : 'open';
-  const poi = w.fronts.phibunsongkhram.entered ? (g.flags.has('war_poipet_raided') ? 'taken' : 'open') : 'open';
+  const roads = (meta.warRoads || []).map(d => `<path class="wm-road" d="${d}"/>`).join('');
+  const towns = Object.entries(meta.warTowns || {}).map(([id, t]) => {
+    const f = w.fronts[t.prov];
+    let st = f && f.occ / 100 >= t.r - 1e-6 ? 'taken' : 'open';
+    if (id === 'battambang' && w.battambang === 'siege') st = 'siege';
+    if (id === 'preah_vihear' && w.preahVihear === 'bypassed') st = 'bypassed';
+    if (id === 'preah_vihear' && w.preahVihear === 'taken') st = 'taken';
+    if (w.annexed) st = 'taken';
+    const label = t.name + (id === 'poipet' && g.flags.has('war_poipet_raided') ? ' · raided' : st === 'siege' ? ' · siege' : id === 'preah_vihear' && st === 'bypassed' ? ' · bypassed' : '');
+    return `<g class="wm-mk ${st}" transform="translate(${t.xy[0]},${t.xy[1]})"><circle r="${st === 'siege' ? 5 : 2.6}" class="wm-ring"/><circle r="1.8"/><text x="3.6" y="-2.6">${label}</text></g>`;
+  }).join('');
   return `<svg class="wm" viewBox="${vx} ${vy} ${vw} ${vh}" role="img" aria-label="The front">
-    <g>${thai}</g>${prov}
-    <g class="wm-arrows"></g><g class="wm-units"></g>
-    ${marker('battambang', btb === 'siege' ? 'Battambang · siege' : btb === 'taken' ? 'Battambang' : 'Battambang · holds', btb)}
-    ${marker('preah_vihear', pv === 'taken' ? 'Preah Vihear · taken' : pv === 'bypassed' ? 'Preah Vihear · bypassed' : 'Preah Vihear', pv)}
-    ${marker('poipet', poi === 'taken' ? 'Poipet · raided' : 'Poipet', poi)}
+    <defs><pattern id="wm-hatch" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="3" height="3" fill="#3b3434"/><rect width="1.2" height="3" fill="#b33a32"/></pattern></defs>
+    <g>${thai}</g>${prov}<g>${roads}</g>
+    <g class="wm-arrows"></g><g class="wm-units"></g>${towns}
   </svg>`;
 }
-/* Sweep rects and arrows need real bounding boxes, so they are laid out after
-   the SVG is in the page. */
+/* Arrows and brigade counters sit at the deepest held cell of each front. */
 function layoutWarMap(box, w) {
-  const svg = box.querySelector('svg.wm'); if (!svg) return;
+  const svg = box.querySelector('svg.wm'); if (!svg || w.stage !== 'war') return;
   const NS = 'http://www.w3.org/2000/svg';
   const arrows = svg.querySelector('.wm-arrows'), units = svg.querySelector('.wm-units');
-  svg.querySelectorAll('rect[data-sweep]').forEach(r => {
-    const id = r.dataset.sweep, occ = +r.dataset.occ / 100;
-    const bb = svg.querySelector(`#wm-c-${id} path`).getBBox();
-    if (SWEEP[id] === 'x') { r.setAttribute('x', bb.x); r.setAttribute('y', bb.y); r.setAttribute('width', bb.width * occ); r.setAttribute('height', bb.height); }
-    else { r.setAttribute('x', bb.x); r.setAttribute('y', bb.y); r.setAttribute('width', bb.width); r.setAttribute('height', bb.height * occ); }
-    const f = w.fronts[id];
-    if (w.stage !== 'war' || f.occ >= 100) return;
-    // Arrow at the advancing edge, pointing into Cambodia; counter beside it.
-    const cx = SWEEP[id] === 'x' ? bb.x + bb.width * Math.max(0.12, occ) : bb.x + bb.width / 2;
-    const cy = SWEEP[id] === 'x' ? bb.y + bb.height / 2 : bb.y + bb.height * Math.max(0.15, occ);
-    const rot = SWEEP[id] === 'x' ? 0 : 90;
+  const hist = Object.fromEntries((PROVINCES.historic || []).map(h => [h.id, h]));
+  for (const [id, f] of Object.entries(w.fronts)) {
+    if (f.occ >= 100 || !hist[id]) continue;
+    const cells = hist[id].cells || [];
+    const occ = f.occ / 100;
+    const held = cells.filter(c => c.r <= occ + 1e-6);
+    const tip = held.length ? held[held.length - 1] : cells[0];
+    const next = cells.find(c => c.r > occ + 1e-6) || tip;
+    const box2 = d => { const t = document.createElementNS(NS, 'path'); t.setAttribute('d', d); svg.appendChild(t); const b = t.getBBox(); t.remove(); return [b.x + b.width / 2, b.y + b.height / 2]; };
+    const [x0, y0] = box2(tip.d), [x1, y1] = box2(next.d);
+    const ang = Math.atan2(y1 - y0, x1 - x0) * 180 / Math.PI;
     const cls = w.ceasefire ? 'hold' : f.posture;
-    if (cls !== 'hold') {
+    if (cls !== 'hold' && f.entered) {
       const a = document.createElementNS(NS, 'path');
-      a.setAttribute('d', cls === 'assault' ? 'M-9,-4 L3,-4 L3,-8 L11,0 L3,8 L3,4 L-9,4 Z' : 'M-7,-2.5 L2,-2.5 L2,-5.5 L8,0 L2,5.5 L2,2.5 L-7,2.5 Z');
-      a.setAttribute('transform', `translate(${cx},${cy}) rotate(${rot})`); a.setAttribute('class', 'wm-arrow ' + cls);
+      a.setAttribute('d', cls === 'assault' ? 'M-8,-3.5 L2.5,-3.5 L2.5,-7 L9.5,0 L2.5,7 L2.5,3.5 L-8,3.5 Z' : 'M-6,-2.2 L1.8,-2.2 L1.8,-5 L7,0 L1.8,5 L1.8,2.2 L-6,2.2 Z');
+      a.setAttribute('transform', `translate(${x0},${y0}) rotate(${ang})`); a.setAttribute('class', 'wm-arrow ' + cls);
       arrows.appendChild(a);
     }
     const u = document.createElementNS(NS, 'g');
-    u.setAttribute('transform', `translate(${cx - 16},${cy - 6})`); u.setAttribute('class', 'wm-unit');
-    u.innerHTML = `<rect width="11" height="8" rx="1"/><text x="5.5" y="6.2">${f.brigades}</text>`;
+    u.setAttribute('transform', `translate(${x0 - 15},${y0 - 9})`); u.setAttribute('class', 'wm-unit');
+    u.innerHTML = `<rect width="10" height="7.5" rx="1"/><text x="5" y="5.8">${f.brigades}</text>`;
     units.appendChild(u);
-  });
+  }
 }
 
 function renderWar() {
