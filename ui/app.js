@@ -528,7 +528,7 @@ function renderConstitutionFinal() {
 
 /* The Cambodian war. Shown once operations begin (war.ts). Every order here is
    free; only the six decision events in the news take an action. */
-const WAR_NAMES = { phra_tabong: 'Phra Tabong', phibunsongkhram: 'Phibunsongkhram', nakhon_champassak: 'Nakhon Champassak' };
+const WAR_NAMES = { phra_tabong: 'Phra Tabong', phibunsongkhram: 'Sisophon', nakhon_champassak: 'Nakhon Champassak' };
 const MOB = [['standing', 'Standing forces', '6 brigades'], ['partial', 'Partial call-up', '9 brigades · reservists leave work'], ['full', 'Full mobilisation', '12 brigades · bigger hit to output']];
 const AIRC = [['military', 'Military targets', 'Slowest, cleanest'], ['interdiction', 'Interdiction', 'Supply lines · faster'], ['strategic', 'Strategic', 'Bridges, power · fastest, civilians pay']];
 const DIPLO = [['none', 'None', ''], ['beijing', 'Beijing back channel', 'China stays out'], ['hanoi', 'Reassure Hanoi', 'Vietnam stays out'], ['asean', 'Engage ASEAN', 'Attention falls']];
@@ -635,7 +635,7 @@ function renderWar() {
   const bar = (v, cls, marks = []) => `<span class="wf-bar">${marks.map(m => `<i class="wf-mk" style="left:${m}%"></i>`).join('')}<span class="${cls}" style="width:${Math.max(0, Math.min(100, v))}%"></span></span>`;
   const POP = { phra_tabong: 1.08, phibunsongkhram: 1.6, nakhon_champassak: 0.35 };
   const fronts = Object.entries(w.fronts).map(([id, fr]) => {
-    const name = id === 'phibunsongkhram' && w.annexed ? 'Sisophon' : WAR_NAMES[id];
+    const name = WAR_NAMES[id];
     const note = id === 'phra_tabong' && w.battambang !== 'taken' ? (w.battambang === 'siege' ? 'Battambang under siege' : 'Battambang holds out at 60%')
       : id === 'nakhon_champassak' && w.preahVihear === 'open' ? 'Preah Vihear blocks the way at 40%' : '';
     const aq = fr.aidQ || 0, pop = POP[id];

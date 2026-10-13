@@ -72,7 +72,7 @@ const AIR: Record<AirCampaign, number> = { military: 1, interdiction: 1.25, stra
 /** Thai casualties per brigade per quarter. */
 const LOSS: Record<Posture, number> = { hold: 8, advance: 25, assault: 55 };
 export const START_DISSENT = 30;
-export const NAMES: Record<ProvId, string> = { phra_tabong: 'Phra Tabong', phibunsongkhram: 'Phibunsongkhram', nakhon_champassak: 'Nakhon Champassak' };
+export const NAMES: Record<ProvId, string> = { phra_tabong: 'Phra Tabong', phibunsongkhram: 'Sisophon', nakhon_champassak: 'Nakhon Champassak' };
 
 export function initialWar(): WarState {
   const f = (p: ProvId): Front => ({ occ: 0, dissent: 0, entered: false, brigades: 0, posture: 'hold', recon: 'martial', enemy: ENEMY0[p], aidQ: 0 });
