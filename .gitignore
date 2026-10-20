@@ -41,6 +41,9 @@ TURNLOOP.txt
 *.webm
 *.ogg
 
+# The title-screen photograph (a news agency photo; see scripts/bundle_ui.py).
+ui/assets/home.*
+
 # ---- personal play records
 # Terms worth keeping, but they are a scrapbook rather than part of the project,
 # and every one of them is a spoiler for a run somebody else has not played yet.

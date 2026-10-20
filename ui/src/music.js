@@ -29,20 +29,25 @@ export const ENDING_THEMES = {
   const hide = () => { box.style.display = 'none'; };
 
   let userPaused = false, playing = false, started = false;
+  // Volume and on/off from the title screen's settings (home.js writes them).
+  let settings = { volume: 45, music: true };
+  try { settings = { ...settings, ...JSON.parse(localStorage.getItem('th2030.settings') || '{}') }; } catch { /* no storage */ }
+  const vol = () => settings.volume;
+  let localEl = null, ytPlayer = null;
   const paint = () => {
     btn.textContent = muted ? '🔇' : playing ? '❙❙' : '▶';
     box.classList.toggle('paused', !playing);
   };
 
   const local = el => {
-    el.volume = 0.45;
+    localEl = el; el.volume = vol() / 100;
     const sync = () => { playing = !el.paused; paint(); };
     const play = () => el.play().then(sync).catch(() => {});
     // currentTime cannot be set before the browser knows how long the track is.
     const seekIn = () => { try { el.currentTime = ANTHEM_IN; } catch { /* not seekable yet */ } };
     window.playAnthem = () => {
       warmYT();
-      if (started || userPaused) return;
+      if (started || userPaused || !settings.music) return;
       started = true;
       if (el.readyState >= 1) { seekIn(); play(); }
       else el.addEventListener('loadedmetadata', () => { seekIn(); play(); }, { once: true });
@@ -92,8 +97,8 @@ export const ENDING_THEMES = {
         events: {
           onReady: e => {
             ready = true; clearTimeout(giveUp);
-            ytShared = { player, ready: true };
-            e.target.setVolume(45);
+            ytShared = { player, ready: true }; ytPlayer = player;
+            e.target.setVolume(vol());
             // The coalition may well have been chosen while the embed was still
             // loading; honour the request rather than dropping it.
             if (wanted && !userPaused) go();
@@ -106,7 +111,7 @@ export const ENDING_THEMES = {
     };
 
     window.playAnthem = () => {
-      if (started || userPaused) return;
+      if (started || userPaused || !settings.music) return;
       started = true; wanted = true;
       if (ready) go();
     };
@@ -138,7 +143,7 @@ export const ENDING_THEMES = {
         videoId: Object.values(ENDING_THEMES)[0].id, host: 'https://www.youtube-nocookie.com',
         playerVars: { autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, playsinline: 1, rel: 0 },
         events: {
-          onReady: () => { ytShared = { player: p, ready: true }; if (pendingEnding) startEnding(p, pendingEnding); },
+          onReady: () => { ytShared = { player: p, ready: true }; ytPlayer = p; if (pendingEnding) startEnding(p, pendingEnding); },
           onStateChange: e => onState(p, e),
         },
       });
@@ -146,7 +151,7 @@ export const ENDING_THEMES = {
   };
   const startEnding = (p, track) => {
     pendingEnding = null;
-    p.setVolume(45);
+    p.setVolume(vol());
     p.loadVideoById({ videoId: track.id, startSeconds: track.start });
     if (userPaused) { p.pauseVideo(); return; }
     // Blocked: play muted rather than not at all, and let the button unmute.
@@ -157,7 +162,7 @@ export const ENDING_THEMES = {
     }, 1500);
   };
   window.playEnding = track => {
-    if (!track || !window.location.protocol.startsWith('http')) return;
+    if (!track || !settings.music || !window.location.protocol.startsWith('http')) return;
     const local = document.getElementById('anthem');
     if (local) local.pause();
     ending = track;
@@ -169,13 +174,23 @@ export const ENDING_THEMES = {
     btn.onclick = () => {
       const p = ytShared && ytShared.player;
       if (!p) { userPaused = false; return; }
-      if (muted) { muted = false; btn.title = ''; p.unMute(); p.setVolume(45); p.playVideo(); paint(); return; }
+      if (muted) { muted = false; btn.title = ''; p.unMute(); p.setVolume(vol()); p.playVideo(); paint(); return; }
       if (playing) { userPaused = true; p.pauseVideo(); }
       else { userPaused = false; p.playVideo(); }
     };
     if (ytShared && ytShared.ready) return startEnding(ytShared.player, track);
     pendingEnding = track;
     warmYT();
+  };
+
+  // Settings changed on the title screen: apply the volume at once, and stop the
+  // music if it was switched off. Switching it back on does not start anything;
+  // the song starts at the coalition choice, or from the play button.
+  window.applyMusicSettings = next => {
+    settings = { ...settings, ...next };
+    if (localEl) { localEl.volume = vol() / 100; if (!settings.music) { localEl.pause(); userPaused = true; } }
+    if (ytPlayer && ytPlayer.setVolume) { ytPlayer.setVolume(vol()); if (!settings.music) { ytPlayer.pauseVideo(); userPaused = true; } }
+    if (settings.music && !started) userPaused = false;
   };
 
   const el = document.getElementById('anthem');
