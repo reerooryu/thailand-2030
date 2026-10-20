@@ -4,7 +4,7 @@ import { ratingLabel } from './dashboard.js';
 import { renderMapInto } from './map.js';
 import { ENDING_THEMES } from './music.js';
 import { seatPositions } from './parliament.js';
-import { renderPrologue } from './prologue.js';
+import { renderHome } from './home.js';
 
 export function showEnd(walked, snap = false) {
   $('#toasts').innerHTML = '';
@@ -169,7 +169,7 @@ export function showEnd(walked, snap = false) {
     ${fell ? '<p class="sub">Scored on what you managed before it ended.</p>' : ''}
     <div class="logbox">${g.log.map(l => `<div class="logline"><span class="muted">Q${l.quarter + 1}</span> ${l.text}</div>`).join('')}</div>
     <button id="again" class="primary">Play again</button>`;
-  $('#again').onclick = () => renderPrologue();
+  $('#again').onclick = () => renderHome();
   renderMapInto($('#end-map'), 'provinces');
   w.querySelectorAll('.end-map-tg button').forEach(b => b.onclick = () => {
     w.querySelectorAll('.end-map-tg button').forEach(x => x.classList.toggle('on', x === b));

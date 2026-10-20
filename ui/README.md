@@ -23,8 +23,9 @@ python3 scripts/bundle_ui.py                         # -> ui/thailand-2030.html
 
 | Module | What it draws |
 |---|---|
-| `main.js` | Entry point: the End Turn button, the prologue, and the test hooks (`window.__g`, `window.__render`) |
+| `main.js` | Entry point: the End Turn button, the title screen, and the test hooks (`window.__g`, `window.__render`) |
 | `core.js` | The live game `g`, DOM helpers, sparklines, meters, tiles, toasts, year-on-year growth |
+| `home.js` | The title screen: Play, Settings (music on/off, volume, kept in localStorage) |
 | `prologue.js` | The coalition choice |
 | `dashboard.js` | `render()`: the top tiles, ratings, alignment, demography; calls every panel below |
 | `parliament.js` | The 500-seat hemicycle and whip |
@@ -37,3 +38,10 @@ python3 scripts/bundle_ui.py                         # -> ui/thailand-2030.html
 | `music.js` | The campaign song and the ending themes |
 
 `g` is a live binding exported from `core.js` and replaced only through `setGame()`. The modules import one another freely. The cycles are safe because at import time the modules only define functions and constants. Only `music.js` and `main.js` do work when they load.
+
+## Optional media
+
+Two files are inlined by the build when present and are never committed (see `.gitignore`), because neither is ours to redistribute:
+
+- `ui/assets/anthem.mp3`: the campaign song. Without it the game streams the rights holder's upload.
+- `ui/assets/home.webp` (or `home.jpg`): the title-screen photograph. Without it the title screen draws the flag in CSS.

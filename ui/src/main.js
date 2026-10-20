@@ -3,7 +3,7 @@ import './music.js';
 import { $, g, toast } from './core.js';
 import { render } from './dashboard.js';
 import { showEnd } from './endscreen.js';
-import { renderPrologue } from './prologue.js';
+import { renderHome } from './home.js';
 
 $('#end-turn').onclick = () => {
   const r = g.endTurn();
@@ -17,7 +17,7 @@ $('#end-turn').onclick = () => {
   if (g.pending.length) toast('News requires your attention', 'warning');
 };
 
-renderPrologue();
+renderHome();
 
 // Hooks for the scripted playthroughs (Playwright): the live game and a redraw.
 window.__g = () => g;

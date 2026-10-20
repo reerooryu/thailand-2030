@@ -29,6 +29,17 @@ else:
     html = re.sub(r'<audio id="anthem".*?</audio>', '', html, flags=re.S)
     print('note: ui/assets/anthem.mp3 absent — the build will stream the song instead')
 
+# The title-screen photograph, optional for the same reason as the song: a news
+# photo is not ours to redistribute (see .gitignore). Inlined when present;
+# without it the title screen draws the flag in CSS instead.
+for name, mime in (('home.webp', 'image/webp'), ('home.jpg', 'image/jpeg')):
+    pic = os.path.join(U, 'assets', name)
+    if os.path.exists(pic):
+        b64 = base64.b64encode(open(pic, 'rb').read()).decode()
+        html = html.replace('<div id="home" hidden></div>',
+                            '<script>window.HOME_BG = "data:%s;base64,%s";</script>\n<div id="home" hidden></div>' % (mime, b64))
+        break
+
 # --- guard: the engine bundle's global name must match what the app destructures.
 # esbuild's --global-name is passed on the command line, so nothing connects it
 # to app.js except convention, and a mismatch fails SILENTLY at bundle time and
