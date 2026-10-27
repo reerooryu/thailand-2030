@@ -5,7 +5,7 @@ Semi-structural macro engine for Thailand 2030. Pure, deterministic, headless.
 ```
 npx tsx src/backtest.ts    # conditional backtest, 129 quarters
 npx tsx src/calibrate.ts   # bounded Nelder-Mead fit of unidentified parameters
-npx tsc --noEmit -p .      # typecheck (strict)
+npm run typecheck          # tsc --noEmit, strict
 ```
 
 `step()` in `src/engine.ts` is the whole model: `(state, prev, lag4, exog, policy, params) -> state`.

@@ -14,7 +14,7 @@ That one HTML file is the whole game. It needs no server and no install, and gam
 
 ## How it plays
 
-Each quarter opens with the news. **Blocking** items, like Hormuz closing or a partner threatening to walk, must be answered before the turn ends. Then you spend up to three actions from 36 policy cards. Each card has two to four options: full programme, pilot, phase-in or nothing.
+Each quarter opens with the news. **Blocking** items, like Hormuz closing or a partner threatening to walk, must be answered before the turn ends. Then you spend up to three actions from 41 policy cards, some of which only reach the desk later in the term or after an earlier decision. Each card has two to four options: full programme, pilot, phase-in or nothing.
 
 Most cards need a vote. You see the whip count, crossbench defectors included, before you commit. Executive actions skip parliament.
 
@@ -70,7 +70,7 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `scripts/map/` | The map pipeline: `build_map.py` rebuilds every outline and the war map; `register_reference.py` fits the 1941 reference scan. |
 | `data/` | Raw source files, kept for provenance. |
 
-Start with `DESIGN.md`. `MODEL.md`, `CALIBRATION.md` and `BACKTEST.md` cover estimation and testing; `GAMELOOP.md`, `EVENTS.md`, `POLICIES.md` and `POLITICS.md` cover the game. `AUDIT_IMPACTS.md` is generated.
+Start with `DESIGN.md`. `MODEL.md`, `CALIBRATION.md` and `BACKTEST.md` cover estimation and testing; `GAMELOOP.md`, `EVENTS.md`, `POLICIES.md` and `POLITICS.md` cover the game. `CATALOGUE.md` (every card and event) and `AUDIT_IMPACTS.md` are generated.
 
 ---
 
@@ -101,12 +101,14 @@ A model of a government's choices, not of Thailand. Real cabinets play for the n
 ```bash
 ./build.sh                              # the game
 npx --prefix engine tsx engine/src/optimise.ts balanced pheuthai
+npm --prefix engine run typecheck       # strict tsc, no output
 npx --prefix engine tsx scripts/audit_impacts.ts > AUDIT_IMPACTS.md
+python3 scripts/catalogue.py > CATALOGUE.md   # after editing config/policies.json or events.json
 python3 scripts/build_panel.py          # rebuild the estimation panel
 python3 scripts/map/build_map.py        # rebuild config/provinces.json outlines (needs shapely, numpy, npx)
 ```
 
-Needs Node 20+ and Python 3.10+. The engine has one dev dependency.
+Needs Node 20+ and Python 3.10+. The engine has four dev dependencies: esbuild, tsx, TypeScript and the Node type definitions.
 
 **The province map.** Beside the House, every province in plain grey with a one-line description on hover. Colour marks status only: Bangkok in cyan as a special administrative area, joined by the elected-governor pilot provinces once a constitution with that clause is ratified (Chiang Mai, Phuket and Khon Kaen for *adjust*; Chonburi, Rayong, Chiang Mai, Phuket, Nakhon Ratchasima, Khon Kaen, Ayutthaya, Surat Thani, Songkhla and Ubon Ratchathani for *tilt*). The three Cambodian provinces of 1941–46 are in the map data but hidden; any card or news option can set `"territory": {"phra_tabong": "disputed" | "occupied" | "annexed"}`. Open the game with `#mapdemo` to preview all three states.
 

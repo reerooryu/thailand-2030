@@ -21,7 +21,10 @@ function saveSettings(s) {
 }
 
 function background(box) {
-  const src = window.HOME_BG || 'assets/home.webp';
+  // The bundled page sets HOME_BG to '' when it was built without the photo:
+  // there is nothing on disk beside it to load, so skip the request.
+  const src = window.HOME_BG ?? 'assets/home.webp';
+  if (!src) return;
   const img = new Image();
   img.onload = () => { box.style.setProperty('--home-bg', `url("${src}")`); box.classList.add('has-photo'); };
   img.src = src;

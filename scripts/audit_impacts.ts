@@ -36,10 +36,9 @@ function run(pick: Pick, unlock: string[] = []) {
       // this audit treated "not in the deck" and "the bill was defeated" as
       // "this option does nothing", which is how a third of the catalogue came
       // to look inert.
-      const before = g.log.length;
-      const ok = g.playCard(pick.card, pick.option);
-      if (ok) played = true;
-      else why = g.log.slice(before).map((l: any) => l.text).join('; ') || 'unavailable';
+      const res = g.playCard(pick.card, pick.option);
+      if (res.ok) played = true;
+      else why = res.msg || 'unavailable';
     }
     g.endTurn(EXOG);
   }
@@ -48,7 +47,14 @@ function run(pick: Pick, unlock: string[] = []) {
            ap: g.approval, reform: g.state.reformStock, played, why };
 }
 
-const base = run({});
+const UNLOCK = ['nesdp14_full','semiconductor_board_seen','sovereign_ai','vat_raised',
+  'digital_government_mandated','pax_silica','domestic_ai_capacity','revenue_secured',
+  'super_licence_done','anticorruption_enforcement','land_bridge_delayed'];
+
+// The baseline gets the same granted flags as every card run. Without them
+// each card row also measured the flags themselves (about +6 headline and
+// +3.5 approval), so even an option with no effects looked like a gain.
+const base = run({}, UNLOCK);
 const d = (a: number, b: number, p = 1) => {
   const v = a - b; const t = v.toFixed(p);
   return (v > 0 ? '+' + t : t);
@@ -64,9 +70,6 @@ console.log(`**Passive baseline** — headline ${base.h.toFixed(0)}, legacy ${ba
             `debt ${base.debt.toFixed(1)}%, investment ${base.inv.toFixed(1)}%, ` +
             `approval ${base.ap.toFixed(1)}, reform stock ${base.reform.toFixed(1)}.\n`);
 
-const UNLOCK = ['nesdp14_full','semiconductor_board_seen','sovereign_ai','vat_raised',
-  'digital_government_mandated','pax_silica','domestic_ai_capacity','revenue_secured',
-  'super_licence_done','anticorruption_enforcement','land_bridge_delayed'];
 
 console.log(`## A note on units, because the card faces mislead\n`);
 console.log(`\`reform effort +55\` on the OECD card is not 55 points of reform stock.`);
@@ -85,9 +88,9 @@ for (const c of cat.policies as any[]) {
   for (const o of c.options) {
     if (o.unavailable) { console.log(`| ${c.name} | ${o.label} | — | — | — | — | — | — | unselectable by design |`); continue; }
     let r = run({ card: c.id, option: o.id, atQ: c.scriptedQuarter ?? 0 }, UNLOCK);
-    const note = !r.played ? (/not in the deck/.test(r.why) ? 'not in this coalition\'s deck'
-                            : /locked/.test(r.why) ? 'locked by prerequisite'
-                            : r.why.replace(/\|/g, '/') || 'unavailable')
+    const note = !r.played ? (/not in the deck/.test(r.why) ? 'not on the desk in this run (coalition, timing or prerequisite)'
+                            : /Defeated/.test(r.why) ? 'vote fails: ' + r.why.replace(/^Defeated — /, '')
+                            : 'locked: ' + r.why.replace(/\|/g, '/'))
       : (Math.abs(r.h - base.h) < 1 && Math.abs(r.leg - base.leg) < 0.005 &&
          Math.abs(r.ap - base.ap) < 0.5 && Math.abs(r.reform - base.reform) < 0.5)
         ? '**no measurable effect**' : '';
@@ -103,10 +106,9 @@ console.log(`| Event | Option | Δheadline | Δlegacy | Δdebt | Δinvestment | 
 console.log(`|---|---|--:|--:|--:|--:|--:|---|`);
 for (const e of events) {
   const legal = e.options.filter((o: any) => !o.unavailable);
-  const ref = run({ event: e.id, eventOption: legal[0].id });
-  for (const o of e.options) {
+    for (const o of e.options) {
     if (o.unavailable) { console.log(`| ${e.headline} | ${o.label} | — | — | — | — | — | unselectable by design |`); continue; }
-    const r = run({ event: e.id, eventOption: o.id });
+    const r = run({ event: e.id, eventOption: o.id }, UNLOCK);
     const same = o.id === legal[0].id;
     // A conditional event that never fires in a passive term measures as zero,
     // which is not the same as an option that does nothing. Say which.

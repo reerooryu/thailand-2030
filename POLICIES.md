@@ -5,7 +5,7 @@
 **Config:** `/config/policies.json` · **Code:** `/engine/src/policies.ts`, `/engine/src/agenda.ts`
 **Run:** `cd engine && npx tsx src/agenda.ts` · **Output:** `/AGENDA.txt`
 
-**12 cards, 36 options.** Each option carries a fiscal cost, a reform contribution, a lag profile, an ideological fit per party, and flavour text.
+**This note covers the first 12 cards (36 options)**, written as they went in. The game has grown well past them; `CATALOGUE.md` lists every card and is generated from the config, so it stays current. Each option carries a fiscal cost, a reform contribution, a lag profile, an ideological fit per party, and flavour text.
 
 ## The cards
 

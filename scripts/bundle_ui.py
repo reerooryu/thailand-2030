@@ -39,6 +39,9 @@ for name, mime in (('home.webp', 'image/webp'), ('home.jpg', 'image/jpeg')):
         html = html.replace('<div id="home" hidden></div>',
                             '<script>window.HOME_BG = "data:%s;base64,%s";</script>\n<div id="home" hidden></div>' % (mime, b64))
         break
+else:
+    html = html.replace('<div id="home" hidden></div>',
+                        '<script>window.HOME_BG = "";</script>\n<div id="home" hidden></div>')
 
 # --- guard: the engine bundle's global name must match what the app destructures.
 # esbuild's --global-name is passed on the command line, so nothing connects it

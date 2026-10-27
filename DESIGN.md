@@ -870,3 +870,27 @@ Not a scoping exercise — a dependency ordering.
 10. Tutorial and post-mortem.
 
 The gate at step 2 matters most. **If the engine cannot retrodict Thailand 1993–2026 with the right signs and plausible magnitudes, nothing built on top of it is worth building.** The data to run that test — 134 quarters of it — is already in `/config`.
+
+---
+
+## 17. Systems added after v1.0
+
+Sections 1–16 are the design as it stood at v1.0 (August 2026). The systems below were added afterwards. Each is summarised here with a pointer to its code; the README has the player-facing detail, and `CATALOGUE.md` lists every card and event.
+
+| System | What it does | Code |
+|---|---|---|
+| EU–Thailand FTA | Talks start at 63% and move 3 points a quarter, faster with reforms that answer open chapters, slower with the paternalist rights chapter, migrant raids or forcing the Land Bridge. After ratification it phases in over two years: export demand plus a small permanent lift to productivity growth. Suspended if international attention passes 40 during the war. | `engine/src/eufta.ts` |
+| OECD accession | While accession is accelerating, each matching domestic law closes a chapter; each closed chapter adds 0.02 to reform capacity and to the FDI signal. | `engine/src/oecd.ts` |
+| Credit ratings | S&P, Fitch and Moody's start at BBB+ / BBB+ / Baa1 and move between A- and BBB-. A downgrade adds to the sovereign risk premium (§6.3). | `engine/src/ratings.ts` |
+| Constitution | Four steps with clause votes and referendums over five parts. A ratified elected-governor clause shows on the province map. | `engine/src/constitution.ts`, `config/constitution.json` |
+| US–China alignment | Options carry `align` points; the tally is a record shown in the top bar and on the end screen. Effects sit on the options themselves, not on the tally. | `engine/src/alignment.ts` |
+| Revealed ideology | The end screen reads the player's economic position off the budget actually passed, not off stated intent. | `engine/src/ideology.ts` |
+| Cambodian war | Reachable only on purpose, through the MOU 2544 event chain. Strategy, three fronts, international attention, six war decisions, occupation, dissent and an annexation bill. Deterministic. | `engine/src/war.ts`, `ui/src/war.js` |
+| Deep South | One card, three options; incremental by design, no settlement on offer. | `config/policies.json` (`deep_south`) |
+| Laos | One card on Laos's debt crisis and Chinese leverage, with Beijing's response two quarters later. No territorial option. | `config/policies.json` (`laos_partnership`) |
+| Economic corridors | Re-evaluations of the Northern and Central-Western corridors under Industry. | `config/policies.json` |
+| Demography | Population and fertility strip; small fertility effects from family and health policy; enlarged-Kingdom GDP per head after annexation. The headline score stays on pre-war borders. | `engine/src/browser.ts` (`demography()`) |
+| Province map | Every province, coloured by status only. | `ui/src/map.js`, `config/provinces.json`, `scripts/map/` |
+
+None of these changes the macro model in §5: each feeds it through the existing channels (export demand, TFP, risk premium, labour input, reform capacity, FDI signal, approval).
+
