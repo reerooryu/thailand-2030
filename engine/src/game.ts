@@ -29,7 +29,9 @@ export class Game extends BrowserGame {
       const e: any = this.pending[0];
       const opts = e.options.filter((o: any) => !o.unavailable);
       let ok = false;
-      for (const o of opts) { try { this.resolveEvent(e.id, o.id); ok = true; break; } catch { /* locked */ } }
+      // resolveEvent ignores a locked option without throwing, so success is
+      // measured by the event leaving the queue.
+      for (const o of opts) { this.resolveEvent(e.id, o.id); if (!this.pending.includes(e)) { ok = true; break; } }
       if (!ok) throw new Error(`turn blocked: ${e.id} has no answerable option`);
       this.defaulted++;
     }

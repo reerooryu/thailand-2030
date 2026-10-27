@@ -1,7 +1,7 @@
 # Build the game and publish it to GitHub Pages.
 #
 # The built HTML is deliberately NOT in the repository (see .gitignore) — it is
-# a ~250 KB generated artifact rewritten on every build, and keeping it in git
+# a ~0.5 MB generated artifact rewritten on every build, and keeping it in git
 # history serves nobody. So Pages builds it here instead: this workflow is the
 # reason the ignore rule is affordable.
 #

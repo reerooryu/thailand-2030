@@ -5,7 +5,7 @@
 **Config:** `/config/events.json` · **Code:** `/engine/src/events.ts`, `/engine/src/turnloop.ts`
 **Run:** `cd engine && npx tsx src/turnloop.ts` · **Output:** `/TURNLOOP.txt`
 
-**9 events, 25 options.** Three of them are *scripted* — they fire on a fixed quarter regardless of what the player does, because they were already happening.
+**This note covers the first 9 events (25 options)**, written as they went in. The game has grown well past them; `CATALOGUE.md` lists every event and what fires it, generated from the config. Of these first nine, three are *scripted* — they fire on a fixed quarter regardless of what the player does, because they were already happening.
 
 ## The distinction from cards
 

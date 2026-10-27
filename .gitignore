@@ -3,7 +3,7 @@ node_modules/
 
 # ---- generated build output
 # Everything here is reproducible from source with `./build.sh`. The single-file
-# HTML in particular is ~1.9 MB and rewritten on every build, which is not
+# HTML in particular is ~0.5 MB (~2.5 MB with the optional song and photo) and rewritten on every build, which is not
 # something to keep 400 revisions of in git history.
 ui/engine.js
 ui/app.js
@@ -63,3 +63,11 @@ _to_delete/
 # Strategy guides: kept locally, not published
 guides/
 data/map/cache/
+
+# Release snapshots. Built by hand from a working tree; GitHub releases are the
+# place for these, not the history of every clone.
+*.tgz
+
+# Screenshots pasted while tracing the 1941 provinces. The traced result lives
+# in data/map/trace_1941.json; register_reference.py takes a scan as an argument.
+map/
