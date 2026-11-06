@@ -23,10 +23,11 @@ error in them is this repository's, not the source's.
 | **Federal Reserve Bank of Dallas** — index of global real economic activity | The export block's demand driver, alongside US real imports | `config/world_demand.json` |
 | **Stock Exchange of Thailand (SET)** — index history | The SET level the game starts from and tracks | `config/set_history.json` |
 | **Election Commission of Thailand (ECT)** — February 2026 general election result | The 500-seat House, party vote shares, and the 2030 seat projection's calibration | `config/parties.json` |
+| **ECT Form สส.6/1 announcements, OCR-extracted by the election-69-OCR-result project** (<https://github.com/killernay/election-69-OCR-result>) — every candidate's vote in 397 of 400 constituencies, and each district's list vote | The 2030 count, seat by seat, and the election map. The certified national list vote (ECT, as tabulated by Wikipedia) is used for the list tier. Volunteer OCR, not an official ECT publication; the project asks for attribution and for the ECT's documents to be treated as authoritative | `data/election-2569/`, `config/election_2026.json` |
 
 ## What the terms require
 
-The obligations are broadly the same across all eight and none of them is
+The obligations are broadly the same across all of them and none of them is
 onerous, but they are obligations rather than courtesies:
 
 - **Cite the agency as the source** wherever its statistics are reproduced. That

@@ -35,6 +35,7 @@ out = {
   'set': load('set_history.json'),
   'constitution': load('constitution.json'),
   'provinces': load('provinces.json'),
+  'election': load('election_2026.json'),
 }
 os.makedirs('engine/src/gen', exist_ok=True)
 with open('engine/src/gen/data.ts', 'w') as f:

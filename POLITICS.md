@@ -110,3 +110,24 @@ The vote preview in the UI shows the crossbench contribution as its own chip, so
 2. **Portfolio allocation** (DESIGN §9.3), the mechanic that trades agenda control for loyalty.
 3. **Confidence motions and coalition collapse** — the run-ending failure state.
 4. Ideological fit vectors per policy type; currently supplied per bill by hand.
+
+## The 2030 count
+
+The count is run seat by seat on the real February 2026 result (`engine/src/election.ts`, data in `config/election_2026.json`).
+
+**The data.** Every candidate's vote in all 400 constituencies, from the Election Commission's Form สส.6/1 announcements as OCR-extracted by the election-69-OCR-result project, grouped into the game's six parties. "Others" in a constituency is the strongest single small-party candidate, not the sum of them. Three districts missing from the source (Bangkok 15, Prachin Buri 2, Nan 1) are imputed from their provinces, with the certified winner placed first. The list count uses the certified national list vote. At zero swing the count reproduces the 2026 House exactly: 192 / 120 / 74 / 58 / 21 / 35, including the Bhumjaithai seat vacant since.
+
+**The swing.** The term becomes a swing index in seat units, built exactly as before: approval (convex, asymmetric), GDP per head against the IMF baseline, growth against trend, and the record above 60% approval. That index shifts each party's vote, as a proportional (log-share) swing applied to every district:
+
+| | Shift per seat of swing |
+|---|---|
+| Bhumjaithai | `K_SWING` (0.0066) when winning, 55% of it when losing |
+| Partners | 35% of Bhumjaithai's, ± how they were treated; past +60 they lose candidates to the leader |
+| Kla Tham, Others in opposition | lose candidates to the leader past +60 |
+| Opposition when the government loses | gains, most for the parties that attacked it |
+
+The list vote moves at 70% of the constituency vote, and People's keeps 60% of whatever list share a swing would take from it. Bangkok (45%), its suburbs (60%) and the Deep South (60%) move less than the provinces. A few things the government did land regionally: the Northeast railway and village nurses in Isan, the Korat Expo in Korat, the Bangkok lines, a won war or a counterattack in the border provinces, peace or force in the Deep South, the Land Bridge in Chumphon and Ranong.
+
+**The House.** Each constituency goes to whoever leads after the swing. The list is allocated by largest remainder over the real parties and counted as a change on the certified 2026 allocation. A ratified constitution redraws the map first: more list seats take constituencies off the most over-represented provinces, and the block vote merges each province's districts into slates of up to three that the leading party takes whole. Annexed provinces vote for the first time, with seats by the citizens who took citizenship (fewer where dissent is high), taken from the most over-represented provinces so the House stays at 500. A broken machine keeps its list vote and loses most of its constituency gain; party-finance reform takes the edge off the machine parties.
+
+**What it does to results.** Ordinary terms land within a few seats of the old national formula. Landslides no longer hit a 330 ceiling. Instead People's keeps Bangkok and much of the north on its list floor, and Bhumjaithai's ceiling is whatever the provinces give it: about 290 single-member, about 330 with the block vote. The end screen shows the national vote, the two tiers of seats, and a map of every province for 2030, 2026 and the change.

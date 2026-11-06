@@ -947,6 +947,9 @@ export class BrowserGame {
       ceiling: this.debtCeiling,
       machineBroken: this.flags.has('patriot'),
       partySystemReformed: this.flags.has('party_system_reformed'),
+      flags: [...this.flags],
+      annexed: this.flags.has('territory_annexed')
+        ? Object.fromEntries(WAR_PROVINCES.map(p => [p, this.war.fronts[p].dissent])) : undefined,
     });
   }
 

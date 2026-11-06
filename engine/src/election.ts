@@ -6,41 +6,42 @@
  * the government made was dated December 2030, which means it can only ever be
  * judged on that promise by winning again. That tension is the point.
  *
- * The model is deliberately crude, because a polling simulator is not what this
- * game is. But it is calibrated to one hard fact about the February 2026 result:
- * Bhumjaithai took 192 seats on a 17.90% party-list vote and a 29.55%
- * constituency vote. The seats are machine seats, converted at a rate no other
- * party manages, and the swing that produced them was +121 in a single cycle.
+ * The count is run seat by seat on the real February 2026 result: 400
+ * constituencies, every candidate (config/election_2026.json, built from the
+ * ECT's Form สส.6/1 announcements by scripts/build_election.py), and the
+ * certified national party-list vote.
  *
- * That makes the seat count VOLATILE IN BOTH DIRECTIONS. A machine that converts
- * at that rate compounds when the mood is with it — provincial candidates defect
- * toward the winner, local networks consolidate — and collapses when it is not,
- * because there is no 30% national list vote underneath to catch the fall. So
- * the swing here is convex rather than linear: doubling the approval margin more
- * than doubles the seats. People's is the mirror image — 30.56% of the list vote
- * is a floor no bad campaign can take away, and a ceiling the constituencies
- * refuse to let it exceed.
+ *   1. The term becomes a SWING INDEX, in seat units, from the same three things
+ *      as before: approval (convex, and asymmetric — +95 at most, -125 with no
+ *      floor), the economy voters felt (GDP per head against the IMF baseline,
+ *      growth against trend), and the record (potential growth, the SET,
+ *      investment, reform stock), which counts only above 60% approval.
+ *   2. The index becomes a shift in each party's vote. Bhumjaithai moves with
+ *      it in full; partners move with a fraction of it, plus or minus how they
+ *      were treated; when the government loses, the hostile opposition gains
+ *      most. Shifts are proportional (log-share): a party that barely stood in
+ *      a seat cannot gain or lose much there.
+ *   3. A few things the government did land in particular regions: the
+ *      Northeast railway and the Korat Expo in Isan, the Bangkok lines, a won
+ *      war on the border, peace or force in the Deep South. They are small, and
+ *      the national swing does most of the work.
+ *   4. Every constituency goes to whoever leads after the shift. The list seats
+ *      follow the national list vote by largest remainder, counted as a change
+ *      on the certified 2026 allocation so that no swing reproduces 2026.
+ *   5. A ratified constitution changes the map before the count: fewer
+ *      constituencies when list seats rise, multi-member districts of up to
+ *      three seats under block voting, where the party ahead takes the slate.
+ *      Annexed provinces get seats, taken from the most over-represented
+ *      provinces so the House stays at 500.
  *
- * Three inputs move seats:
- *
- *   1. Approval — the national swing, convex in the margin either side of 50%
- *      and deliberately ASYMMETRIC: +95 seats at most, -125 with no floor.
- *      Being liked is not the same as having delivered something, and a machine
- *      with no list vote underneath it falls further than it can ever climb.
- *   2. The economy voters felt — real GDP per head against the IMF baseline and
- *      growth against trend. Not potential growth: nobody votes on TFP.
- *   3. The record — potential growth, the index, the investment rate and the
- *      reform stock, worth up to 60 seats but ONLY above 60% approval. A term
- *      that visibly transformed the country converts; competence without a
- *      mandate converts into nothing at all.
- *   4. Relations — a coalition partner kept warm returns and re-signs; one held
- *      at arm's length for four years takes its seats and its options elsewhere.
- *
- * Seats lost by the government are redistributed to the opposition in proportion
- * to how well-disposed the electorate is to each — approximated by inverse
- * relations, since a party that spent four years attacking you collects the
- * votes of people who agree with the attacks.
+ * Bhumjaithai's machine shows up on its own: it took 173 constituencies on 31%
+ * of the constituency vote and 18% of the list. Many of those seats are narrow,
+ * so they compound with the mood and collapse without it. People's is the
+ * mirror image: a big list vote that no bad campaign takes away, and urban
+ * seats piled up with large majorities.
  */
+
+import { DATA } from './gen/data.js';
 
 export interface ElectionInput {
   seats: Record<string, number>;      // the House AT DISSOLUTION, after any defections
@@ -55,25 +56,27 @@ export interface ElectionInput {
   baseline: number;                   // the IMF projection (IMF_BASELINE_2030 at the count)
   realGrowth: number;                 // annualised over the term, %
   /** The record, for the rare term that is not merely popular but visibly
-   *  transformative. Deliberately gated — see recordBonus below. */
+   *  transformative. Deliberately gated — see the record term below. */
   potentialGrowth?: number;
   setChange?: number;                 // % change in the SET over the term
   invRate?: number;                   // private investment, % of GDP, at the end
   reformStock?: number;
   debtGdp?: number;
   ceiling?: number;
-  /** The provincial organisation stopped working for you — see the
-   *  withdrawal block below. Set by refusing the networks after the
-   *  prosecution service reached your own members. */
+  /** The provincial organisation stopped working for you. Set by refusing the
+   *  networks after the prosecution service reached your own members. */
   machineBroken?: boolean;
   /** Party finance enforced: dues and branches decide the subsidy, branches are
-   *  audited, constituency spending is capped. Shifts conversion away from
-   *  parties that are a name attached to a few dozen families. */
+   *  audited, constituency spending is capped. */
   partySystemReformed?: boolean;
   /** Party-list seats under the constitution in force: 100, or 110/125 after reform. */
   listSeats?: number;
   /** Multi-member, winner-takes-all constituencies: machines win slates. */
   blockVote?: boolean;
+  /** Flags set during the term, for the regional effects. */
+  flags?: string[];
+  /** Annexed 1941 provinces voting in this election, with occupation dissent (%). */
+  annexed?: Record<string, number>;
 }
 
 export interface PartyResult {
@@ -82,11 +85,23 @@ export interface PartyResult {
    *  because that is the election this one is compared to. */
   party: string; origin: number; before: number; after: number; change: number;
   inGov: boolean; willJoin: boolean; reason: string;
+  /** Constituency and list seats in 2030. */
+  cons?: number; list?: number;
+}
+
+/** One province on the election map. */
+export interface ProvinceResult {
+  seats: Record<string, number>;      // constituency seats, 2030
+  seats2026: Record<string, number>;  // constituency seats, 2026 (empty for annexed provinces)
+  share: Record<string, number>;      // constituency vote, % (Others = best small-party candidates)
+  share2026: Record<string, number>;
+  districts: number;                  // districts after any redistricting
+  annexed?: boolean;
 }
 
 export interface ElectionResult {
   results: PartyResult[];
-  swing: number;                      // net government seat change
+  swing: number;                      // the swing index, in seat units
   playerSeats: number;
   bestCoalition: string[] | null;     // largest workable government, or null
   bestSeats: number;
@@ -94,130 +109,278 @@ export interface ElectionResult {
   verdict: 'landslide' | 'returned' | 'hung' | 'defeated';
   headline: string;
   detail: string;
+  /** National vote, %: list and constituency, 2026 and 2030. */
+  vote: { list: Record<string, number>; list2026: Record<string, number>;
+          cons: Record<string, number>; cons2026: Record<string, number> };
+  /** The map: every province, and any annexed one. */
+  provinces: Record<string, ProvinceResult>;
+  system: { constituencies: number; list: number; blockVote: boolean };
 }
 
 const MAJORITY = 251;
 const PLAYER = 'Bhumjaithai';
+export const PARTIES = ['Bhumjaithai', "People's", 'Pheu Thai', 'Kla Tham', 'Democrat', 'Others'];
+const B = 0, OTH = 5;
+
+interface District { p: string; r: string; n: number; e: number; c: number[]; l: number[]; }
+const EL: { districts: District[]; list2026: [string, string, number][];
+            listSeats2026: Record<string, number> } = (DATA as any).election;
+
+/* ---- tuning. Calibrated so typical terms land where the old national model
+   put them; checked by scripts/election_check.ts. */
+/** Log-share shift for Bhumjaithai per seat of swing index. */
+export const K_SWING = 0.0066;
+/** Partners ride a fraction of the government's swing. */
+const PARTNER_RIDE = 0.35;
+/** The list vote is the party brand and moves less than the constituency vote. */
+const LIST_DAMP = 0.7;
+/** When the government loses, the opposition that attacked it gains most. */
+const OPP_GAIN = 0.3;
+/** Losing moves the vote less per seat of swing than winning: the machine's
+ *  heartland holds even when the country turns. (The seats still fall fast,
+ *  because so many of them were narrow.) */
+const DOWN = 0.55;
+/** A realignment: past this much swing the leader starts taking its partners'
+ *  provincial candidates and their voters, as Thai Rak Thai did in 2005. */
+const REALIGN_FROM = 60, REALIGN = 0.5;
+/** People's list vote is ideological. A popular government takes some of it,
+ *  not most: this fraction of what a proportional swing would take is kept. */
+const PEOPLES_CORE = 0.6;
+/** How far each region moves with the national swing. Bangkok and its
+ *  suburbs vote on ideas and a machine cannot recruit candidates there; the
+ *  Deep South votes on identity and on peace. The provinces move in full. */
+const ELASTIC: Record<string, number> = { bangkok: 0.45, vicinity: 0.6, deepsouth: 0.6 };
+
+/** Regional effects of things the government did, as log-share shifts. */
+const REGIONAL: { flags: string[]; any?: boolean; regions?: string[]; provinces?: string[];
+                  party?: number; d: number }[] = [
+  // The railway to Nong Khai, and the expo four weeks before the vote.
+  { flags: ['hsr_ne_phase2_committed'], regions: ['northeast'], d: 0.06 },
+  { flags: ['korat_expo_open'], provinces: ['nma'], d: 0.08 },
+  { flags: ['village_nurse'], regions: ['northeast', 'north'], d: 0.03 },
+  // Ribbons in Bangkok: worth something, in a city that votes on other things.
+  { flags: ['orange_line_west_open', 'purple_line_south_open'], any: true, regions: ['bangkok', 'vicinity'], d: 0.04 },
+  // The border provinces: a war won, or a counterattack that reached them.
+  { flags: ['war_won'], provinces: ['skw', 'brm', 'srn', 'ssk', 'ubn', 'cti', 'trt'], d: 0.10 },
+  { flags: ['war_counterattack'], provinces: ['skw', 'brm', 'srn', 'ssk', 'ubn', 'cti', 'trt'], d: -0.08 },
+  // The Deep South votes on peace. Force sends it to the Malay-Muslim parties.
+  { flags: ['deep_south_peace'], regions: ['deepsouth'], d: 0.10 },
+  { flags: ['deep_south_dialogue'], regions: ['deepsouth'], d: 0.05 },
+  { flags: ['deep_south_security'], regions: ['deepsouth'], d: -0.08 },
+  { flags: ['deep_south_security'], regions: ['deepsouth'], party: OTH, d: 0.10 },
+  // The Land Bridge's two provinces, either way.
+  { flags: ['land_bridge_live'], provinces: ['cpn', 'rng'], d: 0.04 },
+];
+
+/** The 1941 provinces, if annexed: population and a starting vote. Residents
+ *  vote once they take citizenship; uptake falls with dissent. */
+const ANNEXED: Record<string, { pop: number; vote: number[] }> = {
+  //                        BJT   PPL   PT    KT    DEM   OTH (local lists)
+  phra_tabong:       { pop: 1.10e6, vote: [0.40, 0.06, 0.13, 0.09, 0.04, 0.28] },
+  phibunsongkhram:   { pop: 1.40e6, vote: [0.40, 0.05, 0.13, 0.10, 0.04, 0.28] },
+  nakhon_champassak: { pop: 0.30e6, vote: [0.42, 0.04, 0.12, 0.10, 0.04, 0.28] },
+};
 
 export function runElection(e: ElectionInput): ElectionResult {
   const gov = new Set(e.coalition);
+  const flags = new Set(e.flags ?? []);
 
-  // --- the swing, in seats, against the government as a whole. Convex in the
-  //     approval margin: the 2026 cycle moved 121 seats, so a government that is
-  //     genuinely popular should be able to approach 250 on its own, and one that
-  //     is genuinely hated should lose the machine outright.
+  // --- 1. the swing index, in seats, as the national model always had it.
   const margin = e.approval - 50;
-  // Asymmetric on purpose: popularity alone caps out around 95 seats, because
-  // being liked is not the same as having delivered something. Collapse has no
-  // such limit — a machine with no list vote underneath it falls all the way.
   const approvalSwing = clamp(Math.sign(margin) * Math.pow(Math.abs(margin), 1.34) * 1.9, -125, 95);
   const economySwing = clamp((e.headline - e.baseline) / 10, -30, 30)
                      + clamp((e.realGrowth - 2.4) * 9, -25, 25);
-
-  // --- the record. Structural reform normally earns nothing at the ballot box:
-  //     nobody votes on total factor productivity, and the whole tragedy of the
-  //     Legacy score is that it matures after the count. But there is a case
-  //     where it converts, and it is the case where the country can SEE it — a
-  //     visible boom, investment turning, the index running, and a government
-  //     popular enough to be given credit for all of it rather than blamed for
-  //     the debt. That is not a normal Thai term. It is Thai Rak Thai in 2005,
-  //     and it is worth a supermajority. Gated behind 60% approval, because
-  //     competence without a mandate converts into nothing at all.
+  // The record converts only when the country can see it and the government
+  // is popular enough to be credited with it rather than blamed for the debt.
   const record =
     (e.approval < 60) ? 0 :
-    clamp((( (e.potentialGrowth ?? 2.1) - 2.4) * 22)      // above-trend capacity
-        + (clamp(e.setChange ?? 0, 0, 80) * 0.28)          // a market people watched
-        + (((e.invRate ?? 18) - 18.0) * 7)                 // investment they can see
-        + (((e.reformStock ?? 0) - 40) * 0.22)             // a legislative record
+    clamp((((e.potentialGrowth ?? 2.1) - 2.4) * 22)
+        + (clamp(e.setChange ?? 0, 0, 80) * 0.28)
+        + (((e.invRate ?? 18) - 18.0) * 7)
+        + (((e.reformStock ?? 0) - 40) * 0.22)
         , 0, 60) * Math.min(1, (e.approval - 55) / 20);
+  const S = approvalSwing + economySwing + record;
 
-  const totalSwing = Math.round(approvalSwing + economySwing + record);
-
-  // --- The seats have to come from somewhere. A landslide is bounded by what
-  //     the opposition can actually surrender before hitting its own floors, so
-  //     the pool is computed first and then shared out. A large positive swing
-  //     is a REALIGNMENT: the leading party cannibalises its own partners as
-  //     provincial candidates move toward the winner, which is exactly how
-  //     Bhumjaithai took 121 seats in 2026 and how Thai Rak Thai took 2005.
-  const govParties = Object.keys(e.seats).filter(p => gov.has(p));
-  const oppParties = Object.keys(e.seats).filter(p => !gov.has(p));
-  const govSeats = govParties.reduce((a, p) => a + e.seats[p], 0);
-
-  const headroom = (p: string, up: boolean) => {
-    const b = BOUNDS[p] ?? [5, 250];
-    return up ? b[1] - e.seats[p] : e.seats[p] - b[0];
+  // --- 2. the shift in each party's vote (log-share).
+  const shift = PARTIES.map((p, i) => {
+    if (i === B) return K_SWING * S * (S < 0 ? DOWN : 1);
+    const op = e.opinion[p] ?? 50;
+    if (gov.has(p)) return K_SWING * S * PARTNER_RIDE + clamp((op - 50) * 0.004, -0.2, 0.1)
+      - K_SWING * Math.max(0, S - REALIGN_FROM) * REALIGN;
+    if (S < 0) return -K_SWING * DOWN * S * OPP_GAIN * (1 + (60 - op) / 100);
+    // Opposition machines lose candidates to the winner in a realignment too.
+    // People's and the Democrats are parties of ideas and members, and do not.
+    return (p === 'Kla Tham' || p === 'Others') ? -K_SWING * Math.max(0, S - REALIGN_FROM) * REALIGN : 0;
+  });
+  const consShift = [...shift];
+  // The machine withdrawn: Bhumjaithai keeps its list vote but most of the
+  // constituency gain above 2026 evaporates, and its provincial members take
+  // their networks to the machine parties that can absorb them.
+  if (e.machineBroken) {
+    consShift[B] = (consShift[B] > 0 ? consShift[B] * 0.4 : consShift[B]) - 0.45;
+    consShift[3] += 0.2; consShift[OTH] += 0.2;
+  }
+  // Party finance enforced: machines lose their edge in the constituencies,
+  // parties with members and a national vote gain.
+  if (e.partySystemReformed) {
+    consShift[3] -= 0.15; consShift[OTH] -= 0.15;
+    for (const i of [1, 2, 4]) consShift[i] += 0.04;
+  }
+  const regional = (d: { p: string; r: string }) => {
+    const out = [0, 0, 0, 0, 0, 0];
+    for (const R of REGIONAL) {
+      const on = R.any ? R.flags.some(f => flags.has(f)) : R.flags.every(f => flags.has(f));
+      if (!on) continue;
+      if (R.regions && !R.regions.includes(d.r)) continue;
+      if (R.provinces && !R.provinces.includes(d.p)) continue;
+      out[R.party ?? B] += R.d;
+    }
+    return out;
+  };
+  const swung = (votes: number[], sh: number[], reg: number[], el = 1) => {
+    const tot = votes.reduce((a, v) => a + v, 0) || 1;
+    const w = votes.map((v, i) => v * Math.exp(sh[i] * el + reg[i]));
+    const wt = w.reduce((a, v) => a + v, 0) || 1;
+    return w.map(v => v / wt * tot);
   };
 
-  const results: PartyResult[] = [];
-  const up = totalSwing >= 0;
-  // what the other side can physically give up
-  const donors = up ? oppParties : govParties;
-  const pool = Math.min(Math.abs(totalSwing),
-    donors.reduce((a, p) => a + headroom(p, false), 0)
-    // in a realignment the leader's own partners are donors too
-    + (up ? govParties.filter(p => p !== PLAYER).reduce((a, p) => a + headroom(p, false), 0) * 0.5 : 0));
-
-  // how concentrated the result is on the leading party: proportional in a
-  // normal cycle, overwhelmingly the leader in a landslide or a wipeout
-  // A realignment has to be earned, not merely enjoyed. On the way up the
-  // leader only starts absorbing everyone else once the swing passes about
-  // sixty seats — which popularity alone cannot reach without the record term
-  // behind it. On the way down there is no such threshold: collapse concentrates
-  // immediately.
-  const intensity = totalSwing >= 0
-    ? clamp((totalSwing - 60) / 120, 0, 1)
-    : Math.min(1, -totalSwing / 130);
-  const leadBase = 0.55 + 0.45 * (e.seats[PLAYER] / govSeats);
-  // Above about three-quarters intensity the leader's share exceeds one: it is
-  // taking seats from its own coalition as well as from the opposition, which is
-  // what a realignment actually looks like on the ground.
-  const leadShare = leadBase + (1.32 - leadBase) * intensity;
-
-  const winners = up ? govParties : oppParties;
-  const losers = up ? oppParties : govParties;
-
-  // winners: the player takes leadShare of the pool where the player is winning
-  const wShares: Record<string, number> = {};
-  if (winners.includes(PLAYER)) {
-    wShares[PLAYER] = leadShare;
-    const rest = winners.filter(p => p !== PLAYER);
-    const restSeats = rest.reduce((a, p) => a + e.seats[p], 0) || 1;
-    for (const p of rest) wShares[p] = (1 - leadShare) * (e.seats[p] / restSeats);
-  } else {
-    // the player is losing: the opposition splits the spoils weighted by how
-    // hostile it was, since the party that made the case collects the votes
-    const w = winners.map(p => [p, e.seats[p] * (1 + (60 - (e.opinion[p] ?? 50)) / 100)] as const);
-    const wsum = w.reduce((a, x) => a + x[1], 0) || 1;
-    for (const [p, v] of w) wShares[p] = v / wsum;
+  // --- 3. the districts, swung. Annexed provinces join with synthetic votes.
+  type D = { p: string; r: string; n: number; e: number; c: number[]; c26: number[]; annexed?: boolean };
+  const ds: D[] = EL.districts.map(d => ({ p: d.p, r: d.r, n: d.n, e: d.e, c26: d.c,
+    c: swung(d.c, consShift, regional(d), ELASTIC[d.r] ?? 1) }));
+  const PER_SEAT = EL.districts.reduce((a, d) => a + d.e, 0) / EL.districts.length;
+  const annexList = [0, 0, 0, 0, 0, 0];
+  for (const [id, dissent] of Object.entries(e.annexed ?? {})) {
+    const A = ANNEXED[id]; if (!A) continue;
+    const uptake = clamp(0.55 + (flags.has('integration_hastened') ? 0.1 : 0)
+                       + (flags.has('migrant_dividend') ? 0.05 : 0) - dissent / 100, 0.2, 0.8);
+    const elig = A.pop * 0.62 * uptake;
+    const seats = Math.max(1, Math.round(elig / PER_SEAT));
+    const v = A.vote.map((x, i) => i === OTH ? x + dissent / 100 : x);
+    const turnout = elig * 0.65;
+    for (let n = 1; n <= seats; n++) {
+      const base = v.map(x => x * turnout / seats);
+      ds.push({ p: id, r: 'annexed', n, e: elig / seats, c26: [0, 0, 0, 0, 0, 0],
+                c: swung(base, consShift, [0, 0, 0, 0, 0, 0]), annexed: true });
+    }
+    v.forEach((x, i) => { annexList[i] += x * turnout; });
   }
 
-  // losers give up in proportion to their room above the floor, so nobody is
-  // asked for seats they do not have
-  const lRoom = losers.map(p => [p, Math.max(0, headroom(p, false))] as const);
-  const lsum = lRoom.reduce((a, x) => a + x[1], 0) || 1;
-
-  for (const p of Object.keys(e.seats)) {
-    const before = e.seats[p];
-    let delta = winners.includes(p) ? pool * (wShares[p] ?? 0)
-                                    : -pool * ((lRoom.find(x => x[0] === p)?.[1] ?? 0) / lsum);
-    // a partner held in contempt for four years underperforms on its own account
-    if (p !== PLAYER && gov.has(p)) delta += clamp((e.opinion[p] - 50) * 0.3, -14, 10);
-    const after = bound(p, before + delta);
-    results.push({ party: p, origin: (e.seatsAt2026 ?? e.seats)[p] ?? before,
-                   before, after, change: after - ((e.seatsAt2026 ?? e.seats)[p] ?? before),
-                   inGov: gov.has(p), willJoin: false, reason: '' });
+  // --- 4. the map the count is fought on. Constituencies: 500 minus the list.
+  const L = e.listSeats ?? 100;
+  const C = 500 - L;
+  const byProv = new Map<string, D[]>();
+  for (const d of ds) { if (!byProv.has(d.p)) byProv.set(d.p, []); byProv.get(d.p)!.push(d); }
+  const elig = new Map([...byProv].map(([p, list]) => [p, list.reduce((a, d) => a + d.e, 0)]));
+  const target = new Map([...byProv].map(([p, list]) => [p, list.length]));
+  // Seats come off the most over-represented province, one at a time.
+  let total = [...target.values()].reduce((a, v) => a + v, 0);
+  while (total > C) {
+    let best = '', bestV = Infinity;
+    for (const [p, m] of target) {
+      if (m < 2) continue;
+      const v = elig.get(p)! / (m - 1);
+      if (v < bestV) { bestV = v; best = p; }
+    }
+    if (!best) break;
+    target.set(best, target.get(best)! - 1); total--;
+  }
+  const consSeats = [0, 0, 0, 0, 0, 0];
+  const provinces: Record<string, ProvinceResult> = {};
+  for (const [p, list] of byProv) {
+    list.sort((a, b) => a.n - b.n);
+    const m = target.get(p)!;
+    // Block vote: districts of up to three seats. Otherwise single seats.
+    const groups = e.blockVote ? Math.ceil(m / 3) : m;
+    const seatsIn = (g: number) => Math.floor(m / groups) + (g < m % groups ? 1 : 0);
+    const seats = [0, 0, 0, 0, 0, 0], seats26 = [0, 0, 0, 0, 0, 0];
+    const sum = [0, 0, 0, 0, 0, 0], sum26 = [0, 0, 0, 0, 0, 0];
+    for (const d of list) {
+      d.c.forEach((v, i) => { sum[i] += v; });
+      d.c26.forEach((v, i) => { sum26[i] += v; });
+      if (!d.annexed) seats26[argmax(d.c26)]++;
+    }
+    if (groups === list.length) {
+      for (const d of list) seats[argmax(d.c)]++;
+    } else {
+      // consecutive districts, merged as evenly as the numbers allow
+      let k = 0;
+      for (let g = 0; g < groups; g++) {
+        const take = Math.floor(list.length / groups) + (g < list.length % groups ? 1 : 0);
+        const v = [0, 0, 0, 0, 0, 0];
+        for (const d of list.slice(k, k + take)) d.c.forEach((x, i) => { v[i] += x; });
+        k += take;
+        seats[argmax(v)] += seatsIn(g);
+      }
+    }
+    seats.forEach((v, i) => { consSeats[i] += v; });
+    const rec = (a: number[]) => Object.fromEntries(PARTIES.map((q, i) => [q, a[i]]));
+    const pct = (a: number[]) => { const t = a.reduce((x, y) => x + y, 0) || 1;
+      return Object.fromEntries(PARTIES.map((q, i) => [q, Math.round(a[i] / t * 1000) / 10])); };
+    provinces[p] = { seats: rec(seats), seats2026: rec(seats26), share: pct(sum), share2026: pct(sum26),
+                     districts: groups, ...(list[0].annexed ? { annexed: true } : {}) };
   }
 
-  // --- who will actually sign. This is the renegotiation: four years of
-  //     relations decide which doors are open, and a government can win the
-  //     election and still fail to form.
+  // --- 5. the list: national, largest remainder over the real parties.
+  const listShift = shift.map(v => v * LIST_DAMP);
+  const parties26 = EL.list2026.map(([b, , v]) => [PARTIES.indexOf(b), v] as const);
+  // annexed voters' list votes, shared among the parties of each bucket
+  const bucketTot = PARTIES.map((_, i) => parties26.filter(x => x[0] === i).reduce((a, x) => a + x[1], 0));
+  let withAnnex = parties26.map(([i, v]) =>
+    [i, (v + annexList[i] * v / (bucketTot[i] || 1)) * Math.exp(listShift[i])] as const);
+  {
+    // People's keeps PEOPLES_CORE of whatever share the swing took from it.
+    const tot = (rows: readonly (readonly [number, number])[], f = (_: number) => true) =>
+      rows.filter(r => f(r[0])).reduce((a, r) => a + r[1], 0);
+    const T = tot(withAnnex), s26 = tot(parties26, i => i === 1) / tot(parties26), s30 = tot(withAnnex, i => i === 1) / T;
+    if (s30 < s26) {
+      const want = s26 - (s26 - s30) * (1 - PEOPLES_CORE);
+      const kP = want / s30, kO = (1 - want) / (1 - s30);
+      withAnnex = withAnnex.map(([i, v]) => [i, v * (i === 1 ? kP : kO)] as const);
+    }
+  }
+  const lr = (rows: readonly (readonly [number, number])[], n: number) => {
+    const tot = rows.reduce((a, r) => a + r[1], 0);
+    const q = rows.map(r => r[1] / tot * n);
+    const s = q.map(Math.floor);
+    let left = n - s.reduce((a, v) => a + v, 0);
+    const order = q.map((v, i) => [v - Math.floor(v), i] as const).sort((a, b) => b[0] - a[0]);
+    for (const [, i] of order) { if (left-- <= 0) break; s[i]++; }
+    const out = [0, 0, 0, 0, 0, 0];
+    rows.forEach((r, i) => { out[r[0]] += s[i]; });
+    return out;
+  };
+  const lr26 = lr(parties26, 100), lr30 = lr(withAnnex, L);
+  const listSeats = PARTIES.map((p, i) => Math.max(0, (EL.listSeats2026[p] ?? 0) + lr30[i] - lr26[i]));
+  // a party floored at zero hands its overflow back to the largest
+  let over = listSeats.reduce((a, v) => a + v, 0) - L;
+  while (over > 0) { const i = argmax(listSeats); listSeats[i]--; over--; }
+  while (over < 0) { const i = argmax(lr30); listSeats[i]++; over++; }
+
+  const pctOf = (a: number[]) => { const t = a.reduce((x, y) => x + y, 0) || 1;
+    return Object.fromEntries(PARTIES.map((q, i) => [q, Math.round(a[i] / t * 1000) / 10])); };
+  const sumBy = (rows: readonly (readonly [number, number])[]) => {
+    const o = [0, 0, 0, 0, 0, 0]; rows.forEach(([i, v]) => { o[i] += v; }); return o; };
+  const consVotes = [0, 0, 0, 0, 0, 0], consVotes26 = [0, 0, 0, 0, 0, 0];
+  for (const d of ds) { d.c.forEach((v, i) => { consVotes[i] += v; }); d.c26.forEach((v, i) => { consVotes26[i] += v; }); }
+
+  // --- 6. the House.
+  const results: PartyResult[] = PARTIES.map((p, i) => {
+    const before = e.seats[p] ?? 0;
+    const origin = (e.seatsAt2026 ?? e.seats)[p] ?? before;
+    const after = consSeats[i] + listSeats[i];
+    return { party: p, origin, before, after, change: after - origin, inGov: gov.has(p),
+             willJoin: false, reason: '', cons: consSeats[i], list: listSeats[i] };
+  });
+
+  // --- who will actually sign. Four years of relations decide which doors are
+  //     open, and a government can win the election and still fail to form.
   for (const r of results) {
     const op = r.party === PLAYER ? 100 : (e.opinion[r.party] ?? 0);
     if (r.party === PLAYER) { r.willJoin = true; r.reason = 'your party'; continue; }
     if (r.party === "People's") {
       r.willJoin = op >= 75;
-      r.reason = op >= 75 ? 'would consider it'
-                          : 'will never sit with you';
+      r.reason = op >= 75 ? 'would consider it' : 'will never sit with you';
       continue;
     }
     if (op >= 55) { r.willJoin = true; r.reason = 'signs without conditions'; }
@@ -225,171 +388,10 @@ export function runElection(e: ElectionInput): ElectionResult {
     else if (op >= 31) { r.willJoin = false; r.reason = 'talks, but will not commit'; }
     else { r.willJoin = false; r.reason = 'refuses outright'; }
   }
-
-  // Bounding breaks the arithmetic. Restore it by distributing the residual in
-  // proportion to each party's remaining headroom, which keeps the result
-  // monotonic in the swing — a bigger win must never return fewer seats.
-  {
-    let residual = 500 - results.reduce((a, r) => a + r.after, 0);
-    for (let pass = 0; pass < 6 && residual !== 0; pass++) {
-      const room = results.map(r => {
-        const b = BOUNDS[r.party] ?? [5, 250];
-        return residual > 0 ? b[1] - r.after : r.after - b[0];
-      });
-      const roomSum = room.reduce((a, v) => a + v, 0);
-      if (roomSum <= 0) break;
-      let placed = 0;
-      results.forEach((r, i) => {
-        if (i === results.length - 1) { r.after += residual - placed; placed = residual; return; }
-        const take = Math.trunc(residual * (room[i] / roomSum));
-        r.after += take; placed += take;
-      });
-      results.forEach(r => {
-        r.after = bound(r.party, r.after);
-        r.change = r.after - r.origin;
-      });
-      residual = 500 - results.reduce((a, r) => a + r.after, 0);
-    }
-    // final exactness: a House of 500 must seat 500, so walk the last few seats
-    // onto (or off) whichever parties still have room, largest first.
-    let guard = 0;
-    while (residual !== 0 && guard++ < 600) {
-      const order = [...results].sort((x, y) => y.after - x.after);
-      let moved2 = false;
-      for (const r of order) {
-        const b2 = BOUNDS[r.party] ?? [5, 250];
-        if (residual > 0 && r.after < b2[1]) { r.after++; residual--; moved2 = true; }
-        else if (residual < 0 && r.after > b2[0]) { r.after--; residual++; moved2 = true; }
-        if (residual === 0) break;
-      }
-      if (!moved2) break;
-    }
-    results.forEach(r => { r.change = r.after - r.origin; });
-  }
-
-  // ---- the machine, withdrawn.
-  // A government that let the prosecutions reach its own provincial members does
-  // not lose its vote. It loses the CONVERSION — Bhumjaithai's constituency
-  // yield has always run far above its list share, and the gap between the two
-  // is precisely the organisation now declining to work. So the 2026 base
-  // survives, most of the gain above it evaporates, and a bloc of members leaves
-  // outright. Softened once the defection waves landed: members now leave DURING
-  // the term and the outgoing House already reflects it, so charging the full
-  // original penalty here as well was billing twice for one withdrawal. What
-  // remains still has to be strong, and the reason is the payoff event: a
-  // government that faces the networks down finishes MORE popular, not less,
-  // and popularity is the largest term in the swing. Without a hard multiplier
-  // here the whole sequence reads as a reward — votes it cannot convert is
-  // exactly the point, and conversion is what this number is. Everything above this line
-  // is scored on the record; this is scored on who was still willing to deliver.
-  if (e.machineBroken) {
-    const me = results.find(r => r.party === PLAYER)!;
-    const base = e.seats[PLAYER] ?? 191;
-    const bound = BOUNDS[PLAYER] ?? [55, 330];
-    const kept = Math.max(bound[0], Math.round(base + Math.max(0, me.after - base) * 0.40) - 14);
-    const lost = me.after - kept;
-    if (lost > 0) {
-      me.after = kept;
-      // The seats do not vanish from the House — they go to the rivals best able
-      // to absorb a defecting provincial network, in proportion to their size.
-      const rivals = results.filter(r => r.party !== PLAYER);
-      const weight = (r: typeof rivals[number]) =>
-        r.after * (r.party === 'Kla Tham' || r.party === 'Others' ? 2.5 : 1);
-      const totalW = rivals.reduce((a, r) => a + weight(r), 0) || 1;
-      let handed = 0;
-      for (const r of rivals) {
-        const b = BOUNDS[r.party] ?? [5, 250];
-        const take = Math.min(Math.round(lost * weight(r) / totalW), b[1] - r.after);
-        r.after += take; handed += take;
-      }
-      // rounding remainder, wherever there is still room
-      for (const r of rivals) {
-        if (handed >= lost) break;
-        const b = BOUNDS[r.party] ?? [5, 250];
-        const take = Math.min(lost - handed, b[1] - r.after);
-        r.after += take; handed += take;
-      }
-    }
-    results.forEach(r => { r.change = r.after - r.origin; });
-  }
-
-  // ---- the machines, defunded.
-  // A big house delivers votes without members and without branches, so a
-  // subsidy that actually weights members and branches starves it while paying
-  // parties that are organisations. Applied to the two parties whose seats are
-  // overwhelmingly constituency conversions, and handed to the three that carry
-  // a national list vote. Bhumjaithai is deliberately exempt: this card can only
-  // be reached by a government whose own machine has already withdrawn, and
-  // charging it twice for the same conversion would be double-counting.
-  if (e.partySystemReformed) {
-    const MACHINES = ['Kla Tham', 'Others'];
-    const NATIONAL = ["People's", 'Democrat', 'Pheu Thai'];
-    let pool = 0;
-    for (const p of MACHINES) {
-      const r = results.find(x => x.party === p); if (!r) continue;
-      const floor = (BOUNDS[p] ?? [5, 250])[0];
-      const take = Math.round(Math.max(0, r.after - floor) * 0.20);
-      r.after -= take; pool += take;
-    }
-    const recipients = NATIONAL.map(p => results.find(x => x.party === p)).filter(Boolean) as PartyResult[];
-    const weight = recipients.reduce((a, r) => a + r.after, 0) || 1;
-    let handed = 0;
-    for (const r of recipients) {
-      const cap = (BOUNDS[r.party] ?? [5, 250])[1];
-      const give = Math.min(Math.round(pool * r.after / weight), cap - r.after);
-      r.after += give; handed += give;
-    }
-    for (const r of recipients) {
-      if (handed >= pool) break;
-      const cap = (BOUNDS[r.party] ?? [5, 250])[1];
-      const give = Math.min(pool - handed, cap - r.after);
-      r.after += give; handed += give;
-    }
-    results.forEach(r => { r.change = r.after - r.origin; });
-  }
-
-  // A new constitution moving constituencies to the list. Constituency seats
-  // are where machines win; list seats follow the national vote.
-  const moved = Math.max(0, (e.listSeats ?? 100) - 100);
-  if (moved) {
-    const take: Record<string, number> = { Bhumjaithai: 0.5, 'Kla Tham': 0.3, Others: 0.2 };
-    const give: Record<string, number> = { "People's": 0.55, 'Pheu Thai': 0.3, Democrat: 0.15 };
-    let taken = 0;
-    for (const [p, f] of Object.entries(take)) {
-      const r = results.find(x => x.party === p); if (!r) continue;
-      const n = Math.min(Math.round(moved * f), Math.max(0, r.after - 5));
-      r.after -= n; taken += n;
-    }
-    let given = 0;
-    const gs = Object.entries(give);
-    gs.forEach(([p, f], i) => {
-      const r = results.find(x => x.party === p); if (!r) return;
-      const n = i === gs.length - 1 ? taken - given : Math.round(taken * f);
-      r.after += n; given += n;
-    });
-    results.forEach(r => { r.change = r.after - r.origin; });
-  }
-
-  // Block voting: slates of three, winner takes all. The machine parties sweep
-  // whole districts; list-strong urban parties lose the seats they won narrowly.
-  if (e.blockVote) {
-    const take: [string, number][] = [["People's", 0.6], ['Democrat', 0.25], ['Pheu Thai', 0.15]];
-    const give: [string, number][] = [['Bhumjaithai', 0.65], ['Kla Tham', 0.35]];
-    const MOVE = 20;
-    let taken = 0;
-    for (const [p, f] of take) {
-      const r = results.find(x => x.party === p); if (!r) continue;
-      const n = Math.min(Math.round(MOVE * f), Math.max(0, r.after - 5));
-      r.after -= n; taken += n;
-    }
-    let given = 0;
-    give.forEach(([p, f], i) => {
-      const r = results.find(x => x.party === p); if (!r) return;
-      const n = i === give.length - 1 ? taken - given : Math.round(taken * f);
-      r.after += n; given += n;
-    });
-    results.forEach(r => { r.change = r.after - r.origin; });
-  }
+  const totalSwing = Math.round(S);
+  const vote = { list: pctOf(sumBy(withAnnex)), list2026: pctOf(sumBy(parties26)),
+                 cons: pctOf(consVotes), cons2026: pctOf(consVotes26) };
+  const system = { constituencies: C, list: L, blockVote: !!e.blockVote };
 
   results.sort((a, b) => b.after - a.after);
   const playerSeats = results.find(r => r.party === PLAYER)!.after;
@@ -398,16 +400,16 @@ export function runElection(e: ElectionInput): ElectionResult {
 
   // greedy: take the largest willing partners until the line is crossed
   const bloc = [PLAYER];
-  let total = playerSeats;
+  let govTotal = playerSeats;
   for (const w of willing) {
-    if (total >= MAJORITY) break;
-    bloc.push(w.party); total += w.after;
+    if (govTotal >= MAJORITY) break;
+    bloc.push(w.party); govTotal += w.after;
   }
-  const formed = total >= MAJORITY;
+  const formed = govTotal >= MAJORITY;
 
   const verdict: ElectionResult['verdict'] =
     !formed ? (playerSeats < ((e.seatsAt2026 ?? e.seats)[PLAYER] ?? 191) - 30 ? 'defeated' : 'hung')
-    : total >= 315 || playerSeats >= MAJORITY ? 'landslide' : 'returned';
+    : govTotal >= 315 || playerSeats >= MAJORITY ? 'landslide' : 'returned';
   const historic = playerSeats >= 300;
 
   const swingSeats = playerSeats - ((e.seatsAt2026 ?? e.seats)[PLAYER] ?? 191);
@@ -431,12 +433,12 @@ export function runElection(e: ElectionInput): ElectionResult {
         `optional. The December 2030 promise falls inside your new term.`
     : verdict === 'landslide'
       ? `Bhumjaithai takes ${playerSeats} seats, ${fmtSigned(swingSeats)} on 2026; the coalition ` +
-        `holds ${total}. A stronger second term, with the December 2030 promise now inside it.`
+        `holds ${govTotal}. A stronger second term, with the December 2030 promise now inside it.`
     : verdict === 'returned' && swingSeats < -10
       ? `Bhumjaithai loses ${-swingSeats} seats, down to ${playerSeats}. ` +
-        `${bloc.slice(1).join(' and ')} still sign — ${total} between them. You govern on their terms now.`
+        `${bloc.slice(1).join(' and ')} still sign — ${govTotal} between them. You govern on their terms now.`
     : verdict === 'returned'
-      ? `Bhumjaithai returns with ${playerSeats} seats (${fmtSigned(swingSeats)}) and builds ${total} ` +
+      ? `Bhumjaithai returns with ${playerSeats} seats (${fmtSigned(swingSeats)}) and builds ${govTotal} ` +
         `with ${bloc.slice(1).join(' and ')}. Workable. You answer for the 2030 promise yourself.`
     : verdict === 'hung'
       ? `Bhumjaithai is the largest party at ${playerSeats} seats and cannot form a government. ` +
@@ -445,30 +447,9 @@ export function runElection(e: ElectionInput): ElectionResult {
         `Whoever comes next answers for the February 2026 promise.`;
 
   return { results, swing: totalSwing, playerSeats, bestCoalition: formed ? bloc : null,
-           bestSeats: total, majority: MAJORITY, verdict, headline, detail };
+           bestSeats: govTotal, majority: MAJORITY, verdict, headline, detail, vote, provinces, system };
 }
 
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
-
-/** Floors and ceilings taken from the structure of the February 2026 vote, not
- *  from its seat totals. A party with a large party-list vote has a floor that
- *  survives a bad campaign — People's polled 30.56% on the list, the largest of
- *  any party, and cannot realistically fall below about ninety seats. A party
- *  whose seats are constituency conversions has almost no floor and a high
- *  ceiling: Bhumjaithai's 17.90% list vote guarantees it very little, and its
- *  machine can take it most of the way to a majority alone. */
-const BOUNDS: Record<string, [number, number]> = {
-  Bhumjaithai: [55, 330],   // 29.55% constituency, 17.90% list — volatile both ways.
-                            // The ceiling is Thai Rak Thai's 377 in 2005, discounted:
-                            // a machine having a historic night can go most of the way.
-  "People's":  [70, 205],   // 30.56% list is a floor; constituencies are the ceiling
-  'Pheu Thai': [22, 165],   // a machine in decline, but still a machine
-  'Kla Tham':  [12, 130],
-  Democrat:    [6, 70],
-  Others:      [14, 90],
-};
-const bound = (party: string, seats: number) => {
-  const b = BOUNDS[party] ?? [5, 250];
-  return Math.max(b[0], Math.min(b[1], Math.round(seats)));
-};
+const argmax = (a: number[]) => a.reduce((b, v, i) => (v > a[b] ? i : b), 0);
 const fmtSigned = (v: number) => (v >= 0 ? `+${v}` : `${v}`);

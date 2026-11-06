@@ -1,7 +1,7 @@
 import { renderConstitutionFinal } from './constitution.js';
 import { $, COALITIONS, el, fmt, g, tile } from './core.js';
 import { ratingLabel } from './dashboard.js';
-import { renderMapInto } from './map.js';
+import { renderMapInto, renderElectionMap } from './map.js';
 import { ENDING_THEMES } from './music.js';
 import { seatPositions } from './parliament.js';
 import { renderHome } from './home.js';
@@ -62,6 +62,12 @@ export function showEnd(walked, snap = false) {
         </tr>`).join('')}
       </table>
       ${electionParliament(elec)}
+      ${electionVote(elec)}
+      <div class="el-mapbox">
+        <div class="end-map-h"><span>The count, province by province</span>
+          <span class="el-map-tg"><button data-m="2030" class="on">2030</button><button data-m="2026">2026</button><button data-m="change">Change</button></span></div>
+        <div id="el-map"></div>
+      </div>
       <div class="el-foot">${elec.bestCoalition
         ? `<b>${elec.bestSeats}</b> seats · ${elec.bestCoalition.join(' + ')} · 251 needed`
         : `<b>No workable majority.</b> 251 needed and every door to it is closed.`}</div>
@@ -172,6 +178,13 @@ export function showEnd(walked, snap = false) {
     <button id="again" class="primary">Play again</button>`;
   $('#again').onclick = () => renderHome();
   renderMapInto($('#end-map'), 'provinces');
+  if (elec) {
+    renderElectionMap($('#el-map'), elec, '2030');
+    w.querySelectorAll('.el-map-tg button').forEach(b => b.onclick = () => {
+      w.querySelectorAll('.el-map-tg button').forEach(x => x.classList.toggle('on', x === b));
+      renderElectionMap($('#el-map'), elec, b.dataset.m);
+    });
+  }
   w.querySelectorAll('.end-map-tg button').forEach(b => b.onclick = () => {
     w.querySelectorAll('.end-map-tg button').forEach(x => x.classList.toggle('on', x === b));
     renderMapInto($('#end-map'), b.dataset.m);
@@ -528,6 +541,27 @@ export function verdictClose(g, s, gov, elec) {
   return 'The term is over. What it was worth depends on numbers still moving.';
 }
 
+
+/** The national vote behind the seats: list and constituency, 2026 and 2030,
+ *  and how the seats split between the two tiers. */
+function electionVote(elec) {
+  if (!elec.vote) return '';
+  const v = elec.vote, sys = elec.system;
+  const pct = x => (x == null ? '–' : x.toFixed(1));
+  const d = (a, b) => { const x = b - a; return `<span class="${x > 0.05 ? 'up' : x < -0.05 ? 'down' : 'muted'}">${x > 0 ? '+' : ''}${x.toFixed(1)}</span>`; };
+  return `<div class="el-vote">
+    <div class="el-parl-h">The vote · ${sys.constituencies} constituencies${sys.blockVote ? ' in multi-member districts, block vote' : ''} · ${sys.list} list seats</div>
+    <table class="el-table">
+      <tr><th>Party</th><th>List vote</th><th></th><th>Constituency vote</th><th></th><th>Seats</th></tr>
+      ${elec.results.map(r => `<tr>
+        <td class="el-p">${r.party}</td>
+        <td class="el-n">${pct(v.list[r.party])}%</td><td class="el-n">${d(v.list2026[r.party], v.list[r.party])}</td>
+        <td class="el-n">${pct(v.cons[r.party])}%</td><td class="el-n">${d(v.cons2026[r.party], v.cons[r.party])}</td>
+        <td class="el-n muted" style="white-space:nowrap">${r.cons} + ${r.list}</td></tr>`).join('')}
+    </table>
+    <p class="el-note">Constituency vote for Others counts each seat's strongest small-party candidate. Seats: constituency + list.</p>
+  </div>`;
+}
 
 /** The House the election produced. A static diagram — no hover, no relations,
  *  because relations with the outgoing parliament are no longer the point. */

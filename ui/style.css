@@ -487,9 +487,9 @@ details.whip td{padding:2px 0;vertical-align:baseline}
 .pv.pv-flag{fill:#5a5f66}
 .end-map{background:var(--surface-1);border:1px solid var(--line);border-radius:var(--radius);padding:14px 15px;margin:18px 0}
 .end-map-h{display:flex;justify-content:space-between;align-items:center;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin-bottom:8px}
-.end-map-tg{display:flex;gap:4px}
-.end-map-tg button{font:inherit;font-size:11.5px;text-transform:none;letter-spacing:0;background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
-.end-map-tg button.on{color:var(--ink);border-color:var(--ink-3)}
+.end-map-tg,.el-map-tg{display:flex;gap:4px}
+.end-map-tg button,.el-map-tg button{font:inherit;font-size:11.5px;text-transform:none;letter-spacing:0;background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.end-map-tg button.on,.el-map-tg button.on{color:var(--ink);border-color:var(--ink-3)}
 #end-map .map-svg{max-height:560px}
 
 .war-att{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11.5px;margin-bottom:10px}
@@ -561,3 +561,11 @@ details.whip td{padding:2px 0;vertical-align:baseline}
 #demog{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:baseline;font-size:12px;color:var(--ink-3);margin:-2px 0 14px;padding:8px 12px;background:var(--surface-1);border:1px solid var(--line);border-radius:var(--radius)}
 .dg{display:flex;gap:6px;align-items:baseline;flex-wrap:wrap} .dg b{color:var(--ink);font-size:14px;font-variant-numeric:tabular-nums} .dg b.down{color:#ff8a80}
 .dg-l{text-transform:uppercase;letter-spacing:.06em;font-size:10.5px}
+/* The count, province by province */
+.el-vote{margin:16px 0 4px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)}
+.el-mapbox{margin:18px 0 4px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)}
+#el-map .map-svg{max-height:560px}
+.pv.pv-el{fill:#3f4349}
+.pv.pv-el:hover{stroke:var(--ink);stroke-width:1}
+.em-chip{display:inline-flex;align-items:center;gap:4px;margin-right:8px;white-space:nowrap}
+.em-chip i{display:inline-block;width:8px;height:8px;border-radius:2px}

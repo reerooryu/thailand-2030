@@ -1,4 +1,4 @@
-import { $, PROVINCES, el, g } from './core.js';
+import { $, PROVINCES, COALITIONS, el, g } from './core.js';
 
 /* The provinces. Plain grey; colour only marks a status that differs from the
    default. Bangkok is a special administrative area from the start; provinces
@@ -59,6 +59,67 @@ export function renderMapInto(box, mode = 'provinces') {
     const show = () => {
       const p = byId[el.dataset.id], st = status(p);
       tip.innerHTML = `<b>${p.name}</b>${st ? `<span class="map-st">${st}</span>` : ''}<span>${p.blurb}</span>`;
+      tip.hidden = false;
+    };
+    el.addEventListener('mouseenter', show);
+    el.addEventListener('click', show);
+    el.addEventListener('mouseleave', () => { tip.hidden = true; });
+  });
+}
+
+/* The 2030 count, province by province. Each province takes the colour of the
+   party that won most of its constituency seats, shaded by how much of the
+   province it won. 'change' colours provinces by the party that gained most
+   seats on 2026, and leaves the unchanged ones grey. Annexed provinces appear
+   when they voted. */
+export function renderElectionMap(box, elec, mode = '2030') {
+  if (!box || !PROVINCES || !elec || !elec.provinces) return;
+  const colours = COALITIONS.seatColours || {};
+  const R = elec.provinces;
+  const order = ['Bhumjaithai', "People's", 'Pheu Thai', 'Kla Tham', 'Democrat', 'Others'];
+  const top = seats => order.reduce((b, p) => (seats[p] > (seats[b] || 0) ? p : b), order[0]);
+  const tot = seats => order.reduce((a, p) => a + (seats[p] || 0), 0);
+  const gain = r => order.map(p => [p, (r.seats[p] || 0) - (r.seats2026[p] || 0)]).sort((a, b) => b[1] - a[1])[0];
+  const paint = r => {
+    if (mode === 'change') {
+      if (r.annexed) return [colours[top(r.seats)], 1];
+      const [p, d] = gain(r);
+      return d > 0 ? [colours[p], Math.min(1, 0.45 + d / Math.max(1, tot(r.seats)))] : [null, 0];
+    }
+    const s = mode === '2026' ? r.seats2026 : r.seats;
+    const n = tot(s); if (!n) return [null, 0];
+    const p = top(s);
+    return [colours[p], 0.4 + 0.6 * (s[p] / n)];
+  };
+  const shown = [...PROVINCES.provinces,
+    ...(PROVINCES.historic || []).filter(h => R[h.id]).map(h => ({ ...h, historic: true,
+      ...(h.id === 'phibunsongkhram' ? { name: 'Sisophon' } : {}) }))];
+  const uid = box.id || 'elmap';
+  const seatLine = s => order.filter(p => s[p]).map(p =>
+    `<span class="em-chip"><i style="background:${colours[p]}"></i>${p} ${s[p]}</span>`).join('');
+  const shareLine = sh => order.filter(p => sh[p] >= 3).sort((a, b) => sh[b] - sh[a]).slice(0, 4)
+    .map(p => `${p} ${sh[p].toFixed(0)}%`).join(' · ');
+  box.innerHTML = `<div class="map-wrap"><svg class="map-svg" viewBox="${PROVINCES.viewBox}" role="img" aria-label="Election map, ${mode}">
+    ${shown.map(p => {
+      if (p.water) return `<path class="pv-water" d="${p.path}"></path>`;
+      const r = R[p.id]; const [c, o] = r ? paint(r) : [null, 0];
+      return `<path class="pv pv-el${p.historic ? ' pv-annexed' : ''}" data-id="${p.id}" d="${p.path}"${c ? ` style="fill:${c};fill-opacity:${o.toFixed(2)}"` : ''}></path>`;
+    }).join('')}
+    </svg><div class="map-tip" hidden></div></div>
+    <div class="map-legend">${mode === 'change'
+      ? 'Coloured by the party that gained most seats on 2026 · grey: no change'
+      : `Coloured by the party with most ${mode} constituency seats · paler: split province`}</div>`;
+  const tip = box.querySelector('.map-tip');
+  const byId = Object.fromEntries(shown.map(p => [p.id, p]));
+  box.querySelectorAll('path.pv').forEach(el => {
+    const show = () => {
+      const p = byId[el.dataset.id], r = R[p.id];
+      if (!r) { tip.hidden = true; return; }
+      tip.innerHTML = `<b>${p.name}</b>
+        <span class="map-st">${r.annexed ? 'Annexed · voting for the first time' : `2026: ${seatLine(r.seats2026)}`}</span>
+        <span>2030: ${seatLine(r.seats)}</span>
+        <span class="muted">Vote 2030: ${shareLine(r.share)}${r.annexed ? '' : `<br>Vote 2026: ${shareLine(r.share2026)}`}</span>
+        ${r.districts !== tot(r.seats) ? `<span class="muted">${r.districts} multi-member district${r.districts > 1 ? 's' : ''}</span>` : ''}`;
       tip.hidden = false;
     };
     el.addEventListener('mouseenter', show);
