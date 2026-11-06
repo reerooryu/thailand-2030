@@ -1,7 +1,7 @@
 import { renderConstitutionFinal } from './constitution.js';
 import { $, COALITIONS, el, fmt, g, tile } from './core.js';
 import { ratingLabel } from './dashboard.js';
-import { renderMapInto, renderElectionMap } from './map.js';
+import { renderMapInto, renderElectionMap, renderConstituencyMap } from './map.js';
 import { ENDING_THEMES } from './music.js';
 import { seatPositions } from './parliament.js';
 import { renderHome } from './home.js';
@@ -64,8 +64,9 @@ export function showEnd(walked, snap = false) {
       ${electionParliament(elec)}
       ${electionVote(elec)}
       <div class="el-mapbox">
-        <div class="end-map-h"><span>The count, province by province</span>
-          <span class="el-map-tg"><button data-m="2030" class="on">2030</button><button data-m="2026">2026</button><button data-m="change">Change</button></span></div>
+        <div class="end-map-h"><span>The count, seat by seat</span>
+          <span class="el-map-tg el-view-tg"><button data-v="districts" class="on">Constituencies</button><button data-v="provinces">Provinces</button></span>
+          <span class="el-map-tg el-mode-tg"><button data-m="2030" class="on">2030</button><button data-m="2026">2026</button><button data-m="change">Change</button></span></div>
         <div id="el-map"></div>
       </div>
       <div class="el-foot">${elec.bestCoalition
@@ -179,10 +180,16 @@ export function showEnd(walked, snap = false) {
   $('#again').onclick = () => renderHome();
   renderMapInto($('#end-map'), 'provinces');
   if (elec) {
-    renderElectionMap($('#el-map'), elec, '2030');
-    w.querySelectorAll('.el-map-tg button').forEach(b => b.onclick = () => {
-      w.querySelectorAll('.el-map-tg button').forEach(x => x.classList.toggle('on', x === b));
-      renderElectionMap($('#el-map'), elec, b.dataset.m);
+    let view = 'districts', mode = '2030';
+    const draw = () => (view === 'districts' ? renderConstituencyMap : renderElectionMap)($('#el-map'), elec, mode);
+    draw();
+    w.querySelectorAll('.el-view-tg button').forEach(b => b.onclick = () => {
+      w.querySelectorAll('.el-view-tg button').forEach(x => x.classList.toggle('on', x === b));
+      view = b.dataset.v; draw();
+    });
+    w.querySelectorAll('.el-mode-tg button').forEach(b => b.onclick = () => {
+      w.querySelectorAll('.el-mode-tg button').forEach(x => x.classList.toggle('on', x === b));
+      mode = b.dataset.m; draw();
     });
   }
   w.querySelectorAll('.end-map-tg button').forEach(b => b.onclick = () => {

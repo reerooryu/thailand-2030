@@ -967,6 +967,8 @@ export { band, effectiveEffects, isUnlocked, nextPeriod };
 export const COALITIONS = cfg;
 export { IMF_BASELINE_2030 };
 /** Province outlines and one-line descriptions, for the map. */
+/** The 400 constituencies of 2026, in the province map's coordinates. */
+export const CONSTITUENCIES = (DATA as any).constituencies as { viewBox: string; districts: Record<string, string> };
 export const PROVINCES = DATA.provinces as unknown as {
   viewBox: string; _meta: { pilotAdjust: string[]; pilotTilt: string[] };
   provinces: { id: string; name: string; blurb?: string; path: string; water?: boolean }[];

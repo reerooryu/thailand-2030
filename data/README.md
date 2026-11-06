@@ -61,6 +61,10 @@ The three Cambodian provinces of 1941–46 (Phra Tabong, Phibunsongkhram, and th
 
 Both steps are in `scripts/map/`. `build_map.py` downloads Natural Earth into `data/map/cache/` (gitignored), cuts the 1941 provinces with the traced lines in `data/map/trace_1941.json`, simplifies everything with mapshaper (pinned to 0.7.83, run through npx), and rebuilds the war-map cells, towns and roads. It merges the result into `config/provinces.json` and keeps the descriptions. `data/map/ne_ids.json` maps Natural Earth names to the game's province ids. `register_reference.py` refits the pixel-to-lon/lat polynomial from a reference scan, which is not redistributed. You only need it to re-trace. A rebuild matches the committed outlines to within 0.15% of area per province. Ring start points and the Voronoi cells of Phibunsongkhram can come out slightly different, because Natural Earth's master branch moves.
 
+### Constituencies
+
+`config/constituencies.json` holds the 400 constituencies of February 2026 in the province map's coordinates. It is redrawn from the Wikimedia Commons file **"2026 Thai general election, electoral map.svg"**, a QGIS export whose metadata names its creator as Anuchit Chanthakaeo. Check that file's Commons page for its licence and the attribution it asks for, and keep that attribution with the derived geometry if you fork. The SVG carries no feature attributes, so `scripts/map/build_constituencies.py` identifies each district by the number printed inside it (in the main map or in its zoomed insets), places it in a province by registering the SVG's province layer to `config/provinces.json`, joins islands to their nearest district, and dissolves and simplifies the result. The build stops unless all 400 (province, number) pairs of `config/election_2026.json` are found exactly once. The 24 MB source goes in `data/map/cache/2026_electoral_map.svg` (gitignored); you only need it to rebuild.
+
 ## Not in this repository
 
 The 2023 Bhumjaithai campaign song, which the build inlines as the soundtrack if

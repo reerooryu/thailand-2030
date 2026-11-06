@@ -1,4 +1,4 @@
-import { $, PROVINCES, COALITIONS, el, g } from './core.js';
+import { $, PROVINCES, CONSTITUENCIES, COALITIONS, el, g } from './core.js';
 
 /* The provinces. Plain grey; colour only marks a status that differs from the
    default. Bangkok is a special administrative area from the start; provinces
@@ -125,5 +125,85 @@ export function renderElectionMap(box, elec, mode = '2030') {
     el.addEventListener('mouseenter', show);
     el.addEventListener('click', show);
     el.addEventListener('mouseleave', () => { tip.hidden = true; });
+  });
+}
+
+/* The count, constituency by constituency: the 400 seats of 2026 as they fell
+   in 2030 (or 2026), a Bangkok inset, and the party-list seats as a grid.
+   Districts merged by a new constitution share the colour of the seat they
+   became. Annexed provinces have no 2026 districts and are drawn whole. */
+const ELPARTIES = ['Bhumjaithai', "People's", 'Pheu Thai', 'Kla Tham', 'Democrat', 'Others'];
+const BKK_VIEW = '196 432 60 60';
+export function renderConstituencyMap(box, elec, mode = '2030') {
+  if (!box || !CONSTITUENCIES || !elec || !elec.districts) return;
+  const colours = COALITIONS.seatColours || {};
+  const col = i => (i >= 0 ? colours[ELPARTIES[i]] : null);
+  const names = Object.fromEntries([...PROVINCES.provinces, ...(PROVINCES.historic || [])].map(p => [p.id, p.name]));
+  names.phibunsongkhram = 'Sisophon';
+  const D = elec.districts;
+  const fillOf = (k) => {
+    const r = D[k]; if (!r) return null;
+    if (mode === '2026') return col(r.w26);
+    if (mode === 'change') return r.w26 < 0 || r.w !== r.w26 ? col(r.w) : null;
+    return col(r.w);
+  };
+  const paths = Object.entries(CONSTITUENCIES.districts).map(([k, d]) => {
+    const c = fillOf(k);
+    return `<path class="cv" data-k="${k}" d="${d}"${c ? ` style="fill:${c}"` : ''}></path>`;
+  }).join('');
+  // annexed provinces, drawn whole in the winner's colour
+  const annexed = mode === '2026' ? '' : (PROVINCES.historic || []).filter(h => elec.provinces[h.id]).map(h => {
+    const s = elec.provinces[h.id].seats;
+    const top = ELPARTIES.reduce((b, p) => (s[p] > (s[b] || 0) ? p : b), ELPARTIES[0]);
+    return `<path class="cv cv-annexed" data-a="${h.id}" d="${h.path}" style="fill:${colours[top]}"></path>`;
+  }).join('');
+  const water = PROVINCES.provinces.filter(p => p.water).map(p => `<path class="pv-water" d="${p.path}"></path>`).join('');
+  // the list, as a grid of seats in House order
+  const ls = mode === '2026' ? elec.listSeats.y2026 : elec.listSeats.y2030;
+  const order = ['Bhumjaithai', 'Pheu Thai', 'Others', 'Democrat', 'Kla Tham', "People's"];
+  const seats = order.flatMap(p => Array(ls[p] || 0).fill(p));
+  const cols = 10, R = 4.2, S = 11;
+  const grid = seats.map((p, i) => `<circle cx="${(i % cols) * S + R + 1}" cy="${Math.floor(i / cols) * S + R + 1}" r="${R}" fill="${colours[p]}"><title>${p}</title></circle>`).join('');
+  const gh = Math.ceil(seats.length / cols) * S + 2;
+  const listTotal = seats.length;
+  const legend = order.filter(p => ls[p]).map(p => `<span class="em-chip"><i style="background:${colours[p]}"></i>${p} ${ls[p]}</span>`).join('');
+  box.innerHTML = `<div class="cm-grid">
+    <div class="map-wrap cm-main"><svg class="map-svg" viewBox="${CONSTITUENCIES.viewBox}" role="img" aria-label="Constituency map, ${mode}">${water}${paths}${annexed}</svg><div class="map-tip" hidden></div></div>
+    <div class="cm-side">
+      <div class="cm-h">Bangkok and around</div>
+      <div class="map-wrap cm-inset"><svg class="map-svg" viewBox="${BKK_VIEW}" role="img" aria-label="Bangkok constituencies">${paths}</svg><div class="map-tip" hidden></div></div>
+      <div class="cm-h">Party list · ${listTotal} seats${mode === 'change' ? ' (2030)' : ''}</div>
+      <svg class="cm-list" viewBox="0 0 ${cols * S + 2} ${gh}" role="img" aria-label="Party-list seats">${grid}</svg>
+      <div class="cm-legend">${legend}</div>
+    </div></div>
+    <div class="map-legend">${mode === 'change'
+      ? 'Coloured where the seat changed hands since 2026 · grey: held'
+      : `Each 2026 constituency in the colour of who won it${mode === '2030' && elec.system.blockVote ? ' (merged districts share their slate\'s colour)' : ''}`}</div>`;
+  const pct = v => ELPARTIES.map((p, i) => [p, v[i]]).filter(x => x[1] >= 3).sort((a, b) => b[1] - a[1]).slice(0, 4)
+    .map(([p, x]) => `${p} ${x.toFixed(0)}%`).join(' · ');
+  const chip = i => (i >= 0 ? `<span class="em-chip"><i style="background:${col(i)}"></i>${ELPARTIES[i]}</span>` : '—');
+  box.querySelectorAll('.map-wrap').forEach(wrap => {
+    const tip = wrap.querySelector('.map-tip');
+    wrap.querySelectorAll('path.cv').forEach(el => {
+      const show = () => {
+        if (el.dataset.a) {
+          const r = elec.provinces[el.dataset.a];
+          tip.innerHTML = `<b>${names[el.dataset.a]}</b><span class="map-st">Annexed · voting for the first time</span>
+            <span>2030: ${ELPARTIES.filter(p => r.seats[p]).map(p => `${p} ${r.seats[p]}`).join(' · ')}</span>
+            <span class="muted">Vote 2030: ${ELPARTIES.filter(p => r.share[p] >= 3).map(p => `${p} ${r.share[p].toFixed(0)}%`).join(' · ')}</span>`;
+        } else {
+          const k = el.dataset.k, r = D[k]; if (!r) return;
+          const [p, n] = [k.slice(0, k.lastIndexOf('-')), k.slice(k.lastIndexOf('-') + 1)];
+          tip.innerHTML = `<b>${names[p]} ${n}</b>
+            <span>2030: ${chip(r.w)} &nbsp; 2026: ${chip(r.w26)}</span>
+            <span class="muted">Vote 2030: ${pct(r.v)}<br>Vote 2026: ${pct(r.v26)}</span>
+            ${r.with ? `<span class="muted">Merged with ${r.with.map(x => x.replace(/^(.*)-(\d+)$/, (_, a, b) => `${names[a]} ${b}`)).join(', ')}</span>` : ''}`;
+        }
+        tip.hidden = false;
+      };
+      el.addEventListener('mouseenter', show);
+      el.addEventListener('click', show);
+      el.addEventListener('mouseleave', () => { tip.hidden = true; });
+    });
   });
 }

@@ -70,4 +70,4 @@ data/map/cache/
 
 # Screenshots pasted while tracing the 1941 provinces. The traced result lives
 # in data/map/trace_1941.json; register_reference.py takes a scan as an argument.
-map/
+/map/

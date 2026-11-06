@@ -486,7 +486,7 @@ details.whip td{padding:2px 0;vertical-align:baseline}
 .fta-fill.suspended{background:var(--critical)}
 .pv.pv-flag{fill:#5a5f66}
 .end-map{background:var(--surface-1);border:1px solid var(--line);border-radius:var(--radius);padding:14px 15px;margin:18px 0}
-.end-map-h{display:flex;justify-content:space-between;align-items:center;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin-bottom:8px}
+.end-map-h{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin-bottom:8px}
 .end-map-tg,.el-map-tg{display:flex;gap:4px}
 .end-map-tg button,.el-map-tg button{font:inherit;font-size:11.5px;text-transform:none;letter-spacing:0;background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
 .end-map-tg button.on,.el-map-tg button.on{color:var(--ink);border-color:var(--ink-3)}
@@ -569,3 +569,18 @@ details.whip td{padding:2px 0;vertical-align:baseline}
 .pv.pv-el:hover{stroke:var(--ink);stroke-width:1}
 .em-chip{display:inline-flex;align-items:center;gap:4px;margin-right:8px;white-space:nowrap}
 .em-chip i{display:inline-block;width:8px;height:8px;border-radius:2px}
+/* Constituency map */
+.cm-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:14px;align-items:start}
+.cm-main .map-svg{max-height:620px}
+.cm-side{display:flex;flex-direction:column;gap:6px}
+.cm-h{font-size:10px;letter-spacing:.12em;text-transform:uppercase;opacity:.45;margin-top:4px}
+.cm-inset{border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.cm-inset .map-tip{font-size:11px}
+.cm-list{width:100%;max-width:220px;display:block}
+.cm-legend{font-size:11.5px;color:var(--ink-2);line-height:1.8}
+path.cv{fill:#3f4349;stroke:var(--surface-1);stroke-width:0.18;stroke-linejoin:round;cursor:pointer}
+.cm-inset path.cv{stroke-width:0.12}
+path.cv:hover{stroke:var(--ink);stroke-width:0.6}
+.cm-inset path.cv:hover{stroke-width:0.3}
+path.cv-annexed{stroke:#d8443a;stroke-width:0.9}
+@media (max-width:640px){.cm-grid{grid-template-columns:1fr}.cm-list{max-width:100%}}

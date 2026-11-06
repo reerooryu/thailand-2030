@@ -115,6 +115,12 @@ export interface ElectionResult {
   /** The map: every province, and any annexed one. */
   provinces: Record<string, ProvinceResult>;
   system: { constituencies: number; list: number; blockVote: boolean };
+  /** Every 2026 constituency, keyed 'province-number': who took the seat it
+   *  became in 2030 and who held it in 2026, the 2030 and 2026 vote (% by
+   *  party, in PARTIES order), and the other 2026 districts it was merged with. */
+  districts: Record<string, { w: number; w26: number; v: number[]; v26: number[]; with?: string[] }>;
+  /** List seats by party, 2030 and 2026. */
+  listSeats: { y2030: Record<string, number>; y2026: Record<string, number> };
 }
 
 const MAJORITY = 251;
@@ -287,6 +293,7 @@ export function runElection(e: ElectionInput): ElectionResult {
   }
   const consSeats = [0, 0, 0, 0, 0, 0];
   const provinces: Record<string, ProvinceResult> = {};
+  const districts: ElectionResult['districts'] = {};
   for (const [p, list] of byProv) {
     list.sort((a, b) => a.n - b.n);
     const m = target.get(p)!;
@@ -300,17 +307,24 @@ export function runElection(e: ElectionInput): ElectionResult {
       d.c26.forEach((v, i) => { sum26[i] += v; });
       if (!d.annexed) seats26[argmax(d.c26)]++;
     }
+    const pctv = (a: number[]) => { const t = a.reduce((x, y) => x + y, 0) || 1; return a.map(x => Math.round(x / t * 1000) / 10); };
+    const note = (d: D, w: number, members?: D[]) => {
+      districts[`${d.p}-${d.n}`] = { w, w26: d.annexed ? -1 : argmax(d.c26), v: pctv(d.c), v26: pctv(d.c26),
+        ...(members && members.length > 1 ? { with: members.filter(x => x !== d).map(x => `${x.p}-${x.n}`) } : {}) };
+    };
     if (groups === list.length) {
-      for (const d of list) seats[argmax(d.c)]++;
+      for (const d of list) { const w = argmax(d.c); seats[w]++; note(d, w); }
     } else {
       // consecutive districts, merged as evenly as the numbers allow
       let k = 0;
       for (let g = 0; g < groups; g++) {
         const take = Math.floor(list.length / groups) + (g < list.length % groups ? 1 : 0);
         const v = [0, 0, 0, 0, 0, 0];
-        for (const d of list.slice(k, k + take)) d.c.forEach((x, i) => { v[i] += x; });
+        const members = list.slice(k, k + take);
+        for (const d of members) d.c.forEach((x, i) => { v[i] += x; });
         k += take;
         seats[argmax(v)] += seatsIn(g);
+        for (const d of members) note(d, argmax(v), members);
       }
     }
     seats.forEach((v, i) => { consSeats[i] += v; });
@@ -446,8 +460,11 @@ export function runElection(e: ElectionInput): ElectionResult {
       : `Bhumjaithai falls to ${playerSeats} seats, ${fmtSigned(swingSeats)} on 2026. The term is over. ` +
         `Whoever comes next answers for the February 2026 promise.`;
 
+  const listRec = { y2030: Object.fromEntries(PARTIES.map((p, i) => [p, listSeats[i]])),
+                    y2026: { ...EL.listSeats2026 } };
   return { results, swing: totalSwing, playerSeats, bestCoalition: formed ? bloc : null,
-           bestSeats: govTotal, majority: MAJORITY, verdict, headline, detail, vote, provinces, system };
+           bestSeats: govTotal, majority: MAJORITY, verdict, headline, detail, vote, provinces, system,
+           districts, listSeats: listRec };
 }
 
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));

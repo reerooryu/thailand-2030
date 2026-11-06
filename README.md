@@ -24,7 +24,7 @@ Four scores, all in tension:
 - **Investment**
 - **Debt ratio**: measured against a ceiling you can raise by law and then have to live with
 
-Then the count, run seat by seat on the real 2026 result and mapped province by province, coalition talks, an analyst's verdict, your revealed ideology and 33 achievements.
+Then the count, run seat by seat on the real 2026 result and mapped constituency by constituency, coalition talks, an analyst's verdict, your revealed ideology and 33 achievements.
 
 ### Before your first term
 
@@ -65,6 +65,7 @@ Then the count, run seat by seat on the real 2026 result and mapped province by 
 | `config/policies.json` | 42 cards, 117 options. |
 | `config/provinces.json` | Province outlines and a one-line description of each of the 77 provinces, for the map. Outlines from Natural Earth (public domain). |
 | `config/election_2026.json` | The February 2026 result by constituency, grouped into the game's six parties, and the certified list vote. Built by `scripts/build_election.py` from `data/election-2569/`. |
+| `config/constituencies.json` | The 400 constituency outlines of 2026, for the election map. Built by `scripts/map/build_constituencies.py`. |
 | `config/events.json` | 55 news events, 116 options. |
 | `config/coalitions.json` | The four coalitions and their effects. |
 | `config/constitution.json` | Five parts of the constitution, their positions and party stances. |
