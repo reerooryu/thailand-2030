@@ -372,7 +372,8 @@ export class BrowserGame {
     if (this.actionsThisTurn >= this.actionCap) return { ok: false, msg: 'No actions left this quarter' };
     const card = this.deck().find(c => c.id === cardId);
     if (!card) return { ok: false, msg: 'not in the deck' };
-    const chosen = card.options.find(o => o.id === optionId)!;
+    const chosen = card.options.find(o => o.id === optionId);
+    if (!chosen) return { ok: false, msg: `no option '${optionId}' on this card` };
     if (!isUnlocked(chosen, this.flags)) return { ok: false, msg: chosen.lockedNote || 'Locked' };
     this.actionsThisTurn++;
     const r = attempt(this.whipState(), card, optionId);
@@ -419,7 +420,8 @@ export class BrowserGame {
     const i = this.pending.findIndex(e => e.id === eventId);
     if (i < 0) return;
     const e = this.pending[i];
-    const opt = e.options.find(o => o.id === optionId)!;
+    const opt = e.options.find(o => o.id === optionId);
+    if (!opt) return;   // no such option: leave the event on the desk
     // Defensive: the UI greys locked options, but nothing stopped a caller
     // resolving one directly, and every headless harness does exactly that.
     this.syncStateFlags();

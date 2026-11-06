@@ -121,8 +121,9 @@ export function showEnd(walked, snap = false) {
           ${row('Credit ratings', g.agencies.map(ratingLabel).join(' / '), 'S&P / Fitch / Moody\'s',
                 g.agencies.some(a => a.notch === 0) ? 'critical' : g.agencies.some(a => a.notch < 2) ? 'warning'
                 : g.agencies.some(a => a.notch > 2) ? 'good' : '')}
-          ${row('Risk premium', '+' + fmt(s.riskPremium, 2) + 'pp', 'over the base borrowing rate',
-                s.riskPremium > 0.4 ? 'critical' : s.riskPremium > 0.05 ? 'warning' : '')}
+          ${row('Risk premium', (s.riskPremium < 0 ? '−' : '+') + fmt(Math.abs(s.riskPremium), 2) + 'pp',
+                s.riskPremium < 0 ? 'under the base borrowing rate' : 'over the base borrowing rate',
+                s.riskPremium > 0.4 ? 'critical' : s.riskPremium > 0.05 ? 'warning' : s.riskPremium < 0 ? 'good' : '')}
           ${row('Primary balance', (s.primaryBalance >= 0 ? '+' : '') + fmt(s.primaryBalance, 2) + '%',
                 'of GDP', s.primaryBalance < 0 ? 'warning' : 'good')}
           ${row('Public capital', fmt(s.capitalSpend, 2) + '%', 'of GDP, from 6.10%')}
@@ -272,6 +273,8 @@ export function verdictSections(g, s, realCagr, setChg, gov) {
   const ceilingPhrase = ceilingMoved
     ? `a ceiling you had already raised to ${g.debtCeiling}%`
     : `the statutory ${g.debtCeiling}% ceiling, which you never asked parliament to move`;
+  // A- ratings earn a discount, so the premium can be below zero.
+  const prem = s.riskPremium < 0 ? `a discount of ${fmt(-s.riskPremium, 2)} points` : `${fmt(s.riskPremium, 2)} points`;
   const debt = pick([
     { min: 8, tag: 'blown', t:
       `Gross debt of ${fmt(s.debtGdp)}%, ${fmt(over)} points above ${ceilingPhrase}. The market charges ` +
@@ -287,15 +290,15 @@ export function verdictSections(g, s, realCagr, setChg, gov) {
       `finds no room.` },
     { min: -3, tag: 'used to the edge', t:
       `Debt of ${fmt(s.debtGdp)}%, ${fmt(-over)} points under the ${g.debtCeiling}% ceiling, premium ` +
-      `${fmt(s.riskPremium, 2)} points. Stopping just short of the limit takes discipline. One bad year ` +
+      `${prem}. Stopping just short of the limit takes discipline. One bad year ` +
       `would eat what is left.` },
     { min: -6, tag: 'used well', t:
       `Debt finished at ${fmt(s.debtGdp)}% inside a ${g.debtCeiling}% ceiling, risk premium held to ` +
-      `${fmt(s.riskPremium, 2)} points. Textbook: spent, stopped before the market repriced, handed over with ` +
+      `${prem}. Textbook: spent, stopped before the market repriced, handed over with ` +
       `a margin. Three governments in the region have blown their limits since 2020.` },
     { min: -10, tag: 'cautious', t:
       `Debt of ${fmt(s.debtGdp)}% leaves ${fmt(-over)} points of the ceiling unused, premium ` +
-      `${fmt(s.riskPremium, 2)}. A clean balance sheet from a government with cheap money and a mandate. ` +
+      `${prem}. A clean balance sheet from a government with cheap money and a mandate. ` +
       `Prudence or timidity? Nobody said what the space was for.` },
     { min: -999, tag: 'conserved', t:
       `Debt of ${fmt(s.debtGdp)}% leaves ${fmt(-over)} points of unused headroom. Real fiscal conservatism. ` +
