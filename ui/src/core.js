@@ -1,4 +1,4 @@
-export const { BrowserGame, COALITIONS, PROVINCES, isUnlocked } = ENGINE;
+export const { BrowserGame, COALITIONS, PROVINCES, isUnlocked, IMF_BASELINE_2030 } = ENGINE;
 
 export let g = null;
 export const $ = s => document.querySelector(s);

@@ -1169,14 +1169,16 @@
       "name": "Land Bridge (Chumphon–Ranong)",
       "ministry": "transport",
       "type": "megaproject",
-      "briefing": "The Southern Economic Corridor land bridge. Over one trillion baht; Phase 1 to open 2030, full completion around 2035. Backers promise a shortcut past the Malacca Strait. Critics: about 54 hours against 48 via Malacca, around US$252 more per container, and 73.9% of Thai trade already uses regional routes.",
+      "briefing": "The Southern Economic Corridor land bridge. Over one trillion baht; Phase 1 to open 2030, full completion around 2035. Backers promise a shortcut past the Malacca Strait. Critics: about 54 hours against 48 via Malacca, around US$252 more per container, and 73.9% of Thai trade already uses regional routes. The government's own review in July 2026 cut the expected return from 8% to 4.8% and cargo by up to 16%, warned about the Ranong biosphere reserve, and found that nine of the ten largest shipping lines have already invested in rival ports. It recommended scrapping it.",
       "options": [
         {
           "id": "proceed",
           "label": "Push ahead with Phase 1",
           "requiresLegislation": true,
           "effects": {
-            "capitalSpend": 0.55
+            "capitalSpend": 0.45,
+            "govConsumption": 0.1,
+            "fdiSignal": -0.05
           },
           "lag": {
             "capacityQuarters": 20,
@@ -1189,7 +1191,7 @@
             "Democrat": -0.3,
             "People's": -0.7
           },
-          "flavour": "The South gets a decade of construction. You get the bill and none of the ribbon.",
+          "flavour": "The South gets a decade of construction. You get the bill and none of the ribbon. Nearly a fifth of it is land and consultants, not concrete.",
           "sets": [
             "land_bridge_committed"
           ],
@@ -2664,6 +2666,98 @@
             "Democrat": 0.1
           },
           "flavour": "Safe. 1.62 million households keep farming land they cannot borrow against."
+        }
+      ]
+    },
+    {
+      "id": "chao_phraya_floodway",
+      "name": "Chai Nat–Pa Sak–Gulf of Thailand Floodway",
+      "ministry": "agriculture",
+      "type": "megaproject",
+      "requires": [
+        "flood_2026"
+      ],
+      "briefing": "The Royal Irrigation Department's answer to 2011. A floodway from the Chao Phraya Dam at Chai Nat, along the Pa Sak and out to the Gulf of Thailand. 134 km of existing canal is widened and 136 km is dug new, raising what can be released past the dam from 210 to 430 m³/s. It costs about 165 billion baht over eight years, part budget and part loan. Beside it sits a 95-billion-baht upgrade of the canals east of the Chao Phraya. In a 2011-sized flood it keeps 3.48 million rai dry, and it saves 5 to 17 billion baht a year on average. It finishes in 2034. Nothing it protects floods inside your term unless the rain comes again.",
+      "options": [
+        {
+          "id": "full",
+          "label": "Build the floodway and the eastern canal upgrade",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.18,
+            "approvalBoost": 2
+          },
+          "lag": {
+            "capacityQuarters": 32,
+            "note": "Completes in 2034. The protection is entirely outside the window."
+          },
+          "fit": {
+            "Pheu Thai": 0.5,
+            "Others": 0.5,
+            "Kla Tham": 0.4,
+            "Democrat": 0.2,
+            "People's": 0.1
+          },
+          "sets": [
+            "floodway_built"
+          ],
+          "maximal": true,
+          "flavour": "Two hundred and sixty billion baht of concrete that matters only in a year like 2011. The next one will not ask whether you were in office."
+        },
+        {
+          "id": "floodway",
+          "label": "The floodway; stretch the canal upgrade",
+          "requiresLegislation": true,
+          "effects": {
+            "capitalSpend": 0.1,
+            "approvalBoost": 1
+          },
+          "lag": {
+            "capacityQuarters": 32
+          },
+          "fit": {
+            "Pheu Thai": 0.4,
+            "Others": 0.4,
+            "Kla Tham": 0.3,
+            "Democrat": 0.3,
+            "People's": 0.1
+          },
+          "sets": [
+            "floodway_built"
+          ],
+          "flavour": "The new channel gets built. The old canals east of the river wait another budget cycle."
+        },
+        {
+          "id": "retention",
+          "label": "Monkey cheeks: local retention basins and dredging",
+          "effects": {
+            "capitalSpend": 0.03,
+            "approvalBoost": 2
+          },
+          "lag": {
+            "capacityQuarters": 4
+          },
+          "fit": {
+            "Others": 0.2,
+            "Pheu Thai": 0.2,
+            "Democrat": 0.1
+          },
+          "sets": [
+            "flood_retention"
+          ],
+          "flavour": "Basins in every province that asks, ready by next monsoon. Enough for September 2026, not for 2011."
+        },
+        {
+          "id": "study",
+          "label": "Send it back to the NESDC",
+          "effects": {},
+          "returnsInQuarters": 4,
+          "fit": {
+            "Democrat": 0.2,
+            "Others": -0.2,
+            "Pheu Thai": -0.2
+          },
+          "flavour": "The study has run since 2017. It can run one more year."
         }
       ]
     },

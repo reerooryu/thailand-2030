@@ -22,6 +22,7 @@
  * Usage: npx tsx scripts/triple_crown.ts [coalition] [restarts]
  */
 import { Game } from '../engine/src/game.js';
+import { IMF_BASELINE_2030 } from '../engine/src/weo.js';
 import { loadPolicies, loadEvents } from '../engine/src/loaders.js';
 import { runElection } from '../engine/src/election.js';
 import { evaluate as evalAch } from '../engine/src/achievements.js';
@@ -269,7 +270,7 @@ if (best.score >= 0) {
     const gov = g.government();
     const elec = runElection({ seats: g.ps.seats,
       coalition: g.ps.coalition.filter((p: string) => !gov.walked.includes(p)),
-      opinion: g.opinion, approval: g.approval, headline: s2.headline, baseline: 9092,
+      opinion: g.opinion, approval: g.approval, headline: s2.headline, baseline: IMF_BASELINE_2030,
       realGrowth: rg, potentialGrowth: s2.legacy, setChange: (setV / 1621.62 - 1) * 100,
       invRate: s2.invRate, reformStock: g.state.reformStock });
     const got = evalAch({ headline: s2.headline, potentialGrowth: s2.legacy, realGrowth: rg,

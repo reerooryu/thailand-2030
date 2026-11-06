@@ -8,6 +8,7 @@
  * Thailand better off.
  */
 import { loadPanel, col } from './panel.js';
+import { IMF_BASELINE_2030 } from './weo.js';
 import { loadSupply } from './loaders.js';
 import { step } from './engine.js';
 import { BASE } from './params.js';
@@ -146,7 +147,7 @@ export const STRATEGIES: Strategy[] = [
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   console.log('=== SCENARIOS, 2026Q2 -> 2030Q4 ===');
-  console.log('IMF baseline for 2030 headline: USD 9,092\n');
+  console.log(`IMF baseline for 2030 headline: USD ${IMF_BASELINE_2030.toLocaleString('en-US')}\n`);
   console.log('strategy               headline   legacy   inv rate   debt/GDP   avg CPI');
   const rs = STRATEGIES.map(s => runScenario(s));
   for (const r of rs) {
@@ -192,5 +193,5 @@ if (import.meta.url === `file://${process.argv[1]}`) {
               `legacy ${(Math.max(...rs.map(r=>r.legacy))-Math.min(...rs.map(r=>r.legacy))).toFixed(2)}pp.`);
   const breaches = rs.filter(r => r.breachedCeiling).map(r => r.name);
   console.log(`\nBreached the 70% debt ceiling: ${breaches.length ? breaches.join(', ') : 'none'}`);
-  console.log(`IMF baseline 9,092 vs model "do nothing" ${base.headline.toFixed(0)} — model is ${((base.headline/9092-1)*100).toFixed(1)}% below.`);
+  console.log(`IMF baseline ${IMF_BASELINE_2030.toLocaleString('en-US')} vs model "do nothing" ${base.headline.toFixed(0)} — model is ${((base.headline/IMF_BASELINE_2030-1)*100).toFixed(1)}% below.`);
 }

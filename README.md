@@ -14,12 +14,12 @@ That one HTML file is the whole game. It needs no server and no install, and gam
 
 ## How it plays
 
-Each quarter opens with the news. **Blocking** items, like Hormuz closing or a partner threatening to walk, must be answered before the turn ends. Then you spend up to three actions from 41 policy cards, some of which only reach the desk later in the term or after an earlier decision. Each card has two to four options: full programme, pilot, phase-in or nothing.
+Each quarter opens with the news. **Blocking** items, like Hormuz closing or a partner threatening to walk, must be answered before the turn ends. Then you spend up to three actions from 42 policy cards, some of which only reach the desk later in the term or after an earlier decision. Each card has two to four options: full programme, pilot, phase-in or nothing.
 
 Most cards need a vote. You see the whip count, crossbench defectors included, before you commit. Executive actions skip parliament.
 
 Four scores, all in tension:
-- **Headline**: GDP per capita against the IMF's 2030 baseline of USD 9,092
+- **Headline**: GDP per capita against the IMF's 2030 baseline of USD 9,399 (October 2026 WEO)
 - **Legacy**: potential growth
 - **Investment**
 - **Debt ratio**: measured against a ceiling you can raise by law and then have to live with
@@ -32,6 +32,8 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 - **Effort is not stock.** Reform effort builds stock at 6% a quarter and decays at 1.5%. A reformist coalition converts at 0.75, a conservative one at 0.55.
 - **Order matters.** Civil service reform without digital government first loses its execution gain. Super Licence half-works. Negative income tax is locked until VAT moves.
 - **The establishment bites back.** Anger it, and budget execution falls. Money you appropriated doesn't arrive.
+- **The energy decree buys 2026, not 2030.** Your first desk holds a 400-billion-baht emergency borrowing decree: relief now, the energy transition after the Constitutional Court rules. Emergency money is paid at full size from the first quarter and stops when it runs out. It lifts output while it lasts, leaves two points of debt behind, and by the 2030 count the economy is back where it would have been.
+- **Disasters hit before you answer.** The September 2026 floods take a quarter of a point off the output gap whatever you choose. Relief is paid once and stops. The Chai Nat–Pa Sak floodway that follows is real concrete and real legacy, and it finishes in 2034.
 - **The bond market charges.** The risk premium hits the next government and every firm borrowing alongside it.
 - **Megaprojects open in stages.** 35% of public capital spending above the baseline programme reaches the capital stock after two years; the rest takes the full four. Build early and some of it counts before 2030.
 - **OECD accession locks reform in.** While accession is accelerating, each matching domestic law (Super Licence, Digital Government, civil service reform, anti-corruption enforcement, justice reform, the Revenue package) closes a chapter. Each closed chapter raises reform capacity by 0.02 and adds to the FDI signal.
@@ -60,9 +62,9 @@ Then the count, coalition talks, an analyst's verdict, your revealed ideology an
 | `engine/src/ideology.ts` | Reads your economic position off the budget. |
 | `engine/src/game.ts` | Headless host for scripts: the browser host with the world passed in and leftover news defaulted. |
 | `engine/src/optimise.ts` | Hill-climbing search over the whole term. Spoilers. |
-| `config/policies.json` | 41 cards, 113 options. |
+| `config/policies.json` | 42 cards, 117 options. |
 | `config/provinces.json` | Province outlines and a one-line description of each of the 77 provinces, for the map. Outlines from Natural Earth (public domain). |
-| `config/events.json` | 52 news events, 107 options. |
+| `config/events.json` | 55 news events, 116 options. |
 | `config/coalitions.json` | The four coalitions and their effects. |
 | `config/constitution.json` | Five parts of the constitution, their positions and party stances. |
 | `ui/` | Front end. The client is in `ui/src/` (ES modules, bundled into `ui/app.js` by the build); see `ui/README.md`. |
@@ -105,6 +107,8 @@ npm --prefix engine run typecheck       # strict tsc, no output
 npx --prefix engine tsx scripts/audit_impacts.ts > AUDIT_IMPACTS.md
 python3 scripts/catalogue.py > CATALOGUE.md   # after editing config/policies.json or events.json
 python3 scripts/build_panel.py          # rebuild the estimation panel
+python3 scripts/build_weo.py            # after replacing the IMF WEO CSV in data/
+npx --prefix engine tsx scripts/passive_check.ts      # a do-nothing term and an IMF-assumption term against the baseline
 python3 scripts/map/build_map.py        # rebuild config/provinces.json outlines (needs shapely, numpy, npx)
 ```
 

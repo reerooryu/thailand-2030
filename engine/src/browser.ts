@@ -18,6 +18,7 @@ import { initialAlign, addAlign, alignLabel, type AlignState } from './alignment
 import { initialWar, startWar, stepWar, warLevels, warApproval, chinaArming, avgDissent, applyOrders, stanceOrders, warDecision, mobilisationDrag, brigadePool, brigadesUsed, PROVINCES as WAR_PROVINCES, type WarState, type WarStance, type ReconStance, type Orders } from './war.js';
 import { initialAgencies, targetNotch, review, ratingPremium, type Agency } from './ratings.js';
 import { BASE } from './params.js';
+import { IMF_PATH, IMF_2025, IMF_BASELINE_2030, PRICE_ALIGN } from './weo.js';
 import { formCoalition, band, type CoalitionCfg, type PoliticalState } from './politics.js';
 import {
   availableCards, applyFlags, lapsedProposals, attempt, effectiveEffects, isUnlocked,
@@ -62,7 +63,15 @@ export interface LogEntry { quarter: number; kind: string; text: string; }
  *  construction: a do-nothing term started 337 in the hole and no amount of good
  *  policy recovered it. This factor aligns the passive path with 9,092 so the
  *  baseline means what the end screen says it means. It scales every outcome
- *  equally and changes no ranking. */
+ *  equally and changes no ranking.
+ *
+ *  It is fitted to the August 2026 WEO (9,092). A newer vintage is aligned
+ *  only for its price revision (PRICE_ALIGN in weo.ts): the IMF expecting more
+ *  inflation at a fixed baht raises its dollar number, and no government earns
+ *  that. Its real revision is NOT aligned. The October 2026 vintage builds in
+ *  the 400-billion-baht energy decree, so a term that issues the decree lands
+ *  near the IMF's 9,399 and a term that does nothing at all falls short.
+ *  scripts/passive_check.ts reports both. */
 const BASELINE_ALIGN = 1.0385;
 const SEN_NEED = 67;
 
@@ -306,6 +315,16 @@ export class BrowserGame {
     return attempt(this.whipState(), card, opt.id).result;
   }
 
+  /** Disaster shocks that hit this quarter, from events that fired in it. */
+  quarterShock = { gap: 0, investment: 0 };
+  /** One-off money (EventOption.effectsQuarters). Emergency spending sits
+   *  outside the budget, so it is paid at full size from the first quarter
+   *  instead of ramping in with the programme stance, and outside the
+   *  coalition's stimulus and megaproject caps. It stops when it expires. */
+  temp: Record<string, number> = { capitalSpend: 0, govConsumption: 0, transfers: 0, taxRate: 0 };
+  /** One-off effects waiting to be reversed. */
+  expiring: { at: number; effects: PolicyEffects }[] = [];
+
   openTurn(): GameEvent[] {
     const st = { debtGdp: this.state.debtGdp, gap: this.state.gap,
                  cpiYoy: this.state.cpiYoy, approval: this.approval,
@@ -314,7 +333,14 @@ export class BrowserGame {
     const { fired, remaining } = due(events, this.scheduled, this.quarter, st,
                                      this.flags, this.rng, this.firedEvents);
     this.scheduled = remaining;
-    for (const e of fired) { this.firedEvents.add(e.id); if (e.blocking) this.pending.push(e); }
+    for (const e of fired) {
+      this.firedEvents.add(e.id);
+      if (e.blocking) this.pending.push(e);
+      if (e.shock) {
+        this.quarterShock.gap += e.shock.gap ?? 0;
+        this.quarterShock.investment += e.shock.investment ?? 0;
+      }
+    }
     for (const d of this.deferred.filter(d => d.returnsAtQuarter === this.quarter)) {
       const c = cat.policies.find(x => x.id === d.cardId);
       if (c) this.log.push({ quarter: this.quarter, kind: 'note', text: `${c.name} returns to the desk` });
@@ -416,7 +442,16 @@ export class BrowserGame {
       this.approval = Math.min(100, this.approval + 12);   // the rally
       this.syncWar();
     }
-    this.apply(res.effects);
+    if (opt.effectsQuarters) {
+      // Fiscal money goes to the one-off pot; the rest (approval, opinion,
+      // signals) lands as usual and its stance part is withdrawn on expiry.
+      const rest: PolicyEffects = {};
+      for (const [k, v] of Object.entries(res.effects)) {
+        if (k in this.temp) this.temp[k] += v as number; else (rest as any)[k] = v;
+      }
+      this.apply(rest);
+      this.expiring.push({ at: this.quarter + opt.effectsQuarters, effects: res.effects });
+    } else this.apply(res.effects);
     this.syncStateFlags();
     this.syncCeiling();
     // Members leaving the party. Mutates the live seat table, so the whip count
@@ -557,10 +592,10 @@ export class BrowserGame {
       // the boom it came from.
       policyRate: 1.0 + 1.5 * Math.max(0, s.cpiYoy - 2.0) + 0.25 * Math.max(0, s.gap - 2),
       reer: s.reer,
-      capitalSpend: Math.min(cap, BASELINE.capitalSpend + this.stance.capitalSpend * ramp),
-      govConsumption: BASELINE.govConsumption + this.stance.govConsumption * ramp,
-      transfers: Math.min(stimCap, this.stance.transfers * ramp),
-      taxRate: BASELINE.taxRate + this.stance.taxRate * ramp,
+      capitalSpend: Math.min(cap, BASELINE.capitalSpend + this.stance.capitalSpend * ramp) + this.temp.capitalSpend,
+      govConsumption: BASELINE.govConsumption + this.stance.govConsumption * ramp + this.temp.govConsumption,
+      transfers: Math.min(stimCap, this.stance.transfers * ramp) + this.temp.transfers,
+      taxRate: BASELINE.taxRate + this.stance.taxRate * ramp + this.temp.taxRate,
       reformIndex: reformEffort(this.stance.reformIndex) * ((this.ps.effects.reformCapacity ?? 0.7) + CAPACITY_PER_CHAPTER * chapters.length),
       fdiSignal: (this.stance.fdiSignal ?? 0) * ramp + FDI_PER_CHAPTER * chapters.length,
       humanCapital: (this.stance.humanCapital ?? 0) * ramp,
@@ -573,8 +608,12 @@ export class BrowserGame {
       mobilisationDrag: mobilisationDrag(this.war),
     };
     const rngEnergy = 1.5 + (this.rng() - 0.5) * 3;   // drawn either way, so the sequence never shifts
-    const exog: Exog = exogOverride ?? { worldDemandGrowth: 3.0, globalActivity: 10.0,
+    const world: Exog = exogOverride ?? { worldDemandGrowth: 3.0, globalActivity: 10.0,
                          energyInflation: rngEnergy, shock: 0 };
+    // Disasters arrive through events, on top of whatever world was passed in.
+    const exog: Exog = { ...world,
+      shock: (world.shock ?? 0) + this.quarterShock.gap,
+      investmentShock: (world.investmentShock ?? 0) + this.quarterShock.investment };
     const params: Params = { ...this.params,
       // Disbursement is a RATE, not a multiplier: 1.0 means every baht of the
       // capital budget actually gets spent in the year it was voted. Reform can
@@ -603,6 +642,16 @@ export class BrowserGame {
     this.setHistory.push(this.set);
     this.quarter++;
     this.actionsThisTurn = 0;
+    this.quarterShock = { gap: 0, investment: 0 };
+    // One-off money runs out. Approval and opinion already moved and are left
+    // to drift on their own; only the money and the stance shift are withdrawn.
+    for (const x of this.expiring.filter(x => x.at <= this.quarter)) {
+      for (const [k, v] of Object.entries(x.effects)) {
+        if (k in this.temp) this.temp[k] -= v as number;
+        else this.stance[k] = (this.stance[k] ?? 0) - (v as number);
+      }
+    }
+    this.expiring = this.expiring.filter(x => x.at > this.quarter);
     this.reviewRatings();
     // A dissolution pre-empts a collapse: the House is gone before anyone can walk.
     if (this.snap) return { ok: true, snap: true };
@@ -767,11 +816,11 @@ export class BrowserGame {
   }
   lastRatingActions: string[] = [];
 
-  /** The IMF path for GDP per head, by game quarter. 9,092 at the 2030 count;
-   *  a term that ends early is measured against where the Fund expected
-   *  Thailand to be at that date, not in 2030. */
+  /** The IMF path for GDP per head, by game quarter (IMF_BASELINE_2030 at the
+   *  count); a term that ends early is measured against where the Fund
+   *  expected Thailand to be at that date, not in 2030. */
   baseline(q = this.quarter): number {
-    const path = [8105.07, 8169.81, 8392.11, 8730.33, 9092.48];   // 2026..2030
+    const path = IMF_PATH;   // 2026..2030
     const t = Math.max(0, Math.min(16, q)) / 4;
     const i = Math.min(3, Math.floor(t));
     return Math.round(path[i] + (path[i + 1] - path[i]) * (t - i));
@@ -779,11 +828,12 @@ export class BrowserGame {
 
   headline(): number {
     const end = this.state, start = this.history[3];
-    // Inflation above the IMF's projected path (about 1.2% a year) does not
-    // raise dollar GDP: the baht depreciates to offset it (relative PPP).
-    // Otherwise overheating would buy headline.
+    // Inflation above the IMF's projected path (about 1.2% a year in the
+    // August 2026 WEO this formula was fitted to) does not raise dollar GDP:
+    // the baht depreciates to offset it (relative PPP). Otherwise overheating
+    // would buy headline.
     const priceFactor = Math.min(end.cpi / start.cpi, Math.pow(1.012, this.quarter / 4));
-    return 8056.57 * BASELINE_ALIGN * (end.rgdp / start.rgdp) * priceFactor
+    return IMF_2025 * BASELINE_ALIGN * PRICE_ALIGN * (end.rgdp / start.rgdp) * priceFactor
          * (71.62 / 71.215) * (32.88 / 34.6);
   }
   /** Population and fertility. Thai population follows the IMF path the headline
@@ -910,6 +960,7 @@ export class BrowserGame {
 
 export { band, effectiveEffects, isUnlocked, nextPeriod };
 export const COALITIONS = cfg;
+export { IMF_BASELINE_2030 };
 /** Province outlines and one-line descriptions, for the map. */
 export const PROVINCES = DATA.provinces as unknown as {
   viewBox: string; _meta: { pilotAdjust: string[]; pilotTilt: string[] };

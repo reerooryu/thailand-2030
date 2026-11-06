@@ -183,7 +183,7 @@ export function showEnd(walked, snap = false) {
    Seven dimensions, each banded seven ways, each expected to praise what
    worked and say plainly what did not — a cabinet that fixed potential growth
    and wrecked the balance sheet gets both paragraphs, in its own words. The
-   headline band splits on the IMF baseline of 9,092, the only number in this
+   headline band splits on the IMF baseline (IMF_BASELINE_2030), the only number in this
    game with an outside author. */
 export function verdictSections(g, s, realCagr, setChg, gov) {
   const start = g.history[3];

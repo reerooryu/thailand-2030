@@ -1,5 +1,5 @@
 import { renderConstitution } from './constitution.js';
-import { $, fmt, g, meter, tile, yoyGrowth, yoySeries } from './core.js';
+import { $, fmt, g, IMF_BASELINE_2030, meter, tile, yoyGrowth, yoySeries } from './core.js';
 import { renderDeck } from './deck.js';
 import { renderMap } from './map.js';
 import { renderNews } from './news.js';
@@ -28,7 +28,7 @@ export function render() {
   const s = g.state;
   const hist = g.history.slice(-10);
   const headline = g.headline();
-  const target = 15000, baseline = 9092;
+  const target = 15000, baseline = IMF_BASELINE_2030;
   const pctToTarget = Math.max(0, Math.min(100, (headline / target) * 100));
 
   $('#turn-label').textContent = g.label;
@@ -63,10 +63,10 @@ export function render() {
   /* KPI row */
   const gdpExtra = `<div class="target-track" role="img" aria-label="${Math.round(headline)} of a 15,000 target">
       <div class="target-fill" style="width:${pctToTarget}%"></div>
-      <div class="target-mark" style="left:${(baseline / target) * 100}%" title="IMF baseline 9,092"></div>
+      <div class="target-mark" style="left:${(baseline / target) * 100}%" title="IMF baseline ${baseline.toLocaleString('en-US')}"></div>
       <div class="target-mark hi" style="left:${(10000 / target) * 100}%" title="10,000 — the practical ceiling of one term"></div>
     </div>
-    <div class="t-foot"><span class="muted">baseline 9,092</span><span class="muted">10k</span><span class="muted">promised 15,000</span></div>`;
+    <div class="t-foot"><span class="muted">baseline ${baseline.toLocaleString('en-US')}</span><span class="muted">10k</span><span class="muted">promised 15,000</span></div>`;
 
   g.gdpTrack = g.gdpTrack || [];
   if (g.gdpTrack.length <= g.quarter) g.gdpTrack.push(headline);

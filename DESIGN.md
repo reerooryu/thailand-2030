@@ -23,7 +23,7 @@ The target is not achievable. That is the design.
 The arithmetic, from IMF WEO:
 
 - Thailand's nominal GDP per capita was **USD 8,057 in 2025**.
-- The IMF baseline for **2030 is USD 9,092** — a 2.45%/yr path.
+- The IMF baseline for **2030 is USD 9,092** — a 2.45%/yr path. *(August 2026 WEO, which this section was written against. The October 2026 vintage raises it to **9,399**, mostly on higher inflation and a better 2026; the game now scores against that, without refitting the model to it. The tables below keep the August figures.)*
 - Hitting 15,000 by 2030 requires **13.24%/yr**, or **1.65× the baseline**.
 
 That gap cannot be closed by growth. Baseline real growth is 2.2%/yr and inflation 1.2%/yr; even adding three percentage points to *both* — an extraordinary, arguably unprecedented policy success — reaches only about 12,200 at an unchanged exchange rate.
@@ -88,7 +88,7 @@ Bands are set against the IMF baseline, not against an abstract notion of good p
 | 9,000–10,000 | Roughly baseline; you governed, nothing changed |
 | < 9,000 | Underperformance — you made things worse |
 
-**IMF baseline 2030: 9,092.**
+**IMF baseline 2030: 9,092** in the August 2026 WEO; **9,399** in the October 2026 vintage the game now uses.
 
 > **These bands are now known to be unreachable and must be rebuilt.** The engine's scenario test (`SUPPLY.md` §3) finds that the *entire spread* across eight fiscal and reform strategies is **93 USD — 1.1%** — and that a player doing everything right lands near 8,750, below the IMF baseline. No real policy moves a 2030 level much in nineteen quarters; that is correct economics, not a modelling failure.
 >
@@ -891,6 +891,10 @@ Sections 1–16 are the design as it stood at v1.0 (August 2026). The systems be
 | Economic corridors | Re-evaluations of the Northern and Central-Western corridors under Industry. | `config/policies.json` |
 | Demography | Population and fertility strip; small fertility effects from family and health policy; enlarged-Kingdom GDP per head after annexation. The headline score stays on pre-war borders. | `engine/src/browser.ts` (`demography()`) |
 | Province map | Every province, coloured by status only. | `ui/src/map.js`, `config/provinces.json`, `scripts/map/` |
+| Floods | The September 2026 Bangkok floods as a scripted 2026 Q3 event. Events can now carry a `shock` (output gap and investment rate, the units of `config/shocks.json`) that lands whatever the answer, and options can carry `effectsQuarters`, so relief is paid once instead of becoming a programme. One-off money is paid at full size from the first quarter (it is outside the budget, so it skips the programme ramp and the coalition's caps). The Chai Nat–Pa Sak–Gulf floodway card follows: real capital, protection only from 2034. | `config/events.json` (`bangkok_flood_2026`), `config/policies.json` (`chao_phraya_floodway`), `engine/src/browser.ts` |
+| Energy decree | The May 2026 400-billion-baht emergency borrowing decree as the first-quarter decision the IMF's October forecast assumes: relief now (Thai Chuay Thai Plus, welfare-card top-ups), then, after the Constitutional Court rules, the energy transition, cash, or nothing. A temporary boom and two points of debt; no lasting gain in the 2030 level. | `config/events.json` (`energy_decree_400bn`, `energy_decree_ruling`) |
+| Land Bridge review | The July 2026 government review (return 4.8% against 8%, cargo up to 16% lower) is in the briefing. Pushing ahead now puts a fifth of the money into land and consultants rather than capital, and costs a little investor confidence. | `config/policies.json` (`land_bridge`) |
+| IMF baseline | Read from `config/imf_weo_thailand.json` (`engine/src/weo.ts`), not hard-coded. October 2026 WEO: 9,399 in 2030. The headline stays fitted to the August vintage for trend growth (`BASELINE_ALIGN`) and is aligned only for each vintage's price revision (`PRICE_ALIGN`, 1.0274 for October): more expected inflation at a fixed baht raises the IMF's dollar number, and no government earns that. The real revision is left for the player to earn. A do-nothing term finishes 27 under 9,399; one that issues the energy decree as the IMF assumes, 25 under. | `engine/src/weo.ts`, `scripts/build_weo.py`, `scripts/passive_check.ts` |
 
 None of these changes the macro model in §5: each feeds it through the existing channels (export demand, TFP, risk premium, labour input, reform capacity, FDI signal, approval).
 

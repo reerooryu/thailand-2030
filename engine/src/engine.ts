@@ -66,7 +66,7 @@ export function step(input: StepInput): State {
   // private investment converts to capital immediately; public capex queues
   const privInvest = (s.invRate / 100) * s.rgdp;
   // Only spending ABOVE the baseline programme is staged, so the passive path
-  // (and the 9,092 calibration) is unchanged.
+  // (and the baseline calibration in browser.ts) is unchanged.
   const aboveBase = Math.max(0, policy.capitalSpend - p.infraBaselineShare) / 100 * s.rgdp;
   const staged = aboveBase * (p.infraStagedShare ?? 0);
   const newPublic  = (policy.capitalSpend / 100) * s.rgdp - staged;

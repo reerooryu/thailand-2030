@@ -16,7 +16,17 @@ slim_supply = {'alpha': supply['alpha'], 'delta_quarterly': supply['delta_quarte
                'K': supply['K'][lo:hi], 'L': supply['L'][lo:hi], 'TFP': supply['TFP'][lo:hi],
                'potential_pf': supply['potential_pf'][lo:hi], 'gap_pf': supply['gap_pf'][lo:hi]}
 
+# The scoring baseline: the IMF's GDP per head path and CPI projection for
+# 2026-2030, from whichever WEO vintage config/imf_weo_thailand.json holds.
+weo = load('imf_weo_thailand.json')
+yrs = [str(y) for y in range(2025, 2031)]
+weo_slim = {'source': weo['source'], 'extracted': weo['extracted'],
+            'gdpPerHead': {y: weo['series']['NGDPDPC']['values'][y] for y in yrs},
+            'cpi': {y: weo['series']['PCPIPCH']['values'][y] for y in yrs},
+            'deflator': {y: weo['series']['NGDP_D']['values'][y] for y in yrs}}
+
 out = {
+  'weo': weo_slim,
   'panel': slim, 'supply': slim_supply, 'panelOffset': lo,
   'coalitions': load('coalitions.json'),
   'policies': load('policies.json'),

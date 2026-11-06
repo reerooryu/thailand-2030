@@ -19,7 +19,7 @@ error in them is this repository's, not the source's.
 | **Trade Policy and Strategy Office (TPSO)**, Ministry of Commerce, Thailand — consumer price index, 189 categories, 487 months 1986–2026 | Headline and core inflation, the energy pass-through | `data/CPI-G_Report.xlsx`, `config/cpi.json` |
 | **Bank of Thailand (BOT)** — MPC decisions and policy rate history, 190 meetings 2000–2026 | The monetary block and the real rate | `data/table-mpc-2026-3.xlsx`, `config/policy_rate.json` |
 | **Bank for International Settlements (BIS)** — credit to the non-financial sector, 1991Q4–2025Q4 | Household debt and private credit | `config/financial.json` |
-| **International Monetary Fund (IMF)** — World Economic Outlook, 40 series, 1980–2031 | Fiscal and debt series, PPP, population, and the 2030 scoring baseline of USD 9,092 | `data/dataset_*_IMF.RES_WEO_*.csv`, `config/imf_weo_thailand.json` |
+| **International Monetary Fund (IMF)** — World Economic Outlook, 40 series, 1980–2031 | Fiscal and debt series, PPP, population, and the 2030 scoring baseline (USD 9,399 in the October 2026 vintage; `scripts/build_weo.py` builds the config from the CSV) | `data/dataset_*_IMF.RES_WEO_*.csv`, `config/imf_weo_thailand.json` |
 | **Federal Reserve Bank of Dallas** — index of global real economic activity | The export block's demand driver, alongside US real imports | `config/world_demand.json` |
 | **Stock Exchange of Thailand (SET)** — index history | The SET level the game starts from and tracks | `config/set_history.json` |
 | **Election Commission of Thailand (ECT)** — February 2026 general election result | The 500-seat House, party vote shares, and the 2030 seat projection's calibration | `config/parties.json` |

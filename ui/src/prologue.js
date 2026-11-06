@@ -1,4 +1,4 @@
-import { $, BrowserGame, COALITIONS, el, g, setGame } from './core.js';
+import { $, BrowserGame, COALITIONS, el, g, IMF_BASELINE_2030, setGame } from './core.js';
 import { render } from './dashboard.js';
 
 /* ---------- prologue ---------- */
@@ -9,7 +9,7 @@ export function renderPrologue() {
   wrap.appendChild(el('p', 'sub',
     'February 2026. Bhumjaithai holds <b>191 of 500 seats</b> — sixty short of a majority. ' +
     'Your government has promised nominal GDP per capita of <b>USD 15,000 by the end of 2030</b>. ' +
-    'The IMF baseline is 9,092.<br><br>Before anything else: who governs with you?'));
+    `The IMF baseline is ${IMF_BASELINE_2030.toLocaleString('en-US')}.<br><br>Before anything else: who governs with you?`));
   const grid = el('div', 'coalition-grid');
   for (const o of COALITIONS.options) {
     const card = el('div', 'coalition' + (o.available ? '' : ' unavailable'));

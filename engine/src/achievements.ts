@@ -11,6 +11,7 @@
  * Each is a pure predicate over the finished term. Nothing here feeds back
  * into the model.
  */
+import { IMF_BASELINE_2030 } from './weo.js';
 
 export interface AchievementContext {
   headline: number;
@@ -277,14 +278,14 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'short_of_the_number',
     name: 'Nine Thousand and Change',
-    requirement: 'Finish ahead of the IMF\'s 9,092 baseline, and short of the 15,000 you promised.',
+    requirement: `Finish ahead of the IMF's ${IMF_BASELINE_2030.toLocaleString('en-US')} baseline, and short of the 15,000 you promised.`,
     flavour: 'Beating the IMF\'s projection is a real result. Fifteen thousand was never a forecast. It was a campaign.',
     rarity: 'common',
     // The promise cannot be met — the ceiling on this model is somewhere under
     // 10,000 — so the earned condition is really the baseline. That is
     // deliberate: the first thing a new player should learn is which of the two
     // numbers on the prologue screen was ever real.
-    test: c => atLeast(c.headline, 9092, 0) && c.headline < 15000,
+    test: c => atLeast(c.headline, c.baseline ?? IMF_BASELINE_2030, 0) && c.headline < 15000,
   },
   {
     id: 'room_to_cut',
@@ -373,7 +374,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     requirement: 'Finish with at least two agencies at BBB-, one notch above junk, and GDP per head below the IMF baseline.',
     flavour: 'The region named the 1997 crisis after a Thai soup. The rating agencies have started reaching for the menu again.',
     rarity: 'rare',
-    test: c => (c.ratingsAtFloor ?? 0) >= 2 && c.headline < (c.baseline ?? 9092),
+    test: c => (c.ratingsAtFloor ?? 0) >= 2 && c.headline < (c.baseline ?? IMF_BASELINE_2030),
   },
   {
     id: 'mai_pen_rai',

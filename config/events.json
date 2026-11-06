@@ -36,7 +36,8 @@
             "Kla Tham": -2
           },
           "effects": {
-            "capitalSpend": 0.55,
+            "capitalSpend": 0.45,
+            "govConsumption": 0.1,
             "approvalBoost": -6,
             "institutionalSupport": -5
           },
@@ -750,6 +751,139 @@
       ]
     },
     {
+      "id": "energy_decree_400bn",
+      "headline": "Cabinet has a 400-billion-baht emergency borrowing decree on the table",
+      "trigger": {
+        "type": "afterOption",
+        "card": "__start__",
+        "option": "__start__",
+        "inQuarters": 0
+      },
+      "scriptedQuarter": 0,
+      "blocking": true,
+      "body": "With Hormuz shut and crude up more than half, Finance has drafted an emergency decree to borrow 400 billion baht outside the budget, in two tranches. The first 200 billion is relief now: Thai Chuay Thai Plus and a 1,000-baht top-up on the state welfare card for four months. The second 200 billion is for the energy transition next year. Full borrowing takes public debt to about 68% of GDP, two points under the ceiling. The Bank of Thailand has warned about the ratings. The People's Party says there is no emergency that the budget cannot handle.",
+      "options": [
+        {
+          "id": "issue",
+          "label": "Issue the decree: 200 billion of relief now, 200 billion for the energy transition",
+          "body": "This is what the IMF's October 2026 forecast assumes.",
+          "opinion": {
+            "Pheu Thai": 3,
+            "Kla Tham": 2,
+            "Others": 1,
+            "Democrat": -3,
+            "People's": -5
+          },
+          "effects": {
+            "transfers": 1.35,
+            "approvalBoost": 4
+          },
+          "effectsQuarters": 3,
+          "sets": [
+            "energy_decree"
+          ],
+          "flavour": "Money out of the door by June, and a court case by July."
+        },
+        {
+          "id": "relief_only",
+          "label": "Borrow 200 billion for relief only",
+          "body": "The transition half is dropped; debt stays near 67%.",
+          "opinion": {
+            "Pheu Thai": 2,
+            "Democrat": -1,
+            "People's": -2
+          },
+          "effects": {
+            "transfers": 1.35,
+            "approvalBoost": 3
+          },
+          "effectsQuarters": 3,
+          "sets": [
+            "energy_decree"
+          ],
+          "flavour": "Half the debt, half the argument, and no buses."
+        },
+        {
+          "id": "no_decree",
+          "label": "No decree: manage the shock inside the budget",
+          "body": "The fiscal year has four months left in it.",
+          "opinion": {
+            "Democrat": 3,
+            "People's": 2,
+            "Pheu Thai": -4,
+            "Kla Tham": -3
+          },
+          "effects": {
+            "approvalBoost": -4
+          },
+          "effectsQuarters": 2,
+          "passive": true,
+          "flavour": "The Bank of Thailand approves. The petrol queues do not."
+        }
+      ]
+    },
+    {
+      "id": "energy_decree_ruling",
+      "headline": "The Constitutional Court upholds the energy decree, 7–2",
+      "trigger": {
+        "type": "afterOption",
+        "card": "energy_decree_400bn",
+        "option": "issue",
+        "inQuarters": 1
+      },
+      "blocking": true,
+      "body": "The People's Party argued there was no emergency. On 9 July the Court disagreed, 7–2. The second 200 billion baht can now be borrowed under the 2027 debt plan, at 1.2%. Transport wants 80,000 electric buses, Interior solar roofs for 400,000 households, Finance cheap loans for electric vehicles, Energy a smart grid. The Bank of Thailand has written again about the 70% ceiling.",
+      "options": [
+        {
+          "id": "transition",
+          "label": "Spend it as planned: buses, solar roofs, EV loans and the grid",
+          "opinion": {
+            "Others": 1,
+            "Democrat": -1
+          },
+          "effects": {
+            "capitalSpend": 0.45,
+            "transfers": 0.2,
+            "fdiSignal": 0.05,
+            "approvalBoost": 2
+          },
+          "effectsQuarters": 6,
+          "sets": [
+            "decree_transition"
+          ],
+          "flavour": "Eighteen months of procurement. The buses are real; so are the tenders."
+        },
+        {
+          "id": "cash",
+          "label": "Redirect it to another round of cash relief",
+          "opinion": {
+            "Pheu Thai": 3,
+            "Kla Tham": 2,
+            "Democrat": -4,
+            "People's": -3
+          },
+          "effects": {
+            "transfers": 0.65,
+            "approvalBoost": 5
+          },
+          "effectsQuarters": 6,
+          "flavour": "The decree said energy transition. The Court said emergency. Nobody said which."
+        },
+        {
+          "id": "hold",
+          "label": "Leave the second tranche unborrowed",
+          "opinion": {
+            "Democrat": 4,
+            "Others": 2,
+            "People's": 2
+          },
+          "effects": {},
+          "passive": true,
+          "flavour": "The ceiling stays two points away. So do the buses."
+        }
+      ]
+    },
+    {
       "id": "bkk_city_plan",
       "headline": "Fourth revision of the Bangkok comprehensive plan takes effect",
       "trigger": {
@@ -1171,6 +1305,84 @@
           ],
           "flavour": "A roadmap, a launch event and targets nobody owns. It costs nothing, which is why it always happens.",
           "passive": true
+        }
+      ]
+    },
+    {
+      "id": "bangkok_flood_2026",
+      "headline": "Bangkok floods: four days of rain, 24 provinces under water",
+      "trigger": {
+        "type": "afterOption",
+        "card": "__start__",
+        "option": "__start__",
+        "inQuarters": 1
+      },
+      "scriptedQuarter": 1,
+      "blocking": true,
+      "body": "Rain from 24 September has put water through 24 provinces and into Bangkok itself. 553,780 households are affected and eight people have died. The government has declared two special holidays. Early estimates put losses at 25 billion baht, most of it in the capital. Interior wants the central reserve released today. The Royal Irrigation Department has a floodway that has been in study since 2017.",
+      "shock": {
+        "gap": -0.25
+      },
+      "options": [
+        {
+          "id": "relief",
+          "label": "Release the central reserve: pumps, rations, road repairs",
+          "body": "About 4.7 billion baht, paid this quarter.",
+          "opinion": {
+            "Others": 2,
+            "Pheu Thai": 1,
+            "Democrat": 1
+          },
+          "effects": {
+            "govConsumption": 0.1,
+            "approvalBoost": 2
+          },
+          "effectsQuarters": 1,
+          "sets": [
+            "flood_2026"
+          ],
+          "flavour": "Pumps, dry rations, mobile kitchens and a cabinet minister for Bangkok. The floodway file is on your desk by Tuesday."
+        },
+        {
+          "id": "compensation",
+          "label": "Relief plus 9,000 baht for every affected household",
+          "body": "About 9.7 billion baht, paid this quarter.",
+          "opinion": {
+            "Pheu Thai": 4,
+            "Kla Tham": 3,
+            "People's": 1,
+            "Democrat": -2
+          },
+          "effects": {
+            "govConsumption": 0.1,
+            "transfers": 0.1,
+            "approvalBoost": 5
+          },
+          "effectsQuarters": 1,
+          "sets": [
+            "flood_2026"
+          ],
+          "flavour": "The 2024 northern floods set the rate at 9,000 baht. Nobody will accept less next time."
+        },
+        {
+          "id": "local",
+          "label": "Leave it to the BMA and the provinces",
+          "body": "Bangkok has its own budget and an elected governor.",
+          "opinion": {
+            "Democrat": 2,
+            "People's": 1,
+            "Pheu Thai": -4,
+            "Others": -2
+          },
+          "effects": {
+            "approvalBoost": -5
+          },
+          "effectsQuarters": 2,
+          "sets": [
+            "flood_2026"
+          ],
+          "passive": true,
+          "flavour": "Bangkok has an elected governor. This week everyone remembers it also has a Prime Minister."
         }
       ]
     },

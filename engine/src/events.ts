@@ -49,6 +49,10 @@ export interface EventOption {
   unavailable?: boolean;
   opinion?: Record<string, number>;
   effects?: PolicyEffects;
+  /** One-off money. Every other effect in the game is a programme that runs
+   *  for the rest of the term; relief after a disaster is paid once. When set,
+   *  the effects vector is reversed after this many quarters. */
+  effectsQuarters?: number;
   sets?: string[]; clears?: string[];
   flavour?: string;
 }
@@ -58,6 +62,11 @@ export interface GameEvent {
   /** Fires on this quarter of the run regardless of player action — the things
    *  that were already happening in 2026 and are inherited, not chosen. */
   scriptedQuarter?: number;
+  /** What the event does to the economy whatever the answer: the flood
+   *  happens before the cabinet meets. Added to the quarter's exogenous
+   *  shocks, in percentage points of the output gap and of the private
+   *  investment rate (the same units as config/shocks.json). */
+  shock?: { gap?: number; investment?: number };
   options: EventOption[];
 }
 

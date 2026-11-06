@@ -52,7 +52,7 @@ export interface ElectionInput {
   opinion: Record<string, number>;    // relations at dissolution
   approval: number;
   headline: number;                   // USD per capita at dissolution
-  baseline: number;                   // the IMF projection, 9,092
+  baseline: number;                   // the IMF projection (IMF_BASELINE_2030 at the count)
   realGrowth: number;                 // annualised over the term, %
   /** The record, for the rare term that is not merely popular but visibly
    *  transformative. Deliberately gated — see recordBonus below. */
