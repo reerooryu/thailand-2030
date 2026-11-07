@@ -549,7 +549,10 @@
             "fdiSignal": -0.25,
             "institutionalSupport": -7
           },
-          "flavour": "The Bank will resent it and may ignore it. Investors still price in its independence."
+          "flavour": "The Bank will resent it, and partly comply: it buys more dollars and lets the baht strengthen less. Investors still price in its independence.",
+          "sets": [
+            "baht_lean"
+          ]
         },
         {
           "id": "tourism_support",

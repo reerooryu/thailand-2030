@@ -74,8 +74,28 @@ export interface LogEntry { quarter: number; kind: string; text: string; }
  *  scripts/passive_check.ts reports both. Refitted (1.0385 → 1.0472) in
  *  November 2026, after the fiscal block and the BOT rule were corrected and
  *  the Hormuz and tariff events began to move the economy, to keep the passive
- *  term where it was. */
-const BASELINE_ALIGN = 1.0472;
+ *  term where it was; and again (1.0472 → 1.0484) when the baht began to move. */
+const BASELINE_ALIGN = 1.0484;
+
+/** The baht. An outcome, never a lever (DESIGN §3.4): each quarter the real
+ *  exchange rate moves a quarter of the way toward a target set by what
+ *  markets can see, measured as a percent deviation from where it started
+ *  (the start is the IMF's path, which already has the baht easing to 34.6).
+ *  - growth: Balassa-Samuelson and growth expectations, per point of
+ *    potential growth above the 2.15% the passive term delivers;
+ *  - fdi: inflows following reform, per unit of the FDI signal;
+ *  - carry: per point of real rate (core) above where it started;
+ *  - risk: per point of sovereign risk premium, ratings included;
+ *  - war: while the guns fire, and while a ceasefire line is frozen.
+ *  The BOT leans against appreciation, buying dollars into reserves: only
+ *  `passUp` of upward pressure reaches the rate, and `passUpLean` once the
+ *  government has publicly pressed it to weaken the baht for tourism, which
+ *  also shifts the target down by `lean`. Downward pressure passes in full,
+ *  and the baht can strengthen at most `maxUp` percent in a term.
+ *  A stronger baht costs tourism and tradables margins: `tourism` points of
+ *  output gap per percent of appreciation, each quarter. */
+const FX = { speed: 0.25, growth: 1.5, fdi: 0.75, carry: 0.5, risk: 3.0, war: 2.0, frozen: 1.0,
+  passUp: 0.5, passUpLean: 0.3, lean: 1.5, tourism: 0.05, maxUp: 4, maxDown: -20 } as const;
 const SEN_NEED = 67;
 
 /** Stance keys that are money, in % of GDP a year. */
@@ -325,6 +345,8 @@ export class BrowserGame {
    *  from the quarter its event fires until `until`, and the answer to the
    *  event can scale it (EventOption.shockScale). */
   shocks: { id: string; until: number; gap: number; investment: number; energy: number }[] = [];
+  /** The baht's real deviation from its starting level, percent (+ = stronger). */
+  fx = 0;
   /** One-off money (EventOption.effectsQuarters). Emergency spending sits
    *  outside the budget, so it is paid at full size from the first quarter
    *  instead of ramping in with the programme stance, and outside the
@@ -646,6 +668,18 @@ export class BrowserGame {
       this.oecdClosed.add(c);
       this.log.push({ quarter: this.quarter, kind: 'note', text: `OECD accession: the ${c} chapter closes` });
     }
+    {
+      const fdiNow = (this.stance.fdiSignal ?? 0) * ramp + FDI_PER_CHAPTER * chapters.length;
+      const rr0 = this.history.slice(0, 4).reduce((a, v) => a + (v.policyRate - v.cpiCoreYoy), 0) / 4;
+      const lean = this.flags.has('baht_lean');
+      let target = FX.growth * (s.potentialGrowthYoy - 2.15) + FX.fdi * fdiNow
+        + FX.carry * (simRr - rr0) - FX.risk * s.riskPremium
+        - (this.war.stage === 'war' && !this.war.ceasefire ? FX.war : this.war.stage === 'frozen' ? FX.frozen : 0)
+        - (lean ? FX.lean : 0);
+      if (target > 0) target *= lean ? FX.passUpLean : FX.passUp;
+      this.fx = Math.max(FX.maxDown, Math.min(FX.maxUp, this.fx + FX.speed * (target - this.fx)));
+      if ((globalThis as any).process?.env?.FXDBG) console.log(`Q${this.quarter + 1} fx ${this.fx.toFixed(2)} target ${target.toFixed(2)} pot ${s.potentialGrowthYoy.toFixed(2)} fdi ${fdiNow.toFixed(2)} rr ${(simRr - rr0).toFixed(2)} risk ${s.riskPremium.toFixed(2)}`);
+    }
     const policy: Policy = {
       // The Bank of Thailand. A Taylor rule on CORE inflation with a 2% target
       // and a 0.5% neutral real rate, i = 0.5 + core + 0.5(core - 2), which is
@@ -656,7 +690,7 @@ export class BrowserGame {
       // moves halfway to its target each quarter: the MPC meets eight times a
       // year and rarely moves more than 50bp at once.
       policyRate: s.policyRate + 0.5 * ((1.0 + 1.5 * Math.max(0, s.cpiCoreYoy - 1.0) + 0.25 * Math.max(0, s.gap - 2)) - s.policyRate),
-      reer: s.reer,
+      reer: this.history[3].reer * (1 + this.fx / 100),
       capitalSpend: Math.min(cap, BASELINE.capitalSpend + this.stance.capitalSpend * ramp) + this.temp.capitalSpend,
       govConsumption: BASELINE.govConsumption + this.stance.govConsumption * ramp + this.temp.govConsumption,
       transfers: Math.min(stimCap, this.stance.transfers * ramp) + this.temp.transfers,
@@ -681,7 +715,7 @@ export class BrowserGame {
     const sum = (k: 'gap' | 'investment' | 'energy') => live.reduce((a, x) => a + x[k], 0);
     const exog: Exog = { ...world,
       energyInflation: world.energyInflation + sum('energy'),
-      shock: (world.shock ?? 0) + sum('gap'),
+      shock: (world.shock ?? 0) + sum('gap') - FX.tourism * this.fx,
       investmentShock: (world.investmentShock ?? 0) + sum('investment') };
     const params: Params = { ...this.params,
       // Disbursement is a RATE, not a multiplier: 1.0 means every baht of the
@@ -912,8 +946,19 @@ export class BrowserGame {
     // the baht depreciates to offset it (relative PPP). Otherwise overheating
     // would buy headline.
     const priceFactor = Math.min(end.cpi / start.cpi, Math.pow(1.012, this.quarter / 4));
+    // The baht: the IMF's path has it easing to 34.6, and a real appreciation
+    // against that path converts at a better rate (FX above).
     return IMF_2025 * BASELINE_ALIGN * PRICE_ALIGN * (end.rgdp / start.rgdp) * priceFactor
-         * (71.62 / 71.215) * (32.88 / 34.6);
+         * (71.62 / 71.215) * (32.88 / 34.6) * (end.reer / start.reer);
+  }
+  /** Baht per US dollar: the IMF's implied path (WEO October 2026, nominal GDP
+   *  in baht over GDP in dollars: 32.9 in 2025, 33.0 in 2026, 34.3 in 2027,
+   *  34.6 from 2028), moved by the baht's real deviation from it. */
+  baht(q = this.quarter): number {
+    const path = [32.88, 33.0, 34.3, 34.6, 34.6, 34.6];
+    const t = Math.max(0, Math.min(16, q)) / 4 + 0.25, i = Math.min(4, Math.floor(t));
+    const imf = path[i] + (path[i + 1] - path[i]) * (t - i);
+    return imf * this.history[3].reer / this.state.reer;
   }
   /** Population and fertility. Thai population follows the IMF path the headline
    *  uses (71.62m in 2026 to 71.215m in 2030). TFR starts at 0.9 and falls about

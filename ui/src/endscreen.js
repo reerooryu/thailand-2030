@@ -103,6 +103,9 @@ export function showEnd(walked, snap = false) {
           ${row('Private investment', fmt(s.invRate) + '%', 'of GDP, from 18.0%')}
           ${row('SET Index', Math.round(g.set).toLocaleString(),
                 `${setChg >= 0 ? '+' : ''}${fmt(setChg)}% from 1,622`, setChg >= 0 ? 'good' : 'critical')}
+          ${row('Baht', fmt(g.baht(), 2) + ' to the dollar',
+                `IMF path 34.60 · ${g.fx >= 0 ? 'stronger' : 'weaker'} by ${fmt(Math.abs(g.fx), 1)}%${g.flags.has('baht_lean') ? ', with the BOT leaning against it' : ''}`,
+                g.fx >= 0.5 ? 'good' : g.fx <= -2 ? 'critical' : '')}
           ${row('Capital stock', fmt(s.capital / start.capital * 100 - 100, 1) + '%', 'growth over the term')}
           ${row('Reform stock', fmt(s.reformStock, 1), 'accumulated structural effort')}
           ${row('Alignment', g.alignLabel(), `US ${g.align.us} · China ${g.align.cn}`)}

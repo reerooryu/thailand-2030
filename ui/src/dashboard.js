@@ -79,7 +79,7 @@ export function render() {
          'year on year', yoySeries(), 'var(--series-3)'),
     tile('Headline inflation', fmt(s.cpiYoy), '%', `core ${fmt(s.cpiCoreYoy)}%`,
          hist.map(h => h.cpiYoy), 'var(--series-2)'),
-    tile('SET Index', Math.round(g.set).toLocaleString(), '', 'the fastest-moving number here',
+    tile('SET Index', Math.round(g.set).toLocaleString(), '', `baht ${g.baht().toFixed(2)} to the dollar`,
          g.setHistory.slice(-10), 'var(--series-1)'),
   ].join('');
 

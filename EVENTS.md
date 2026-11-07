@@ -82,7 +82,9 @@ This one is the design's FX thesis arriving as a political demand rather than an
 | Global energy spike (hazard) | energy +8 pts, gap −0.2, for 4 quarters | price cap: energy ×0.3; targeted subsidy ×0.8 |
 | US tariffs on electronics (Q6) | gap −0.2 every quarter for the rest of the term | concede ×0.25, negotiate ×0.5, refuse ×1 |
 
-The Hormuz shock reproduces the April 2026 print: headline CPI goes from deflation to about 5.8% within a year, core to about 2.5%, and the BOT, reacting to core, takes the rate to about 2.8%. On the main economymaxx line, refusing the tariffs costs about 40 USD at the count, letting Hormuz pass through 10, and letting the late energy spike pass through 13 (and, through approval, about 50 seats).
+**The tourism lobby's demand for a weaker baht (Q4)** now does something. Pressing the BOT sets `baht_lean`: the Bank partly complies, letting only 30% of appreciation pressure through instead of 50% and shifting its target down 1.5%. On a well-run line the baht then ends near the IMF's 34.6 instead of about 34.0, which costs about 110–125 USD of headline (111 on the main economymaxx line): tourism gains in baht, and the country loses in dollars.
+
+The Hormuz shock reproduces the April 2026 print: headline CPI goes from deflation to about 5.8% within a year, core to about 2.5%, and the BOT, reacting to core, takes the rate to about 2.8%. On the main economymaxx line, refusing the tariffs costs about 55 USD at the count, letting Hormuz pass through 6, and letting the late energy spike pass through 14 (and, through approval, about 45 seats).
 
 **Debt ceiling warning** — fires above 68.5% of GDP, which every run reaches. Raise the ceiling, consolidate, or note it and proceed.
 

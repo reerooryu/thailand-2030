@@ -59,7 +59,7 @@ Every card and every fiscal event was checked against the money it represents (G
 | Allowances; ministry restructure; migrant regularisation | 0.38; 0.03; 0.10 | 0.31; 0.01; 0.03 | Costed from recipients and rates. |
 | Provincial tourism; tourism support; fuel subsidies; Hormuz co-payments; better severance | permanent | one-off (4 or 8 quarters) | Each is a single envelope or a temporary relief. |
 
-**What the audit leaves as it is, deliberately.** The game multiplies every fiscal multiplier by a playability gain (`config/playability.json`, ×3; since November 2026 the fiscal block applies multipliers as total responses with a tax collection factor, `LITERATURE.md` §1.3). A dated tax step still bites: letting VAT rise to 10% in October 2029 costs about 140 USD of headline at the count (about 400 before the correction). The Land Bridge keeps its state-built cost, and the five news "notes" on scheduled projects (the Orange and Purple lines, Laem Chabang F, Map Ta Phut 3, the Bangkok plan) keep their small capital top-ups.
+**What the audit leaves as it is, deliberately.** The game multiplies every fiscal multiplier by a playability gain (`config/playability.json`, ×3; since November 2026 the fiscal block applies multipliers as total responses with a tax collection factor, `LITERATURE.md` §1.3). A dated tax step still bites: letting VAT rise to 10% in October 2029 costs about 145 USD of headline at the count (about 400 before the correction). The Land Bridge keeps its state-built cost, and the five news "notes" on scheduled projects (the Orange and Purple lines, Laem Chabang F, Map Ta Phut 3, the Bangkok plan) keep their small capital top-ups.
 
 ## The rail cards, and conditional unlocks
 

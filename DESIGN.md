@@ -283,6 +283,17 @@ Y_pot = TFP · K^α · (L · H)^(1−α)
 ```
 FX matters enormously here because the win condition is USD-denominated, and modest appreciation genuinely does more for the Headline score than plausible real growth. But the player cannot summon it: they can influence the rate differential (50bp of room), the current account, and risk sentiment, and that is all. Moves of a few percent are achievable; 27% is not.
 
+**As built (November 2026).** Until now the baht was copied forward unchanged in play, so every run converted at the IMF's path (easing from 32.9 to 34.6 to the dollar) however it was governed. It now moves, in the game host (`FX` in `browser.ts`; the backtest still reads the real series from data). Each quarter the real rate moves a quarter of the way toward a target, measured as a percent deviation from the IMF's path:
+
+```
+target = 1.5·(potential growth − 2.15) + 0.75·FDI signal + 0.5·Δ(real rate, core)
+       − 3·risk premium − 2 (while fighting) − 1 (frozen ceasefire) − 1.5 (government leaning on the BOT)
+```
+
+The BOT leans against appreciation by buying dollars: only half of any upward target reaches the rate (0.3 once the government has publicly pressed it to weaken the baht for tourism), and the baht can strengthen at most 4% in a term. Downward pressure passes in full. A stronger baht costs tourism and tradables margins, 0.05 points of output gap per percent each quarter, and weaker helps them. The headline converts at the moved rate.
+
+In practice the do-nothing term stays on the IMF's path, well-run lines strengthen 1.4–1.7% (to about 34.0–34.1), worth roughly 130–160 USD of headline after the tourism cost, and pressing the BOT for tourism keeps the baht near 34.6. A government that loses market confidence (risk premium, war) gets a weaker baht.
+
 Note that the export feedback is **weak** — estimation finds no significant REER elasticity on goods exports (`MODEL.md` §4). Do not model appreciation as gutting exports; the data says it does not. Tourism receipts and tradables margins are the channels that do respond, and they should carry the real cost.
 
 **Sovereign risk premium.** Thai government bond yields are **out of scope** — ThaiBMA is subscription-only and the curve is not worth a dependency. The premium is therefore modelled as a judgemental function rather than estimated:
