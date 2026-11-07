@@ -764,7 +764,10 @@ export class BrowserGame {
       }
     }
     this.expiring = this.expiring.filter(x => x.at > this.quarter);
-    for (const x of this.pendingCard.filter(x => x.at <= this.quarter)) {
+    // Nothing scheduled lands once the term is over: a step due after the
+    // final quarter belongs to the next government, and must not set the
+    // flags (a VAT rate in force, say) that the end screen reads.
+    for (const x of this.pendingCard.filter(x => x.at <= this.quarter && this.quarter < 16)) {
       this.apply(x.effects);
       for (const f of x.sets ?? []) { this.flags.add(f); this.flagSince[f] ??= this.quarter; }
       const r = (this.cardFiscal[x.cardId] ??= {});

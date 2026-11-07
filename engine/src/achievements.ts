@@ -220,10 +220,12 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'revenue_state',
     name: 'A Revenue State at Last',
-    requirement: 'Raise VAT and pass the full Revenue Mobilisation Package in the same term.',
+    requirement: 'Raise VAT, with the higher rate in force before the count, and pass the full Revenue Mobilisation Package in the same term.',
     flavour: 'Thailand collects less of GDP than any peer it likes to be compared to. Two tax rises in one parliament. A feat of politics.',
     rarity: 'uncommon',
-    test: c => has(c, 'vat_raised') && has(c, 'revenue_package_done'),
+    // The rate has to be collected, not merely legislated: a phased rise
+    // passed in the last two quarters lands after the count and costs nothing.
+    test: c => (has(c, 'vat_8_5') || has(c, 'vat_10')) && has(c, 'revenue_package_done'),
   },
   {
     id: 'grey_capital',

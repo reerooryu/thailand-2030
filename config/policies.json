@@ -882,7 +882,8 @@
           "flavour": "Closes the gap in one move and funds everything on the desk. The opposition gets its slogan. -1.65pp of output on impact.",
           "sets": [
             "revenue_secured",
-            "vat_raised"
+            "vat_raised",
+            "vat_10"
           ],
           "maximal": true
         }
