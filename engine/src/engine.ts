@@ -38,11 +38,27 @@ export function step(input: StepInput): State {
   // Impulses are YEAR-ON-YEAR changes in each instrument's GDP share. The
   // underlying NESDC fiscal series are 'original', not seasonally adjusted, so
   // a quarter-on-quarter difference is mostly seasonality, not policy.
-  const fiscalImpulse =
+  //
+  // The published multipliers are TOTAL responses: how much output moves, in
+  // all, for a sustained change of 1% of GDP. The gap carries every quarter's
+  // impulse forward at gapPersistence, so entering the whole multiplier each
+  // quarter counted it about 1/(1 - persistence) ≈ 1.9 times over. Scaling the
+  // quarterly impulse by (1 - persistence) makes the peak response to a
+  // permanent change land on the multiplier itself (1 - persistence^4 of it,
+  // since the year-on-year impulse lasts four quarters).
+  //
+  // Taxes carry a collection factor, as spending carries an execution rate:
+  // the card states the legislated yield, and only part of a legislated rise
+  // reaches household spending within the year (compliance, the informal
+  // sector, and the part of indirect tax paid by visitors and absorbed in
+  // margins). Without it a baht of tax moved output three times as far as a
+  // baht of capital spending.
+  const toTotal = 1 - p.gapPersistence;
+  const fiscalImpulse = toTotal * (
     p.multCapital  * p.executionCapital * (policy.capitalSpend   - lag4.capitalSpend) +
     p.multGovCons  * p.executionOther    * (policy.govConsumption - lag4.govConsumption) +
     p.multTransfer * p.executionOther    * (policy.transfers      - lag4.transfers) +
-    p.multTax      * (policy.taxRate        - lag4.taxRate);
+    p.multTax      * p.collectionTax     * (policy.taxRate        - lag4.taxRate));
 
   const gap =
     p.gapPersistence * s.gap +

@@ -253,7 +253,7 @@ Calibration must reproduce this. A player should find it genuinely hard to gener
 
 **Inflation expectations, very lightly.** While headline runs above 3%, expected inflation drifts up by 2% of the excess each quarter and decays 5% a quarter back towards target; the drift shifts both curves' long-run level one for one (`expDrift`, `expDecay`, `expThreshold`). Two years at 6% moves it about half a point. It never matters below 3%. The fuller design (an anchor that also responds to BOT credibility events, slow and costly to re-anchor) is not built.
 
-**The Bank of Thailand** holds at 1.0% until the economy runs hot, then leans against it: its target is 1.0 + 1.5·max(0, CPI − 2) + 0.25·max(0, gap − 2), and it moves halfway to that target each quarter, as an MPC that meets eight times a year and rarely moves more than 50bp at once would.
+**The Bank of Thailand** follows a Taylor rule on *core* inflation with a 2% target and a 0.5% neutral real rate, floored at 1.0%: its target is 1.0 + 1.5·max(0, core − 1) + 0.25·max(0, gap − 2), and it moves halfway to that target each quarter, as an MPC that meets eight times a year and rarely moves more than 50bp at once would. It looks through energy, as it did in 2008 and 2022, but not through second-round effects. The real rate that moves borrowing is measured against core inflation too (the ex-ante rate: nobody borrows on the assumption that an oil spike lasts). Measured against headline, with the rule reacting to headline, the Hormuz shock first drove the real rate to −4%, turning an oil shock into a boom, and then took the policy rate to 6%.
 
 **Potential output.** A production function:
 ```

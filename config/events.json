@@ -256,6 +256,11 @@
       },
       "blocking": true,
       "body": "Headline inflation moves this month whatever you do. Energy passes into headline CPI at over four times the rate it reaches core, and fuel prices are what voters notice.",
+      "shock": {
+        "energy": 8,
+        "gap": -0.2,
+        "quarters": 4
+      },
       "options": [
         {
           "id": "subsidise",
@@ -272,7 +277,10 @@
             "approvalBoost": 7
           },
           "flavour": "Instant relief, permanent expectation. Thailand has never unwound one cleanly.",
-          "effectsQuarters": 4
+          "effectsQuarters": 4,
+          "shockScale": {
+            "energy": 0.3
+          }
         },
         {
           "id": "targeted",
@@ -287,7 +295,10 @@
             "approvalBoost": 2
           },
           "flavour": "A third of the cost, a third of the credit.",
-          "effectsQuarters": 4
+          "effectsQuarters": 4,
+          "shockScale": {
+            "energy": 0.8
+          }
         },
         {
           "id": "absorb",
@@ -380,6 +391,12 @@
       "scriptedQuarter": 0,
       "blocking": true,
       "body": "About half of Thailand's crude and a third of its LNG transit Hormuz. Panic buying has pushed daily consumption from 67 to 84 million litres. The Federation of Thai Industries warns heavy-industry costs could rise 50%. Headline CPI, negative three months ago, is about to jump.",
+      "shock": {
+        "energy": 10,
+        "gap": -0.6,
+        "investment": -0.3,
+        "quarters": 4
+      },
       "options": [
         {
           "id": "copayment",
@@ -414,7 +431,11 @@
             "fdiSignal": -0.1,
             "institutionalSupport": -3
           },
-          "flavour": "Cheaper for the budget. The energy sector will remember."
+          "flavour": "Cheaper for the budget. The energy sector will remember.",
+          "shockScale": {
+            "energy": 0.6,
+            "gap": 0.7
+          }
         },
         {
           "id": "pass_through",
@@ -2175,6 +2196,10 @@
       "scriptedQuarter": 5,
       "blocking": true,
       "body": "The US Trade Representative opens an investigation into Chinese components routed through Thai factories to dodge American duties. Electronics are Thailand's largest export to the US, its biggest single market. The letter asks what Bangkok intends to do about it.",
+      "shock": {
+        "gap": -0.2,
+        "quarters": 99
+      },
       "options": [
         {
           "id": "concede",
@@ -2194,7 +2219,10 @@
             "setSupport": 0.3,
             "approvalBoost": -2
           },
-          "flavour": "The tariff goes away. So do some Chinese-owned factories in Rayong."
+          "flavour": "The tariff goes away. So do some Chinese-owned factories in Rayong.",
+          "shockScale": {
+            "gap": 0.25
+          }
         },
         {
           "id": "negotiate",
@@ -2207,7 +2235,10 @@
             "Others": 2
           },
           "effects": {},
-          "flavour": "Nobody is satisfied, and nobody is punished. Thai diplomacy at its most Thai."
+          "flavour": "Nobody is satisfied, and nobody is punished. Thai diplomacy at its most Thai.",
+          "shockScale": {
+            "gap": 0.5
+          }
         },
         {
           "id": "retaliate",

@@ -35,6 +35,14 @@ The wedge is chronic under-disbursement — the sources name it explicitly for c
 
 The engine models it as an explicit `executionCapital` = **0.50** and `executionOther` = **0.70**, giving effective multipliers of 0.34 and 0.33 — inside the reported aggregate band and reconciling the two numbers.
 
+### 1.3 Total responses, and the collection factor (November 2026)
+
+The published multipliers are **total** responses: how far output moves, in all, for a sustained change of 1% of GDP. The gap equation carries each quarter's impulse forward at `gapPersistence` (0.485), so entering the whole multiplier every quarter counted it about 1/(1 − 0.485) ≈ 1.9 times. The engine now scales the quarterly impulse by (1 − `gapPersistence`), so the peak response to a permanent change lands on the multiplier itself (1 − 0.485⁴ ≈ 95% of it, because the year-on-year impulse lasts four quarters). With gains at 1.0 this also improves the backtest: gap RMSE 2.34 → 2.14, correlation 0.55 → 0.63.
+
+Taxes now carry a **collection factor**, `collectionTax` = **0.70**, the revenue side's execution rate. A card states the legislated yield; compliance gaps, the informal sector, and the part of indirect tax paid by visitors or absorbed in margins keep the rest from reaching household spending within the year. It scales the tax multiplier, not the revenue, exactly as execution scales spending's demand effect but not its cost. The effective tax multiplier is −0.79, at the low end of the published range. Without it a baht of tax moved output about three times as far as a baht of capital spending (0.34 effective).
+
+With the fiscal playability gain at 2.5, the peak output response in the game to 1% of GDP is now about 1.9 for a tax rise (was 6.2), 0.80 for capital spending (1.9), 0.77 for government consumption (1.8) and 0.50 for transfers (1.2).
+
 **This is also a game mechanic.** The player allocates a budget; only a fraction lands. Execution rate becomes something reform can improve — an unglamorous, cheap, high-value structural lever of exactly the kind the design wants to reward.
 
 **Note on why these are not fitted.** An unconstrained fit drives both execution rates to their lower bounds, implying effective multipliers near 0.20 — below the published range. That is almost certainly the same endogeneity as `MODEL.md` §1: governments spend into weakness, biasing any fitted fiscal response toward zero. Fitting them would repeat exactly the mistake the sign bounds exist to prevent. They are set by judgement, and the backtest fit is worse for it. That is the correct trade.

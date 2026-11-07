@@ -74,6 +74,16 @@ This one is the design's FX thesis arriving as a political demand rather than an
 
 **Energy shock** — 9%/quarter hazard. Cap fuel prices (approval +7, permanent expectation), targeted transport subsidy, or let it pass through (approval −8, and correct). Grounded in the April 2026 shock already in the data.
 
+**Shocks that happen whatever you answer (November 2026).** Until now only the 2026 flood moved the economy by itself; every other crisis was free if ignored, and answering it was a stimulus. Events can now carry a shock that lasts several quarters (`shock: {gap, investment, energy, quarters}`; `energy` is added to raw food and energy inflation), and an answer can scale it (`shockScale`):
+
+| Event | Shock | How the answers change it |
+|---|---|---|
+| Hormuz closed (Q1) | energy +10 pts, gap −0.6, investment −0.3, for 4 quarters | reserves and margin caps: energy ×0.6, output ×0.7. Co-payment credits leave pump prices and the shock as they are |
+| Global energy spike (hazard) | energy +8 pts, gap −0.2, for 4 quarters | price cap: energy ×0.3; targeted subsidy ×0.8 |
+| US tariffs on electronics (Q6) | gap −0.2 every quarter for the rest of the term | concede ×0.25, negotiate ×0.5, refuse ×1 |
+
+The Hormuz shock reproduces the April 2026 print: headline CPI goes from deflation to about 5.8% within a year, core to about 2.5%, and the BOT, reacting to core, takes the rate to about 2.8%. On the main economymaxx line, refusing the tariffs costs about 40 USD at the count, letting Hormuz pass through 11, and letting the late energy spike pass through 11 (and, through approval, about 50 seats).
+
 **Debt ceiling warning** — fires above 68.5% of GDP, which every run reaches. Raise the ceiling, consolidate, or note it and proceed.
 
 ## Two new policy cards

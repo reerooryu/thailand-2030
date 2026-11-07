@@ -80,7 +80,7 @@ export function runScenario(st: Strategy, params: Params = applyGains(BASE, load
     const h = hist.length;
     const s = hist[h - 1];
     const lag4 = hist[h - 4];
-    const simRr = hist.slice(-4).reduce((a, v) => a + (v.policyRate - v.cpiYoy), 0) / 4;
+    const simRr = hist.slice(-4).reduce((a, v) => a + (v.policyRate - v.cpiCoreYoy), 0) / 4;
     const prev = { ...hist[h - 2], realRate: simRr } as State;
 
     const stance = st.policy(q, s);

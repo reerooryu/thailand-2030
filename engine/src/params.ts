@@ -22,6 +22,7 @@ export const PROVENANCE: Record<keyof Params, ParamSource> = {
   crowdingOut: 'literature',
   executionCapital: 'fitted',
   executionOther: 'fitted',
+  collectionTax: 'prior',
 
   corePersistence: 'estimated',
   coreGap: 'estimated',
@@ -142,6 +143,7 @@ export const BASE: Params = {
   // inside the 0.25-0.49 aggregate band the same sources report.
   executionCapital: 0.50,
   executionOther: 0.70,
+  collectionTax: 0.70,      // matches executionOther: effective tax multiplier -0.79
 
   // Phillips — from phillips.py, core equation R2=0.957
   corePersistence: 0.859,

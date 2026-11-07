@@ -58,6 +58,10 @@ export interface EventOption {
   cancels?: string;
   sets?: string[]; clears?: string[];
   flavour?: string;
+  /** How this answer changes the event's own shock: a price cap holds the
+   *  energy component down, conceding a tariff mostly avoids the export hit.
+   *  Multiplies the event's `shock` (gap also scales investment). */
+  shockScale?: { gap?: number; energy?: number };
 }
 export interface GameEvent {
   id: string; headline: string; body: string;
@@ -68,8 +72,12 @@ export interface GameEvent {
   /** What the event does to the economy whatever the answer: the flood
    *  happens before the cabinet meets. Added to the quarter's exogenous
    *  shocks, in percentage points of the output gap and of the private
-   *  investment rate (the same units as config/shocks.json). */
-  shock?: { gap?: number; investment?: number };
+   *  investment rate (the same units as config/shocks.json).
+   *  `energy` is added to raw food and energy inflation (y/y %, the series the
+   *  Phillips curves read). A shock lasts one quarter unless `quarters` says
+   *  otherwise; each quarter it is added again, so a lasting gap shock settles
+   *  at about twice its size. */
+  shock?: { gap?: number; investment?: number; energy?: number; quarters?: number };
   options: EventOption[];
 }
 

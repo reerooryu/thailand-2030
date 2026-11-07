@@ -71,8 +71,11 @@ export interface LogEntry { quarter: number; kind: string; text: string; }
  *  that. Its real revision is NOT aligned. The October 2026 vintage builds in
  *  the 400-billion-baht energy decree, so a term that issues the decree lands
  *  near the IMF's 9,399 and a term that does nothing at all falls short.
- *  scripts/passive_check.ts reports both. */
-const BASELINE_ALIGN = 1.0385;
+ *  scripts/passive_check.ts reports both. Refitted (1.0385 → 1.0472) in
+ *  November 2026, after the fiscal block and the BOT rule were corrected and
+ *  the Hormuz and tariff events began to move the economy, to keep the passive
+ *  term where it was. */
+const BASELINE_ALIGN = 1.0472;
 const SEN_NEED = 67;
 
 /** Stance keys that are money, in % of GDP a year. */
@@ -318,8 +321,10 @@ export class BrowserGame {
     return attempt(this.whipState(), card, opt.id).result;
   }
 
-  /** Disaster shocks that hit this quarter, from events that fired in it. */
-  quarterShock = { gap: 0, investment: 0 };
+  /** Shocks from events: the flood, the energy spikes, the tariffs. Each runs
+   *  from the quarter its event fires until `until`, and the answer to the
+   *  event can scale it (EventOption.shockScale). */
+  shocks: { id: string; until: number; gap: number; investment: number; energy: number }[] = [];
   /** One-off money (EventOption.effectsQuarters). Emergency spending sits
    *  outside the budget, so it is paid at full size from the first quarter
    *  instead of ramping in with the programme stance, and outside the
@@ -343,10 +348,8 @@ export class BrowserGame {
     for (const e of fired) {
       this.firedEvents.add(e.id);
       if (e.blocking) this.pending.push(e);
-      if (e.shock) {
-        this.quarterShock.gap += e.shock.gap ?? 0;
-        this.quarterShock.investment += e.shock.investment ?? 0;
-      }
+      if (e.shock) this.shocks.push({ id: e.id, until: this.quarter + (e.shock.quarters ?? 1),
+        gap: e.shock.gap ?? 0, investment: e.shock.investment ?? 0, energy: e.shock.energy ?? 0 });
     }
     for (const d of this.deferred.filter(d => d.returnsAtQuarter === this.quarter)) {
       const c = cat.policies.find(x => x.id === d.cardId);
@@ -452,6 +455,10 @@ export class BrowserGame {
       this.syncWar();
     }
     if (opt.cancels) this.cancelCard(opt.cancels);
+    if (opt.shockScale) for (const x of this.shocks.filter(x => x.id === e.id)) {
+      x.gap *= opt.shockScale.gap ?? 1; x.investment *= opt.shockScale.gap ?? 1;
+      x.energy *= opt.shockScale.energy ?? 1;
+    }
     if (opt.effectsQuarters) {
       // Fiscal money goes to the one-off pot; the rest (approval, opinion,
       // signals) lands as usual and its stance part is withdrawn on expiry.
@@ -589,7 +596,11 @@ export class BrowserGame {
     this.censusProposals();
     this.syncStateFlags();
     const h = this.history, s = h[h.length - 1], lag4 = h[h.length - 4];
-    const simRr = h.slice(-4).reduce((a, v) => a + (v.policyRate - v.cpiYoy), 0) / 4;
+    // The real rate that moves borrowing is the ex-ante one, against CORE
+    // inflation: nobody borrows on the assumption that an oil spike lasts.
+    // Against headline, the Hormuz shock drove it to -4% and turned an oil
+    // shock into a boom.
+    const simRr = h.slice(-4).reduce((a, v) => a + (v.policyRate - v.cpiCoreYoy), 0) / 4;
     const prev = { ...h[h.length - 2], realRate: simRr } as State;
     const ramp = Math.min(1, (this.quarter + 1) / 6);
     const cap = this.ps.effects.megaprojectCap ?? 9.0;
@@ -636,11 +647,15 @@ export class BrowserGame {
       this.log.push({ quarter: this.quarter, kind: 'note', text: `OECD accession: the ${c} chapter closes` });
     }
     const policy: Policy = {
-      // The Bank of Thailand: holds at 1.0% until the economy runs hot, then
-      // leans against it. Without this, inflation lowered the real rate and fed
-      // the boom it came from. It moves halfway to its target each quarter:
-      // the MPC meets eight times a year and rarely moves more than 50bp at once.
-      policyRate: s.policyRate + 0.5 * ((1.0 + 1.5 * Math.max(0, s.cpiYoy - 2.0) + 0.25 * Math.max(0, s.gap - 2)) - s.policyRate),
+      // The Bank of Thailand. A Taylor rule on CORE inflation with a 2% target
+      // and a 0.5% neutral real rate, i = 0.5 + core + 0.5(core - 2), which is
+      // 1.0 + 1.5(core - 1); plus a lean against a gap above 2%; floored at
+      // 1.0%. It looks through energy, as it did in 2008 and 2022, but not
+      // through second-round effects: when core rises it tightens before the
+      // real rate turns negative, so an oil shock cannot become a boom. It
+      // moves halfway to its target each quarter: the MPC meets eight times a
+      // year and rarely moves more than 50bp at once.
+      policyRate: s.policyRate + 0.5 * ((1.0 + 1.5 * Math.max(0, s.cpiCoreYoy - 1.0) + 0.25 * Math.max(0, s.gap - 2)) - s.policyRate),
       reer: s.reer,
       capitalSpend: Math.min(cap, BASELINE.capitalSpend + this.stance.capitalSpend * ramp) + this.temp.capitalSpend,
       govConsumption: BASELINE.govConsumption + this.stance.govConsumption * ramp + this.temp.govConsumption,
@@ -660,10 +675,14 @@ export class BrowserGame {
     const rngEnergy = 1.5 + (this.rng() - 0.5) * 3;   // drawn either way, so the sequence never shifts
     const world: Exog = exogOverride ?? { worldDemandGrowth: 3.0, globalActivity: 10.0,
                          energyInflation: rngEnergy, shock: 0 };
-    // Disasters arrive through events, on top of whatever world was passed in.
+    // Disasters, price spikes and tariffs arrive through events, on top of
+    // whatever world was passed in.
+    const live = this.shocks.filter(x => x.until > this.quarter);
+    const sum = (k: 'gap' | 'investment' | 'energy') => live.reduce((a, x) => a + x[k], 0);
     const exog: Exog = { ...world,
-      shock: (world.shock ?? 0) + this.quarterShock.gap,
-      investmentShock: (world.investmentShock ?? 0) + this.quarterShock.investment };
+      energyInflation: world.energyInflation + sum('energy'),
+      shock: (world.shock ?? 0) + sum('gap'),
+      investmentShock: (world.investmentShock ?? 0) + sum('investment') };
     const params: Params = { ...this.params,
       // Disbursement is a RATE, not a multiplier: 1.0 means every baht of the
       // capital budget actually gets spent in the year it was voted. Reform can
@@ -692,7 +711,7 @@ export class BrowserGame {
     this.setHistory.push(this.set);
     this.quarter++;
     this.actionsThisTurn = 0;
-    this.quarterShock = { gap: 0, investment: 0 };
+    this.shocks = this.shocks.filter(x => x.until > this.quarter);
     // One-off money runs out. Approval and opinion already moved and are left
     // to drift on their own; only the money and the stance shift are withdrawn.
     for (const x of this.expiring.filter(x => x.at <= this.quarter)) {

@@ -5,7 +5,7 @@ baseline, coalition Bhumjaithai + Pheu Thai + Others, seed 20260201.
 Prerequisite flags are granted so gated options can be measured on their
 own merits rather than showing as zero.
 
-**Passive baseline** — headline 9445, legacy 2.15%, debt 74.6%, investment 18.0%, approval 56.0, reform stock 3.8.
+**Passive baseline** — headline 9423, legacy 2.14%, debt 71.2%, investment 18.0%, approval 54.7, reform stock 3.8.
 
 ## A note on units, because the card faces mislead
 
@@ -22,122 +22,122 @@ number that actually matters.
 
 | Card | Option | Δheadline | Δlegacy | Δdebt | Δinvestment | Δapproval | Δreform stock | note |
 |---|---|--:|--:|--:|--:|--:|--:|---|
-| Super Licence and Omnibus Law | Full omnibus consolidation | +47 | +0.17 | -0.2 | +0.63 | -0.3 | +15.7 |  |
+| Super Licence and Omnibus Law | Full omnibus consolidation | +41 | +0.16 | -0.2 | +0.61 | -0.4 | +15.7 |  |
 | Super Licence and Omnibus Law | Super licence only, defer the omnibus | +15 | +0.07 | -0.1 | +0.29 | +0.2 | +8.1 |  |
 | Super Licence and Omnibus Law | Take no action | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
-| OECD Accession | Accelerate the roadmap | +55 | +0.23 | -0.3 | +0.97 | -0.2 | +20.5 |  |
+| OECD Accession | Accelerate the roadmap | +55 | +0.23 | -0.3 | +0.96 | -0.2 | +20.5 |  |
 | OECD Accession | Proceed at technical pace | +13 | +0.06 | -0.1 | +0.26 | +0.1 | +6.7 |  |
-| OECD Accession | Let it drift | -4 | -0.01 | +0.0 | -0.11 | -0.1 | 0.0 |  |
-| Civil Service Reform | Full early-retirement programme | -1 | +0.05 | +0.4 | +0.13 | -0.9 | +10.9 |  |
-| Civil Service Reform | Freeze hiring, let attrition do it | +6 | +0.03 | -0.3 | +0.11 | +0.2 | +3.8 |  |
+| OECD Accession | Let it drift | -4 | -0.01 | +0.0 | -0.11 | 0.0 | 0.0 |  |
+| Civil Service Reform | Full early-retirement programme | +5 | +0.10 | +0.3 | +0.34 | -0.4 | +10.9 |  |
+| Civil Service Reform | Freeze hiring, let attrition do it | +7 | +0.03 | -0.3 | +0.11 | 0.0 | +3.8 |  |
 | Civil Service Reform | Leave the establishment alone | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
-| Ministry Restructure — Tourism, Culture and Sport | Split sport out and merge tourism with culture | +8 | +0.03 | -0.0 | +0.10 | +0.4 | +3.2 |  |
-| Ministry Restructure — Tourism, Culture and Sport | Create the sports ministry, leave tourism where it is | +2 | +0.01 | +0.0 | +0.03 | +0.4 | +1.5 |  |
+| Ministry Restructure — Tourism, Culture and Sport | Split sport out and merge tourism with culture | +6 | +0.03 | +0.0 | +0.10 | +0.4 | +3.2 |  |
+| Ministry Restructure — Tourism, Culture and Sport | Create the sports ministry, leave tourism where it is | +2 | +0.01 | +0.0 | +0.03 | +0.5 | +1.5 |  |
 | Ministry Restructure — Tourism, Culture and Sport | Leave the machinery alone | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
 | Party Finance and Organisation Act | Enforce the formula, audit the branches, fund against projects | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Party Finance and Organisation Act | Enlarge the fund, leave the formula alone | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Party Finance and Organisation Act | Not this parliament | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Formal Annexation of the 1941 Provinces | Pass the annexation bill | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Formal Annexation of the 1941 Provinces | Keep the occupation administration, defer the bill | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
-| Deep South Reappraisal | Small steps: talks and a few concessions | +2 | +0.01 | -0.0 | +0.06 | +0.6 | 0.0 |  |
-| Deep South Reappraisal | Development only | +5 | +0.01 | +0.5 | -0.05 | +0.1 | 0.0 |  |
-| Deep South Reappraisal | Security first | +1 | -0.01 | +0.4 | -0.07 | -0.8 | 0.0 |  |
-| Laos: the Mekong Partnership | Phi-nong compact: a baht zone and an open border | +5 | +0.01 | +0.4 | -0.03 | +0.3 | 0.0 |  |
-| Laos: the Mekong Partnership | Grid, rail and border trade | +2 | +0.00 | +0.2 | -0.01 | +0.1 | 0.0 |  |
+| Deep South Reappraisal | Small steps: talks and a few concessions | +2 | +0.01 | -0.0 | +0.06 | +0.5 | 0.0 |  |
+| Deep South Reappraisal | Development only | +2 | +0.01 | +0.5 | -0.03 | +0.3 | 0.0 |  |
+| Deep South Reappraisal | Security first | -2 | -0.00 | +0.4 | -0.05 | -0.8 | 0.0 |  |
+| Laos: the Mekong Partnership | Phi-nong compact: a baht zone and an open border | +2 | +0.01 | +0.4 | -0.01 | +0.5 | 0.0 |  |
+| Laos: the Mekong Partnership | Grid, rail and border trade | +1 | +0.00 | +0.2 | -0.01 | +0.1 | 0.0 | **no measurable effect** |
 | Laos: the Mekong Partnership | Leave it to EGAT and the banks | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
-| Negative Income Tax | Implement, funded from general revenue | -4 | +0.05 | +1.3 | +0.04 | +0.4 | +9.2 |  |
-| Negative Income Tax | Transfers without the VAT rise | +19 | -0.02 | +2.6 | -0.53 | -0.4 | +3.8 |  |
+| Negative Income Tax | Implement, funded from general revenue | +10 | +0.05 | +1.2 | +0.10 | +0.1 | +9.2 |  |
+| Negative Income Tax | Transfers without the VAT rise | +3 | +0.01 | +2.4 | -0.14 | -0.1 | +3.8 |  |
 | Negative Income Tax | Defer to the next government | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
-| Thai Chuay Thai Plus | Run the full scheme | +19 | -0.01 | +0.6 | -0.06 | +1.0 | 0.0 |  |
-| Thai Chuay Thai Plus | Means-test to the bottom 40% | +11 | +0.02 | +0.2 | +0.04 | +0.5 | +0.4 |  |
-| Thai Chuay Thai Plus | Redirect the funds to public investment | +10 | -0.03 | +0.7 | -0.27 | -0.7 | 0.0 |  |
-| Thailand Individual Savings Account (TISA) | Launch as approved | +22 | +0.02 | +0.4 | +0.08 | -0.3 | 0.0 |  |
-| Thailand Individual Savings Account (TISA) | Equalise deduction rights across income bands | +32 | +0.04 | +0.5 | +0.14 | -0.4 | +2.3 |  |
+| Thai Chuay Thai Plus | Run the full scheme | -1 | -0.01 | +0.6 | -0.06 | +1.1 | 0.0 |  |
+| Thai Chuay Thai Plus | Means-test to the bottom 40% | +1 | +0.00 | +0.3 | -0.01 | +0.5 | +0.4 |  |
+| Thai Chuay Thai Plus | Redirect the funds to public investment | +0 | +0.01 | +0.6 | -0.09 | -0.5 | 0.0 |  |
+| Thailand Individual Savings Account (TISA) | Launch as approved | +4 | +0.01 | +0.5 | +0.07 | -0.1 | 0.0 |  |
+| Thailand Individual Savings Account (TISA) | Equalise deduction rights across income bands | +9 | +0.03 | +0.6 | +0.13 | -0.1 | +2.3 |  |
 | Thailand Individual Savings Account (TISA) | Shelve it | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
 | VAT Reform | Keep VAT at 7% | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
-| VAT Reform | Phased: 8.5% in 2028, 10% in 2030 | -52 | -0.08 | -1.7 | -0.22 | +3.7 | +4.6 |  |
+| VAT Reform | Phased: 8.5% in 2028, 10% in 2030 | -8 | +0.01 | -2.0 | +0.09 | +1.9 | +4.6 |  |
 | VAT Reform | Go straight to 10% | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | vote fails: 196 yes, 55 short |
-| Revenue Mobilisation Package | Full package — excise, deduction caps, collection | -39 | +0.06 | -2.3 | +0.35 | +0.7 | +5.7 |  |
-| Revenue Mobilisation Package | Fuel and sin excise only | -24 | +0.02 | -0.7 | +0.11 | +0.2 | 0.0 |  |
+| Revenue Mobilisation Package | Full package — excise, deduction caps, collection | +4 | +0.05 | -2.3 | +0.26 | -0.2 | +5.7 |  |
+| Revenue Mobilisation Package | Fuel and sin excise only | -2 | +0.00 | -0.8 | +0.05 | -0.1 | 0.0 |  |
 | Revenue Mobilisation Package | No revenue measure | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
 | Central Cooperative Debt Consolidation | Create the central body, with mandatory credit-bureau reporting | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Central Cooperative Debt Consolidation | Leave the cooperatives to the registrar | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | The People's Bank | Charter the bank with capped rates | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | The People's Bank | Expand the existing state banks' mandate instead | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
-| Senior Plus 1 — Employment Incentive | Double the ceiling to 30,000 baht and lift the headcount cap | +5 | +0.02 | -0.1 | +0.06 | +0.6 | +1.9 |  |
-| Senior Plus 1 — Employment Incentive | Raise the ceiling only, keep the 10% headcount cap | +3 | +0.01 | -0.0 | +0.03 | +0.3 | +1.0 |  |
+| Senior Plus 1 — Employment Incentive | Double the ceiling to 30,000 baht and lift the headcount cap | +3 | +0.02 | -0.1 | +0.04 | +0.8 | +1.9 |  |
+| Senior Plus 1 — Employment Incentive | Raise the ceiling only, keep the 10% headcount cap | +2 | +0.01 | -0.0 | +0.02 | +0.5 | +1.0 |  |
 | Senior Plus 2 — Income Tax Relief | Grant the full 50% deduction under 1.5 million baht | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Senior Plus 2 — Income Tax Relief | A limited 25% deduction, reviewed after two years | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
-| Land Bridge (Chumphon–Ranong) | Push ahead with Phase 1 | +12 | +0.01 | +1.8 | -0.27 | -4.8 | 0.0 |  |
-| Land Bridge (Chumphon–Ranong) | Delay pending review | 0 | 0.00 | 0.0 | 0.00 | +0.1 | 0.0 | **no measurable effect** |
+| Land Bridge (Chumphon–Ranong) | Push ahead with Phase 1 | -2 | +0.01 | +1.8 | -0.20 | -4.4 | 0.0 |  |
+| Land Bridge (Chumphon–Ranong) | Delay pending review | 0 | 0.00 | 0.0 | 0.00 | +0.2 | 0.0 | **no measurable effect** |
 | Land Bridge (Chumphon–Ranong) | Cancel outright | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | vote fails: 196 yes, 55 short |
 | Chumphon–Ranong Rail Link | Build the rail link | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Chumphon–Ranong Rail Link | Commission a feasibility study | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Chumphon–Ranong Rail Link | Leave the corridor alone | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
-| Northeast HSR — Bangkok–Nong Khai (Phase 2) | Fund Phase 2 and accelerate | +16 | +0.04 | +1.2 | -0.02 | -0.2 | 0.0 |  |
-| Northeast HSR — Bangkok–Nong Khai (Phase 2) | Finish Phase 1, defer Phase 2 | +4 | +0.01 | +0.3 | -0.03 | -0.1 | 0.0 |  |
-| Northeast HSR — Bangkok–Nong Khai (Phase 2) | Renegotiate financing terms with Beijing | +10 | +0.02 | +0.9 | -0.10 | -0.2 | 0.0 |  |
-| Eastern HSR — Three-Airport Link | Amend the concession and proceed | +3 | +0.00 | +0.5 | -0.10 | -0.1 | 0.0 |  |
-| Eastern HSR — Three-Airport Link | Terminate the concession | -4 | -0.00 | +0.3 | -0.10 | -0.7 | 0.0 |  |
+| Northeast HSR — Bangkok–Nong Khai (Phase 2) | Fund Phase 2 and accelerate | +7 | +0.04 | +1.2 | +0.02 | 0.0 | 0.0 |  |
+| Northeast HSR — Bangkok–Nong Khai (Phase 2) | Finish Phase 1, defer Phase 2 | +1 | +0.01 | +0.3 | -0.02 | -0.1 | 0.0 |  |
+| Northeast HSR — Bangkok–Nong Khai (Phase 2) | Renegotiate financing terms with Beijing | +3 | +0.02 | +0.9 | -0.07 | 0.0 | 0.0 |  |
+| Eastern HSR — Three-Airport Link | Amend the concession and proceed | -0 | +0.00 | +0.5 | -0.08 | -0.1 | 0.0 | **no measurable effect** |
+| Eastern HSR — Three-Airport Link | Terminate the concession | -2 | +0.01 | +0.3 | -0.05 | -0.6 | 0.0 |  |
 | Eastern HSR — Three-Airport Link | Defer the review again | -2 | -0.01 | +0.0 | -0.05 | 0.0 | 0.0 |  |
 | EEC Conventional Rail (post-termination) | Build conventional double-track to U-Tapao | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | EEC Conventional Rail (post-termination) | Re-tender the high-speed line | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | EEC Conventional Rail (post-termination) | No replacement | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
-| Electric Bus Network | Full fleet electrification and route overhaul | +8 | +0.03 | +0.2 | +0.05 | +0.6 | +3.4 |  |
-| Electric Bus Network | Lease the buses, leave the routes alone | +2 | +0.01 | +0.1 | +0.02 | +0.4 | +1.2 |  |
-| Electric Bus Network | Electrify and make it fare-free | +6 | +0.02 | +0.3 | +0.02 | +1.4 | +2.3 |  |
-| Small Modular Reactors | Order both units and build the regulator | +13 | +0.04 | +0.1 | +0.11 | +0.1 | +2.7 |  |
-| Small Modular Reactors | Order one unit, site it in the Northeast | +6 | +0.02 | +0.1 | +0.06 | 0.0 | +1.6 |  |
-| Small Modular Reactors | Fund the feasibility and siting study only | +2 | +0.01 | +0.1 | +0.00 | 0.0 | +0.4 |  |
+| Electric Bus Network | Full fleet electrification and route overhaul | +6 | +0.03 | +0.2 | +0.06 | +0.8 | +3.4 |  |
+| Electric Bus Network | Lease the buses, leave the routes alone | +1 | +0.01 | +0.1 | +0.02 | +0.5 | +1.2 |  |
+| Electric Bus Network | Electrify and make it fare-free | +3 | +0.02 | +0.3 | +0.03 | +1.5 | +2.3 |  |
+| Small Modular Reactors | Order both units and build the regulator | +9 | +0.04 | +0.1 | +0.11 | 0.0 | +2.7 |  |
+| Small Modular Reactors | Order one unit, site it in the Northeast | +5 | +0.02 | +0.1 | +0.06 | 0.0 | +1.6 |  |
+| Small Modular Reactors | Fund the feasibility and siting study only | +1 | +0.01 | +0.1 | +0.00 | 0.0 | +0.4 |  |
 | Small Modular Reactors | Strike the reactors from the plan | — | — | — | — | — | — | unselectable by design |
-| Semiconductor and Advanced Electronics | Fund the full package — packaging, design centres, 86,000 engineers | +21 | +0.04 | +0.1 | +0.16 | +0.4 | +1.2 |  |
-| Semiconductor and Advanced Electronics | Build a national champion around the sovereign programme | +28 | +0.02 | +0.2 | +0.03 | +2.7 | +0.6 |  |
+| Semiconductor and Advanced Electronics | Fund the full package — packaging, design centres, 86,000 engineers | +11 | +0.03 | +0.1 | +0.13 | +0.2 | +1.2 |  |
+| Semiconductor and Advanced Electronics | Build a national champion around the sovereign programme | +12 | +0.01 | +0.2 | -0.00 | +2.4 | +0.6 |  |
 | Semiconductor and Advanced Electronics | Leave the sector to the BOI incentives already in place | +0 | +0.00 | -0.0 | +0.01 | 0.0 | 0.0 | **no measurable effect** |
 | Northern Economic Corridor Re-evaluation | Scrap it: a chip-packaging and precision-optics cluster | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Northern Economic Corridor Re-evaluation | Add an electronics park and keep the creative zoning | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Northern Economic Corridor Re-evaluation | Keep the creative-economy plan | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
-| Central-Western Economic Corridor Re-evaluation | Scrap it: an EV, automation and electronics corridor with a Kanchanaburi freight hub | +10 | +0.03 | +0.1 | +0.12 | +0.2 | +0.8 |  |
-| Central-Western Economic Corridor Re-evaluation | Build the Kanchanaburi freight corridor and keep the zoning | +6 | +0.01 | +0.1 | +0.05 | +0.2 | 0.0 |  |
+| Central-Western Economic Corridor Re-evaluation | Scrap it: an EV, automation and electronics corridor with a Kanchanaburi freight hub | +5 | +0.02 | +0.1 | +0.10 | +0.1 | +0.8 |  |
+| Central-Western Economic Corridor Re-evaluation | Build the Kanchanaburi freight corridor and keep the zoning | +3 | +0.01 | +0.1 | +0.03 | 0.0 | 0.0 |  |
 | Central-Western Economic Corridor Re-evaluation | Keep the heritage and agro-tourism plan | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
-| TH-AI Passport | Run the programme as designed | +4 | +0.02 | -0.0 | +0.05 | +0.4 | +2.3 |  |
-| TH-AI Passport | Redirect toward domestic AI capacity | +8 | +0.04 | -0.0 | +0.14 | +0.1 | +3.8 |  |
-| TH-AI Passport | Cancel over procurement concerns | 0 | 0.00 | 0.0 | 0.00 | -0.2 | 0.0 | **no measurable effect** |
-| Digital Government | Mandate whole-of-government migration | +27 | +0.07 | +0.0 | +0.21 | +0.1 | +8.8 |  |
-| Digital Government | Continue voluntary agency onboarding | +9 | +0.02 | +0.0 | +0.07 | +0.1 | +3.1 |  |
+| TH-AI Passport | Run the programme as designed | +4 | +0.02 | +0.0 | +0.05 | +0.6 | +2.3 |  |
+| TH-AI Passport | Redirect toward domestic AI capacity | +8 | +0.04 | -0.0 | +0.14 | 0.0 | +3.8 |  |
+| TH-AI Passport | Cancel over procurement concerns | 0 | 0.00 | 0.0 | 0.00 | -0.1 | 0.0 | **no measurable effect** |
+| Digital Government | Mandate whole-of-government migration | +16 | +0.07 | +0.1 | +0.19 | +0.2 | +8.8 |  |
+| Digital Government | Continue voluntary agency onboarding | +6 | +0.02 | +0.0 | +0.07 | 0.0 | +3.1 |  |
 | Digital Government | No additional push | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
 | The 100-Baht Internet Package | Mandate the package through the universal service obligation | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | The 100-Baht Internet Package | Leave it to the regulator | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Zero Corruption Act | Pass the Act as drafted, mandatory execution and all | — | — | — | — | — | — | unselectable by design |
 | Zero Corruption Act | Take the enforcement, drop the death penalty | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | locked: Requires accelerated OECD accession and a civil service already cut. Without both, an anti-corruption body is a new office staffed by the same people. |
 | Zero Corruption Act | Thank them and shelve it | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
-| Justice System Reform | Separate investigation from arrest, prosecutors direct the file | +1 | +0.00 | -0.2 | +0.05 | -1.4 | -1.9 |  |
-| Justice System Reform | Pilot it in three provinces and review | +2 | +0.01 | -0.1 | +0.04 | 0.0 | +1.2 |  |
+| Justice System Reform | Separate investigation from arrest, prosecutors direct the file | +0 | +0.00 | -0.2 | +0.04 | -1.4 | -1.9 |  |
+| Justice System Reform | Pilot it in three provinces and review | +1 | +0.01 | -0.1 | +0.03 | 0.0 | +1.2 |  |
 | Justice System Reform | Not this parliament | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
-| Migrant Labour Regularisation | One-stop regularisation, brokers cut out, social security enrolment mandatory | +9 | +0.06 | -0.7 | +0.22 | -1.7 | +5.7 |  |
-| Migrant Labour Regularisation | Widen the MOU channel and leave the rest alone | +0 | +0.02 | -0.3 | +0.09 | +0.1 | +2.3 |  |
-| Migrant Labour Regularisation | Enforcement first — raids, fines, deportations | -7 | -0.02 | +0.4 | -0.11 | -2.7 | 0.0 |  |
-| Tourism Workforce Reskilling | Fund the full programme with a credit-bank qualification behind it | +16 | +0.01 | +0.2 | -0.05 | +1.4 | +1.0 |  |
-| Tourism Workforce Reskilling | Hospitality standards only, no digital component | +4 | +0.01 | +0.0 | -0.01 | +1.6 | +0.5 |  |
+| Migrant Labour Regularisation | One-stop regularisation, brokers cut out, social security enrolment mandatory | +12 | +0.06 | -0.7 | +0.18 | -1.7 | +5.7 |  |
+| Migrant Labour Regularisation | Widen the MOU channel and leave the rest alone | +3 | +0.02 | -0.3 | +0.07 | 0.0 | +2.3 |  |
+| Migrant Labour Regularisation | Enforcement first — raids, fines, deportations | -7 | -0.01 | +0.4 | -0.08 | -2.6 | 0.0 |  |
+| Tourism Workforce Reskilling | Fund the full programme with a credit-bank qualification behind it | +7 | +0.00 | +0.2 | -0.09 | +1.2 | +1.0 |  |
+| Tourism Workforce Reskilling | Hospitality standards only, no digital component | +2 | +0.00 | +0.0 | -0.02 | +1.6 | +0.5 |  |
 | Tourism Workforce Reskilling | The sector trains its own | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
-| High-Value Agriculture | Fund the full transition — precision farming, biorefining, standards | +15 | +0.04 | -0.1 | +0.12 | +3.0 | +1.9 |  |
-| High-Value Agriculture | Input subsidies and a price floor instead | +9 | +0.01 | +0.7 | -0.00 | +4.7 | +0.2 |  |
+| High-Value Agriculture | Fund the full transition — precision farming, biorefining, standards | +9 | +0.03 | -0.0 | +0.09 | +2.7 | +1.9 |  |
+| High-Value Agriculture | Input subsidies and a price floor instead | +3 | +0.00 | +0.7 | -0.01 | +4.6 | +0.2 |  |
 | High-Value Agriculture | Leave the sector to the existing schemes | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
 | Converting Sor Por Kor Land Deeds | Convert the documents to full title deeds | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Converting Sor Por Kor Land Deeds | Leave the documents as they are | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
-| Chai Nat–Pa Sak–Gulf of Thailand Floodway | Build the floodway and the eastern canal upgrade | +5 | +0.01 | +0.5 | -0.05 | +0.1 | 0.0 |  |
-| Chai Nat–Pa Sak–Gulf of Thailand Floodway | The floodway; stretch the canal upgrade | +3 | +0.01 | +0.3 | -0.03 | +0.1 | 0.0 |  |
-| Chai Nat–Pa Sak–Gulf of Thailand Floodway | Monkey cheeks: local retention basins and dredging | +1 | +0.00 | +0.1 | -0.01 | +0.3 | 0.0 |  |
+| Chai Nat–Pa Sak–Gulf of Thailand Floodway | Build the floodway and the eastern canal upgrade | +2 | +0.01 | +0.5 | -0.03 | +0.3 | 0.0 |  |
+| Chai Nat–Pa Sak–Gulf of Thailand Floodway | The floodway; stretch the canal upgrade | +1 | +0.01 | +0.3 | -0.02 | +0.3 | 0.0 |  |
+| Chai Nat–Pa Sak–Gulf of Thailand Floodway | Monkey cheeks: local retention basins and dredging | +0 | +0.00 | +0.1 | -0.01 | +0.4 | 0.0 | **no measurable effect** |
 | Chai Nat–Pa Sak–Gulf of Thailand Floodway | Send it back to the NESDC | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
-| Mental Health in the Universal Scheme | Write it into the scheme and fund the training pipeline | +9 | +0.01 | +0.1 | -0.03 | +4.2 | +0.6 |  |
+| Mental Health in the Universal Scheme | Write it into the scheme and fund the training pipeline | +4 | +0.01 | +0.1 | -0.05 | +4.2 | +0.6 |  |
 | Mental Health in the Universal Scheme | Not in this budget | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
 | Senior Plus 3 — One Village, One Volunteer Nurse | Fund the nationwide programme and the training pipeline | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Senior Plus 3 — One Village, One Volunteer Nurse | Limit it to the twenty oldest provinces | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Fully Funded 15-Year Education | Fund it properly — materials, transport, fees, and a remote-school weighting | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Fully Funded 15-Year Education | Keep the existing per-head subsidy | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
-| Vulnerable Demographic Allowances | Flat 1,000 baht at 60, and widen the maternal grant | +7 | +0.02 | +0.7 | -0.00 | +2.5 | 0.0 |  |
+| Vulnerable Demographic Allowances | Flat 1,000 baht at 60, and widen the maternal grant | +1 | +0.00 | +0.8 | -0.05 | +2.6 | 0.0 |  |
 | Vulnerable Demographic Allowances | Keep the existing tiers | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
-| Provincial Tourism Allocations | One hundred million to every province, no conditions | -1 | +0.00 | +0.0 | -0.00 | +1.6 | +0.1 |  |
-| Provincial Tourism Allocations | Allocate against submitted proposals, audited afterwards | +1 | +0.01 | +0.0 | +0.01 | +0.6 | +0.7 |  |
+| Provincial Tourism Allocations | One hundred million to every province, no conditions | -0 | +0.00 | +0.0 | +0.00 | +1.8 | +0.1 |  |
+| Provincial Tourism Allocations | Allocate against submitted proposals, audited afterwards | +1 | +0.01 | +0.0 | +0.02 | +0.7 | +0.7 |  |
 | Provincial Tourism Allocations | Keep the fund centralised | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
 
 ## News
@@ -155,20 +155,20 @@ number that actually matters.
 | Concessionaire files for international arbitration | Settle quickly | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
 | Concessionaire files for international arbitration | Contest it | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
 | Global energy prices spike: fuel and transport costs surge | Cap retail fuel prices | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
-| Global energy prices spike: fuel and transport costs surge | Targeted transport subsidy only | -20 | -0.00 | -0.1 | -0.01 | -3.9 |  |
-| Global energy prices spike: fuel and transport costs surge | Let prices pass through | -31 | -0.00 | -0.2 | -0.02 | -11.6 |  |
+| Global energy prices spike: fuel and transport costs surge | Targeted transport subsidy only | -7 | -0.00 | -0.5 | +0.01 | -4.0 |  |
+| Global energy prices spike: fuel and transport costs surge | Let prices pass through | -11 | -0.00 | -0.8 | +0.02 | -11.7 |  |
 | Fiscal Policy Office warns debt ceiling will be breached | Legislate a higher ceiling — 70% to 78% | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
-| Fiscal Policy Office warns debt ceiling will be breached | Cut spending to stay under | -5 | +0.01 | -1.9 | +0.29 | -1.3 |  |
-| Fiscal Policy Office warns debt ceiling will be breached | Note the warning and proceed | -0 | -0.01 | +0.1 | -0.39 | -1.1 |  |
+| Fiscal Policy Office warns debt ceiling will be breached | Cut spending to stay under | -26 | +0.03 | -0.9 | +0.22 | -3.7 |  |
+| Fiscal Policy Office warns debt ceiling will be breached | Note the warning and proceed | +0 | +0.00 | -0.0 | +0.02 | -0.1 |  |
 | Strait of Hormuz closed — fuel imports at risk | Co-payment fuel credits (2,000–2,400 baht) | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
-| Strait of Hormuz closed — fuel imports at risk | Release strategic reserves, cap refinery margins | -10 | +0.02 | -0.6 | +0.09 | -0.8 |  |
-| Strait of Hormuz closed — fuel imports at risk | Let it pass through | -8 | +0.03 | -0.6 | +0.15 | -2.2 |  |
+| Strait of Hormuz closed — fuel imports at risk | Release strategic reserves, cap refinery margins | +9 | +0.02 | +0.8 | -0.02 | -0.3 |  |
+| Strait of Hormuz closed — fuel imports at risk | Let it pass through | +1 | +0.01 | -0.5 | +0.05 | -2.1 |  |
 | Constitutional Court accepts petition against the February election | Defend the Election Commission publicly | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
-| Constitutional Court accepts petition against the February election | Concede the point, legislate ballot reform | +5 | +0.02 | -0.0 | +0.09 | +0.5 |  |
+| Constitutional Court accepts petition against the February election | Concede the point, legislate ballot reform | +5 | +0.02 | -0.0 | +0.09 | +0.6 |  |
 | Constitutional Court accepts petition against the February election | Say nothing and govern | -2 | -0.01 | +0.0 | -0.05 | 0.0 |  |
 | Tourism industry demands the BOT weaken the baht | Publicly press the BOT to intervene | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
-| Tourism industry demands the BOT weaken the baht | Fund a tourism marketing and subsidy push instead | +3 | +0.01 | +0.2 | +0.10 | -0.1 |  |
-| Tourism industry demands the BOT weaken the baht | Decline — the rate is not the government's to set | +6 | +0.03 | -0.0 | +0.22 | -1.3 |  |
+| Tourism industry demands the BOT weaken the baht | Fund a tourism marketing and subsidy push instead | +3 | +0.01 | +0.2 | +0.11 | 0.0 |  |
+| Tourism industry demands the BOT weaken the baht | Decline — the rate is not the government's to set | +6 | +0.03 | -0.0 | +0.21 | -1.2 |  |
 | Bond auction undersubscribed: Treasury forces cuts | Cut the capital programme | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
 | Bond auction undersubscribed: Treasury forces cuts | Cut transfers and subsidies | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
 | Bond auction undersubscribed: Treasury forces cuts | Sell state enterprise stakes | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
@@ -176,14 +176,14 @@ number that actually matters.
 | Coalition partner threatens to withdraw | Abandon the unpopular programme | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
 | Coalition partner threatens to withdraw | Call their bluff | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
 | Cabinet has the MOU 2544 termination instrument on the table | Terminate the memorandum | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
-| Cabinet has the MOU 2544 termination instrument on the table | Terminate it, and say what the 1941 line means | -21 | -0.02 | +1.6 | -0.37 | -5.8 |  |
+| Cabinet has the MOU 2544 termination instrument on the table | Terminate it, and say what the 1941 line means | -21 | +0.02 | +1.5 | -0.05 | -5.2 |  |
 | Cabinet has the MOU 2544 termination instrument on the table | Retain the memorandum | — | — | — | — | — | unselectable by design |
 | Cabinet has a 400-billion-baht emergency borrowing decree on the table | Issue the decree: 200 billion of relief now, 200 billion for the energy transition | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
-| Cabinet has a 400-billion-baht emergency borrowing decree on the table | Borrow 200 billion for relief only | -12 | +0.04 | -1.0 | +0.27 | -0.5 |  |
-| Cabinet has a 400-billion-baht emergency borrowing decree on the table | No decree: manage the shock inside the budget | -14 | +0.06 | -2.0 | +0.39 | -1.4 |  |
+| Cabinet has a 400-billion-baht emergency borrowing decree on the table | Borrow 200 billion for relief only | -0 | +0.00 | -0.9 | +0.12 | -0.4 |  |
+| Cabinet has a 400-billion-baht emergency borrowing decree on the table | No decree: manage the shock inside the budget | +1 | +0.01 | -1.9 | +0.21 | -1.2 |  |
 | The Constitutional Court upholds the energy decree, 7–2 | Spend it as planned: buses, solar roofs, EV loans and the grid | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
-| The Constitutional Court upholds the energy decree, 7–2 | Redirect it to another round of cash relief | -6 | +0.01 | -0.0 | +0.09 | +0.3 |  |
-| The Constitutional Court upholds the energy decree, 7–2 | Leave the second tranche unborrowed | -12 | +0.04 | -1.0 | +0.27 | -0.5 |  |
+| The Constitutional Court upholds the energy decree, 7–2 | Redirect it to another round of cash relief | -4 | -0.02 | +0.0 | +0.01 | +0.3 |  |
+| The Constitutional Court upholds the energy decree, 7–2 | Leave the second tranche unborrowed | -0 | +0.00 | -0.9 | +0.12 | -0.2 |  |
 | Fourth revision of the Bangkok comprehensive plan takes effect | Note the plan and let the pipeline run | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
 | Map Ta Phut Phase 3 hands over Stage 1 | Attend the handover | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
 | Laem Chabang Phase 3 opens Wharf F | Open the wharf | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
@@ -191,25 +191,25 @@ number that actually matters.
 | MRT Purple Line southern extension opens | Open the extension | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
 | MRT Orange Line western section completes the corridor | Complete the corridor | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
 | Thailand is asked to sign: Pax Silica, WAICO, or neither | Sign Pax Silica | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
-| Thailand is asked to sign: Pax Silica, WAICO, or neither | Join WAICO | -12 | -0.05 | +0.4 | -0.15 | -0.3 |  |
-| Thailand is asked to sign: Pax Silica, WAICO, or neither | Stay out of both | -12 | -0.05 | +0.1 | -0.14 | +0.2 |  |
-| Thailand is asked to sign: Pax Silica, WAICO, or neither | Chart a sovereign AI course | -4 | -0.03 | +0.6 | -0.27 | +0.8 |  |
+| Thailand is asked to sign: Pax Silica, WAICO, or neither | Join WAICO | -14 | -0.05 | +0.4 | -0.13 | -0.2 |  |
+| Thailand is asked to sign: Pax Silica, WAICO, or neither | Stay out of both | -12 | -0.05 | +0.1 | -0.14 | +0.3 |  |
+| Thailand is asked to sign: Pax Silica, WAICO, or neither | Chart a sovereign AI course | -8 | -0.03 | +0.6 | -0.25 | +0.9 |  |
 | The 14th National Plan carries the energy transition | Fund the transition in full | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
-| The 14th National Plan carries the energy transition | Adopt the plan, fund the first tranche | -8 | -0.02 | -0.5 | -0.05 | +0.1 |  |
+| The 14th National Plan carries the energy transition | Adopt the plan, fund the first tranche | -4 | -0.01 | -0.5 | -0.05 | 0.0 |  |
 | The National Semiconductor Board wants a decision and a budget | Chair it yourself and fund the secretariat | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
-| The National Semiconductor Board wants a decision and a budget | Let the board meet and see | -6 | -0.02 | -0.1 | -0.05 | -0.1 |  |
+| The National Semiconductor Board wants a decision and a budget | Let the board meet and see | -5 | -0.02 | -0.1 | -0.05 | 0.0 |  |
 | Bangkok floods: four days of rain, 24 provinces under water | Release the central reserve: pumps, rations, road repairs | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
-| Bangkok floods: four days of rain, 24 provinces under water | Relief plus 9,000 baht for every affected household | +1 | -0.00 | +0.0 | -0.00 | +0.3 |  |
-| Bangkok floods: four days of rain, 24 provinces under water | Leave it to the BMA and the provinces | -1 | +0.00 | -0.0 | +0.00 | -0.9 |  |
+| Bangkok floods: four days of rain, 24 provinces under water | Relief plus 9,000 baht for every affected household | -0 | -0.00 | +0.0 | -0.00 | +0.5 |  |
+| Bangkok floods: four days of rain, 24 provinces under water | Leave it to the BMA and the provinces | +0 | +0.00 | -0.0 | +0.00 | -0.8 |  |
 | EGAT wants a ruling on data-centre power as requests pass 850 MW | Guarantee firm clean power and build transmission | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
-| EGAT wants a ruling on data-centre power as requests pass 850 MW | Let them queue for a standard connection | -12 | -0.05 | -0.3 | -0.23 | 0.0 |  |
+| EGAT wants a ruling on data-centre power as requests pass 850 MW | Let them queue for a standard connection | -10 | -0.05 | -0.3 | -0.23 | 0.0 |  |
 | U-Tapao Phase 1 opens at a quarter of the promised size | Fund the terminal to the original specification | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
-| U-Tapao Phase 1 opens at a quarter of the promised size | Open at reduced scope, review in five years | -29 | -0.01 | -0.1 | -0.09 | +0.7 |  |
+| U-Tapao Phase 1 opens at a quarter of the promised size | Open at reduced scope, review in five years | -13 | -0.01 | -0.1 | -0.06 | +1.1 |  |
 | Expo 2029 Korat opens in Khong district | Open the exposition | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
 | Power Development Plan | Adopt the base case: gas-led transition | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
-| Power Development Plan | Adopt the base case, with carbon capture costed in | +3 | +0.01 | +0.1 | +0.01 | -0.9 |  |
-| Power Development Plan | Take the renewables pathway: 89% clean by 2050 | +17 | +0.05 | +0.7 | +0.06 | -1.7 |  |
-| Power Development Plan | Take the middle path: domestic gas, capture, renewables | +6 | +0.02 | +0.3 | +0.03 | -0.4 |  |
+| Power Development Plan | Adopt the base case, with carbon capture costed in | +2 | +0.01 | +0.1 | +0.02 | -0.8 |  |
+| Power Development Plan | Take the renewables pathway: 89% clean by 2050 | +11 | +0.05 | +0.7 | +0.08 | -1.5 |  |
+| Power Development Plan | Take the middle path: domestic gas, capture, renewables | +4 | +0.02 | +0.3 | +0.04 | -0.4 |  |
 | They are coming | I will, I will — this was never aimed at you | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
 | They are coming | No. | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
 | The debt ceiling is reached again | Legislate again — 78% to 85% | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
@@ -227,11 +227,11 @@ number that actually matters.
 | Eight walk | Let them go | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
 | The EU agreement enters into force | Welcome it | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
 | Washington threatens tariffs on Thai electronics | Tighten rules of origin and buy American | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
-| Washington threatens tariffs on Thai electronics | Negotiate quietly, concede on transshipment only | -1 | -0.01 | +0.0 | -0.05 | +0.4 |  |
-| Washington threatens tariffs on Thai electronics | Refuse, and redirect exports toward China | -6 | -0.03 | +0.0 | -0.21 | +1.2 |  |
+| Washington threatens tariffs on Thai electronics | Negotiate quietly, concede on transshipment only | -12 | -0.01 | +0.0 | -0.09 | +0.4 |  |
+| Washington threatens tariffs on Thai electronics | Refuse, and redirect exports toward China | -37 | -0.05 | +0.1 | -0.31 | +1.0 |  |
 | The PLA Navy asks to call at Sattahip | Host the port call and a joint exercise | 0 | 0.00 | 0.0 | 0.00 | 0.0 | default |
 | The PLA Navy asks to call at Sattahip | A routine courtesy call, no exercise | +0 | +0.00 | -0.0 | +0.03 | -0.4 |  |
-| The PLA Navy asks to call at Sattahip | Cite scheduling and decline | +0 | +0.00 | -0.0 | +0.03 | -0.8 |  |
+| The PLA Navy asks to call at Sattahip | Cite scheduling and decline | +0 | +0.00 | -0.0 | +0.03 | -0.7 |  |
 | Beijing reminds Vientiane who holds the debt | Stand behind Vientiane | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
 | Beijing reminds Vientiane who holds the debt | Bring Beijing in: a three-way Mekong framework | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
 | Beijing reminds Vientiane who holds the debt | Quietly scale it back | 0 | 0.00 | 0.0 | 0.00 | 0.0 | conditional — does not fire in a passive term |
@@ -268,31 +268,31 @@ number that actually matters.
 | Rank | Decision | Δlegacy | Δdebt |
 |---|---|--:|--:|
 | 1 | OECD Accession — Accelerate the roadmap | +0.23 | -0.3 |
-| 2 | Super Licence and Omnibus Law — Full omnibus consolidation | +0.17 | -0.2 |
-| 3 | Super Licence and Omnibus Law — Super licence only, defer the omnibus | +0.07 | -0.1 |
-| 4 | Digital Government — Mandate whole-of-government migration | +0.07 | +0.0 |
-| 5 | OECD Accession — Proceed at technical pace | +0.06 | -0.1 |
-| 6 | Revenue Mobilisation Package — Full package — excise, deduction caps, collection | +0.06 | -2.3 |
+| 2 | Super Licence and Omnibus Law — Full omnibus consolidation | +0.16 | -0.2 |
+| 3 | Civil Service Reform — Full early-retirement programme | +0.10 | +0.3 |
+| 4 | Super Licence and Omnibus Law — Super licence only, defer the omnibus | +0.07 | -0.1 |
+| 5 | Digital Government — Mandate whole-of-government migration | +0.07 | +0.1 |
+| 6 | OECD Accession — Proceed at technical pace | +0.06 | -0.1 |
 | 7 | Migrant Labour Regularisation — One-stop regularisation, brokers cut out, social security enrolment mandatory | +0.06 | -0.7 |
-| 8 | Civil Service Reform — Full early-retirement programme | +0.05 | +0.4 |
-| 9 | Negative Income Tax — Implement, funded from general revenue | +0.05 | +1.3 |
-| 10 | High-Value Agriculture — Fund the full transition — precision farming, biorefining, standards | +0.04 | -0.1 |
-| 11 | Semiconductor and Advanced Electronics — Fund the full package — packaging, design centres, 86,000 engineers | +0.04 | +0.1 |
-| 12 | Small Modular Reactors — Order both units and build the regulator | +0.04 | +0.1 |
+| 8 | Negative Income Tax — Implement, funded from general revenue | +0.05 | +1.2 |
+| 9 | Revenue Mobilisation Package — Full package — excise, deduction caps, collection | +0.05 | -2.3 |
+| 10 | Northeast HSR — Bangkok–Nong Khai (Phase 2) — Fund Phase 2 and accelerate | +0.04 | +1.2 |
+| 11 | Small Modular Reactors — Order both units and build the regulator | +0.04 | +0.1 |
+| 12 | TH-AI Passport — Redirect toward domestic AI capacity | +0.04 | -0.0 |
 
 ## Ranking — cost in debt per point of legacy
 
 | Decision | Δlegacy | Δdebt | debt per legacy point |
 |---|--:|--:|--:|
-| Revenue Mobilisation Package — Full package — excise, deduction caps, collection | +0.06 | -2.3 | -38.0 |
+| Revenue Mobilisation Package — Full package — excise, deduction caps, collection | +0.05 | -2.3 | -46.3 |
 | Migrant Labour Regularisation — One-stop regularisation, brokers cut out, social security enrolment mandatory | +0.06 | -0.7 | -11.7 |
-| Civil Service Reform — Freeze hiring, let attrition do it | +0.03 | -0.3 | -10.0 |
+| Civil Service Reform — Freeze hiring, let attrition do it | +0.03 | -0.3 | -9.1 |
 | OECD Accession — Proceed at technical pace | +0.06 | -0.1 | -1.4 |
-| Super Licence and Omnibus Law — Super licence only, defer the omnibus | +0.07 | -0.1 | -1.4 |
-| Super Licence and Omnibus Law — Full omnibus consolidation | +0.17 | -0.2 | -1.4 |
-| OECD Accession — Accelerate the roadmap | +0.23 | -0.3 | -1.4 |
-| High-Value Agriculture — Fund the full transition — precision farming, biorefining, standards | +0.04 | -0.1 | -1.3 |
-| TH-AI Passport — Redirect toward domestic AI capacity | +0.04 | -0.0 | -0.7 |
-| Ministry Restructure — Tourism, Culture and Sport — Split sport out and merge tourism with culture | +0.03 | -0.0 | -0.3 |
-| Digital Government — Mandate whole-of-government migration | +0.07 | +0.0 | 0.5 |
-| Digital Government — Continue voluntary agency onboarding | +0.02 | +0.0 | 0.9 |
+| Super Licence and Omnibus Law — Super licence only, defer the omnibus | +0.07 | -0.1 | -1.3 |
+| High-Value Agriculture — Fund the full transition — precision farming, biorefining, standards | +0.03 | -0.0 | -1.3 |
+| OECD Accession — Accelerate the roadmap | +0.23 | -0.3 | -1.3 |
+| Super Licence and Omnibus Law — Full omnibus consolidation | +0.16 | -0.2 | -1.2 |
+| TH-AI Passport — Redirect toward domestic AI capacity | +0.04 | -0.0 | -0.6 |
+| Ministry Restructure — Tourism, Culture and Sport — Split sport out and merge tourism with culture | +0.03 | +0.0 | 0.0 |
+| Digital Government — Mandate whole-of-government migration | +0.07 | +0.1 | 1.2 |
+| Digital Government — Continue voluntary agency onboarding | +0.02 | +0.0 | 1.6 |

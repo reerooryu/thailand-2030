@@ -59,7 +59,7 @@ Every card and every fiscal event was checked against the money it represents (G
 | Allowances; ministry restructure; migrant regularisation | 0.38; 0.03; 0.10 | 0.31; 0.01; 0.03 | Costed from recipients and rates. |
 | Provincial tourism; tourism support; fuel subsidies; Hormuz co-payments; better severance | permanent | one-off (4 or 8 quarters) | Each is a single envelope or a temporary relief. |
 
-**What the audit leaves as it is, deliberately.** The game multiplies every fiscal multiplier by 3 (`config/playability.json`), so a tax step that the literature says costs about 1% of output costs about 3% here. That is the documented trade of realism for a game, and it is why a dated tax step bites: letting VAT rise to 10% in October 2029 costs about 400 USD of headline at the count. The Land Bridge keeps its state-built cost, and the five news "notes" on scheduled projects (the Orange and Purple lines, Laem Chabang F, Map Ta Phut 3, the Bangkok plan) keep their small capital top-ups.
+**What the audit leaves as it is, deliberately.** The game multiplies every fiscal multiplier by a playability gain (`config/playability.json`; 2.5 since November 2026, when the fiscal block was also corrected to total responses with a tax collection factor, `LITERATURE.md` §1.3). A dated tax step still bites: letting VAT rise to 10% in October 2029 costs about 120 USD of headline at the count (about 400 before the correction). The Land Bridge keeps its state-built cost, and the five news "notes" on scheduled projects (the Orange and Purple lines, Laem Chabang F, Map Ta Phut 3, the Bangkok plan) keep their small capital top-ups.
 
 ## The rail cards, and conditional unlocks
 
@@ -190,4 +190,4 @@ Sources are listed in the delivery message for this file and should be captured 
 ## Outstanding
 
 1. **The `lag` field on cards is documentation only.** Capacity lags come from the engine's own gestation pipeline and reform-stock dynamics; the money's timing comes from `effectsQuarters`, `rampQuarters` and `later`.
-2. **The fiscal playability gain** (×3 on every multiplier) is the largest single departure from the estimated model. Lowering it towards 1 restores realism and quietens every decision.
+2. **The fiscal playability gain** (×2.5 on every multiplier) is the largest single departure from the estimated model. Lowering it towards 1 restores realism and quietens every decision.

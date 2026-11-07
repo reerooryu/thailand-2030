@@ -152,6 +152,12 @@ export interface Params {
    *  sources name explicitly for capital projects. */
   executionCapital: number;
   executionOther: number;
+  /** Tax collection factor, the revenue side's execution rate: the share of a
+   *  legislated tax change that reaches household spending within the year.
+   *  Cards state the legislated yield; compliance gaps, the informal sector,
+   *  and indirect tax paid by visitors or absorbed in margins keep the rest
+   *  from landing on demand. Scales the tax multiplier, not the revenue. */
+  collectionTax: number;
 
   /** Government consumption crowds out private investment over the medium term
    *  (BOT / Thammasat BVAR). Enters the investment-rate equation. */
