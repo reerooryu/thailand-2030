@@ -41,7 +41,7 @@ The published multipliers are **total** responses: how far output moves, in all,
 
 Taxes now carry a **collection factor**, `collectionTax` = **0.70**, the revenue side's execution rate. A card states the legislated yield; compliance gaps, the informal sector, and the part of indirect tax paid by visitors or absorbed in margins keep the rest from reaching household spending within the year. It scales the tax multiplier, not the revenue, exactly as execution scales spending's demand effect but not its cost. The effective tax multiplier is −0.79, at the low end of the published range. Without it a baht of tax moved output about three times as far as a baht of capital spending (0.34 effective).
 
-With the fiscal playability gain at 2.5, the peak output response in the game to 1% of GDP is now about 1.9 for a tax rise (was 6.2), 0.80 for capital spending (1.9), 0.77 for government consumption (1.8) and 0.50 for transfers (1.2).
+With the fiscal playability gain at 3.0, the peak output response in the game to 1% of GDP is now about 2.2 for a tax rise (was 6.2), 0.96 for capital spending (1.9), 0.92 for government consumption (1.8) and 0.60 for transfers (1.2).
 
 **This is also a game mechanic.** The player allocates a budget; only a fraction lands. Execution rate becomes something reform can improve — an unglamorous, cheap, high-value structural lever of exactly the kind the design wants to reward.
 

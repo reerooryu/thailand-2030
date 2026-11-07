@@ -14,7 +14,7 @@ The estimated model says no fiscal or reform strategy moves 2030 GDP per capita 
 
 | Channel | Gain |
 |---|---|
-| Fiscal multipliers | 2.5 (3.0 until November 2026) |
+| Fiscal multipliers | 3.0 |
 | Monetary transmission | 2.0 |
 | Reform → investment | 4.5 |
 | Reform → TFP | 3.6 |
@@ -26,7 +26,7 @@ Gestation moved to the **low end** of the published 3–7 year range rather than
 
 **Verification:** with gains applied to scenarios, the backtest is byte-identical to before — core CPI correlation 0.965, investment rate 0.927, dynamic simulation still non-divergent with bias +0.019. The realistic model underneath is untouched.
 
-**November 2026.** The fiscal gain came down from 3.0 to 2.5 alongside two corrections to the fiscal block (`LITERATURE.md` §1.3): multipliers now enter as total rather than per-quarter responses, and taxes carry a collection factor. Together they cut the peak response to a tax rise from about 6 times the change to about 2, and to capital spending from about 1.9 to 0.8. The cost: the best lines found so far finish about 4–5% above the passive term rather than 8–10%, and overheating no longer buys much headline.
+**November 2026.** Two corrections to the fiscal block (`LITERATURE.md` §1.3): multipliers now enter as total rather than per-quarter responses, and taxes carry a collection factor. With the gain kept at 3.0 they cut the peak response to a tax rise from about 6.2 times the change to 2.2, and to capital spending from about 1.9 to 1.0. The gain was briefly lowered to 2.5 and restored, because at 2.5 the best lines found finished under 5% above the passive term and no search came near Into Five Figures.
 
 ## Two structural fixes, not gains
 
