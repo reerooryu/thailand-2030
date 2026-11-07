@@ -249,7 +249,11 @@ This makes the degenerate path in §3.4 fight itself, with the magnitude now kno
 
 Calibration must reproduce this. A player should find it genuinely hard to generate inflation through demand at all, and should discover that FX passthrough and energy prices are the dominant channels. This also means the BOT is persistently *undershooting* its target band, which changes its reaction function (§7): the realistic constraint on easing is financial stability and household debt, not inflation.
 
-**Inflation expectations.** Two components: a short-run adaptive term and a long-run anchor. The anchor moves only in response to *sustained* deviation and to visible BOT credibility events. Once unanchored, re-anchoring is slow and costly. This is the mechanism that makes monetary mistakes expensive without making them immediately visible.
+**Overheating bends the curve.** The estimated slope comes from a sample in which the gap rarely left ±5%, so above a +2% gap both curves gain linear and quadratic terms in the excess (`hotGapHeadline` 0.10 and `hotGapHeadline2` 0.03; core 0.02 and 0.004; all priors). In the long run a +5% gap adds about 1.3 points to headline inflation and a +10% gap about 5.5, roughly the 1988–91 boom (CPI from 3.8% to 5.9%). Below +2% nothing changes, and the backtest moves by a hundredth of a point. Because inflation lags the gap, a government that overheats only in its last three quarters reaches the count with inflation around 4–5% and leaves 6–7% to its successor.
+
+**Inflation expectations, very lightly.** While headline runs above 3%, expected inflation drifts up by 2% of the excess each quarter and decays 5% a quarter back towards target; the drift shifts both curves' long-run level one for one (`expDrift`, `expDecay`, `expThreshold`). Two years at 6% moves it about half a point. It never matters below 3%. The fuller design (an anchor that also responds to BOT credibility events, slow and costly to re-anchor) is not built.
+
+**The Bank of Thailand** holds at 1.0% until the economy runs hot, then leans against it: its target is 1.0 + 1.5·max(0, CPI − 2) + 0.25·max(0, gap − 2), and it moves halfway to that target each quarter, as an MPC that meets eight times a year and rarely moves more than 50bp at once would.
 
 **Potential output.** A production function:
 ```

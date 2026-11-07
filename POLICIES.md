@@ -11,10 +11,10 @@
 
 | Card | What it is | Fiscal | Reform | Lag |
 |---|---|---|---|---|
-| **Land Bridge** | Chumphon–Ranong, >1tn baht, Phase 1 targeted 2030 | +0.55% GDP/yr | 0 | 20q — lands outside the window |
+| **Land Bridge** | Chumphon–Ranong, >1tn baht, Phase 1 targeted 2030 | +0.45% capital +0.1% consumption a year, ramped over 6q | 0 | 20q — lands outside the window |
 | **Negative Income Tax** | 2027 target, ~60,000 baht threshold, VAT-funded | +0.9% transfers, +0.9% revenue | 25 | 16q on TFP |
 | **Super Licence / Omnibus** | Unified licence, ~7,000 rules consolidated | ~0 | **45** | 6q investment, 12q TFP |
-| **Thai Chuay Thai Plus** | 1,000฿/month × 4 months × 30m people | +0.63% GDP | 0 | immediate |
+| **Thai Chuay Thai Plus** | 1,000฿/month × 4 months × 30m people | 0.63% GDP, one-off over two quarters | 0 | immediate |
 | **TISA** | Equity savings accounts, 800k฿ deduction, 11.4m earners | −0.15% revenue | 6 | 8q |
 | **OECD Accession** | Initial Memorandum filed Dec 2025, technical review | ~0 | **55** | 8q investment, 20q TFP |
 | **TH-AI Passport** | 1.6bn฿, 5m citizens, 12 AI models | +0.008% GDP | 6 | 24q |
@@ -25,16 +25,52 @@ Two things stand out immediately from that table, and both are the game working:
 
 **TH-AI Passport is fiscally trivial and politically loud.** At 0.008% of GDP it barely registers in the model, but it polls well and its productivity effect lands in 2032. It is the archetype of the cheap, popular, useless-inside-the-window card — and a good test of whether the player has understood the lag structure.
 
+## When the money lands
+
+A card's fiscal effects are flows in % of GDP a year. By default they start the quarter the card passes and run for the rest of the term, scaled in by the stance ramp over the first six quarters of the game. Four fields change that, and the card face shows them:
+
+- **`effectsQuarters`**: one-off money. The flow runs for this many quarters and stops, outside the ramp and the caps. Thai Chuay Thai is four months of co-payments (0.63% of GDP in total, so 1.26% a year for two quarters), not a permanent transfer.
+- **`rampQuarters`**: capital disburses over this many quarters, 1/n of the rate in the first quarter rising to the full rate. New Thai megaprojects spend little in year one (land, design, tender): Northeast HSR Phase 2 is tendered in December 2026 and built 2027–31.
+- **`later`**: effects that arrive later, after `inQuarters` and not before game quarter `atQuarter` when the step has a date of its own. Phased VAT is +0.83% of GDP from FY2028 whenever it is legislated; the step to 10% comes as its own decision in 2029 Q4. Civil service severance stops after two years and a net saving follows.
+- **`cancels`** (on an event option): takes a card's money back out, and anything it still had scheduled.
+
+## Audit, November 2026
+
+Every card and every fiscal event was checked against the money it represents (GDP about 19 trillion baht, so 0.1% of GDP is about 19 billion a year). `AUDIT_IMPACTS.md` is regenerated from the corrected config. What changed:
+
+| Card / event | Was | Now | Why |
+|---|---|---|---|
+| Land Bridge protests → force it through | a second full Land Bridge budget (+0.45 capital, +0.1 consumption) | policing cost only (+0.02) | Forcing the sites does not double the project. A bug since v1.0. |
+| Land Bridge protests → pull back | kept the Land Bridge's spending and added the rail link | cancels the Land Bridge spending; rail link +0.08 | Pulling back has to stop the money. |
+| Land Bridge → push ahead | 0.45 + 0.1 from day one | same rate, capital ramped over 6 quarters | The government's own plan has the state pay only for land (13–14bn); with no investors, pushing ahead means a state-built Phase 1, which spends slowly at first. |
+| Thai Chuay Thai Plus | permanent transfers 0.63%/yr; redirect permanent capital 0.63%/yr | one-off: 0.63% of GDP over two quarters; redirect 0.63% over two years | 1,000 baht a month for four months is one payment, not a programme. |
+| Civil service reform (full) | +0.45% government consumption for ever | severance as a transfer, +0.45%/yr for two years; the wage bill falls 0.1% a year at a time to a net saving of 0.3%/yr | A third of the service at up to 15 months' salary is about 1% of GDP of severance, paid to households, not spent by the state. The wage bill is 850bn, so the saving is real, and it starts as people leave. Attrition now saves 0.08%/yr after a year. |
+| Phased VAT | +0.83% immediately | +0.83% from FY2028; the step to 10% is a decision in 2029 Q4 (*VAT is due to rise to 10% in October*): raise it (+0.82%) or renew the decree | The card says 8.5% in 2028 and 10% in 2030. The 7% rate has always been a royal decree that every government renewed, so the second step, five months before the election, is a choice, not an automatic. |
+| Northeast HSR Phase 2 | 0.62 / 0.45 / 0.24 | 0.40 / 0.30 / 0.10, ramped | 341bn baht, built 2027–31: about 0.36% of GDP a year. |
+| Eastern HSR → amend; terminate | 0.28; 0.10 for ever | 0.14 ramped; 0.10 for four quarters | Pay-as-you-build is 126bn in five tranches of about 25bn; compensation is paid once. The arbitration settlement is one-off too. |
+| EEC conventional rail, Chumphon–Ranong rail | 0.14 / 0.20; 0.16 | 0.08 / 0.12; 0.08, ramped | Double-track lines of 90–100 km cost 40–60bn over four years. |
+| Small modular reactors | 0.22 capital, 0.25 human capital | 0.06 and 0.08 (one unit 0.035 and 0.05) | Online in 2037: inside the term the money is the regulator, siting and early works, not reactors. |
+| CWEC, NEC corridors | 0.22 / 0.12; 0.12 | 0.12 / 0.08; 0.06, ramped | Industrial-estate and freight-hub budgets, not new cities. |
+| Electric buses | 0.12 capital + 0.06; fare-free +0.28 consumption + 0.1 transfers | 0.04 + 0.03; fare-free +0.06 | The fleet is leased (8bn for 800 buses); BMTA fares bring in a few billion a year. Fare-free cost 53bn a year in the old card. |
+| Semiconductor package; TH-AI Passport; 100-baht internet | human capital 0.55; 0.15 / 0.10; 0.12 | 0.30; 0.03 / 0.02; 0.06 | Human capital in proportion to the money and the people reached: free 15-year schooling (42bn a year, 12 million pupils) is 0.45, so 86,000 engineers cannot be 0.55 and a 1.6bn AI subscription cannot be a third of it. |
+| Digital Government | 0.09 / 0.04 | 0.05 / 0.02 | The DGA's budget is a few billion a year. |
+| Party finance | 0.04 / 0.05 consumption | 0.002 / 0.004 | The Party Development Fund is 117 million baht. |
+| Senior Plus 1 and 2 | −0.05 / −0.11 revenue | −0.03 / −0.05 | Few firms use the senior-wage deduction; working over-60s pay little income tax. |
+| Allowances; ministry restructure; migrant regularisation | 0.38; 0.03; 0.10 | 0.31; 0.01; 0.03 | Costed from recipients and rates. |
+| Provincial tourism; tourism support; fuel subsidies; Hormuz co-payments; better severance | permanent | one-off (4 or 8 quarters) | Each is a single envelope or a temporary relief. |
+
+**What the audit leaves as it is, deliberately.** The game multiplies every fiscal multiplier by 3 (`config/playability.json`), so a tax step that the literature says costs about 1% of output costs about 3% here. That is the documented trade of realism for a game, and it is why a dated tax step bites: letting VAT rise to 10% in October 2029 costs about 400 USD of headline at the count. The Land Bridge keeps its state-built cost, and the five news "notes" on scheduled projects (the Orange and Purple lines, Laem Chabang F, Map Ta Phut 3, the Bangkok plan) keep their small capital top-ups.
+
 ## The rail cards, and conditional unlocks
 
 Three transport projects, plus two successor cards that only exist if something else dies first. This required a **flag system**: cards declare `requires`, options declare `sets` and `clears`, and the agenda resolver iterates to a fixed point so a cancellation and its successor can both resolve in one session.
 
 | Card | Detail | Fiscal |
 |---|---|---|
-| **Northeast HSR Phase 2** | Nakhon Ratchasima–Nong Khai, 357 km, ~US$10.1bn, target 2030, connects to the China–Laos line. Phase 1 already slipped a year. | +0.62% GDP/yr |
-| **Eastern HSR (3-airport)** | Eight years late, **21.8bn baht sunk** (9.8bn public, on expropriation and utility relocation), concession facing a termination review. U-Tapao forecasts cut, Makkasan drainage unresolved, financing unclosable. | +0.28% |
-| **Chumphon–Ranong Rail** | *Unlocks only if the Land Bridge is scrapped.* Rail-only link, no deep-sea ports, doesn't require persuading shippers to abandon Malacca. | +0.16% |
-| **EEC Conventional Rail** | *Unlocks only if the Eastern HSR concession is terminated.* Double-track electrified to U-Tapao. Lands inside the term. | +0.14% |
+| **Northeast HSR Phase 2** | Nakhon Ratchasima–Nong Khai, 357 km, 341bn baht, built 2027–31, connects to the China–Laos line. Phase 1 already slipped a year. | +0.40% GDP/yr, ramped |
+| **Eastern HSR (3-airport)** | Eight years late, **21.8bn baht sunk** (9.8bn public, on expropriation and utility relocation), concession facing a termination review. U-Tapao forecasts cut, Makkasan drainage unresolved, financing unclosable. | +0.14%, ramped |
+| **Chumphon–Ranong Rail** | *Unlocks only if the Land Bridge is scrapped.* Rail-only link, no deep-sea ports, doesn't require persuading shippers to abandon Malacca. | +0.08% |
+| **EEC Conventional Rail** | *Unlocks only if the Eastern HSR concession is terminated.* Double-track electrified to U-Tapao. Lands inside the term. | +0.08% |
 
 The Northeast HSR completion date is 2030 — precisely the end of the run. The ribbon, if there is one, belongs to whoever wins the next election.
 
@@ -153,7 +189,5 @@ Sources are listed in the delivery message for this file and should be captured 
 
 ## Outstanding
 
-1. **Card state** — unlocks, cooldowns, "returns in N quarters" on postponement. The schema carries `returnsInQuarters`; nothing consumes it yet.
-2. **Contingent and shock cards** (DESIGN §10.4). Only the scripted spine exists.
-3. **Opinion movement from enacted policy** — passing a card should move every party's opinion, not just the coalition choice.
-4. Channels declared but not yet wired: `fdiSignal`, `humanCapital`, `formalisation`, `savingsRate`, `setSupport`, `approvalBoost`, `institutionalSupport`.
+1. **The `lag` field on cards is documentation only.** Capacity lags come from the engine's own gestation pipeline and reform-stock dynamics; the money's timing comes from `effectsQuarters`, `rampQuarters` and `later`.
+2. **The fiscal playability gain** (×3 on every multiplier) is the largest single departure from the estimated model. Lowering it towards 1 restores realism and quietens every decision.

@@ -53,6 +53,9 @@ export interface EventOption {
    *  for the rest of the term; relief after a disaster is paid once. When set,
    *  the effects vector is reversed after this many quarters. */
   effectsQuarters?: number;
+  /** Cancels a card already played: its fiscal stance comes back out and
+   *  anything it still had scheduled is dropped. */
+  cancels?: string;
   sets?: string[]; clears?: string[];
   flavour?: string;
 }

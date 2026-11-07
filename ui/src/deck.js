@@ -44,7 +44,7 @@ export function renderDeck() {
         ? `<div class="o-dep">⚠ ×${o.dependsOn.withoutFactor} — ${o.dependsOn.note || o.dependsOn.flag}</div>` : '';
       b.innerHTML = `<div class="o-label">${o.label} ${badge}</div>` +
         (o.flavour ? `<div class="o-flavour">${o.flavour}</div>` : '') + dep +
-        renderEffects(o.effects) + renderWhip(v);
+        renderEffects(o.effects) + renderTiming(o) + renderWhip(v);
       b.onclick = () => {
         const r = g.playCard(card.id, o.id);
         toast(`${card.name}: ${r.msg}`, r.ok ? 'good' : 'critical');
@@ -92,6 +92,18 @@ export const EFFECT_LABEL = {
   approvalBoost: 'approval', institutionalSupport: 'institutional', humanCapital: 'human capital',
   formalisation: 'formalisation', savingsRate: 'saving', setSupport: 'market sentiment',
 };
+/** When the money lands: one-off, phased in, or later steps. */
+export function renderTiming(o) {
+  const bits = [];
+  if (o.effectsQuarters) bits.push(`one-off: runs ${o.effectsQuarters} quarter${o.effectsQuarters > 1 ? 's' : ''}, then stops`);
+  if (o.rampQuarters) bits.push(`spending ramps up over ${o.rampQuarters} quarters`);
+  for (const L of o.later || []) {
+    const parts = Object.entries(L.effects).filter(([k, v]) => v && EFFECT_LABEL[k])
+      .map(([k, v]) => `${EFFECT_LABEL[k]} ${v > 0 ? '+' : ''}${v}`).join(', ');
+    bits.push(`after ${L.inQuarters} quarters: ${parts}${L.note ? ` (${L.note})` : ''}`);
+  }
+  return bits.length ? `<div class="o-timing">${bits.join(' · ')}</div>` : '';
+}
 export function renderEffects(e) {
   if (!e) return '';
   const parts = Object.entries(e).filter(([k, v]) => v && EFFECT_LABEL[k])

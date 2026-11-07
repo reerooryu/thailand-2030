@@ -66,6 +66,11 @@ export const PROVENANCE: Record<keyof Params, ParamSource> = {
   hotGapThreshold: 'prior',
   hotGapCore: 'prior',
   hotGapHeadline: 'prior',
+  hotGapCore2: 'prior',
+  hotGapHeadline2: 'prior',
+  expDrift: 'prior',
+  expDecay: 'prior',
+  expThreshold: 'prior',
   ftaDemand: 'prior',
   ftaTfp: 'prior',
   ftaTfpCap: 'prior',
@@ -200,10 +205,23 @@ export const BASE: Params = {
   // reaches the capital stock after two years rather than five.
   infraStagedShare: 0.35,
   infraStagedLag: 8,
-  // About +1pp on headline inflation at a +7% gap; nothing below +2%.
+  // Overheating. The estimated slopes come from a sample where the gap rarely
+  // left ±5%, so above +2% the curve bends upward: linear and quadratic terms
+  // in the excess gap. Long run, a +5% gap adds about 1.3 points to headline
+  // inflation and a +10% gap about 5.5 — roughly what the 1988-91 boom did
+  // (CPI 3.8% in 1988 to 5.9% in 1990). Nothing changes below +2%.
   hotGapThreshold: 2,
   hotGapCore: 0.02,
   hotGapHeadline: 0.10,
+  hotGapCore2: 0.004,
+  hotGapHeadline2: 0.03,
+  // Expectations, very lightly. While headline runs above 3%, expected
+  // inflation drifts up by 2% of the excess a quarter and decays 5% a quarter
+  // back towards target. It shifts both curves' long-run level one for one.
+  // Two years at 6% moves it about half a point; it never matters below 3%.
+  expDrift: 0.02,
+  expDecay: 0.95,
+  expThreshold: 3,
   // EU FTA: a permanent LEVEL gain in capacity, not a standing demand boost.
   // TFP rises 0.06%/quarter at full access until the cumulative gain reaches
   // 0.7%; with the capital that follows, potential output ends ~1.28% higher,

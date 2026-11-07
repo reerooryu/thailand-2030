@@ -52,6 +52,20 @@ export interface PolicyOption {
   maximal?: boolean;
   returnsInQuarters?: number;
   effects: PolicyEffects;
+  /** One-off money: the fiscal part of `effects` is a flow (% of GDP a year)
+   *  that runs for this many quarters and then stops. Outside the stance ramp
+   *  and caps, like an event's one-off. Thai Chuay Thai is four months of
+   *  co-payments, not a permanent transfer. */
+  effectsQuarters?: number;
+  /** Capital spending disburses over this many quarters: 1/n of the annual
+   *  rate in the first quarter, rising to the full rate. New Thai megaprojects
+   *  spend little in year one (land, design, tender). */
+  rampQuarters?: number;
+  /** Effects that arrive later: `inQuarters` after the card is played, and
+   *  not before game quarter `atQuarter` (0 = 2026Q2) when a step has a date
+   *  of its own — the VAT path is 8.5% from FY2028 and 10% from FY2030
+   *  whenever it is legislated. */
+  later?: { inQuarters: number; atQuarter?: number; effects: PolicyEffects; sets?: string[]; note?: string }[];
   lag?: Record<string, number | boolean | string>;
   fit: Record<string, number>;
   flavour?: string;
@@ -140,6 +154,14 @@ export function attempt(ps: PoliticalState, card: PolicyCard, optionId: string) 
   }
   const v = vote(ps, option.fit);
   return { option, passed: v.passed, result: v, executive: false as const };
+}
+
+/** Multiply every effect by k. */
+export function scaleEffects(e: PolicyEffects, k: number): PolicyEffects {
+  if (k === 1) return e;
+  const out: Record<string, number> = {};
+  for (const [key, v] of Object.entries(e)) out[key] = (v as number) * k;
+  return out as PolicyEffects;
 }
 
 /** Effects after applying any unmet dependency discount. */

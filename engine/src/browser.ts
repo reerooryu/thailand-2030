@@ -22,7 +22,7 @@ import { IMF_PATH, IMF_2025, IMF_BASELINE_2030, PRICE_ALIGN } from './weo.js';
 import { formCoalition, band, type CoalitionCfg, type PoliticalState } from './politics.js';
 import {
   availableCards, applyFlags, lapsedProposals, attempt, effectiveEffects, isUnlocked,
-  type PolicyCatalogue, type PolicyCard, type PolicyEffects, type PolicyOption,
+  type PolicyCatalogue, type PolicyCard, type PolicyEffects, type PolicyOption, scaleEffects,
 } from './policies.js';
 import {
   scheduleFrom, due, resolve, isEventOptionUnlocked, makeRng,
@@ -74,6 +74,9 @@ export interface LogEntry { quarter: number; kind: string; text: string; }
  *  scripts/passive_check.ts reports both. */
 const BASELINE_ALIGN = 1.0385;
 const SEN_NEED = 67;
+
+/** Stance keys that are money, in % of GDP a year. */
+const FISCAL_KEYS = ['capitalSpend', 'govConsumption', 'transfers', 'taxRate'];
 
 export class BrowserGame {
   cfg = cfg; cat = cat; events = events;
@@ -324,6 +327,10 @@ export class BrowserGame {
   temp: Record<string, number> = { capitalSpend: 0, govConsumption: 0, transfers: 0, taxRate: 0 };
   /** One-off effects waiting to be reversed. */
   expiring: { at: number; effects: PolicyEffects }[] = [];
+  /** Card effects still to land: capital ramps and later steps. */
+  pendingCard: { at: number; cardId: string; effects: PolicyEffects; sets?: string[] }[] = [];
+  /** Fiscal stance each card has put in, so a cancellation can remove it. */
+  cardFiscal: Record<string, Record<string, number>> = {};
 
   openTurn(): GameEvent[] {
     const st = { debtGdp: this.state.debtGdp, gap: this.state.gap,
@@ -400,7 +407,7 @@ export class BrowserGame {
     this.syncWar();
     this.scheduled = scheduleFrom(this.scheduled, events, cardId, optionId, this.quarter);
     const discounted = opt.dependsOn && !this.flags.has(opt.dependsOn.flag);
-    this.apply(effectiveEffects(opt, this.flags));
+    this.applyCard(cardId, opt, discounted ? opt.dependsOn!.withoutFactor : 1);
     this.shiftOpinionFromPolicy(opt.fit);
     // enacting a partner's proposal is worth more to them than the policy itself
     if (card.proposal) {
@@ -444,6 +451,7 @@ export class BrowserGame {
       this.approval = Math.min(100, this.approval + 12);   // the rally
       this.syncWar();
     }
+    if (opt.cancels) this.cancelCard(opt.cancels);
     if (opt.effectsQuarters) {
       // Fiscal money goes to the one-off pot; the rest (approval, opinion,
       // signals) lands as usual and its stance part is withdrawn on expiry.
@@ -527,6 +535,45 @@ export class BrowserGame {
     return Math.max(0.78, Math.min(1.15, 1 + (others - 55) / 200));
   }
 
+  /** A card's effects, with its timing: one-off money, a capital ramp, and
+   *  anything that lands later. The fiscal part is recorded per card so an
+   *  event that cancels the project can take it back out. */
+  private applyCard(cardId: string, opt: PolicyOption, k: number) {
+    const eff = { ...scaleEffects(opt.effects, k) } as Record<string, number>;
+    const record = (e: Record<string, number>) => {
+      const r = (this.cardFiscal[cardId] ??= {});
+      for (const key of FISCAL_KEYS) if (e[key]) r[key] = (r[key] ?? 0) + e[key];
+    };
+    if (opt.effectsQuarters) {
+      const rest: Record<string, number> = {};
+      for (const [key, v] of Object.entries(eff)) {
+        if (key in this.temp) this.temp[key] += v; else rest[key] = v;
+      }
+      this.apply(rest as PolicyEffects);
+      this.expiring.push({ at: this.quarter + opt.effectsQuarters, effects: eff as PolicyEffects });
+    } else {
+      const n = opt.rampQuarters ?? 1;
+      if (n > 1 && eff.capitalSpend) {
+        const step = eff.capitalSpend / n;
+        eff.capitalSpend = step;
+        for (let i = 1; i < n; i++) this.pendingCard.push({ at: this.quarter + i, cardId, effects: { capitalSpend: step } as PolicyEffects });
+      }
+      this.apply(eff as PolicyEffects);
+      record(eff);
+    }
+    for (const L of opt.later ?? [])
+      this.pendingCard.push({ at: Math.max(this.quarter + L.inQuarters, L.atQuarter ?? 0), cardId, effects: scaleEffects(L.effects, k), sets: L.sets });
+  }
+
+  /** Take a card's money back out: its recorded fiscal stance, and anything
+   *  still scheduled. Used when an event cancels the project. */
+  private cancelCard(cardId: string) {
+    const r = this.cardFiscal[cardId] ?? {};
+    for (const [key, v] of Object.entries(r)) this.stance[key] = (this.stance[key] ?? 0) - v;
+    delete this.cardFiscal[cardId];
+    this.pendingCard = this.pendingCard.filter(x => x.cardId !== cardId);
+  }
+
   private apply(e: PolicyEffects) {
     for (const [k, v] of Object.entries(e)) this.stance[k] = (this.stance[k] ?? 0) + (v as number);
     if (e.approvalBoost) this.approval = Math.max(0, Math.min(100, this.approval + e.approvalBoost));
@@ -591,8 +638,9 @@ export class BrowserGame {
     const policy: Policy = {
       // The Bank of Thailand: holds at 1.0% until the economy runs hot, then
       // leans against it. Without this, inflation lowered the real rate and fed
-      // the boom it came from.
-      policyRate: 1.0 + 1.5 * Math.max(0, s.cpiYoy - 2.0) + 0.25 * Math.max(0, s.gap - 2),
+      // the boom it came from. It moves halfway to its target each quarter:
+      // the MPC meets eight times a year and rarely moves more than 50bp at once.
+      policyRate: s.policyRate + 0.5 * ((1.0 + 1.5 * Math.max(0, s.cpiYoy - 2.0) + 0.25 * Math.max(0, s.gap - 2)) - s.policyRate),
       reer: s.reer,
       capitalSpend: Math.min(cap, BASELINE.capitalSpend + this.stance.capitalSpend * ramp) + this.temp.capitalSpend,
       govConsumption: BASELINE.govConsumption + this.stance.govConsumption * ramp + this.temp.govConsumption,
@@ -654,6 +702,16 @@ export class BrowserGame {
       }
     }
     this.expiring = this.expiring.filter(x => x.at > this.quarter);
+    for (const x of this.pendingCard.filter(x => x.at <= this.quarter)) {
+      this.apply(x.effects);
+      for (const f of x.sets ?? []) { this.flags.add(f); this.flagSince[f] ??= this.quarter; }
+      const r = (this.cardFiscal[x.cardId] ??= {});
+      for (const key of FISCAL_KEYS) {
+        const v = (x.effects as Record<string, number>)[key];
+        if (v) r[key] = (r[key] ?? 0) + v;
+      }
+    }
+    this.pendingCard = this.pendingCard.filter(x => x.at > this.quarter);
     this.reviewRatings();
     // A dissolution pre-empts a collapse: the House is gone before anyone can walk.
     if (this.snap) return { ok: true, snap: true };

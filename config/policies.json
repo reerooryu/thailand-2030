@@ -170,18 +170,18 @@
       "name": "Civil Service Reform",
       "ministry": "pm office",
       "type": "structural_reform",
-      "briefing": "1.8 million core civil servants, 3.0 million with teachers, medics, police and military. Personnel and pensions cost about 1.4 trillion baht, near a third of spending; the Budget Office wants a 35% cap by 2032. Plan: cut the core to 1.35 million via voluntary early retirement for 414,000 officials around 40, from fiscal 2027. Severance now, savings over a decade.",
+      "briefing": "1.75 million career civil servants, nearly 3 million with teachers, medics, police and military hires. The wage bill is about 850 billion baht and pensions another 390 billion. The government has committed to cutting a third of civil service jobs. The Cabinet's first step, in October 2026, is 30,000 voluntary exits over five years at up to 15 months' salary each, with one post abolished for every exit. Severance now, savings later.",
       "options": [
         {
           "id": "full",
           "label": "Full early-retirement programme",
           "requiresLegislation": true,
           "effects": {
-            "govConsumption": 0.45,
             "reformIndex": 30,
             "executionBonus": 0.04,
             "institutionalSupport": -12,
-            "approvalBoost": -4
+            "approvalBoost": -4,
+            "transfers": 0.45
           },
           "lag": {
             "savingsFromQuarter": 12,
@@ -208,7 +208,31 @@
             "digital_government_mandated"
           ],
           "lockedNote": "Requires Digital Government. The state cannot shed a third of its staff until something automates their work.",
-          "maximal": true
+          "maximal": true,
+          "later": [
+            {
+              "inQuarters": 4,
+              "effects": {
+                "govConsumption": -0.1
+              },
+              "note": "wage bill falls as officials leave"
+            },
+            {
+              "inQuarters": 8,
+              "effects": {
+                "transfers": -0.45,
+                "govConsumption": -0.1
+              },
+              "note": "severance paid out; more officials gone"
+            },
+            {
+              "inQuarters": 12,
+              "effects": {
+                "govConsumption": -0.1
+              },
+              "note": "net saving about 0.3% of GDP a year, after pensions"
+            }
+          ]
         },
         {
           "id": "attrition",
@@ -231,7 +255,16 @@
             "flag": "digital_government_mandated",
             "withoutFactor": 0.65,
             "note": "Same dependency."
-          }
+          },
+          "later": [
+            {
+              "inQuarters": 4,
+              "effects": {
+                "govConsumption": -0.08
+              },
+              "note": "hiring freeze"
+            }
+          ]
         },
         {
           "id": "none",
@@ -263,7 +296,7 @@
           "label": "Split sport out and merge tourism with culture",
           "requiresLegislation": true,
           "effects": {
-            "govConsumption": 0.03,
+            "govConsumption": 0.01,
             "fdiSignal": 0.05,
             "reformIndex": 9,
             "executionBonus": 0.02,
@@ -288,7 +321,7 @@
           "label": "Create the sports ministry, leave tourism where it is",
           "requiresLegislation": true,
           "effects": {
-            "govConsumption": 0.02,
+            "govConsumption": 0.01,
             "reformIndex": 4,
             "institutionalSupport": -2,
             "approvalBoost": 3
@@ -333,7 +366,7 @@
           "effects": {
             "reformIndex": 13,
             "formalisation": 0.07,
-            "govConsumption": 0.04,
+            "govConsumption": 0.002,
             "approvalBoost": 4,
             "institutionalSupport": -9
           },
@@ -356,7 +389,7 @@
           "requiresLegislation": true,
           "effects": {
             "reformIndex": 4,
-            "govConsumption": 0.05,
+            "govConsumption": 0.004,
             "approvalBoost": 2,
             "institutionalSupport": -1
           },
@@ -478,7 +511,8 @@
             "Others": 0.1,
             "Pheu Thai": 0.1
           },
-          "flavour": "Roads and factories, which help. Nobody has ever been talked out of an insurgency by an industrial estate."
+          "flavour": "Roads and factories, which help. Nobody has ever been talked out of an insurgency by an industrial estate.",
+          "rampQuarters": 4
         },
         {
           "id": "security",
@@ -538,7 +572,8 @@
           "align": {
             "us": 1
           },
-          "flavour": "Isan's cousins get the baht. In Vientiane, the 1941 maps are not mentioned, and everybody remembers them."
+          "flavour": "Isan's cousins get the baht. In Vientiane, the 1941 maps are not mentioned, and everybody remembers them.",
+          "rampQuarters": 4
         },
         {
           "id": "partnership",
@@ -561,7 +596,8 @@
           "sets": [
             "lao_ties"
           ],
-          "flavour": "Closer, cheaper, and nothing Beijing can object to in public. It objects in private."
+          "flavour": "Closer, cheaper, and nothing Beijing can object to in public. It objects in private.",
+          "rampQuarters": 4
         },
         {
           "id": "commercial",
@@ -653,7 +689,7 @@
           "id": "full",
           "label": "Run the full scheme",
           "effects": {
-            "transfers": 0.63,
+            "transfers": 1.26,
             "approvalBoost": 8
           },
           "lag": {
@@ -667,13 +703,14 @@
             "Democrat": -0.6
           },
           "flavour": "Everyone gets a thousand baht and remembers who gave it. Four months of goodwill, nothing else.",
-          "maximal": true
+          "maximal": true,
+          "effectsQuarters": 2
         },
         {
           "id": "targeted",
           "label": "Means-test to the bottom 40%",
           "effects": {
-            "transfers": 0.28,
+            "transfers": 0.56,
             "approvalBoost": 3,
             "reformIndex": 8
           },
@@ -684,13 +721,14 @@
             "Kla Tham": -0.3,
             "Others": 0.0
           },
-          "flavour": "Twice the multiplier per baht, a fraction of the gratitude."
+          "flavour": "Twice the multiplier per baht, a fraction of the gratitude.",
+          "effectsQuarters": 2
         },
         {
           "id": "redirect",
           "label": "Redirect the funds to public investment",
           "effects": {
-            "capitalSpend": 0.63,
+            "capitalSpend": 0.315,
             "approvalBoost": -6
           },
           "lag": {
@@ -703,7 +741,8 @@
             "Pheu Thai": -0.6,
             "Kla Tham": -0.4
           },
-          "flavour": "Done once before: 157 billion baht moved out of the Digital Wallet. Multiplier 0.30 becomes 0.675. Nobody thanks you."
+          "flavour": "Done once before: 157 billion baht moved out of the Digital Wallet. Multiplier 0.30 becomes 0.675. Nobody thanks you.",
+          "effectsQuarters": 8
         }
       ]
     },
@@ -772,7 +811,7 @@
       "name": "VAT Reform",
       "ministry": "finance",
       "type": "revenue",
-      "briefing": "VAT has sat at 7% for three decades against a statutory 10%. Finance's path: 8.5% in 2028, 10% in 2030, plus 1 baht/litre fuel excise from 2027, for revenue of 15.1% of GDP and a sub-3% deficit by FY2029. Each point is about 0.55% of GDP. Tax multiplier -1.125, the largest. The Revenue Mobilisation Package raises about two-thirds as much.",
+      "briefing": "VAT has sat at 7% for three decades against a statutory 10%. Finance's path: 8.5% in 2028, 10% in 2030 (the 7% has always been a royal decree, renewed by every government, so the second step will be a decision of its own), plus 1 baht/litre fuel excise from 2027, for revenue of 15.1% of GDP and a sub-3% deficit by FY2029. Each point is about 0.55% of GDP. Tax multiplier -1.125, the largest. The Revenue Mobilisation Package raises about two-thirds as much.",
       "options": [
         {
           "id": "hold",
@@ -792,7 +831,6 @@
           "label": "Phased: 8.5% in 2028, 10% in 2030",
           "requiresLegislation": true,
           "effects": {
-            "taxRate": 0.83,
             "reformIndex": 12,
             "approvalBoost": -5
           },
@@ -810,6 +848,19 @@
           "sets": [
             "revenue_secured",
             "vat_raised"
+          ],
+          "later": [
+            {
+              "inQuarters": 2,
+              "atQuarter": 6,
+              "effects": {
+                "taxRate": 0.83
+              },
+              "sets": [
+                "vat_8_5"
+              ],
+              "note": "8.5% from FY2028 (October 2027)"
+            }
           ]
         },
         {
@@ -1056,7 +1107,7 @@
           "label": "Double the ceiling to 30,000 baht and lift the headcount cap",
           "requiresLegislation": true,
           "effects": {
-            "taxRate": -0.05,
+            "taxRate": -0.03,
             "formalisation": 0.09,
             "humanCapital": 0.06,
             "reformIndex": 6,
@@ -1083,7 +1134,7 @@
           "label": "Raise the ceiling only, keep the 10% headcount cap",
           "requiresLegislation": true,
           "effects": {
-            "taxRate": -0.03,
+            "taxRate": -0.015,
             "formalisation": 0.04,
             "humanCapital": 0.03,
             "reformIndex": 3,
@@ -1119,7 +1170,7 @@
           "label": "Grant the full 50% deduction under 1.5 million baht",
           "requiresLegislation": true,
           "effects": {
-            "taxRate": -0.11,
+            "taxRate": -0.05,
             "formalisation": 0.1,
             "savingsRate": 0.04,
             "humanCapital": 0.04,
@@ -1144,7 +1195,7 @@
           "label": "A limited 25% deduction, reviewed after two years",
           "requiresLegislation": true,
           "effects": {
-            "taxRate": -0.05,
+            "taxRate": -0.025,
             "formalisation": 0.05,
             "savingsRate": 0.02,
             "reformIndex": 3,
@@ -1169,7 +1220,7 @@
       "name": "Land Bridge (Chumphon–Ranong)",
       "ministry": "transport",
       "type": "megaproject",
-      "briefing": "The Southern Economic Corridor land bridge. Over one trillion baht; Phase 1 to open 2030, full completion around 2035. Backers promise a shortcut past the Malacca Strait. Critics: about 54 hours against 48 via Malacca, around US$252 more per container, and 73.9% of Thai trade already uses regional routes. The government's own review in July 2026 cut the expected return from 8% to 4.8% and cargo by up to 16%, warned about the Ranong biosphere reserve, and found that nine of the ten largest shipping lines have already invested in rival ports. It recommended scrapping it.",
+      "briefing": "The Southern Economic Corridor land bridge. Over one trillion baht; Phase 1 to open 2030, full completion around 2035. Backers promise a shortcut past the Malacca Strait. Critics: about 54 hours against 48 via Malacca, around US$252 more per container, and 73.9% of Thai trade already uses regional routes. The government's own review in July 2026 cut the expected return from 8% to 4.8% and cargo by up to 16%, warned about the Ranong biosphere reserve, and found that nine of the ten largest shipping lines have already invested in rival ports. It recommended scrapping it. The government says the state would pay only for the land, about 14 billion baht, with private investors funding the rest. With no investors in sight, pushing ahead means the state builds Phase 1 itself.",
       "options": [
         {
           "id": "proceed",
@@ -1209,7 +1260,8 @@
           "maximal": true,
           "align": {
             "cn": 1
-          }
+          },
+          "rampQuarters": 6
         },
         {
           "id": "postpone",
@@ -1268,7 +1320,7 @@
           "label": "Build the rail link",
           "requiresLegislation": true,
           "effects": {
-            "capitalSpend": 0.16,
+            "capitalSpend": 0.08,
             "reformIndex": 0
           },
           "lag": {
@@ -1282,7 +1334,8 @@
             "People's": 0.0
           },
           "flavour": "About a third of Land Bridge Phase 1, and it might carry something.",
-          "maximal": true
+          "maximal": true,
+          "rampQuarters": 4
         },
         {
           "id": "study",
@@ -1322,7 +1375,7 @@
           "label": "Fund Phase 2 and accelerate",
           "requiresLegislation": true,
           "effects": {
-            "capitalSpend": 0.62,
+            "capitalSpend": 0.4,
             "fdiSignal": 0.2
           },
           "lag": {
@@ -1348,13 +1401,14 @@
           "maximal": true,
           "align": {
             "cn": 2
-          }
+          },
+          "rampQuarters": 6
         },
         {
           "id": "phase1_only",
           "label": "Finish Phase 1, defer Phase 2",
           "effects": {
-            "capitalSpend": 0.24
+            "capitalSpend": 0.1
           },
           "lag": {
             "capacityQuarters": 10
@@ -1365,13 +1419,14 @@
             "Pheu Thai": -0.2,
             "Others": -0.2
           },
-          "flavour": "Deliver something before promising more. Unfashionable."
+          "flavour": "Deliver something before promising more. Unfashionable.",
+          "rampQuarters": 4
         },
         {
           "id": "renegotiate",
           "label": "Renegotiate financing terms with Beijing",
           "effects": {
-            "capitalSpend": 0.45,
+            "capitalSpend": 0.3,
             "institutionalSupport": -4
           },
           "lag": {
@@ -1384,7 +1439,8 @@
             "Others": -0.4,
             "Pheu Thai": -0.3
           },
-          "flavour": "Better terms, slower delivery, and a call nobody in the ministry wants to make."
+          "flavour": "Better terms, slower delivery, and a call nobody in the ministry wants to make.",
+          "rampQuarters": 6
         }
       ]
     },
@@ -1403,7 +1459,7 @@
           "label": "Amend the concession and proceed",
           "requiresLegislation": true,
           "effects": {
-            "capitalSpend": 0.28,
+            "capitalSpend": 0.14,
             "fdiSignal": -0.1
           },
           "lag": {
@@ -1420,7 +1476,8 @@
           "sets": [
             "eastern_hsr_proceeding"
           ],
-          "maximal": true
+          "maximal": true,
+          "rampQuarters": 4
         },
         {
           "id": "terminate",
@@ -1444,7 +1501,8 @@
             "Pheu Thai": -0.3,
             "Others": -0.5
           },
-          "flavour": "Compensation talks, nothing to show for 21.8 billion baht, and every foreign concessionaire rereading their termination clauses."
+          "flavour": "Compensation talks, nothing to show for 21.8 billion baht, and every foreign concessionaire rereading their termination clauses.",
+          "effectsQuarters": 4
         },
         {
           "id": "defer",
@@ -1477,7 +1535,7 @@
           "label": "Build conventional double-track to U-Tapao",
           "requiresLegislation": true,
           "effects": {
-            "capitalSpend": 0.14,
+            "capitalSpend": 0.08,
             "reformIndex": 4,
             "fdiSignal": 0.15
           },
@@ -1492,14 +1550,15 @@
             "Kla Tham": 0.1
           },
           "flavour": "Finished inside your term. Nobody makes a documentary about double-track.",
-          "maximal": true
+          "maximal": true,
+          "rampQuarters": 4
         },
         {
           "id": "retender",
           "label": "Re-tender the high-speed line",
           "requiresLegislation": true,
           "effects": {
-            "capitalSpend": 0.2,
+            "capitalSpend": 0.12,
             "fdiSignal": -0.1
           },
           "lag": {
@@ -1511,7 +1570,8 @@
             "Democrat": -0.4,
             "People's": -0.4
           },
-          "flavour": "Same project, new consortium, same drainage channel at Makkasan."
+          "flavour": "Same project, new consortium, same drainage channel at Makkasan.",
+          "rampQuarters": 6
         },
         {
           "id": "none",
@@ -1537,8 +1597,8 @@
           "label": "Full fleet electrification and route overhaul",
           "requiresLegislation": true,
           "effects": {
-            "capitalSpend": 0.12,
-            "govConsumption": 0.06,
+            "capitalSpend": 0.04,
+            "govConsumption": 0.03,
             "reformIndex": 9,
             "humanCapital": 0.05,
             "approvalBoost": 6
@@ -1562,13 +1622,14 @@
             "Kla Tham": -0.1
           },
           "flavour": "Visible within two years. Bangkok notices buses; it does not notice the Super Licence.",
-          "maximal": true
+          "maximal": true,
+          "rampQuarters": 4
         },
         {
           "id": "lease_only",
           "label": "Lease the buses, leave the routes alone",
           "effects": {
-            "govConsumption": 0.05,
+            "govConsumption": 0.02,
             "reformIndex": 3,
             "approvalBoost": 3
           },
@@ -1586,9 +1647,8 @@
           "label": "Electrify and make it fare-free",
           "requiresLegislation": true,
           "effects": {
-            "capitalSpend": 0.12,
-            "govConsumption": 0.28,
-            "transfers": 0.1,
+            "capitalSpend": 0.04,
+            "govConsumption": 0.06,
             "reformIndex": 6,
             "approvalBoost": 13
           },
@@ -1602,7 +1662,8 @@
             "Others": 0.0,
             "Democrat": -0.6
           },
-          "flavour": "The most approval per baht on this desk. It also makes an 8 billion baht annual loss permanent."
+          "flavour": "The most approval per baht on this desk. It also makes an 8 billion baht annual loss permanent.",
+          "rampQuarters": 4
         }
       ]
     },
@@ -1621,10 +1682,10 @@
           "label": "Order both units and build the regulator",
           "requiresLegislation": true,
           "effects": {
-            "capitalSpend": 0.22,
+            "capitalSpend": 0.06,
             "reformIndex": 7,
             "fdiSignal": 0.12,
-            "humanCapital": 0.25,
+            "humanCapital": 0.08,
             "executionBonus": 0.02
           },
           "lag": {
@@ -1648,17 +1709,18 @@
             "People's": -0.5
           },
           "flavour": "A premium over gas for power in 2037, and a nuclear regulator built from scratch. Neither will win you a vote.",
-          "maximal": true
+          "maximal": true,
+          "rampQuarters": 4
         },
         {
           "id": "one_unit",
           "label": "Order one unit, site it in the Northeast",
           "requiresLegislation": true,
           "effects": {
-            "capitalSpend": 0.12,
+            "capitalSpend": 0.035,
             "reformIndex": 4,
             "fdiSignal": 0.06,
-            "humanCapital": 0.15
+            "humanCapital": 0.05
           },
           "lag": {
             "capacityQuarters": 16
@@ -1674,7 +1736,8 @@
             "Pheu Thai": 0.1,
             "People's": -0.3
           },
-          "flavour": "A demonstration unit. It buys the regulator, the fuel deal and trained inspectors without betting the grid."
+          "flavour": "A demonstration unit. It buys the regulator, the fuel deal and trained inspectors without betting the grid.",
+          "rampQuarters": 4
         },
         {
           "id": "study_only",
@@ -1725,7 +1788,7 @@
           "effects": {
             "capitalSpend": 0.1,
             "govConsumption": 0.05,
-            "humanCapital": 0.55,
+            "humanCapital": 0.3,
             "reformIndex": 8,
             "fdiSignal": 0.2,
             "formalisation": 0.1
@@ -1750,7 +1813,8 @@
             "Kla Tham": -0.1
           },
           "flavour": "Sound use of public money with little to show by December 2030. Your successor reports the numbers.",
-          "maximal": true
+          "maximal": true,
+          "rampQuarters": 4
         },
         {
           "id": "champion",
@@ -1763,7 +1827,7 @@
           "effects": {
             "capitalSpend": 0.16,
             "govConsumption": 0.04,
-            "humanCapital": 0.3,
+            "humanCapital": 0.2,
             "reformIndex": 4,
             "fdiSignal": -0.05,
             "approvalBoost": 5
@@ -1787,7 +1851,8 @@
             "flag": "domestic_ai_capacity",
             "withoutFactor": 0.75,
             "note": "A champion with no domestic AI capacity to serve is a fabrication subsidy looking for a customer — the TH-AI redirect is what gives it demand."
-          }
+          },
+          "rampQuarters": 4
         },
         {
           "id": "none",
@@ -1827,7 +1892,7 @@
           "requiresLegislation": true,
           "maximal": true,
           "effects": {
-            "capitalSpend": 0.12,
+            "capitalSpend": 0.06,
             "fdiSignal": 0.14,
             "humanCapital": 0.12,
             "reformIndex": 4,
@@ -1849,7 +1914,8 @@
           "align": {
             "cn": 1
           },
-          "flavour": "The fabs (or at least the packaging lines) come to Lanna. The road to the market runs north, and Washington is reading the bill of lading."
+          "flavour": "The fabs (or at least the packaging lines) come to Lanna. The road to the market runs north, and Washington is reading the bill of lading.",
+          "rampQuarters": 4
         },
         {
           "id": "hybrid",
@@ -1872,7 +1938,8 @@
           "sets": [
             "nec_hybrid"
           ],
-          "flavour": "A components park beside the craft villages. Each brochure mentions the other."
+          "flavour": "A components park beside the craft villages. Each brochure mentions the other.",
+          "rampQuarters": 4
         },
         {
           "id": "keep",
@@ -1900,7 +1967,7 @@
           "requiresLegislation": true,
           "maximal": true,
           "effects": {
-            "capitalSpend": 0.22,
+            "capitalSpend": 0.12,
             "fdiSignal": 0.13,
             "humanCapital": 0.06,
             "reformIndex": 4,
@@ -1919,13 +1986,14 @@
           "sets": [
             "cwec_industrial"
           ],
-          "flavour": "Container trains past the bridge on the River Kwai. The tourists who came for it can watch."
+          "flavour": "Container trains past the bridge on the River Kwai. The tourists who came for it can watch.",
+          "rampQuarters": 4
         },
         {
           "id": "freight_only",
           "label": "Build the Kanchanaburi freight corridor and keep the zoning",
           "effects": {
-            "capitalSpend": 0.12,
+            "capitalSpend": 0.08,
             "fdiSignal": 0.05
           },
           "lag": {
@@ -1941,7 +2009,8 @@
           "sets": [
             "cwec_freight"
           ],
-          "flavour": "A railway first. What it carries can be decided later."
+          "flavour": "A railway first. What it carries can be decided later.",
+          "rampQuarters": 4
         },
         {
           "id": "keep",
@@ -1967,7 +2036,7 @@
           "effects": {
             "capitalSpend": 0.008,
             "reformIndex": 6,
-            "humanCapital": 0.15,
+            "humanCapital": 0.03,
             "approvalBoost": 3
           },
           "lag": {
@@ -1994,7 +2063,7 @@
           "effects": {
             "capitalSpend": 0.008,
             "reformIndex": 10,
-            "humanCapital": 0.1,
+            "humanCapital": 0.02,
             "fdiSignal": 0.1
           },
           "lag": {
@@ -2042,7 +2111,7 @@
           "label": "Mandate whole-of-government migration",
           "requiresLegislation": true,
           "effects": {
-            "capitalSpend": 0.09,
+            "capitalSpend": 0.05,
             "reformIndex": 24,
             "executionBonus": 0.09,
             "institutionalSupport": -5
@@ -2068,7 +2137,7 @@
           "id": "voluntary",
           "label": "Continue voluntary agency onboarding",
           "effects": {
-            "capitalSpend": 0.04,
+            "capitalSpend": 0.02,
             "reformIndex": 8,
             "executionBonus": 0.03
           },
@@ -2123,7 +2192,7 @@
           "requiresLegislation": true,
           "effects": {
             "govConsumption": 0.05,
-            "humanCapital": 0.12,
+            "humanCapital": 0.06,
             "formalisation": 0.1,
             "reformIndex": 3,
             "approvalBoost": 6,
@@ -2368,7 +2437,7 @@
             "formalisation": 0.27,
             "taxRate": 0.05,
             "humanCapital": 0.04,
-            "govConsumption": 0.1,
+            "govConsumption": 0.03,
             "reformIndex": 15,
             "approvalBoost": -14,
             "institutionalSupport": -11
@@ -2566,7 +2635,8 @@
             "Democrat": 0.1
           },
           "flavour": "The best farm policy in twenty years, and the slowest. Smallholders need three seasons and credit; you offer one.",
-          "maximal": true
+          "maximal": true,
+          "rampQuarters": 4
         },
         {
           "id": "input_support",
@@ -2702,7 +2772,8 @@
             "floodway_built"
           ],
           "maximal": true,
-          "flavour": "Two hundred and sixty billion baht of concrete that matters only in a year like 2011. The next one will not ask whether you were in office."
+          "flavour": "Two hundred and sixty billion baht of concrete that matters only in a year like 2011. The next one will not ask whether you were in office.",
+          "rampQuarters": 6
         },
         {
           "id": "floodway",
@@ -2725,7 +2796,8 @@
           "sets": [
             "floodway_built"
           ],
-          "flavour": "The new channel gets built. The old canals east of the river wait another budget cycle."
+          "flavour": "The new channel gets built. The old canals east of the river wait another budget cycle.",
+          "rampQuarters": 6
         },
         {
           "id": "retention",
@@ -2978,7 +3050,7 @@
           "label": "Flat 1,000 baht at 60, and widen the maternal grant",
           "requiresLegislation": true,
           "effects": {
-            "transfers": 0.38,
+            "transfers": 0.31,
             "govConsumption": 0.03,
             "approvalBoost": 11,
             "humanCapital": 0.06,
@@ -3027,7 +3099,7 @@
           "label": "One hundred million to every province, no conditions",
           "requiresLegislation": true,
           "effects": {
-            "govConsumption": 0.06,
+            "govConsumption": 0.04,
             "approvalBoost": 8,
             "institutionalSupport": 6,
             "reformIndex": 1
@@ -3043,14 +3115,15 @@
             "People's": -0.3
           },
           "flavour": "Seventy-seven governors with a budget line and a ribbon. Good politics; economically, close to a plain transfer.",
-          "maximal": true
+          "maximal": true,
+          "effectsQuarters": 4
         },
         {
           "id": "competitive",
           "label": "Allocate against submitted proposals, audited afterwards",
           "requiresLegislation": true,
           "effects": {
-            "govConsumption": 0.05,
+            "govConsumption": 0.04,
             "approvalBoost": 3,
             "institutionalSupport": -2,
             "reformIndex": 7,
@@ -3067,7 +3140,8 @@
             "Kla Tham": -0.2,
             "Others": -0.3
           },
-          "flavour": "Better spending, worse politics. Every province that loses will say the criteria were written in Bangkok."
+          "flavour": "Better spending, worse politics. Every province that loses will say the criteria were written in Bangkok.",
+          "effectsQuarters": 4
         },
         {
           "id": "none",

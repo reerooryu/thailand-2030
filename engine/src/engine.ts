@@ -110,11 +110,16 @@ export function step(input: StepInput): State {
   const rgdp = potential * (1 + gap / 100);
 
   // ---- Phillips. Core is the anchored process; headline adds energy.
+  // Above the hot-gap threshold both curves bend upward (linear + quadratic in
+  // the excess gap), and a slow drift in expectations shifts their level.
+  const hot = Math.max(0, s.gap - (p.hotGapThreshold ?? 2));
+  const drift = s.inflDrift ?? 0;
   const coreYoy =
     p.coreConst +
     p.corePersistence * s.cpiCoreYoy +
     p.coreGap * s.gap +
-    (p.hotGapCore ?? 0) * Math.max(0, s.gap - (p.hotGapThreshold ?? 2)) +
+    (p.hotGapCore ?? 0) * hot + (p.hotGapCore2 ?? 0) * hot * hot +
+    (1 - p.corePersistence) * drift +
     p.coreFx * dReer4 +
     p.coreEnergy * exog.energyInflation;
 
@@ -122,9 +127,11 @@ export function step(input: StepInput): State {
     p.headlineConst +
     p.headlinePersistence * s.cpiYoy +
     p.headlineGap * s.gap +
-    (p.hotGapHeadline ?? 0) * Math.max(0, s.gap - (p.hotGapThreshold ?? 2)) +
+    (p.hotGapHeadline ?? 0) * hot + (p.hotGapHeadline2 ?? 0) * hot * hot +
+    (1 - p.headlinePersistence) * drift +
     p.headlineFx * dReer4 +
     p.headlineEnergy * exog.energyInflation;
+  const inflDrift = (p.expDecay ?? 1) * drift + (p.expDrift ?? 0) * Math.max(0, s.cpiYoy - (p.expThreshold ?? 3));
 
   const cpi = lag4.cpi * (1 + cpiYoy / 100);
   const cpiCore = lag4.cpiCore * (1 + coreYoy / 100);
@@ -216,7 +223,7 @@ export function step(input: StepInput): State {
     gap, rgdp, potential,
     capital, labour, tfp, potentialGrowthYoy, infraPipeline: pipeline, infraStaged: stagedPipe, ftaTfpCum: (s.ftaTfpCum ?? 0) + ftaTfpStep, territoryCum: (s.territoryCum ?? 0) + terrStep, reformStock,
     exportsR, importsR, invPrivR, invPubR, consR, invRate,
-    cpi, cpiCore, cpiYoy, cpiCoreYoy: coreYoy,
+    cpi, cpiCore, cpiYoy, cpiCoreYoy: coreYoy, inflDrift,
     policyRate: policy.policyRate,
     realRate,
     reer,

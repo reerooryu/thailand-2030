@@ -144,6 +144,7 @@ b{font-weight:600}
 .o-flavour{font-size:12px;color:var(--ink-3);font-style:italic;margin-top:4px;line-height:1.45}
 .o-dep{font-size:11.5px;color:var(--warning);margin-top:5px;line-height:1.4}
 .o-deltas{margin-top:6px}
+.o-timing{margin-top:3px;font-size:11px;color:var(--ink-2);opacity:.8}
 .chip{font-size:10px;padding:2px 7px;border-radius:20px;white-space:nowrap;font-weight:500}
 .chip.exec{background:var(--surface-1);color:var(--ink-3)}
 .chip.pass{background:rgba(12,163,12,.16);color:var(--good)}

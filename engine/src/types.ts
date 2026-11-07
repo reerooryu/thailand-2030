@@ -33,6 +33,9 @@ export interface State {
   cpiCore: number;         // core CPI index
   cpiYoy: number;          // headline y/y, %
   cpiCoreYoy: number;      // core y/y, %
+  /** Drift in expected inflation above target, pp. Zero unless headline has
+   *  run above params.expThreshold for a while. */
+  inflDrift?: number;
 
   // --- financial
   policyRate: number;      // %
@@ -227,6 +230,11 @@ export interface Params {
   hotGapThreshold: number;
   hotGapCore: number;
   hotGapHeadline: number;
+  hotGapCore2: number;
+  hotGapHeadline2: number;
+  expDrift: number;
+  expDecay: number;
+  expThreshold: number;
   ftaDemand: number;
   ftaTfp: number;
   /** Cumulative cap on the FTA's TFP gain, % of the TFP level: a one-off level

@@ -36,8 +36,7 @@
             "Kla Tham": -2
           },
           "effects": {
-            "capitalSpend": 0.45,
-            "govConsumption": 0.1,
+            "govConsumption": 0.02,
             "approvalBoost": -6,
             "institutionalSupport": -5
           },
@@ -59,7 +58,7 @@
             "Kla Tham": -1
           },
           "effects": {
-            "capitalSpend": 0.16,
+            "capitalSpend": 0.08,
             "approvalBoost": 2,
             "institutionalSupport": 4,
             "fdiSignal": -0.1
@@ -71,7 +70,8 @@
             "land_bridge_scrapped",
             "chumphon_rail_via_climbdown"
           ],
-          "flavour": "Looks competent to everyone except those promised a trillion baht."
+          "flavour": "Looks competent to everyone except those promised a trillion baht.",
+          "cancels": "land_bridge"
         }
       ]
     },
@@ -102,7 +102,8 @@
             "institutionalSupport": 6,
             "executionBonus": 0.02
           },
-          "flavour": "You bought back the bureaucracy at its asking price."
+          "flavour": "You bought back the bureaucracy at its asking price.",
+          "effectsQuarters": 8
         },
         {
           "id": "hold_firm",
@@ -226,7 +227,8 @@
             "fdiSignal": 0.25,
             "approvalBoost": -4
           },
-          "flavour": "Expensive. Stops the bleeding on every other concession."
+          "flavour": "Expensive. Stops the bleeding on every other concession.",
+          "effectsQuarters": 4
         },
         {
           "id": "fight",
@@ -269,7 +271,8 @@
             "transfers": 0.35,
             "approvalBoost": 7
           },
-          "flavour": "Instant relief, permanent expectation. Thailand has never unwound one cleanly."
+          "flavour": "Instant relief, permanent expectation. Thailand has never unwound one cleanly.",
+          "effectsQuarters": 4
         },
         {
           "id": "targeted",
@@ -283,7 +286,8 @@
             "transfers": 0.12,
             "approvalBoost": 2
           },
-          "flavour": "A third of the cost, a third of the credit."
+          "flavour": "A third of the cost, a third of the credit.",
+          "effectsQuarters": 4
         },
         {
           "id": "absorb",
@@ -392,7 +396,8 @@
             "transfers": 0.55,
             "approvalBoost": 9
           },
-          "flavour": "Fast, popular, and the expectation never goes away."
+          "flavour": "Fast, popular, and the expectation never goes away.",
+          "effectsQuarters": 4
         },
         {
           "id": "strategic_reserve",
@@ -538,7 +543,8 @@
             "transfers": 0.18,
             "approvalBoost": 3
           },
-          "flavour": "Treats the symptom. The hotels are grateful for a season."
+          "flavour": "Treats the symptom. The hotels are grateful for a season.",
+          "effectsQuarters": 4
         },
         {
           "id": "decline",
@@ -2909,6 +2915,51 @@
             "approvalBoost": 1
           },
           "flavour": "The offer is declined in a sentence. The offensive resumes at dawn."
+        }
+      ]
+    },
+    {
+      "id": "vat_second_step",
+      "headline": "VAT is due to rise to 10% in October",
+      "trigger": {
+        "type": "flag",
+        "flag": "vat_8_5",
+        "requiresFlag": "vat_8_5"
+      },
+      "scriptedQuarter": 14,
+      "blocking": true,
+      "body": "The phased law takes VAT from 8.5% to 10% at the start of fiscal 2030, five months before the election. The statutory rate has been 10% since 1992; every government since has renewed a royal decree holding it lower. The Fiscal Policy Office wants the revenue. Your whips want the decree.",
+      "options": [
+        {
+          "id": "decree",
+          "label": "Renew the decree: hold at 8.5% for another year",
+          "opinion": {
+            "Pheu Thai": 4,
+            "Kla Tham": 3,
+            "Democrat": -6
+          },
+          "effects": {
+            "approvalBoost": 2,
+            "fdiSignal": -0.03
+          },
+          "flavour": "What every government since 1992 has done. The rating agencies notice, and say so politely.",
+          "passive": true
+        },
+        {
+          "id": "raise",
+          "label": "Let it rise to 10%, as legislated",
+          "opinion": {
+            "Democrat": 6,
+            "Others": 2,
+            "Pheu Thai": -6,
+            "Kla Tham": -5
+          },
+          "effects": {
+            "taxRate": 0.82,
+            "reformIndex": 6,
+            "approvalBoost": -6
+          },
+          "flavour": "Revenue the next government will thank you for, collected in front of the voters."
         }
       ]
     }
