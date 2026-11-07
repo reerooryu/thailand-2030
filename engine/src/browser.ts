@@ -370,8 +370,15 @@ export class BrowserGame {
     for (const e of fired) {
       this.firedEvents.add(e.id);
       if (e.blocking) this.pending.push(e);
-      if (e.shock) this.shocks.push({ id: e.id, until: this.quarter + (e.shock.quarters ?? 1),
-        gap: e.shock.gap ?? 0, investment: e.shock.investment ?? 0, energy: e.shock.energy ?? 0 });
+      if (e.shock) {
+        // Data centres on an LNG grid: more load on imported gas makes every
+        // later energy spike bite harder, unless the power is contracted from
+        // renewables.
+        const lng = e.shock.energy && this.flags.has('datacentre_grid_guaranteed')
+          && !this.flags.has('pdp_renewables') && !this.flags.has('dc_green_power') ? 1.15 : 1;
+        this.shocks.push({ id: e.id, until: this.quarter + (e.shock.quarters ?? 1),
+          gap: e.shock.gap ?? 0, investment: e.shock.investment ?? 0, energy: (e.shock.energy ?? 0) * lng });
+      }
     }
     for (const d of this.deferred.filter(d => d.returnsAtQuarter === this.quarter)) {
       const c = cat.policies.find(x => x.id === d.cardId);
@@ -477,6 +484,8 @@ export class BrowserGame {
       this.syncWar();
     }
     if (opt.cancels) this.cancelCard(opt.cancels);
+    if (opt.shock) this.shocks.push({ id: `${e.id}:${opt.id}`, until: this.quarter + (opt.shock.quarters ?? 1),
+      gap: opt.shock.gap ?? 0, investment: opt.shock.investment ?? 0, energy: opt.shock.energy ?? 0 });
     if (opt.shockScale) for (const x of this.shocks.filter(x => x.id === e.id)) {
       x.gap *= opt.shockScale.gap ?? 1; x.investment *= opt.shockScale.gap ?? 1;
       x.energy *= opt.shockScale.energy ?? 1;

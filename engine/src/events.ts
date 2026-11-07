@@ -62,6 +62,9 @@ export interface EventOption {
    *  energy component down, conceding a tariff mostly avoids the export hit.
    *  Multiplies the event's `shock` (gap also scales investment). */
   shockScale?: { gap?: number; energy?: number };
+  /** A shock this answer brings on its own, in the event's units: capturing
+   *  or losing a wave of private investment, a construction boom. */
+  shock?: { gap?: number; investment?: number; energy?: number; quarters?: number };
 }
 export interface GameEvent {
   id: string; headline: string; body: string;

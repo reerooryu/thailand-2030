@@ -1427,7 +1427,7 @@
       },
       "scriptedQuarter": 4,
       "blocking": true,
-      "body": "USD 16 billion of data-centre commitments across 28 projects in half a year: AWS 5 billion through 2037, TikTok 3.8 across three provinces, Google 1 in Chonburi, a 300 MW campus in Rayong. Installed capacity is about 200 MW; the pipeline needs 850 MW within three years. Where does firm clean power come from, and at what tariff?",
+      "body": "Data-centre approvals reached almost 500 billion baht in 2025, and applications in the first quarter of 2026 alone passed a trillion: TikTok 842 billion across three provinces, AWS 200 billion through 2037, Google in Chonburi, Microsoft under review. The pipeline is about 2.9 GW, mostly in the EEC, and the grid there cannot carry it. Generation is not the problem; transmission is. Johor and Batam are taking the sites Thailand cannot connect. Most of the money buys imported servers, and a 100 MW hall employs about fifty people.",
       "options": [
         {
           "id": "guarantee",
@@ -1450,9 +1450,14 @@
           "sets": [
             "datacentre_grid_guaranteed"
           ],
-          "flavour": "The investment is real; the jobs are a few hundred. But a poured data centre cannot be relocated.",
+          "flavour": "The investment is real and the halls cannot be moved once poured; the jobs are a few hundred, and the servers are imported.",
           "align": {
             "us": 1
+          },
+          "shock": {
+            "investment": 0.3,
+            "gap": 0.05,
+            "quarters": 12
           }
         },
         {
@@ -1473,8 +1478,228 @@
           "sets": [
             "datacentre_queue"
           ],
-          "flavour": "Households should not subsidise the world's largest companies. Johor and Batam already built theirs, and site decisions expire in about eighteen months.",
+          "flavour": "Households should not subsidise the world's largest companies. The wave the forecasters expect still comes; Johor and Batam take the marginal sites.",
           "passive": true
+        }
+      ]
+    },
+    {
+      "id": "datacentre_tariff",
+      "headline": "Data centres want a discount on power; households want them to pay",
+      "trigger": {
+        "type": "flag",
+        "flag": "datacentre_grid_guaranteed",
+        "requiresFlag": "datacentre_grid_guaranteed"
+      },
+      "scriptedQuarter": 6,
+      "blocking": true,
+      "body": "A 100 MW hall draws the electricity of about thirteen million people. The ERC has drafted a data-centre tariff of 5 to 6 baht a unit, against 3 to 4 for households, with a deposit of 4.5 million baht per megawatt refunded as the load arrives. Johor offers less. A 2,000 MW pilot would let operators contract renewable power directly.",
+      "options": [
+        {
+          "id": "cost",
+          "label": "Charge the cost: 5 to 6 baht a unit, and the deposit",
+          "opinion": {
+            "People's": 2,
+            "Democrat": 2,
+            "Kla Tham": 1
+          },
+          "effects": {
+            "fdiSignal": -0.05,
+            "approvalBoost": 1
+          },
+          "shock": {
+            "investment": -0.05,
+            "quarters": 8
+          },
+          "sets": [
+            "dc_tariff_cost"
+          ],
+          "flavour": "Households do not subsidise the world's largest companies. A few marginal projects go to Johor.",
+          "passive": true
+        },
+        {
+          "id": "subsidise",
+          "label": "Match Johor: a discounted digital tariff, EGAT absorbs the difference",
+          "opinion": {
+            "People's": -4,
+            "Kla Tham": -2,
+            "Democrat": -2,
+            "Pheu Thai": 1
+          },
+          "effects": {
+            "transfers": 0.12,
+            "fdiSignal": 0.15,
+            "approvalBoost": -3
+          },
+          "shock": {
+            "investment": 0.15,
+            "quarters": 10
+          },
+          "sets": [
+            "dc_tariff_subsidised"
+          ],
+          "flavour": "Every hall in the queue gets built. The Ft charge on household bills tells voters who paid for it."
+        },
+        {
+          "id": "green",
+          "label": "Direct renewable contracts: open the 2,000 MW pilot",
+          "requiresFlags": [
+            "pdp_renewables"
+          ],
+          "lockedNote": "Needs the renewables pathway in the Power Development Plan.",
+          "opinion": {
+            "People's": 3,
+            "Democrat": 2,
+            "Others": 1
+          },
+          "effects": {
+            "fdiSignal": 0.2,
+            "reformIndex": 2,
+            "capitalSpend": 0.04,
+            "approvalBoost": 1
+          },
+          "shock": {
+            "investment": 0.1,
+            "quarters": 10
+          },
+          "sets": [
+            "dc_green_power"
+          ],
+          "flavour": "The hyperscalers' own climate pledges do the selling. Solar and wind get a buyer that pays on time."
+        }
+      ]
+    },
+    {
+      "id": "tiktok_scrutiny",
+      "headline": "Washington asks about ByteDance's 842-billion-baht build-out",
+      "trigger": {
+        "type": "flag",
+        "flag": "pax_silica",
+        "requiresFlag": "pax_silica"
+      },
+      "scriptedQuarter": 8,
+      "blocking": true,
+      "body": "Pax Silica gave Thailand access to advanced chips. The Commerce Department now wants to know why the largest data-centre investment in the country belongs to TikTok's parent, and whether the halls in Samut Prakan and Chachoengsao will ever run American accelerators.",
+      "options": [
+        {
+          "id": "ringfence",
+          "label": "Ring-fence it: Thai data stays in Thailand, independent audit, no frontier chips",
+          "opinion": {
+            "Democrat": 2,
+            "Others": 1
+          },
+          "effects": {
+            "fdiSignal": 0.05
+          },
+          "shock": {
+            "investment": -0.05,
+            "quarters": 8
+          },
+          "flavour": "Both capitals grumble. Neither walks away. The audit firm is from Singapore."
+        },
+        {
+          "id": "defend",
+          "label": "A Thai investment decision, not Washington's",
+          "opinion": {
+            "Kla Tham": 2,
+            "People's": 1,
+            "Democrat": -2
+          },
+          "effects": {
+            "fdiSignal": -0.1,
+            "approvalBoost": 2
+          },
+          "align": {
+            "us": -1,
+            "cn": 1
+          },
+          "flavour": "Popular at home. American cloud providers quietly re-run their Thai site comparisons.",
+          "passive": true
+        },
+        {
+          "id": "review",
+          "label": "Order a national-security review of the sites",
+          "opinion": {
+            "Pheu Thai": -2,
+            "Democrat": 1
+          },
+          "effects": {
+            "fdiSignal": 0.1,
+            "approvalBoost": -1
+          },
+          "align": {
+            "us": 1,
+            "cn": -1
+          },
+          "shock": {
+            "investment": -0.3,
+            "quarters": 8
+          },
+          "flavour": "ByteDance slows the build while the review runs. Washington notices, and so does Beijing."
+        }
+      ]
+    },
+    {
+      "id": "eec_water",
+      "headline": "A dry year in the east: reservoirs at 30%",
+      "trigger": {
+        "type": "flag",
+        "flag": "datacentre_grid_guaranteed",
+        "requiresFlag": "datacentre_grid_guaranteed"
+      },
+      "scriptedQuarter": 10,
+      "blocking": true,
+      "body": "The eastern reservoirs that serve Rayong, Chonburi and Chachoengsao are at 30% going into the dry season. Industry, the new data-centre halls, durian growers and the cities all draw on the same pipes. A 100 MW hall uses the water of over a million people.",
+      "options": [
+        {
+          "id": "industry",
+          "label": "Keep the factories and data centres running",
+          "opinion": {
+            "Kla Tham": -4,
+            "People's": -2,
+            "Pheu Thai": -2,
+            "Democrat": 1
+          },
+          "effects": {
+            "approvalBoost": -4
+          },
+          "flavour": "The investment never pauses. The farmers in Chanthaburi remember who was rationed.",
+          "passive": true
+        },
+        {
+          "id": "farmers",
+          "label": "Ration industrial water",
+          "opinion": {
+            "Kla Tham": 3,
+            "Pheu Thai": 2,
+            "Democrat": -2
+          },
+          "effects": {
+            "approvalBoost": 2,
+            "fdiSignal": -0.1
+          },
+          "shock": {
+            "investment": -0.25,
+            "gap": -0.05,
+            "quarters": 3
+          },
+          "flavour": "Two halls delay commissioning. One operator mentions Johor in its earnings call."
+        },
+        {
+          "id": "build",
+          "label": "Desalination and an eastern water grid",
+          "opinion": {
+            "Others": 2,
+            "Democrat": 2,
+            "People's": 1
+          },
+          "effects": {
+            "capitalSpend": 0.1,
+            "fdiSignal": 0.1,
+            "approvalBoost": 1
+          },
+          "effectsQuarters": 8,
+          "flavour": "Expensive, slow and permanent. The next dry year is somebody else's problem, as it should be."
         }
       ]
     },
