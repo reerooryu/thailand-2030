@@ -18,7 +18,8 @@ export function showEnd(walked, snap = false) {
   const yrs = (g.quarter) / 4;
   const realCagr = (Math.pow(s.rgdp / start.rgdp, 1 / Math.max(yrs, 0.5)) - 1) * 100;
   const cpiCagr  = (Math.pow(s.cpi / start.cpi, 1 / Math.max(yrs, 0.5)) - 1) * 100;
-  const setChg   = (g.set / 1621.62 - 1) * 100;
+  const setStart = g.setHistory[3];
+  const setChg   = (g.set / setStart - 1) * 100;
   const gov      = g.government();
 
   const head = fell
@@ -102,9 +103,9 @@ export function showEnd(walked, snap = false) {
           ${row('Potential growth', fmt(s.potentialGrowthYoy, 2) + '%', 'from 2.1% in 2026')}
           ${row('Private investment', fmt(s.invRate) + '%', 'of GDP, from 18.0%')}
           ${row('SET Index', Math.round(g.set).toLocaleString(),
-                `${setChg >= 0 ? '+' : ''}${fmt(setChg)}% from 1,622`, setChg >= 0 ? 'good' : 'critical')}
+                `${setChg >= 0 ? '+' : ''}${fmt(setChg)}% from ${Math.round(setStart).toLocaleString()}`, setChg >= 0 ? 'good' : 'critical')}
           ${row('Baht', fmt(g.baht(), 2) + ' to the dollar',
-                `IMF path 34.60 · ${g.fx >= 0 ? 'stronger' : 'weaker'} by ${fmt(Math.abs(g.fx), 1)}%${g.flags.has('baht_lean') ? ', with the BOT leaning against it' : ''}`,
+                `IMF path ${fmt(g.bahtPath(), 2)} · ${g.fx >= 0 ? 'stronger' : 'weaker'} by ${fmt(Math.abs(g.fx), 1)}%${g.flags.has('baht_lean') ? ', with the BOT leaning against it' : ''}`,
                 g.fx >= 0.5 ? 'good' : g.fx <= -2 ? 'critical' : '')}
           ${row('Capital stock', fmt(s.capital / start.capital * 100 - 100, 1) + '%', 'growth over the term')}
           ${row('Reform stock', fmt(s.reformStock, 1), 'accumulated structural effort')}
@@ -119,7 +120,7 @@ export function showEnd(walked, snap = false) {
           ${(() => { const d = g.demography(); return row('Population', d.total.toFixed(1) + 'm', d.newPop ? `incl. ${d.newPop.toFixed(1)}m in the 1941 provinces` : 'from 71.6m in 2026')
             + row('Fertility rate', d.tfr.toFixed(2), d.newPop ? `children per woman · ${d.thaiTfr.toFixed(2)} in pre-war Thailand, from 0.90` : 'children per woman, from 0.90', d.tfr < 1 ? 'critical' : 'warning')
             + (d.kingdomPc ? row('GDP per head, enlarged Kingdom', Math.round(d.kingdomPc).toLocaleString() + ' USD', 'the headline is scored on pre-war borders') : ''); })()}
-          ${row('Household debt', fmt(s.hhDebt) + '%', 'of GDP, from 87.5%',
+          ${row('Household debt', fmt(s.hhDebt) + '%', `of GDP, from ${fmt(g.history[3].hhDebt)}%`,
                 s.hhDebt <= 82 ? 'good' : s.hhDebt >= 90 ? 'warning' : '')}
         </table>
       </div>
@@ -366,7 +367,7 @@ export function verdictSections(g, s, realCagr, setChg, gov) {
   // ---- households. The largest constraint on Thai consumption. A stock over a
   // denominator: it falls when nominal GDP outruns credit, which is the only
   // mechanism this country has ever used, and four years barely moves it.
-  const hhStart = 87.5, hhDelta = s.hhDebt - hhStart;
+  const hhStart = g.history[3].hhDebt, hhDelta = s.hhDebt - hhStart;
   const households = pick([
     { min: 6, tag: 'deeper in', t:
       `Household debt finished at ${fmt(s.hhDebt)}% of GDP, ${fmt(hhDelta)} points ABOVE where you found it. ` +

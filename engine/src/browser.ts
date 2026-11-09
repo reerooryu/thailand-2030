@@ -74,8 +74,19 @@ export interface LogEntry { quarter: number; kind: string; text: string; }
  *  scripts/passive_check.ts reports both. Refitted (1.0385 → 1.0472) in
  *  November 2026, after the fiscal block and the BOT rule were corrected and
  *  the Hormuz and tariff events began to move the economy, to keep the passive
- *  term where it was; and again (1.0472 → 1.0484) when the baht began to move, and (→ 1.0190) when potential growth was recalibrated to the BOT's 2.7%. */
-const BASELINE_ALIGN = 1.0190;
+ *  term where it was; and again (1.0472 → 1.0484) when the baht began to move, and (→ 1.0190) when potential growth was recalibrated to the BOT's 2.7%, and (→ 1.0182) when the term began from 2026 Q1. */
+/** Where the term starts: the last full quarter before the first one played,
+ *  2026 Q1. Public debt is the PDMO's end-March 2026 figure (66.38% of GDP),
+ *  household debt the BOT's Q1 2026 figure (85.9%), the SET its 31 March close.
+ *  Later quarters stay in the panel for the backtest but are not the start. */
+const START_PERIOD = '2026Q1';
+const START_DEBT = 66.4;
+const START_HH_DEBT = 85.9;
+export const SET_START = 1448.14;
+/** Baht per dollar, Q1 2026 average (BOT). */
+const BAHT_START = 31.62;
+
+const BASELINE_ALIGN = 1.0182;
 
 /** The baht. An outcome, never a lever (DESIGN §3.4): each quarter the real
  *  exchange rate moves a quarter of the way toward a target set by what
@@ -116,7 +127,8 @@ export class BrowserGame {
   approval = 48;
   /** Mutable — the ceiling event genuinely raises it. */
   debtCeiling = 70;
-  set = 1621.62;
+  /** The SET's close on 31 March 2026, the eve of the term. */
+  set = SET_START;
   /** Mean-reverting deviation of the SET from its nominal-GDP fundamental. */
   sentiment = 0;
   scheduled: Scheduled[] = [];
@@ -145,6 +157,8 @@ export class BrowserGame {
   log: LogEntry[] = [];
   history: State[] = [];
   setHistory: number[] = [];
+  /** The four quarters before the start, for year-on-year figures on the opening turns. */
+  before: State[] = [];
   private rng: () => number;
 
   /** The February 2026 result, frozen. `ps.seats` is the LIVE House and moves
@@ -258,14 +272,23 @@ export class BrowserGame {
       cpi: g('cpi', i), cpiCore: g('cpi_core', i),
       cpiYoy: g('cpi_yoy', i), cpiCoreYoy: g('cpi_core_yoy', i),
       policyRate: g('policy_rate', i, 1), realRate: g('real_rate_cpi', i),
-      reer: g('reer', i, 100), hhDebt: g('hh_debt', i, 87.5),
-      debtGdp: 64.7, primaryBalance: 0, riskPremium: 0,
+      reer: g('reer', i, 100), hhDebt: g('hh_debt', i, START_HH_DEBT),
+      debtGdp: START_DEBT, primaryBalance: 0, riskPremium: 0,
       capitalSpend: BASELINE.capitalSpend, govConsumption: BASELINE.govConsumption,
       transfers: 0, taxRate: BASELINE.taxRate,
     });
-    const last = P.periods.length - 1;
+    // The first quarter played is 2026 Q2, so the term starts from 2026 Q1.
+    // (It used to start from the panel's last quarter, 2026 Q2 itself, which
+    // put the April Hormuz inflation print in the opening state and then
+    // simulated it again.)
+    const at = P.periods.indexOf(START_PERIOD);
+    const last = at >= 0 ? at : P.periods.length - 1;
     for (let k = 3; k >= 0; k--) this.history.push(mk(last - k));
-    this.setHistory = [1493.69, 1568.37, 1591.24, 1621.62];
+    // Four earlier quarters, only so the opening turns can show true
+    // year-on-year growth rather than an annualised shorter window.
+    for (let k = 7; k >= 4; k--) this.before.push(mk(last - k));
+    // SET quarter closes, June 2025 to March 2026.
+    this.setHistory = [1089.56, 1274.17, 1259.67, SET_START];
   }
 
   get state(): State { return this.history[this.history.length - 1]; }
@@ -743,7 +766,7 @@ export class BrowserGame {
     // absurd levels — 3,000 by 2030 on a 1,620 start.
     const base = this.history[3];
     const nominalIdx = (next.rgdp / base.rgdp) * (next.cpi / base.cpi);
-    const fundamental = 1621.62 * Math.pow(nominalIdx, 1.15);
+    const fundamental = SET_START * Math.pow(nominalIdx, 1.15);
     const shock = (next.gap - s.gap) * 1.6
                 + (this.stance.fdiSignal ?? 0) * 1.2
                 + (this.stance.setSupport ?? 0) * 1.5
@@ -964,14 +987,19 @@ export class BrowserGame {
     return IMF_2025 * BASELINE_ALIGN * PRICE_ALIGN * (end.rgdp / start.rgdp) * priceFactor
          * (71.62 / 71.215) * (32.88 / 34.6) * (end.reer / start.reer);
   }
-  /** Baht per US dollar: the IMF's implied path (WEO October 2026, nominal GDP
-   *  in baht over GDP in dollars: 32.9 in 2025, 33.0 in 2026, 34.3 in 2027,
-   *  34.6 from 2028), moved by the baht's real deviation from it. */
-  baht(q = this.quarter): number {
+  /** Baht per US dollar. Starts at the Q1 2026 average (31.62), follows the
+   *  IMF's implied path from there (WEO October 2026, nominal GDP in baht over
+   *  GDP in dollars: 32.9 in 2025, 33.0 in 2026, 34.3 in 2027, 34.6 from 2028,
+   *  about 5% weaker over the term), and moves with the baht's real deviation
+   *  from it. */
+  bahtPath(q = this.quarter): number {
     const path = [32.88, 33.0, 34.3, 34.6, 34.6, 34.6];
-    const t = Math.max(0, Math.min(16, q)) / 4 + 0.25, i = Math.min(4, Math.floor(t));
-    const imf = path[i] + (path[i + 1] - path[i]) * (t - i);
-    return imf * this.history[3].reer / this.state.reer;
+    const at = (qq: number) => { const t = Math.max(0, Math.min(16, qq)) / 4, i = Math.min(4, Math.floor(t));
+      return path[i] + (path[i + 1] - path[i]) * (t - i); };
+    return BAHT_START * at(q) / at(0);
+  }
+  baht(q = this.quarter): number {
+    return this.bahtPath(q) * this.history[3].reer / this.state.reer;
   }
   /** Population and fertility. Thai population follows the IMF path the headline
    *  uses (71.62m in 2026 to 71.215m in 2030). TFR starts at 0.9 and falls about
@@ -1010,7 +1038,7 @@ export class BrowserGame {
       govConsumption: this.stance.govConsumption ?? 0,
       reformStock: s.reformStock,
       fdiSignal: this.stance.fdiSignal ?? 0,
-      debtStart: 64.7,
+      debtStart: this.history[3].debtGdp,
       debtEnd: s.debtGdp,
       primaryBalance: s.primaryBalance,
       invRate: s.invRate,
@@ -1037,7 +1065,7 @@ export class BrowserGame {
       potentialGrowth: s.potentialGrowthYoy,
       realGrowth: (Math.pow(s.rgdp / start.rgdp, 1 / yrs) - 1) * 100,
       invRate: s.invRate, debtGdp: s.debtGdp, ceiling: this.debtCeiling,
-      approval: this.approval, set: this.set, setChange: (this.set / 1621.62 - 1) * 100,
+      approval: this.approval, set: this.set, setChange: (this.set / SET_START - 1) * 100,
       reformStock: s.reformStock, riskPremium: s.riskPremium, gap: s.gap,
       primaryBalance: s.primaryBalance, hhDebt: s.hhDebt,
       flags: this.flags, opinion: this.opinion,
@@ -1075,7 +1103,7 @@ export class BrowserGame {
         && blockVote(conCfg, this.con.adopted!),
       realGrowth,
       potentialGrowth: this.state.potentialGrowthYoy,
-      setChange: (this.set / 1621.62 - 1) * 100,
+      setChange: (this.set / SET_START - 1) * 100,
       invRate: this.state.invRate,
       reformStock: this.state.reformStock,
       debtGdp: this.state.debtGdp,

@@ -78,7 +78,7 @@ This one is the design's FX thesis arriving as a political demand rather than an
 
 | Event | Shock | How the answers change it |
 |---|---|---|
-| Hormuz closed (Q1) | energy +10 pts, gap −0.6, investment −0.3, for 4 quarters | reserves and margin caps: energy ×0.6, output ×0.7. Co-payment credits leave pump prices and the shock as they are |
+| Hormuz closed (Q1) | energy +10 pts, gap −0.9, investment −0.3, for 4 quarters | reserves and margin caps: energy ×0.6, output ×0.7. Co-payment credits leave pump prices and the shock as they are |
 | Global energy spike (hazard) | energy +8 pts, gap −0.2, for 4 quarters | price cap: energy ×0.3; targeted subsidy ×0.8 |
 | US tariffs on electronics (Q6) | gap −0.2 every quarter for the rest of the term | concede ×0.25, negotiate ×0.5, refuse ×1 |
 

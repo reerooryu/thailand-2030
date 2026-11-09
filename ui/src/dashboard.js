@@ -114,7 +114,7 @@ export function render() {
            hist.map(h => h.invRate), 'var(--series-3)')}
     ${tile('Potential growth', fmt(s.potentialGrowthYoy, 2), '%', 'the Legacy score',
            hist.map(h => h.potentialGrowthYoy), 'var(--series-1)')}
-    ${tile('Household debt', fmt(s.hhDebt), '% of GDP', '87.5% in 2026 · the drag on every rate cut',
+    ${tile('Household debt', fmt(s.hhDebt), '% of GDP', `${fmt(g.history[3].hhDebt)}% in March 2026 · the drag on every rate cut`,
            hist.map(h => h.hhDebt), 'var(--series-2)')}`;
 
   /* politics */

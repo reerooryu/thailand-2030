@@ -913,3 +913,20 @@ Sections 1–16 are the design as it stood at v1.0 (August 2026). The systems be
 
 None of these changes the macro model in §5: each feeds it through the existing channels (export demand, TFP, risk premium, labour input, reform capacity, FDI signal, approval).
 
+## The starting state (November 2026)
+
+The term starts from **2026 Q1**, the last full quarter before the first one played (2026 Q2). It used to start from the panel's last quarter, 2026 Q2 itself, which put the April Hormuz inflation print into the opening state and then simulated it again, and left every period label one quarter late. The opening dashboard now shows Q1 2026 as published:
+
+| | Start value | Source |
+|---|---|---|
+| Real GDP growth | 2.8% year on year | NESDC (the panel) |
+| Headline / core inflation | −0.54% / 0.58% | BOT |
+| Policy rate | 1.00%, cut 25 bp on 25 February | BOT MPC 1/2026 |
+| Baht | 31.62 to the dollar (Q1 average) | BOT |
+| SET | 1,448.14 (31 March close) | SET |
+| Public debt | 66.4% of GDP (end-March) | PDMO |
+| Household debt | 85.9% of GDP | BOT |
+| Potential growth | 2.7% | BOT Governor, July 2026 |
+
+The game keeps the four quarters before the start so the opening turns show true year-on-year growth. The baht follows the IMF's implied path (about 5% weaker over the term) from the Q1 average rather than from the IMF's annual level. Two SET achievements were rescaled to the lower start: Thailand Number One needs 2,250 (was 2,500) and To the Moon 2,500 (was 2,800), the same rise as before. The Hormuz shock's output hit was raised to −0.9 so that the passive term's 2026 growth comes out near 2.2%, between the IMF's 2.1% and the BOT's 2.3%; its first quarter (2.4%) still overstates the actual Q2 print (1.9%), because event shocks cannot yet be front-loaded.
+

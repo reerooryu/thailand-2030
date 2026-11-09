@@ -54,6 +54,10 @@ export function tile(label, value, unit, sub, series, color, extra = '') {
    only ever the first turn — the change is annualised, so the label stays true. */
 export function yoyAt(i) {
   const h = g.history[i];
+  // The game keeps the four quarters before the start (g.before), so the
+  // opening turns compare with the same quarter a year earlier too.
+  const prior = i - 4 >= 0 ? g.history[i - 4] : (g.before ?? [])[(g.before ?? []).length + i - 4];
+  if (prior) return (h.rgdp / prior.rgdp - 1) * 100;
   const back = Math.max(0, i - 4);
   const lag = i - back;
   if (lag < 1) return null;

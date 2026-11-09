@@ -71,13 +71,13 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'thailand_number_one',
     name: 'Thailand Number One!',
-    requirement: 'Real growth above 3.5%, potential growth above 3.5%, private investment above 20% and the SET above 2,500.',
+    requirement: 'Real growth above 3.5%, potential growth above 3.5%, private investment above 20% and the SET above 2,250.',
     flavour: 'Every dial pointing up at once, for the first time since the nineties. Thai policy has chased this for a quarter of a century.',
     rarity: 'legendary',
     // 3.5%, not 3%: with potential growth starting at the BOT's 2.7%, the
     // thresholds sit about a point above a term that does nothing.
     test: c => atLeast(c.realGrowth, 3.5) && atLeast(c.potentialGrowth, 3.5) &&
-               atLeast(c.invRate, 20, 1) && atLeast(c.set, 2500, 0),
+               atLeast(c.invRate, 20, 1) && atLeast(c.set, 2250, 0),
   },
   {
     id: 'five_figures',
@@ -206,10 +206,11 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'to_the_moon',
     name: 'To the Moon',
-    requirement: 'Finish with the SET above 2,800.',
+    requirement: 'Finish with the SET above 2,500.',
     flavour: 'For a decade Thai equities were the cheapest bet against Thai growth. Foreign money is back. Whether it stays is the next government\'s problem.',
     rarity: 'rare',
-    test: c => atLeast(c.set, 2800, 0),
+    // From the 1,448 close of March 2026; was 2,800 from an older 1,622 start.
+    test: c => atLeast(c.set, 2500, 0),
   },
   {
     id: 'the_quiet_part',
@@ -295,7 +296,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'room_to_cut',
     name: 'Room to Cut',
     requirement: 'Finish with household debt below 80% of GDP.',
-    flavour: 'At 87.5% of GDP, banks tighten against bad loans instead of passing rate cuts on. Below eighty, monetary policy works again. No votes in it.',
+    flavour: 'At 86% of GDP, banks tighten against bad loans instead of passing rate cuts on. Below eighty, monetary policy works again. No votes in it.',
     rarity: 'uncommon',
     test: c => atMost(c.hhDebt, 80, 1) && !c.fell,
   },
