@@ -72,6 +72,13 @@ export function render() {
   if (g.gdpTrack.length <= g.quarter) g.gdpTrack.push(headline);
   else g.gdpTrack[g.quarter] = headline;
 
+  // The MPC's last decision, in basis points: it moves in steps of 25.
+  const rateMove = () => {
+    const prev = hist.length > 1 ? hist[hist.length - 2].policyRate : s.policyRate;
+    const bp = Math.round((s.policyRate - prev) * 100);
+    return bp === 0 ? 'held last quarter' : `${bp > 0 ? 'raised' : 'cut'} ${Math.abs(bp)} bp last quarter`;
+  };
+
   $('#kpis').innerHTML = [
     tile('GDP per capita', Math.round(headline).toLocaleString(), ' USD', 'level now · the target is for 2030',
          g.gdpTrack.slice(-10), 'var(--series-1)', gdpExtra),
@@ -79,6 +86,8 @@ export function render() {
          'year on year', yoySeries(), 'var(--series-3)'),
     tile('Headline inflation', fmt(s.cpiYoy), '%', `core ${fmt(s.cpiCoreYoy)}%`,
          hist.map(h => h.cpiYoy), 'var(--series-2)'),
+    tile('BOT policy rate', fmt(s.policyRate, 2), '%', rateMove(),
+         hist.map(h => h.policyRate), 'var(--series-3)'),
     tile('SET Index', Math.round(g.set).toLocaleString(), '', `baht ${g.baht().toFixed(2)} to the dollar`,
          g.setHistory.slice(-10), 'var(--series-1)'),
   ].join('');

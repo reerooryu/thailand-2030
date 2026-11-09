@@ -60,7 +60,7 @@ export const PROVENANCE: Record<keyof Params, ParamSource> = {
 
   alpha: 'estimated',
   depreciation: 'prior',
-  tfpTrendGrowth: 'estimated',
+  tfpTrendGrowth: 'prior',
   labourGrowth: 'estimated',
   infraGestation: 'literature',
   infraStagedShare: 'prior',
@@ -199,7 +199,7 @@ export const BASE: Params = {
   // 4.12%/yr in the 2000s to 2.76% in the 2010s to 1.51% in the 2020s.
   alpha: 0.45,
   depreciation: 0.0127,     // 5%/yr
-  tfpTrendGrowth: 0.52,     // ~2.1%/yr, the 2022-26 residual average
+  tfpTrendGrowth: 0.68,     // ~2.7%/yr; calibrated so potential starts at the BOT's 2.7% (the 2022-26 residual gives ~2.1)
   labourGrowth: -0.09,      // ~-0.35%/yr, working-age population decline
   infraGestation: 20,       // 5 years, midpoint of the 3-7 year range
   // Long projects open in sections: the first stretch of line, the first

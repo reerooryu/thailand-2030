@@ -253,7 +253,7 @@ Calibration must reproduce this. A player should find it genuinely hard to gener
 
 **Inflation expectations, very lightly.** While headline runs above 3%, expected inflation drifts up by 2% of the excess each quarter and decays 5% a quarter back towards target; the drift shifts both curves' long-run level one for one (`expDrift`, `expDecay`, `expThreshold`). Two years at 6% moves it about half a point. It never matters below 3%. The fuller design (an anchor that also responds to BOT credibility events, slow and costly to re-anchor) is not built.
 
-**The Bank of Thailand** follows a Taylor rule on *core* inflation with a 2% target and a 0.5% neutral real rate, floored at 1.0%: its target is 1.0 + 1.5·max(0, core − 1) + 0.25·max(0, gap − 2), and it moves halfway to that target each quarter, as an MPC that meets eight times a year and rarely moves more than 50bp at once would. It looks through energy, as it did in 2008 and 2022, but not through second-round effects. The real rate that moves borrowing is measured against core inflation too (the ex-ante rate: nobody borrows on the assumption that an oil spike lasts). Measured against headline, with the rule reacting to headline, the Hormuz shock first drove the real rate to −4%, turning an oil shock into a boom, and then took the policy rate to 6%.
+**The Bank of Thailand** follows a Taylor rule on *core* inflation with a 2% target and a 0.5% neutral real rate, floored at 1.0%: its target is 1.0 + 1.5·max(0, core − 1) + 0.25·max(0, gap − 2), and it moves halfway to that target each quarter, in steps of 25 basis points (a move that rounds to less is a hold), as an MPC that meets eight times a year and rarely moves more than 50bp at once would. The dashboard shows the rate and the last decision. It looks through energy, as it did in 2008 and 2022, but not through second-round effects. The real rate that moves borrowing is measured against core inflation too (the ex-ante rate: nobody borrows on the assumption that an oil spike lasts). Measured against headline, with the rule reacting to headline, the Hormuz shock first drove the real rate to −4%, turning an oil shock into a boom, and then took the policy rate to 6%.
 
 **Potential output.** A production function:
 ```
@@ -286,7 +286,7 @@ FX matters enormously here because the win condition is USD-denominated, and mod
 **As built (November 2026).** Until now the baht was copied forward unchanged in play, so every run converted at the IMF's path (easing from 32.9 to 34.6 to the dollar) however it was governed. It now moves, in the game host (`FX` in `browser.ts`; the backtest still reads the real series from data). Each quarter the real rate moves a quarter of the way toward a target, measured as a percent deviation from the IMF's path:
 
 ```
-target = 1.5·(potential growth − 2.15) + 0.75·FDI signal + 0.5·Δ(real rate, core)
+target = 1.5·(potential growth − 2.65) + 0.75·FDI signal + 0.5·Δ(real rate, core)
        − 3·risk premium − 2 (while fighting) − 1 (frozen ceasefire) − 1.5 (government leaning on the BOT)
 ```
 

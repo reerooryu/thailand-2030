@@ -99,3 +99,14 @@ Worth resolving before scoring is finalised. Either the IMF is optimistic about 
 2. **Reform elasticities.** Four priors doing heavy lifting with no empirical basis. Cross-country evidence on business-environment reform and investment would help.
 3. **Decide the scoring question in §3.2** before building the card deck — it determines what the cards are for.
 4. Fiscal and debt accounting; FX and the BOT reaction function. Both still exogenous.
+
+## Recalibration, November 2026: potential growth at 2.7%
+
+The production function above put potential growth near 2.1% at the start of the term, falling to about 2.0% in a passive term. The Bank of Thailand's own estimate is **2.7%** (Governor Vitai Ratanakorn, July 2026: "Thailand's potential growth rate has fallen from about 5% in the past to only 2.7%"), and the IMF projects real growth settling at 2.5% by 2029–30, which is close to its view of potential. The game now uses the BOT's figure.
+
+`tfpTrendGrowth` goes from 0.52 to 0.68 a quarter (about 2.1% to 2.7% a year), and the starting potential from 2.1% to 2.7%. In a passive term potential growth now runs between 2.55% and 2.75% and real growth averages about 2.6%. That is TFP doing work that §5 suspects belongs to labour: the working-age profile is still an assumed ageing curve, and the 2022–26 residual is depressed by the recovery from COVID. If UN WPP data replace the curve, the TFP trend should be re-fitted so that potential still starts at 2.7%.
+
+`BASELINE_ALIGN` was refitted (1.0484 → 1.0190) so the passive term still finishes at the IMF's 2030 level, and the baht's growth anchor moved from 2.15% to 2.65%, the passive term's average.
+
+What changes for the player: every good line now shows potential growth 0.6–0.7 points higher (3.7–4.1% rather than 3.0–3.4%), and debt about two points lower, because nominal GDP grows faster. The headline barely moves, because the baseline alignment absorbs the level. Thailand Number One's 3% thresholds now sit only about 0.3 points above the passive term.
+

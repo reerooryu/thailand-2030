@@ -74,15 +74,15 @@ export interface LogEntry { quarter: number; kind: string; text: string; }
  *  scripts/passive_check.ts reports both. Refitted (1.0385 → 1.0472) in
  *  November 2026, after the fiscal block and the BOT rule were corrected and
  *  the Hormuz and tariff events began to move the economy, to keep the passive
- *  term where it was; and again (1.0472 → 1.0484) when the baht began to move. */
-const BASELINE_ALIGN = 1.0484;
+ *  term where it was; and again (1.0472 → 1.0484) when the baht began to move, and (→ 1.0190) when potential growth was recalibrated to the BOT's 2.7%. */
+const BASELINE_ALIGN = 1.0190;
 
 /** The baht. An outcome, never a lever (DESIGN §3.4): each quarter the real
  *  exchange rate moves a quarter of the way toward a target set by what
  *  markets can see, measured as a percent deviation from where it started
  *  (the start is the IMF's path, which already has the baht easing to 34.6).
  *  - growth: Balassa-Samuelson and growth expectations, per point of
- *    potential growth above the 2.15% the passive term delivers;
+ *    potential growth above the 2.65% the passive term delivers;
  *  - fdi: inflows following reform, per unit of the FDI signal;
  *  - carry: per point of real rate (core) above where it started;
  *  - risk: per point of sovereign risk premium, ratings included;
@@ -251,7 +251,7 @@ export class BrowserGame {
       period: P.periods[i], gap: g('gap', i), rgdp: g('rgdp_sa', i),
       potential: g('rgdp_sa', i) / (1 + g('gap', i) / 100),
       capital: S.K[i], labour: S.L[i], tfp: S.TFP[i],
-      potentialGrowthYoy: 2.1, infraPipeline: [], reformStock: 0,
+      potentialGrowthYoy: 2.7, infraPipeline: [], reformStock: 0,
       exportsR: g('exp_r', i), importsR: g('imp_r', i),
       invPrivR: g('gfcf_priv_r', i), invPubR: g('gfcf_pub_r', i), consR: g('cons_r', i),
       invRate: g('gfcf_priv_n', i) / g('ngdp', i) * 100,
@@ -681,7 +681,7 @@ export class BrowserGame {
       const fdiNow = (this.stance.fdiSignal ?? 0) * ramp + FDI_PER_CHAPTER * chapters.length;
       const rr0 = this.history.slice(0, 4).reduce((a, v) => a + (v.policyRate - v.cpiCoreYoy), 0) / 4;
       const lean = this.flags.has('baht_lean');
-      let target = FX.growth * (s.potentialGrowthYoy - 2.15) + FX.fdi * fdiNow
+      let target = FX.growth * (s.potentialGrowthYoy - 2.65) + FX.fdi * fdiNow
         + FX.carry * (simRr - rr0) - FX.risk * s.riskPremium
         - (this.war.stage === 'war' && !this.war.ceasefire ? FX.war : this.war.stage === 'frozen' ? FX.frozen : 0)
         - (lean ? FX.lean : 0);
@@ -697,8 +697,9 @@ export class BrowserGame {
       // through second-round effects: when core rises it tightens before the
       // real rate turns negative, so an oil shock cannot become a boom. It
       // moves halfway to its target each quarter: the MPC meets eight times a
-      // year and rarely moves more than 50bp at once.
-      policyRate: s.policyRate + 0.5 * ((1.0 + 1.5 * Math.max(0, s.cpiCoreYoy - 1.0) + 0.25 * Math.max(0, s.gap - 2)) - s.policyRate),
+      // year and rarely moves more than 50bp at once. Decisions come in steps
+      // of 25 basis points: a move that rounds to less than that is a hold.
+      policyRate: Math.round(4 * (s.policyRate + 0.5 * ((1.0 + 1.5 * Math.max(0, s.cpiCoreYoy - 1.0) + 0.25 * Math.max(0, s.gap - 2)) - s.policyRate))) / 4,
       reer: this.history[3].reer * (1 + this.fx / 100),
       capitalSpend: Math.min(cap, BASELINE.capitalSpend + this.stance.capitalSpend * ramp) + this.temp.capitalSpend,
       govConsumption: BASELINE.govConsumption + this.stance.govConsumption * ramp + this.temp.govConsumption,
