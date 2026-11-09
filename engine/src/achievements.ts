@@ -71,10 +71,12 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'thailand_number_one',
     name: 'Thailand Number One!',
-    requirement: 'Real growth above 3%, potential growth above 3%, private investment above 20% and the SET above 2,500.',
+    requirement: 'Real growth above 3.5%, potential growth above 3.5%, private investment above 20% and the SET above 2,500.',
     flavour: 'Every dial pointing up at once, for the first time since the nineties. Thai policy has chased this for a quarter of a century.',
     rarity: 'legendary',
-    test: c => atLeast(c.realGrowth, 3) && atLeast(c.potentialGrowth, 3) &&
+    // 3.5%, not 3%: with potential growth starting at the BOT's 2.7%, the
+    // thresholds sit about a point above a term that does nothing.
+    test: c => atLeast(c.realGrowth, 3.5) && atLeast(c.potentialGrowth, 3.5) &&
                atLeast(c.invRate, 20, 1) && atLeast(c.set, 2500, 0),
   },
   {
@@ -212,10 +214,10 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'the_quiet_part',
     name: 'The Quiet Part',
-    requirement: 'Finish with potential growth above 3% and approval below 45%.',
+    requirement: 'Finish with potential growth above 3.5% and approval below 45%.',
     flavour: 'You fixed the supply side and nobody thanked you. That is why so little of it gets done.',
     rarity: 'rare',
-    test: c => atLeast(c.potentialGrowth, 3) && c.approval < 45 && !c.fell,
+    test: c => atLeast(c.potentialGrowth, 3.5) && c.approval < 45 && !c.fell,
   },
   {
     id: 'revenue_state',

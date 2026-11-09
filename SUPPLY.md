@@ -108,5 +108,5 @@ The production function above put potential growth near 2.1% at the start of the
 
 `BASELINE_ALIGN` was refitted (1.0484 → 1.0190) so the passive term still finishes at the IMF's 2030 level, and the baht's growth anchor moved from 2.15% to 2.65%, the passive term's average.
 
-What changes for the player: every good line now shows potential growth 0.6–0.7 points higher (3.7–4.1% rather than 3.0–3.4%), and debt about two points lower, because nominal GDP grows faster. The headline barely moves, because the baseline alignment absorbs the level. Thailand Number One's 3% thresholds now sit only about 0.3 points above the passive term.
+What changes for the player: every good line now shows potential growth 0.6–0.7 points higher (3.7–4.1% rather than 3.0–3.4%), and debt about two points lower, because nominal GDP grows faster. The headline barely moves, because the baseline alignment absorbs the level. Thailand Number One's thresholds were raised from 3% to 3.5% (real and potential growth), and The Quiet Part's from 3% to 3.5%, so they stay about a point above the passive term.
 
