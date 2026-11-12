@@ -100,8 +100,9 @@ export function showEnd(walked, snap = false) {
           ${row('Real GDP growth', fmt(realCagr, 2) + '%', 'annualised over the term')}
           ${row('Inflation', fmt(cpiCagr, 2) + '%', 'CPI, annualised')}
           ${row('Output gap', (s.gap >= 0 ? '+' : '') + fmt(s.gap, 2) + '%', 'at the end')}
-          ${row('Potential growth', fmt(s.potentialGrowthYoy, 2) + '%', 'from 2.1% in 2026')}
+          ${row('Potential growth', fmt(s.potentialGrowthYoy, 2) + '%', 'from 2.7% in 2026')}
           ${row('Private investment', fmt(s.invRate) + '%', 'of GDP, from 18.0%')}
+          ${row('Public investment', fmt(s.capitalSpend) + '%', `of GDP, from ${fmt(start.capitalSpend)}%`)}
           ${row('SET Index', Math.round(g.set).toLocaleString(),
                 `${setChg >= 0 ? '+' : ''}${fmt(setChg)}% from ${Math.round(setStart).toLocaleString()}`, setChg >= 0 ? 'good' : 'critical')}
           ${row('Baht', fmt(g.baht(), 2) + ' to the dollar',

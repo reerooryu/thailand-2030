@@ -4,10 +4,12 @@ import json, os
 C = 'config'
 def load(f): return json.load(open(os.path.join(C, f)))
 
-# The panel is large; the UI only needs the seed window around 2026Q2.
+# The panel is large; the UI only needs the seed window around the start.
+# The term starts from 2026Q1 and keeps eight quarters behind it: four of
+# history and four more (g.before) for the opening year-on-year figures.
 panel = load('panel_quarterly.json')
 i0 = panel['periods'].index('2026Q2')
-lo, hi = i0 - 6, i0 + 1
+lo, hi = i0 - 9, i0 + 1
 slim = {'periods': panel['periods'][lo:hi],
         'series': {k: v[lo:hi] for k, v in panel['series'].items()}}
 supply = load('supply.json')

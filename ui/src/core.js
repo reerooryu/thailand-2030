@@ -20,6 +20,29 @@ export function spark(values, color, w = 132, h = 34) {
   </svg>`;
 }
 
+/* ---------- stacked bars: parts of one total, one bar per quarter ----------
+   Bars start at zero so the segments keep their true proportions. `rows` is
+   [{ label, parts: [number, ...] }], `colors` one per part, bottom first. */
+export function stackBars(rows, colors, names, w = 132, h = 52) {
+  if (!rows.length) return '';
+  const max = Math.max(...rows.map(r => r.parts.reduce((a, b) => a + b, 0))) || 1;
+  const gap = 3, bw = (w - gap * (rows.length - 1)) / rows.length;
+  const bars = rows.map((r, i) => {
+    const x = i * (bw + gap);
+    let y = h;
+    const segs = r.parts.map((v, k) => {
+      const sh = (v / max) * (h - 2);
+      y -= sh;
+      // a 1px seam between segments so the two colours read apart
+      return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0, sh - (k ? 1 : 0)).toFixed(1)}" fill="${colors[k]}" rx="1.5"/>`;
+    }).join('');
+    const tip = `${r.label}: ` + r.parts.map((v, k) => `${names[k]} ${fmt(v)}`).join(', ') +
+      `, total ${fmt(r.parts.reduce((a, b) => a + b, 0))}% of GDP`;
+    return `<g><title>${tip}</title>${segs}</g>`;
+  }).join('');
+  return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="Investment by quarter, private and public">${bars}</svg>`;
+}
+
 /* ---------- meter against a threshold ---------- */
 export function meter(value, ceiling, lo, hi) {
   const pct = Math.max(0, Math.min(100, ((value - lo) / (hi - lo)) * 100));

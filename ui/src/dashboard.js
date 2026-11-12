@@ -1,5 +1,5 @@
 import { renderConstitution } from './constitution.js';
-import { $, fmt, g, IMF_BASELINE_2030, meter, tile, yoyGrowth, yoySeries } from './core.js';
+import { $, fmt, g, IMF_BASELINE_2030, meter, stackBars, tile, yoyGrowth, yoySeries } from './core.js';
 import { renderDeck } from './deck.js';
 import { renderMap } from './map.js';
 import { renderNews } from './news.js';
@@ -110,8 +110,15 @@ export function render() {
       ${ratingsBox()}
       <div id="fta" class="fta-under">${g._ftaHtml || ''}</div>
     </div>
-    ${tile('Private investment', fmt(s.invRate), '% of GDP', '31.2% in 1996 · never recovered',
-           hist.map(h => h.invRate), 'var(--series-3)')}
+    <div class="tile">
+      <div class="t-label">Investment</div>
+      <div class="t-value">${fmt(s.invRate + s.capitalSpend)}<span class="t-unit">% of GDP</span></div>
+      <div class="t-sub"><span class="key" style="--c:var(--series-3)"></span>private ${fmt(s.invRate)}
+        · <span class="key" style="--c:var(--series-4)"></span>public ${fmt(s.capitalSpend)}</div>
+      <div class="t-bars">${stackBars(hist.map(h => ({ label: h.period, parts: [h.invRate, h.capitalSpend] })),
+        ['var(--series-3)', 'var(--series-4)'], ['private', 'public'])}</div>
+      <div class="t-foot"><span class="muted">private was 31.2% in 1996</span></div>
+    </div>
     ${tile('Potential growth', fmt(s.potentialGrowthYoy, 2), '%', 'the Legacy score',
            hist.map(h => h.potentialGrowthYoy), 'var(--series-1)')}
     ${tile('Household debt', fmt(s.hhDebt), '% of GDP', `${fmt(g.history[3].hhDebt)}% in March 2026 · the drag on every rate cut`,
