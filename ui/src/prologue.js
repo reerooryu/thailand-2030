@@ -1,5 +1,6 @@
 import { $, BrowserGame, COALITIONS, el, g, IMF_BASELINE_2030, setGame } from './core.js';
 import { render } from './dashboard.js';
+import { track } from './saves.js';
 
 /* ---------- prologue ---------- */
 export function renderPrologue() {
@@ -29,7 +30,8 @@ export function renderPrologue() {
 }
 
 export function start(id) {
-  setGame(new BrowserGame(id));
+  // Tracked: every move is recorded, so the game can be saved and replayed.
+  setGame(track(new BrowserGame(id), id));
   $('#prologue').hidden = true;
   $('#game').hidden = false;
   // The song opens here rather than on page load — see the music block at the

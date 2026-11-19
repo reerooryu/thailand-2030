@@ -5,8 +5,12 @@ import { renderMapInto, renderElectionMap, renderConstituencyMap } from './map.j
 import { ENDING_THEMES } from './music.js';
 import { seatPositions } from './parliament.js';
 import { renderHome } from './home.js';
+import { captureMap, clearAutosave, endingData, keepEnding, recordEnding, viewingBanner, wireEndActions } from './saves.js';
 
-export function showEnd(walked, snap = false) {
+/* `opts.viewing` is a saved ending being shown again (saves.js): it gets a
+   banner, and it is not counted in the record a second time. */
+export function showEnd(walked, snap = false, opts = {}) {
+  const viewing = opts.viewing || null;
   $('#toasts').innerHTML = '';
   const s = g.state;
   const start = g.history[3];
@@ -38,6 +42,11 @@ export function showEnd(walked, snap = false) {
   const elec = fell ? null : g.election();
   const endIdeology = g.ideology();
   if (window.playEnding) window.playEnding(ENDING_THEMES[endIdeology.name]);
+  // The record of past playthroughs: what this term earned, and which of it is
+  // new. A saved ending being shown again is not counted twice.
+  const achList = g.achievements(elec);
+  const earned = achList.filter(a => a.earned).map(a => a.name);
+  const fresh = viewing ? [] : recordEnding(earned, { headline: Math.round(h) });
   // Did anyone change party mid-term? Decides whether the seat table needs a
   // dissolution column. Must come AFTER `elec` exists.
   const moved = !!elec && elec.results.some(r => r.before !== r.origin);
@@ -79,7 +88,7 @@ export function showEnd(walked, snap = false) {
     `<tr><td class="s-label">${label}</td><td class="s-val ${cls || ''}">${value}</td>
      <td class="s-note">${note || ''}</td></tr>`;
 
-  w.innerHTML = head + electionBlock + `
+  w.innerHTML = (viewing ? viewingBanner(viewing, false) : '') + head + electionBlock + `
     <div class="endgrid">
       ${endTile('Headline', Math.round(h).toLocaleString() + ' USD',
                 `IMF baseline ${g.quarter < 16 ? 'for ' + g.label : 'was'} ${g.baseline().toLocaleString()}`,
@@ -178,10 +187,13 @@ export function showEnd(walked, snap = false) {
         <span class="end-map-tg"><button data-m="provinces" class="on">Provinces</button><button data-m="flag">Flag</button></span></div>
       <div id="end-map"></div>
     </div>
-    ${renderAchievements(g.achievements(elec))}
+    ${renderAchievements(achList, fresh)}
     ${fell ? '<p class="sub">Scored on what you managed before it ended.</p>' : ''}
     <div class="logbox">${g.log.map(l => `<div class="logline"><span class="muted">Q${l.quarter + 1}</span> ${l.text}</div>`).join('')}</div>
-    <button id="again" class="primary">Play again</button>`;
+    <div class="end-actions">
+      <button id="end-export" class="ghost">Export this ending</button>
+      <button id="again" class="primary">Play again</button>
+    </div>`;
   $('#again').onclick = () => renderHome();
   renderMapInto($('#end-map'), 'provinces');
   if (elec) {
@@ -201,6 +213,23 @@ export function showEnd(walked, snap = false) {
     w.querySelectorAll('.end-map-tg button').forEach(x => x.classList.toggle('on', x === b));
     renderMapInto($('#end-map'), b.dataset.m);
   });
+
+  if (viewing) { wireEndActions(w, viewing); window.scrollTo(0, 0); return; }
+  // Keep this ending, frozen: the page as drawn, with every map view drawn in
+  // advance, so it can be shown again after the game has changed. The maps are
+  // stored once each rather than inside the page.
+  g.__over = true;
+  clearAutosave();
+  const maps = {};
+  if (elec) for (const v of ['districts', 'provinces']) for (const m of ['2030', '2026', 'change'])
+    maps[`el:${v}:${m}`] = captureMap(box => (v === 'districts' ? renderConstituencyMap : renderElectionMap)(box, elec, m));
+  for (const m of ['provinces', 'flag']) maps[`end:${m}`] = captureMap(box => renderMapInto(box, m));
+  const copy = w.cloneNode(true);
+  copy.querySelectorAll('#el-map, #end-map').forEach(b => { b.innerHTML = ''; });
+  const data = endingData({ walked, snap, elec, ideology: endIdeology, earned, html: copy.innerHTML, maps,
+                            theme: ENDING_THEMES[endIdeology.name] || null });
+  keepEnding(data);
+  wireEndActions(w, data);
 }
 
 
@@ -629,12 +658,13 @@ export function renderIdeology(i) {
   </div>`;
 }
 
-export function renderAchievements(list) {
+export function renderAchievements(list, fresh = []) {
   const earned = list.filter(a => a.earned);
   const locked = list.filter(a => !a.earned);
+  const isNew = new Set(fresh);
   const row = a => `<div class="ach ${a.earned ? 'got' : 'locked'} r-${a.rarity}">
       <div class="ach-h">
-        <span class="ach-name">${a.earned ? a.name : '???'}</span>
+        <span class="ach-name">${a.earned ? a.name : '???'}${isNew.has(a.name) ? ' <span class="ach-new">First time</span>' : ''}</span>
         <span class="ach-rarity">${a.rarity}</span>
       </div>
       <div class="ach-req">${a.requirement}</div>

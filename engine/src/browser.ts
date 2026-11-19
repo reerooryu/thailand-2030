@@ -6,7 +6,7 @@
 import { DATA } from './gen/data.js';
 import { step, nextPeriod, reformEffort } from './engine.js';
 import { runElection } from './election.js';
-import { evaluate as evaluateAchievements } from './achievements.js';
+import { evaluate as evaluateAchievements, ACHIEVEMENTS as ACHIEVEMENT_LIST } from './achievements.js';
 import { classify } from './ideology.js';
 import {
   initialConstitution, tally, tallyClause, keepIndex, reformScore, backbenchPressure,
@@ -1127,6 +1127,8 @@ export class BrowserGame {
 }
 
 export { band, effectiveEffects, isUnlocked, nextPeriod };
+/** Every achievement, for the record of past playthroughs kept on the title screen. */
+export const ACHIEVEMENTS = ACHIEVEMENT_LIST.map(({ name, requirement, flavour, rarity }) => ({ name, requirement, flavour, rarity }));
 export const COALITIONS = cfg;
 export { IMF_BASELINE_2030 };
 /** Province outlines and one-line descriptions, for the map. */

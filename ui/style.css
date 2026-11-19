@@ -587,3 +587,39 @@ path.cv:hover{stroke:var(--ink);stroke-width:0.6}
 .cm-inset path.cv:hover{stroke-width:0.3}
 path.cv-annexed{stroke:#d8443a;stroke-width:0.9}
 @media (max-width:640px){.cm-grid{grid-template-columns:1fr}.cm-list{max-width:100%}}
+
+
+/* ---- saves, endings and the record (saves.js) ---- */
+.ghost{font:inherit;font-size:13.5px;font-weight:600;background:transparent;color:var(--ink-2);
+  border:1px solid var(--line);border-radius:8px;padding:9px 16px;cursor:pointer}
+.ghost:hover{color:var(--ink);border-color:var(--ink-3)}
+.gm-wrap{position:relative;align-self:center}
+.game-menu{position:absolute;right:0;top:calc(100% + 6px);z-index:30;min-width:240px;padding:6px;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 8px 24px rgba(0,0,0,.45)}
+.game-menu[hidden]{display:none}
+.game-menu button{display:block;width:100%;text-align:left;font:inherit;font-size:13.5px;background:none;border:0;
+  color:var(--ink);padding:8px 10px;border-radius:6px;cursor:pointer}
+.game-menu button:hover{background:var(--surface-1)}
+.gm-note{font-size:11.5px;padding:6px 10px 4px;line-height:1.45}
+.home-cont{font-size:12.5px;margin:-4px 0 4px}
+.home-panel.wide{max-width:760px;max-height:54vh;overflow:auto}
+.hp-gap{margin-top:16px}
+.hp-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid rgba(255,255,255,.08)}
+.hp-item-main{display:flex;flex-direction:column;min-width:0}
+.hp-item-main b{font-size:13.5px;font-weight:600}
+.hp-item-main span{font-size:12px}
+.hp-item-btns{display:flex;gap:6px;flex-shrink:0}
+.hp-item-btns button,.hp-foot button{font:inherit;font-size:12px;background:var(--surface-2);color:var(--ink-2);
+  border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.hp-item-btns button:hover,.hp-foot button:hover{color:var(--ink)}
+.hp-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px;font-size:12px}
+.hp-ach{margin-top:10px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.ach-when{margin-top:6px;font-size:11px;color:var(--ink-3)}
+.ach-new{display:inline-block;white-space:nowrap;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#111;
+  background:var(--warning);border-radius:20px;padding:1px 6px;margin-left:4px;vertical-align:1px}
+/* An ending shown again: what was new then is not new now. */
+.viewing-banner ~ .achievements .ach-new{display:none}
+.warning-text{color:var(--warning)}
+.viewing-banner{margin:0 0 18px;padding:10px 14px;border-radius:var(--radius);font-size:13px;
+  background:rgba(57,135,229,.12);border:1px solid rgba(57,135,229,.4)}
+.end-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px;margin-top:18px}

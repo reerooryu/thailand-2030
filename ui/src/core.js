@@ -1,4 +1,6 @@
-export const { BrowserGame, COALITIONS, PROVINCES, CONSTITUENCIES, isUnlocked, IMF_BASELINE_2030 } = ENGINE;
+export const { BrowserGame, COALITIONS, PROVINCES, CONSTITUENCIES, isUnlocked, IMF_BASELINE_2030, ACHIEVEMENTS } = ENGINE;
+/** Which build of the engine this is (stamped by build.sh). Saves record it. */
+export const BUILD = window.TH2030_BUILD || 'dev';
 
 export let g = null;
 export const $ = s => document.querySelector(s);

@@ -12,6 +12,15 @@ python3 scripts/build_ui_data.py
 # 2. Bundle the engine into an IIFE the page can load without a module server.
 npx --prefix engine esbuild engine/src/browser.ts \
     --bundle --format=iife --global-name=ENGINE --outfile=ui/engine.js
+# Stamp the bundle with a hash of itself. Saved games are replays of the moves,
+# so a save made on one build is only certain to replay the same on that build;
+# the stamp lets the game say so when it loads a save from another.
+python3 - <<'PY'
+import hashlib
+p = 'ui/engine.js'
+src = open(p, encoding='utf-8').read()
+open(p, 'a', encoding='utf-8').write('\nwindow.TH2030_BUILD = "%s";\n' % hashlib.sha1(src.encode()).hexdigest()[:12])
+PY
 
 # 3. Bundle the UI modules (ui/src/) into one script.
 npx --prefix engine esbuild ui/src/main.js \

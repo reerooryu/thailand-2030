@@ -4,6 +4,7 @@ import { $, g, toast } from './core.js';
 import { render } from './dashboard.js';
 import { showEnd } from './endscreen.js';
 import { renderHome } from './home.js';
+import { mountGameMenu } from './saves.js';
 
 $('#end-turn').onclick = () => {
   const r = g.endTurn();
@@ -17,6 +18,7 @@ $('#end-turn').onclick = () => {
   if (g.pending.length) toast('News requires your attention', 'warning');
 };
 
+mountGameMenu();
 renderHome();
 
 // Hooks for the scripted playthroughs (Playwright): the live game and a redraw.
