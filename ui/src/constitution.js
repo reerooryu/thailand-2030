@@ -84,6 +84,7 @@ export function renderConstitution() {
           ${v.editing ? '' : 'disabled'} title="${pos.text}">
           <div class="cs-ol">${pos.label}${isProp ? ' ' + partyPill(p.proposal.party, ' prop') + '<span class="cs-prop">proposal</span>' : ''} ${verdict}</div>
           ${pos.sgLite ? `<div class="cs-sg">Singapore-lite${pos.halfStrength ? ' · <span class="down">half strength without civil service reform and anti-corruption enforcement</span>' : ''}</div>` : ''}
+          ${!pos.sgLite && pos.halfStrength && pos.warning ? `<div class="cs-warn">⚠ ${pos.warning}</div>` : ''}
           <div class="cs-ot">${pos.text}</div>
           <div class="cs-pills">${backers}</div>
         </button>`;
@@ -96,7 +97,7 @@ export function renderConstitution() {
   const prCls = pr >= bb.revolt ? 'critical' : pr >= bb.warning ? 'warning' : 'good';
   const meters = `<div class="cs-meters">
       <span>Reform score <b>${v.score}</b></span>
-      ${v.sg ? `<span>Singapore-lite <b class="sg-t">${v.sg}</b><span class="muted"> / 3</span></span>` : ''}
+      ${v.sg ? `<span>Singapore-lite <b class="sg-t">${v.sg}</b><span class="muted"> / 4</span></span>` : ''}
       <span>Bhumjaithai tolerance <b class="${prCls === 'good' ? '' : 'down'}">${pr}</b><span class="muted"> / warning ${bb.warning}, revolt ${bb.revolt}</span></span>
       ${v.stage === 'ratified' || v.stage === 'failed' ? '' :
         `<span>Referendum projection <b class="${v.referendum >= 50 ? 'up' : 'down'}">${v.referendum}%</b></span>`}

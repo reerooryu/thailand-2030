@@ -68,7 +68,7 @@ Then the count, run seat by seat on the real 2026 result and mapped constituency
 | `config/constituencies.json` | The 400 constituency outlines of 2026, for the election map. Built by `scripts/map/build_constituencies.py`. |
 | `config/events.json` | 55 news events, 116 options. |
 | `config/coalitions.json` | The four coalitions and their effects. |
-| `config/constitution.json` | Five parts of the constitution, their positions and party stances. |
+| `config/constitution.json` | Six parts of the constitution, their positions and party stances. |
 | `ui/` | Front end. The client is in `ui/src/` (ES modules, bundled into `ui/app.js` by the build); see `ui/README.md`. |
 | `scripts/` | Data builders (Python) and analysis tools (TypeScript). |
 | `scripts/map/` | The map pipeline: `build_map.py` rebuilds every outline and the war map; `register_reference.py` fits the 1941 reference scan. |
@@ -116,7 +116,7 @@ python3 scripts/map/build_map.py        # rebuild config/provinces.json outlines
 
 Needs Node 20+ and Python 3.10+. The engine has four dev dependencies: esbuild, tsx, TypeScript and the Node type definitions.
 
-**The province map.** Beside the House, every province in plain grey with a one-line description on hover. Colour marks status only: Bangkok in cyan as a special administrative area, joined by the elected-governor pilot provinces once a constitution with that clause is ratified (Chiang Mai, Phuket and Khon Kaen for *adjust*; Chonburi, Rayong, Chiang Mai, Phuket, Nakhon Ratchasima, Khon Kaen, Ayutthaya, Surat Thani, Songkhla and Ubon Ratchathani for *tilt*). The three Cambodian provinces of 1941–46 are in the map data but hidden; any card or news option can set `"territory": {"phra_tabong": "disputed" | "occupied" | "annexed"}`. Open the game with `#mapdemo` to preview all three states.
+**The province map.** Beside the House, every province in plain grey with a one-line description on hover. Colour marks status only: Bangkok in cyan as a special administrative area, joined by the elected-governor pilot provinces once a constitution with that clause is ratified (Chiang Mai, Phuket and Khon Kaen for *adjust*; Chonburi, Rayong, Chiang Mai, Phuket, Nakhon Ratchasima, Khon Kaen, Ayutthaya, Surat Thani, Songkhla and Ubon Ratchathani for *tilt*; every province for *elect them all*). The three Cambodian provinces of 1941–46 are in the map data but hidden; any card or news option can set `"territory": {"phra_tabong": "disputed" | "occupied" | "annexed"}`. Open the game with `#mapdemo` to preview all three states.
 
 **The Cambodian war.** Deterministic, and only reachable on purpose. The MOU 2544 event has a revanchist option ("say what the 1941 line means"); a border clash and a rocket strike follow, and at each step the cabinet can stand down. Crossing opens a war panel with three layers, all free to change:
 - **Strategy:** mobilisation (6, 9 or 12 brigades; call-ups withdraw 0.3% or 0.6% of labour input from the economy), air campaign (military targets, interdiction, strategic), diplomacy (a Beijing back channel keeps China from arming Cambodia, reassuring Hanoi keeps Vietnam out, engaging ASEAN lowers attention), and a temporary ceasefire.

@@ -185,6 +185,11 @@ const REGIONAL: { flags: string[]; any?: boolean; regions?: string[]; provinces?
   // record, which counts for most in the cities, where no machine ever won.
   { flags: ['integrity_enforced'], regions: ['northeast', 'north', 'central', 'south', 'east'], d: -0.09 },
   { flags: ['integrity_enforced'], regions: ['bangkok', 'vicinity'], d: 0.06 },
+  // Every governor elected, without the Integrity Act: the provincial bosses
+  // organise for the 2031 governorships through the 2030 campaign, and the
+  // machine parties they run carry it.
+  { flags: ['governors_captured'], regions: ['northeast', 'north', 'central', 'south', 'east'], party: 3, d: 0.06 },
+  { flags: ['governors_captured'], regions: ['northeast', 'north', 'central', 'south', 'east'], party: OTH, d: 0.06 },
 ];
 
 /** The 1941 provinces, if annexed: population and a starting vote. Residents

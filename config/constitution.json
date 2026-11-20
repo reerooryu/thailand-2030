@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "purpose": "The new constitution, as a four-step track. The 8 February 2026 referendum approved drafting one (60.16% yes, 69.65% turnout). Chapters 1 and 2 are not on the table. Bhumjaithai tables nothing radical: the furthest any part goes is a moderate reformist tilt.",
+    "purpose": "The new constitution, as a four-step track. The 8 February 2026 referendum approved drafting one (60.16% yes, 69.65% turnout). Chapters 1 and 2 are not on the table. Bhumjaithai tables nothing radical: the furthest most parts go is a moderate reformist tilt. Two go one step further (every governor elected, the Constitutional Court reconstituted), and the Senate makes both hard to pass.",
     "stances": "Party and Senate stance on each position, -2 (opposes) to +2 (supports). Positions are ordered from least to most reformist; `score` is the reform score.",
     "vote": "Each changed clause goes to a joint sitting: yes >= 351 of 700 and at least 67 of 200 senators. A clause that fails reverts to the current text.",
-    "singapore": "Singapore-lite positions (sgLite) score -1. They strengthen the state rather than open it. They pay in full only with civil service reform and anti-corruption enforcement done (competentIf); otherwise execution gains are halved and approval falls."
+    "singapore": "Singapore-lite positions (sgLite) score -1. They strengthen the state rather than open it. They pay in full only with civil service reform and anti-corruption enforcement done (competentIf); otherwise execution gains are halved and approval falls. Any position can carry competentIf: electing every governor pays in full only with the Electoral Integrity Act enforced, and without it sets withoutSets (the bosses capture the governorships) and shows its warning."
   },
   "parts": [
     {
@@ -185,38 +185,64 @@
           "sets": [
             "court_dissolution_limited"
           ]
+        },
+        {
+          "id": "reconstitute",
+          "score": 3,
+          "label": "Reconstitute",
+          "text": "The Court is rebuilt: judges confirmed by two-thirds of the House to staggered nine-year terms, and dissolving a party limited to proven electoral fraud, brought by the Election Commission.",
+          "effects": {
+            "reformIndex": 5,
+            "institutionalSupport": -7,
+            "approvalBoost": 2
+          },
+          "opinion": {
+            "People's": 6,
+            "Pheu Thai": 3,
+            "Others": -3
+          },
+          "sets": [
+            "court_dissolution_limited",
+            "court_reconstituted"
+          ]
         }
       ],
       "stances": {
         "People's": [
           -1,
           1,
+          2,
           2
         ],
         "Pheu Thai": [
           0,
           1,
-          1
+          1,
+          2
         ],
         "Kla Tham": [
           2,
           0,
-          -1
+          -1,
+          -2
         ],
         "Democrat": [
           1,
           1,
-          1
+          1,
+          0
         ],
         "Others": [
           2,
           1,
-          -1
+          -1,
+          -2
         ],
         "Senate": [
           2,
           0,
-          -1
+          -1,
+          -1.5
         ]
       }
     },
@@ -279,6 +305,37 @@
           "opinion": {
             "People's": 2
           }
+        },
+        {
+          "id": "elected",
+          "score": 3,
+          "label": "Elect them all",
+          "text": "Every province elects its governor from 2031, as Bangkok does, and keeps a third of the revenue raised in it. The Interior Ministry's provincial line is wound down.",
+          "effects": {
+            "executionBonus": 0.03,
+            "reformIndex": 22,
+            "approvalBoost": 3,
+            "institutionalSupport": -8
+          },
+          "opinion": {
+            "People's": 5
+          },
+          "sets": [
+            "elected_governors"
+          ],
+          "competentIf": [
+            "integrity_enforced"
+          ],
+          "withoutEffects": {
+            "executionBonus": -0.01,
+            "reformIndex": 6,
+            "approvalBoost": 1,
+            "institutionalSupport": -6
+          },
+          "withoutSets": [
+            "governors_captured"
+          ],
+          "warning": "No Electoral Integrity Act enforced. The governorships go to whoever pays the canvassers: the provincial bosses take them, the reform loses most of its effect, and the machine parties gain at the 2030 count."
         }
       ],
       "stances": {
@@ -286,11 +343,13 @@
           -2,
           -1,
           1,
+          2,
           2
         ],
         "Pheu Thai": [
           0,
           0,
+          1,
           1,
           1
         ],
@@ -298,11 +357,13 @@
           1,
           1,
           0,
-          -1
+          -1,
+          1
         ],
         "Democrat": [
           0,
           0,
+          1,
           1,
           1
         ],
@@ -310,13 +371,15 @@
           2,
           1,
           0,
-          -1
+          -1,
+          -2
         ],
         "Senate": [
           2,
           1,
           0,
-          -1
+          -1,
+          -1.25
         ]
       },
       "proposal": {
@@ -426,6 +489,98 @@
           1,
           0,
           -1
+        ]
+      }
+    },
+    {
+      "id": "watchdogs",
+      "name": "Independent bodies",
+      "bjtWeight": 2,
+      "keepIndex": 1,
+      "positions": [
+        {
+          "id": "bureau",
+          "score": -1,
+          "sgLite": true,
+          "label": "Integrity bureau",
+          "text": "The investigators of the anti-corruption commission and the Election Commission merged into one bureau that reports to the Prime Minister, on Singapore's CPIB model. The cabinet appoints its director.",
+          "effects": {
+            "executionBonus": 0.01,
+            "reformIndex": 5,
+            "fdiSignal": 0.03,
+            "institutionalSupport": 2
+          },
+          "opinion": {
+            "People's": -6,
+            "Democrat": -3
+          },
+          "sets": [
+            "watchdog_bureau"
+          ],
+          "competentIf": [
+            "civil_service_shrinking",
+            "anticorruption_enforcement"
+          ],
+          "withoutEffects": {
+            "reformIndex": -2,
+            "approvalBoost": -3,
+            "institutionalSupport": 3
+          }
+        },
+        {
+          "id": "keep",
+          "score": 0,
+          "label": "Keep",
+          "text": "Selection committees choose the Election Commission, the anti-corruption commission, the Ombudsman and the State Audit Office. The Senate confirms them."
+        },
+        {
+          "id": "adjust",
+          "score": 1,
+          "label": "Adjust",
+          "text": "Open nominations, public hearings, and two opposition seats on every selection committee. The Senate still confirms.",
+          "effects": {
+            "reformIndex": 4,
+            "approvalBoost": 1,
+            "institutionalSupport": -2
+          },
+          "opinion": {
+            "People's": 2
+          },
+          "sets": [
+            "watchdogs_opened"
+          ]
+        }
+      ],
+      "stances": {
+        "People's": [
+          -2,
+          -1,
+          2
+        ],
+        "Pheu Thai": [
+          -1,
+          0,
+          1
+        ],
+        "Kla Tham": [
+          -1,
+          1,
+          0
+        ],
+        "Democrat": [
+          -1,
+          0,
+          1
+        ],
+        "Others": [
+          1,
+          1,
+          -1
+        ],
+        "Senate": [
+          -1,
+          2,
+          0
         ]
       }
     }

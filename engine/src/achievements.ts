@@ -361,7 +361,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'asian_values',
     name: 'Asian Values',
-    requirement: 'Ratify a constitution with all three Singapore-lite positions: multi-member constituencies, a delivery unit and the paternalist rights chapter.',
+    requirement: 'Ratify a constitution with three or more of the four Singapore-lite positions: multi-member constituencies, a delivery unit, the paternalist rights chapter and an integrity bureau.',
     flavour: 'Order, harmony, responsible expression. Singapore took fifty years and a single party to make it work.',
     rarity: 'rare',
     test: c => has(c, 'constitution_sg_all'),

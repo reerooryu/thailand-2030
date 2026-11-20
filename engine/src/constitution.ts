@@ -29,6 +29,10 @@ export interface Position {
   competentIf?: string[];
   /** Applied instead of `effects` when `competentIf` is not met. */
   withoutEffects?: Record<string, number>;
+  /** Flags set as well when `competentIf` is not met (a reform captured). */
+  withoutSets?: string[];
+  /** Shown in red on the drafting panel while `competentIf` is not met. */
+  warning?: string;
 }
 export interface Part {
   id: string; name: string; bjtWeight: number;
@@ -121,7 +125,7 @@ export function tallyClause(part: Part, pos: number, w: Whip): Tally {
   return tally(clauseStances(part, pos), w);
 }
 
-/** Reform score of a package, -1 to 10. */
+/** Reform score of a package, -4 to 13. */
 export function reformScore(cfg: ConstitutionCfg, pkg: Record<string, number>): number {
   return cfg.parts.reduce((a, p) => a + p.positions[pkg[p.id]].score, 0);
 }

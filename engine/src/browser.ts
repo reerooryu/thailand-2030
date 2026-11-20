@@ -239,6 +239,8 @@ export class BrowserGame {
     const part = conCfg.parts.find(p => p.id === 'decentral');
     const pos = part && part.positions[this.con.adopted[part.id]];
     const meta = (DATA.provinces as any)._meta;
+    if (pos?.id === 'elected')
+      return ((DATA.provinces as any).provinces as { id: string; water?: boolean }[]).filter(p => !p.water).map(p => p.id);
     return pos?.id === 'adjust' ? meta.pilotAdjust : pos?.id === 'tilt' ? meta.pilotTilt : [];
   }
   passiveSeen = 0;
@@ -831,6 +833,7 @@ export class BrowserGame {
         positions: p.positions.map((pos, i) => ({
           id: pos.id, label: pos.label, text: pos.text, score: pos.score, sgLite: !!pos.sgLite,
           halfStrength: !!pos.competentIf && !pos.competentIf.every(f => this.flags.has(f)),
+          warning: pos.warning ?? null,
           tally: i === keepIndex(p) ? null : tallyClause(p, i, w),
         })),
       })),
@@ -932,10 +935,12 @@ export class BrowserGame {
     const competent = (fs?: string[]) => (fs ?? []).every(f => this.flags.has(f));
     for (const p of conCfg.parts) {
       const pos = p.positions[pkg[p.id]];
-      const fx = pos.competentIf && !competent(pos.competentIf) ? pos.withoutEffects : pos.effects;
+      const without = !!pos.competentIf && !competent(pos.competentIf);
+      const fx = without ? pos.withoutEffects : pos.effects;
       if (fx) this.apply(fx as PolicyEffects);
       this.bumpOpinion(pos.opinion);
       for (const f of pos.sets ?? []) this.flags.add(f);
+      if (without) for (const f of pos.withoutSets ?? []) this.flags.add(f);
     }
     const score = reformScore(conCfg, pkg);
     this.flags.add('constitution_ratified');
