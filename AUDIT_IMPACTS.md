@@ -34,6 +34,9 @@ number that actually matters.
 | Ministry Restructure — Tourism, Culture and Sport | Split sport out and merge tourism with culture | +12 | +0.03 | +0.0 | +0.10 | +0.3 | +3.2 |  |
 | Ministry Restructure — Tourism, Culture and Sport | Create the sports ministry, leave tourism where it is | +3 | +0.01 | +0.0 | +0.03 | +0.4 | +1.5 |  |
 | Ministry Restructure — Tourism, Culture and Sport | Leave the machinery alone | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
+| Electoral Integrity Act | An Election Commission unit with teeth: real-time disclosure, audited caps, paid informants | +8 | +0.02 | -0.1 | +0.08 | +0.6 | +2.7 |  |
+| Electoral Integrity Act | Disclosure only: donors published, no new enforcement | +2 | +0.01 | -0.0 | +0.02 | +0.3 | +1.0 |  |
+| Electoral Integrity Act | Not this parliament | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | **no measurable effect** |
 | Party Finance and Organisation Act | Enforce the formula, audit the branches, fund against projects | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Party Finance and Organisation Act | Enlarge the fund, leave the formula alone | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
 | Party Finance and Organisation Act | Not this parliament | 0 | 0.00 | 0.0 | 0.00 | 0.0 | 0.0 | not on the desk in this run (coalition, timing or prerequisite) |
@@ -296,6 +299,7 @@ number that actually matters.
 | Revenue Mobilisation Package — Full package — excise, deduction caps, collection | +0.06 | -2.3 | -40.8 |
 | Migrant Labour Regularisation — One-stop regularisation, brokers cut out, social security enrolment mandatory | +0.06 | -0.7 | -11.7 |
 | Civil Service Reform — Freeze hiring, let attrition do it | +0.03 | -0.3 | -10.0 |
+| Electoral Integrity Act — An Election Commission unit with teeth: real-time disclosure, audited caps, paid informants | +0.02 | -0.1 | -6.4 |
 | OECD Accession — Proceed at technical pace | +0.06 | -0.1 | -1.2 |
 | Super Licence and Omnibus Law — Super licence only, defer the omnibus | +0.07 | -0.1 | -1.2 |
 | High-Value Agriculture — Fund the full transition — precision farming, biorefining, standards | +0.03 | -0.0 | -1.2 |
@@ -304,4 +308,3 @@ number that actually matters.
 | TH-AI Passport — Redirect toward domestic AI capacity | +0.04 | -0.0 | -0.5 |
 | Ministry Restructure — Tourism, Culture and Sport — Split sport out and merge tourism with culture | +0.03 | +0.0 | 0.1 |
 | Digital Government — Mandate whole-of-government migration | +0.07 | +0.1 | 1.1 |
-| Digital Government — Continue voluntary agency onboarding | +0.02 | +0.0 | 1.4 |

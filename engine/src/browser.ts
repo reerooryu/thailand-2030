@@ -1044,6 +1044,7 @@ export class BrowserGame {
       invRate: s.invRate,
       singaporeLite: this.flags.has('constitution_sg'),
       cleanState: this.flags.has('civil_service_shrinking') && this.flags.has('anticorruption_enforcement'),
+      patronageReforms: +this.flags.has('integrity_enforced') + +this.flags.has('party_system_reformed'),
       industrialPolicy: this.flags.has('semiconductor_programme') || this.flags.has('semiconductor_champion'),
       marketOpening: this.flags.has('oecd_accelerating') || this.flags.has('super_licence_done'),
       alignCn: this.align.cn, alignUs: this.align.us,
@@ -1110,6 +1111,7 @@ export class BrowserGame {
       ceiling: this.debtCeiling,
       machineBroken: this.flags.has('patriot'),
       partySystemReformed: this.flags.has('party_system_reformed'),
+      integrity: this.flags.has('integrity_enforced') ? 'enforced' : this.flags.has('integrity_disclosure') ? 'disclosure' : undefined,
       flags: [...this.flags],
       annexed: this.flags.has('territory_annexed')
         ? Object.fromEntries(WAR_PROVINCES.map(p => [p, this.war.fronts[p].dissent])) : undefined,

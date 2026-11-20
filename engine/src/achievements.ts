@@ -233,10 +233,10 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'grey_capital',
     name: 'Dissolving Grey Capital',
-    requirement: 'Pass the Zero Corruption Act, justice system reform and land titling in one term.',
-    flavour: 'Enforcement with teeth, investigation split from arrest, and twenty-two million rai turned from possession into property. The informal economy felt that.',
+    requirement: 'Pass the Zero Corruption Act, justice system reform, land titling and the Electoral Integrity Act with its enforcement unit in one term.',
+    flavour: 'Enforcement with teeth, investigation split from arrest, twenty-two million rai turned from possession into property, and the canvassers out of work. The informal economy felt that, and so did the informal politics.',
     rarity: 'rare',
-    test: c => has(c, 'zero_corruption_act') && has(c, 'justice_reform_done') && has(c, 'land_titled'),
+    test: c => has(c, 'zero_corruption_act') && has(c, 'justice_reform_done') && has(c, 'land_titled') && has(c, 'integrity_enforced'),
   },
   {
     id: 'concrete_and_nothing_else',
@@ -304,10 +304,11 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'patriot',
     name: 'Patriot',
     requirement: 'Pass the Zero Corruption Act with real enforcement, separate investigation from arrest ' +
-                 'nationwide — and then refuse the networks when they come for the files, whatever it costs your party.',
+                 'nationwide, enforce the Electoral Integrity Act — and then refuse the networks when they come ' +
+                 'for the files, whatever it costs your party.',
     flavour: 'Stand up to them.',
     rarity: 'legendary',
-    test: c => has(c, 'patriot') && !c.fell,
+    test: c => has(c, 'patriot') && has(c, 'integrity_enforced') && !c.fell,
   },
   {
     id: 'ecological_revolution',

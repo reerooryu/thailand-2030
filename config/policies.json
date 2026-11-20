@@ -350,6 +350,75 @@
       ]
     },
     {
+      "id": "electoral_integrity",
+      "name": "Electoral Integrity Act",
+      "ministry": "pm office",
+      "type": "institutional",
+      "scriptedQuarter": 2,
+      "briefing": "Thai elections are won in part by hua khanaen, the village canvassers paid to deliver a vote, and by money that is disclosed a year late if at all. The Election Commission has the powers on paper and rarely the staff or the will to use them. Enforce them and the machine parties lose their edge, in your coalition and in your own provincial organisation. The candidates who replace the canvassers' men campaign on the record, and some of them win where the old ones could not. Some of them lose where the old ones never did.",
+      "options": [
+        {
+          "id": "full",
+          "label": "An Election Commission unit with teeth: real-time disclosure, audited caps, paid informants",
+          "requiresLegislation": true,
+          "effects": {
+            "reformIndex": 8,
+            "formalisation": 0.06,
+            "fdiSignal": 0.03,
+            "govConsumption": 0.001,
+            "approvalBoost": 4,
+            "institutionalSupport": -8
+          },
+          "sets": [
+            "integrity_enforced"
+          ],
+          "fit": {
+            "People's": 0.6,
+            "Democrat": 0.5,
+            "Pheu Thai": 0.1,
+            "Others": -0.5,
+            "Kla Tham": -0.6
+          },
+          "flavour": "Donations published within a week, campaign spending audited against the cap, a reward for every canvasser reported with cash in hand. The provincial organisations of three parties in this cabinet, yours included, find out what that means.",
+          "maximal": true
+        },
+        {
+          "id": "disclosure",
+          "label": "Disclosure only: donors published, no new enforcement",
+          "requiresLegislation": true,
+          "effects": {
+            "reformIndex": 3,
+            "formalisation": 0.01,
+            "approvalBoost": 2,
+            "institutionalSupport": -2
+          },
+          "sets": [
+            "integrity_disclosure"
+          ],
+          "fit": {
+            "People's": 0.2,
+            "Democrat": 0.3,
+            "Pheu Thai": 0.2,
+            "Others": -0.1,
+            "Kla Tham": -0.1
+          },
+          "flavour": "Every donor on a public register, and nobody new to read it. Tolerable to everyone, which is the measure of it."
+        },
+        {
+          "id": "decline",
+          "label": "Not this parliament",
+          "effects": {},
+          "fit": {
+            "Kla Tham": 0.2,
+            "Others": 0.2,
+            "People's": -0.3,
+            "Democrat": -0.1
+          },
+          "flavour": "The canvassers will be paid in 2030 as they were in 2026."
+        }
+      ]
+    },
+    {
       "id": "party_finance",
       "name": "Party Finance and Organisation Act",
       "ministry": "pm office",
@@ -364,11 +433,11 @@
           "label": "Enforce the formula, audit the branches, fund against projects",
           "requiresLegislation": true,
           "effects": {
-            "reformIndex": 13,
-            "formalisation": 0.07,
-            "govConsumption": 0.002,
-            "approvalBoost": 4,
-            "institutionalSupport": -9
+            "reformIndex": 17.3,
+            "formalisation": 0.093,
+            "govConsumption": 0.0027,
+            "approvalBoost": 5.3,
+            "institutionalSupport": -12
           },
           "sets": [
             "party_system_reformed"
@@ -381,7 +450,12 @@
             "Kla Tham": -0.8
           },
           "flavour": "Audited dues and branches decide the money, paid against projects, constituency spending capped. The existing law, enforced. Two thirty-family parties in this parliament lose.",
-          "maximal": true
+          "maximal": true,
+          "dependsOn": {
+            "flag": "integrity_enforced",
+            "withoutFactor": 0.75,
+            "note": "A third stronger after the Electoral Integrity Act: the Election Commission already has the staff and the informants"
+          }
         },
         {
           "id": "fund_only",

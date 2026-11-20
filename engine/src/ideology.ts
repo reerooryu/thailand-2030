@@ -29,6 +29,9 @@ export interface IdeologyInput {
   singaporeLite?: boolean;
   /** The civil service cut and anti-corruption enforcement in place. */
   cleanState?: boolean;
+  /** Structural reforms of the patronage system: the Electoral Integrity Act
+   *  enforced, and party finance reformed. 0, 1 or 2. */
+  patronageReforms?: number;
   /** A national industrial programme (the semiconductor package or a champion). */
   industrialPolicy?: boolean;
   /** Opened to outside rules: OECD accession accelerated or the Super Licence passed. */
@@ -61,6 +64,7 @@ export function classify(i: IdeologyInput): Ideology {
   const debtRise = i.debtEnd - i.debtStart;     // negative = deleveraged
   const state = i.govConsumption;
 
+  const pr = i.patronageReforms ?? 0;
   const BUILDS = build > 0.7, SPENDS = give > 0.9, COLLECTS = collect > 0.8;
   const REFORMS = reform > 55, DELEVERAGED = debtRise < 6, BORROWED = debtRise > 12;
 
@@ -87,18 +91,36 @@ export function classify(i: IdeologyInput): Ideology {
   // A strong state: the constitution says so, and the reform record and the
   // capital budget back it up.
   if (i.singaporeLite && REFORMS && BUILDS) {
-    // One type, two versions: the same constitution reads very differently
-    // depending on whether the bureaucracy it empowers was cleaned first.
-    const clean = !!i.cleanState;
-    return {
-      name: 'Authoritarian Developmentalism',
-      tradition: clean
-        ? "Singapore's PAP state and Korea under Park: a strong executive, a clean bureaucracy, and a plan"
-        : "Suharto's New Order and Marcos's Philippines: a strong executive and a plan, without the clean bureaucracy",
-      tag: clean ? 'cleaned the state, then gave it more power' : 'gave the state more power before cleaning it',
-      body: clean
-        ? 'The civil service cut and policed first, then a constitution that lets the executive plan and deliver with fewer checks. Industrial strategy, managed labour, means-tested welfare. It works while the bureaucracy stays clean, and nothing in the new rules guarantees that it will.'
+    // One type, four versions: the same constitution reads very differently
+    // depending on what it hands power to. The bureaucracy has to be cleaned
+    // first, and the politics too: a strong executive over a patronage system
+    // serves whoever wins the provinces.
+    const name = 'Authoritarian Developmentalism';
+    if (!i.cleanState) return {
+      name,
+      tradition: "Suharto's New Order and Marcos's Philippines: a strong executive and a plan, without the clean bureaucracy",
+      tag: 'gave the state more power before cleaning it',
+      body: pr > 0
+        ? 'A constitution that lets the executive plan and deliver with fewer checks, handed to a civil service that was never reformed, while the rules on political money were only beginning to bite. Growth can be real. So is the risk that the new powers serve the networks rather than the plan.'
         : 'A constitution that lets the executive plan and deliver with fewer checks, handed to a civil service and a patronage system that were never reformed. Growth can be real. So is the risk that the new powers serve the networks rather than the plan.',
+    };
+    if (pr === 0) return {
+      name,
+      tradition: 'Thailand under Sarit and Thanom: capable technocrats and a strong executive, over politics run on patronage',
+      tag: 'cleaned the bureaucracy, and left the machine',
+      body: 'The civil service cut and policed, then a constitution that lets the executive plan and deliver with fewer checks. But the parties that will hold those powers still run on canvassers and provincial money. A strong state over captured politics: the plan lasts as long as the people who win the provinces want it to.',
+    };
+    if (pr === 1) return {
+      name,
+      tradition: "Singapore's PAP state and Korea under Park: a strong executive, a clean bureaucracy, and a plan",
+      tag: 'cleaned the state, then gave it more power',
+      body: 'The civil service cut and policed first, and the first rules on political money enforced, then a constitution that lets the executive plan and deliver with fewer checks. Industrial strategy, managed labour, means-tested welfare. It works while the state stays clean, and nothing in the new rules guarantees that it will.',
+    };
+    return {
+      name,
+      tradition: "Singapore's PAP state: a strong executive, a clean bureaucracy, and a party that runs on organisation rather than patronage",
+      tag: 'cleaned the state and the parties, then gave it more power',
+      body: 'The civil service cut and policed, elections fought without canvassers, party money audited, and only then a constitution that lets the executive plan and deliver with fewer checks. The old conservatism of the provincial networks replaced by a modern one that wins on its record. Strong, clean and still not accountable: it works for exactly as long as the people running it want it to.',
     };
   }
 
@@ -112,11 +134,22 @@ export function classify(i: IdeologyInput): Ideology {
     body: 'Capital spending at scale and a national industrial programme, steered by ministries and state firms rather than by opening to outside standards. Fast where the state chooses well. Without competition or outside discipline, nobody finds out when it chooses badly until the debt does.',
   };
 
-  if (BUILDS && REFORMS && COLLECTS && DELEVERAGED) return {
+  // Three versions, by how far the patronage system was reformed underneath.
+  if (BUILDS && REFORMS && COLLECTS && DELEVERAGED) return pr === 0 ? {
+    name: 'Developmental Statism',
+    tradition: 'Thai technocratic developmentalism under Sarit and Prem: planners in Bangkok, patronage in the provinces',
+    tag: 'built it and paid for it, but left the machine in charge',
+    body: 'Public capital at scale, institutions rebuilt underneath, all funded from revenue rather than issuance. But the politics on top still runs on canvassers and provincial money, and the machine that wins the provinces will decide what the next government does with the state this one built.',
+  } : pr === 1 ? {
     name: 'Developmental Statism',
     tradition: 'the East Asian developmental state: Park, Lee, Sarit with better arithmetic',
     tag: 'built it, reformed it, and paid for it from revenue',
-    body: 'Public capital at scale, institutions rebuilt underneath, all funded from revenue rather than issuance. A maximally activist state that stays solvent, and a government willing to be disliked in year two for results in year eight.',
+    body: 'Public capital at scale, institutions rebuilt underneath, all funded from revenue rather than issuance, and the first rules on political money enforced. A maximally activist state that stays solvent, and a government willing to be disliked in year two for results in year eight.',
+  } : {
+    name: 'Developmental Statism',
+    tradition: "the East Asian developmental state, with its politics reformed too: Korea and Taiwan after democratisation",
+    tag: 'built it, reformed it, paid for it, and took the money out of politics',
+    body: 'Public capital at scale, institutions rebuilt underneath, all funded from revenue, and the party system rebuilt as well: elections fought on records and organisations rather than canvassers. The whole developmental-state programme, including the part Thailand has never tried.',
   };
 
   if (BUILDS && REFORMS && BORROWED) return {

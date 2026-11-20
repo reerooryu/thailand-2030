@@ -69,6 +69,9 @@ export interface ElectionInput {
   /** Party finance enforced: dues and branches decide the subsidy, branches are
    *  audited, constituency spending is capped. */
   partySystemReformed?: boolean;
+  /** The Electoral Integrity Act: 'enforced' (an Election Commission unit with
+   *  teeth) or 'disclosure' (donors published, nothing new to enforce it). */
+  integrity?: 'enforced' | 'disclosure';
   /** Party-list seats under the constitution in force: 100, or 110/125 after reform. */
   listSeats?: number;
   /** Multi-member, winner-takes-all constituencies: machines win slates. */
@@ -176,6 +179,12 @@ const REGIONAL: { flags: string[]; any?: boolean; regions?: string[]; provinces?
   { flags: ['deep_south_security'], regions: ['deepsouth'], party: OTH, d: 0.10 },
   // The Land Bridge's two provinces, either way.
   { flags: ['land_bridge_live'], provinces: ['cpn', 'rng'], d: 0.04 },
+  // Electoral integrity enforced. The canvassers stop being paid, and
+  // Bhumjaithai's own provincial organisation feels it most where it was
+  // strongest. The candidates who replace the canvassers' men campaign on the
+  // record, which counts for most in the cities, where no machine ever won.
+  { flags: ['integrity_enforced'], regions: ['northeast', 'north', 'central', 'south', 'east'], d: -0.09 },
+  { flags: ['integrity_enforced'], regions: ['bangkok', 'vicinity'], d: 0.06 },
 ];
 
 /** The 1941 provinces, if annexed: population and a starting vote. Residents
@@ -227,10 +236,21 @@ export function runElection(e: ElectionInput): ElectionResult {
     consShift[3] += 0.2; consShift[OTH] += 0.2;
   }
   // Party finance enforced: machines lose their edge in the constituencies,
-  // parties with members and a national vote gain.
-  if (e.partySystemReformed) {
-    consShift[3] -= 0.15; consShift[OTH] -= 0.15;
-    for (const i of [1, 2, 4]) consShift[i] += 0.04;
+  // parties with members and a national vote gain. A third more after the
+  // Electoral Integrity Act, whose enforcement the new finance rules run on.
+  const PF = e.partySystemReformed ? (e.integrity === 'enforced' ? 4 / 3 : 1) : 0;
+  if (PF) {
+    consShift[3] -= 0.15 * PF; consShift[OTH] -= 0.15 * PF;
+    for (const i of [1, 2, 4]) consShift[i] += 0.04 * PF;
+  }
+  // Electoral integrity: the same direction, smaller. Kla Tham and the small
+  // provincial parties lose some of what the canvassers bought them.
+  // Bhumjaithai's own rural loss is a regional effect (REGIONAL), offset in
+  // part by a modern conservative brand that the list vote rewards (below).
+  const EI = e.integrity === 'enforced' ? 1 : e.integrity === 'disclosure' ? 0.25 : 0;
+  if (EI) {
+    consShift[3] -= 0.06 * EI; consShift[OTH] -= 0.06 * EI;
+    for (const i of [1, 2, 4]) consShift[i] += 0.015 * EI;
   }
   const regional = (d: { p: string; r: string }) => {
     const out = [0, 0, 0, 0, 0, 0];
@@ -337,6 +357,7 @@ export function runElection(e: ElectionInput): ElectionResult {
 
   // --- 5. the list: national, largest remainder over the real parties.
   const listShift = shift.map(v => v * LIST_DAMP);
+  if (e.integrity === 'enforced') listShift[B] += 0.04;
   const parties26 = EL.list2026.map(([b, , v]) => [PARTIES.indexOf(b), v] as const);
   // annexed voters' list votes, shared among the parties of each bucket
   const bucketTot = PARTIES.map((_, i) => parties26.filter(x => x[0] === i).reduce((a, x) => a + x[1], 0));
