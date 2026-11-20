@@ -187,9 +187,9 @@
           ]
         },
         {
-          "id": "reconstitute",
+          "id": "overhaul",
           "score": 3,
-          "label": "Reconstitute",
+          "label": "Overhaul",
           "text": "The Court is rebuilt: judges confirmed by two-thirds of the House to staggered nine-year terms, and dissolving a party limited to proven electoral fraud, brought by the Election Commission.",
           "effects": {
             "reformIndex": 5,
@@ -307,9 +307,9 @@
           }
         },
         {
-          "id": "elected",
+          "id": "overhaul",
           "score": 3,
-          "label": "Elect them all",
+          "label": "Overhaul",
           "text": "Every province elects its governor from 2031, as Bangkok does, and keeps a third of the revenue raised in it. The Interior Ministry's provincial line is wound down.",
           "effects": {
             "executionBonus": 0.03,

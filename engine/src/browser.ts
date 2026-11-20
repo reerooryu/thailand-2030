@@ -239,7 +239,7 @@ export class BrowserGame {
     const part = conCfg.parts.find(p => p.id === 'decentral');
     const pos = part && part.positions[this.con.adopted[part.id]];
     const meta = (DATA.provinces as any)._meta;
-    if (pos?.id === 'elected')
+    if (pos?.id === 'overhaul')
       return ((DATA.provinces as any).provinces as { id: string; water?: boolean }[]).filter(p => !p.water).map(p => p.id);
     return pos?.id === 'adjust' ? meta.pilotAdjust : pos?.id === 'tilt' ? meta.pilotTilt : [];
   }
